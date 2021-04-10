@@ -7,8 +7,11 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Cube.h"
+#include "Lightsource.h"
+#include "CubeHandler.h"
 
 #include <iostream>
+#include <memory>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -28,10 +31,6 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-// lighting
-glm::vec3 lightPos(1.2f, 3.0f, 2.0f);
-glm::vec3 lightPos2(1.2f, 3.0f, 2.0f);
 
 int main()
 {
@@ -73,47 +72,45 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader("/Users/stan/dev/C++/GraphicsLightning/shaders/basic_light.vs", "/Users/stan/dev/C++/GraphicsLightning/shaders/basic_light.fs");
-    Shader lightCubeShader("/Users/stan/dev/C++/GraphicsLightning/shaders/light_cube.vs", "/Users/stan/dev/C++/GraphicsLightning/shaders/light_cube.fs");
-    Shader lightCubeShader2("/Users/stan/dev/C++/GraphicsLightning/shaders/light_cube.vs", "/Users/stan/dev/C++/GraphicsLightning/shaders/light_cube.fs");
+    Shader lightingShader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
+                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs");
+    Shader lightCubeShader("/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.vs",
+                           "/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.fs");
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-
-    std::vector<Cube*> cubes;
-    bool first = true;
-    int nrCubes = 10;
+    int nrCubes = 100;
+    CubeHandler cubeHandler(&lightingShader);
     for (int i = 0; i < nrCubes; i++) {
         for (int n = 0; n < nrCubes; n++) {
-            Cube* cube = new Cube(
-                    { i * 0.11f, 2,  n * 0.11f},
-                    {0.1, 0.1, 0.1},
-                    {{1.0f, 1.0f, 1.0f},
-                    {(float)i / nrCubes - 0.2, (float)n / nrCubes - 0.2, (float)(i + n)/nrCubes*2 - 0.2},
-                    {1.0f, 0.5f, 0.31f},
-                    {0.5f, 0.5f, 0.5f},
-                    32.0f});
+            auto cube = std::make_unique<Cube>(
+                    Position{ i * 0.11f, 2,  n * 0.11f},
+                    Dimensions{0.1, 0.1, 0.1},
+                    Material{{1.0f, 1.0f, 1.0f},
+                             {(float)i / nrCubes - 0.2, (float)n / nrCubes - 0.2, (float)(i + n)/nrCubes*2 - 0.2},
+                             {1.0f, 0.5f, 0.31f},
+                             {0.5f, 0.5f, 0.5f},
+                             32.0f});
             cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
             cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-            cubes.push_back(cube);
+            cubeHandler.AddCube(std::move(cube));
         }
     }
 
-    Cube floor({0, 0, 0},
-               {1000000, 0, 1000000},
-               {{0.2f, 0.8f, 0.31f},
-                 {0.2f, 0.2f, 0.2f},
-                 {1.0f, 0.5f, 0.31f},
-                 {0.5f, 0.5f, 0.5f},
-                 32.0f});
-    floor.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    floor.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    auto floor = std::make_unique<Cube>(
+                    Position{0, 0, 0},
+                    Dimensions{1000, 0, 1000},
+                    Material{{0.2f, 0.8f, 0.31f},
+                            {0.2f, 0.2f, 0.2f},
+                            {1.0f, 0.5f, 0.31f},
+                            {0.5f, 0.5f, 0.5f},
+                            32.0f});
+    floor->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    floor->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    cubeHandler.AddCube(std::move(floor));
 
-    Cube lightCube({0, 0, 0}, {1, 1, 1});
-    lightCube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    LightSourceHandler lights(&lightCubeShader, &lightingShader);
 
-    Cube lightCube2({0, 0, 0}, {1, 1, 1});
-    lightCube2.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {1.0f, 1.0f, 1.0f}, {1.0f, 3.0f, 1.0f}));
+    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
 
     // render loop
     // -----------
@@ -128,69 +125,31 @@ int main()
         deltaTime = currentFrame - lastFrame;
         if (FPSUpdate-- <= 0) {
             std::cout << "FPS: " << (int)(1/deltaTime) << std::endl;
-            FPSUpdate = 10;
+            FPSUpdate = 20;
         }
         lastFrame = currentFrame;
-        lightPos[0] = 1*sin((float)n /30);
-        lightPos[2] = 1*cos((float)n /30);
+        bool first = true;
+        for (auto& light : lights.GetLightSources()) {
+            auto pos = light.GetPosition();
+            if (first) {
+                pos[0] = 1*sin((float)n / 40);
+                pos[2] = 1*cos((float)n / 40);
+                first = false;
+            } else {
+                pos[0] = 1*cos((float)n / 40);
+                pos[2] = 1*sin((float)n / 40);
+            }
+            light.SetPosition(pos);
+        }
 
-        lightPos2[0] = 1*cos((float)n /40);
-        lightPos2[2] = 1*sin((float)n /40);
-
-        // input
-        // -----
         processInput(window);
 
-        // render
-        // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // be sure to activate shader when setting uniforms/drawing objects
-        lightingShader.use();
-        lightingShader.setVec3("objectColor", 0.0f, 1.0f, 0.31f);
-        lightingShader.setInt("nrLights", 2);
-        lightingShader.setVec3("lights[0].lightColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("lights[0].lightPos", lightPos);
-        lightingShader.setVec3("lights[1].lightColor", 5.0f, 0.0f, 0.0f);
-        lightingShader.setVec3("lights[1].lightPos", lightPos2);
-        camera.SetShaderParameters(lightingShader);
+        lights.Draw(camera);
+        cubeHandler.Draw(camera);
 
-        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        lightingShader.setFloat("material.shininess", 32.0f);
-
-        // world transformation
-        glm::mat4 model = glm::mat4(1.0f);
-        //lightingShader.setMat4("model", model);
-        for (auto& cube : cubes) {
-            cube->SetShaderParameters(lightingShader);
-            cube->Draw();
-        }
-
-        floor.SetShaderParameters(lightingShader);
-        floor.Draw();
-
-        // also draw the lamp object
-        lightCubeShader.use();
-        camera.SetShaderParameters(lightCubeShader);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.1f)); // a smaller cube
-        lightCubeShader.setMat4("model", model);
-        lightCube.Draw();
-
-        lightCubeShader2.use();
-        camera.SetShaderParameters(lightCubeShader2);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos2);
-        model = glm::scale(model, glm::vec3(0.1f)); // a smaller cube
-        lightCubeShader2.setMat4("model", model);
-        lightCube2.Draw();
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

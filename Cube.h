@@ -9,6 +9,8 @@
 #include <glfw3.h>
 #include <vector>
 
+#include "Shader.h"
+
 struct Material {
     glm::vec3 color;
     glm::vec3 ambient;
@@ -31,6 +33,7 @@ struct Dimensions {
 
 class Cube {
 public:
+    Cube() {}
     Cube(Position p, Dimensions d, Material m = {})
     : nVertices(36), position(p), dimensions(d), material(m) {
         GenerateVertices(position, dimensions);
@@ -97,12 +100,20 @@ public:
         glEnableVertexAttribArray(attributes++);
     }
 
+    void SetPosition(const Position& updatedPosition) {
+        position = updatedPosition;
+    }
+
+    glm::vec3 GetPosition() const {
+        return {position.x, position.y, position.z};
+    }
+
     ~Cube() {
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
     }
 
-    void Draw() {
+    void Draw() const {
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
