@@ -13,6 +13,7 @@
 class CubeHandler {
 public:
     CubeHandler(Shader* shader);
+    void Init() const;
     void Draw(const Camera& camera) const;
     void AddCube(std::unique_ptr<Cube>&&);
 

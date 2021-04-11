@@ -79,37 +79,46 @@ int main()
 
     int nrCubes = 100;
     CubeHandler cubeHandler(&lightingShader);
+    int materialIndex = 0;
     for (int i = 0; i < nrCubes; i++) {
         for (int n = 0; n < nrCubes; n++) {
-            auto cube = std::make_unique<Cube>(
+            cubeHandler.AddCube(std::move(std::make_unique<Cube>(
                     Position{ i * 0.11f, 2,  n * 0.11f},
                     Dimensions{0.1, 0.1, 0.1},
                     Material{{1.0f, 1.0f, 1.0f},
                              {(float)i / nrCubes - 0.2, (float)n / nrCubes - 0.2, (float)(i + n)/nrCubes*2 - 0.2},
                              {1.0f, 0.5f, 0.31f},
                              {0.5f, 0.5f, 0.5f},
-                             32.0f});
-            cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-            cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-            cubeHandler.AddCube(std::move(cube));
+                             32.0f}, materialIndex++)));
+            if (materialIndex >= 128) {
+                materialIndex = 0;
+            }
         }
     }
 
-    auto floor = std::make_unique<Cube>(
-                    Position{0, 0, 0},
-                    Dimensions{1000, 0, 1000},
-                    Material{{0.2f, 0.8f, 0.31f},
-                            {0.2f, 0.2f, 0.2f},
-                            {1.0f, 0.5f, 0.31f},
-                            {0.5f, 0.5f, 0.5f},
-                            32.0f});
-    floor->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    floor->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    cubeHandler.AddCube(std::move(floor));
+    cubeHandler.AddCube(std::make_unique<Cube>(
+            Position{0, 0, 0},
+            Dimensions{1000, 0, 1000},
+            Material{{0.2f, 0.8f, 0.31f},
+                     {0.2f, 0.2f, 0.2f},
+                     {1.0f, 0.5f, 0.31f},
+                     {0.5f, 0.5f, 0.5f},
+                     32.0f}, materialIndex++));
+
+    cubeHandler.AddCube(std::make_unique<Cube>(
+            Position{0, -1, 0},
+            Dimensions{1000, 0, 1000},
+            Material{{0.2f, 0.8f, 0.31f},
+                     {0.2f, 0.2f, 0.2f},
+                     {1.0f, 0.5f, 0.31f},
+                     {0.5f, 0.5f, 0.5f},
+                     32.0f}, materialIndex++));
+
+    cubeHandler.Init();
 
     LightSourceHandler lights(&lightCubeShader, &lightingShader);
 
-    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {1.0f, 1.0f, 1.0f}, {1.0f, 3.0f, 1.0f}));
+    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.6f, 0.6f}, {1.0f, 3.0f, 1.0f}));
     lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
 
     // render loop

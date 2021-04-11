@@ -2,6 +2,7 @@
 out vec4 FragColor;
 
 #define MAXLIGHTS 128
+#define MAXMATERIALS 128
 
 struct Material {
     vec3 ambient;
@@ -15,31 +16,32 @@ struct Light {
     vec3 lightColor;
 };
 
-uniform Material material;
 
 in vec3 Normal;
 in vec3 FragPos;
+flat in int MaterialIndex;
 
 uniform int nrLights;
 uniform Light lights[MAXLIGHTS];
+uniform Material materials[MAXMATERIALS];
 uniform vec3 viewPos;
-uniform vec3 objectColor;
 
 vec3 calculateLight(vec3 lightPos, vec3 lightColor) {
     // ambient
-    vec3 ambient = lightColor * material.ambient;
+    int i = MaterialIndex;
+    vec3 ambient = lightColor * materials[i].ambient;
 
     // diffuse
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = lightColor * (diff * material.diffuse);
+    vec3 diffuse = lightColor * (diff * materials[i].diffuse);
 
     // specular
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = lightColor * (spec * material.specular);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), materials[i].shininess);
+    vec3 specular = lightColor * (spec * materials[i].specular);
 
     return ambient + diffuse + specular;
 }

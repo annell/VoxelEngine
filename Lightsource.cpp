@@ -7,7 +7,7 @@ LightSource::LightSource(Cube* cubeIn, glm::vec3 colorIn, glm::vec3 positionIn)
  : cube(cubeIn)
  , color(colorIn)
  , pos(positionIn) {
-    cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     model = glm::mat4(1.0f);
     model = glm::translate(model, pos);
 }
