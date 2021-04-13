@@ -3,12 +3,12 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
-
 #include "Shader.h"
 #include "Camera.h"
 #include "Cube.h"
 #include "Lightsource.h"
 #include "CubeHandler.h"
+#include "ModelLoader.h"
 
 #include <iostream>
 #include <memory>
@@ -77,33 +77,10 @@ int main()
     Shader lightCubeShader("/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.vs",
                            "/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.fs");
 
+
     int nrCubes = 100;
     CubeHandler cubeHandler(&lightingShader);
-    int materialIndex = 0;
-    for (int i = 0; i < nrCubes; i++) {
-        for (int n = 0; n < nrCubes; n++) {
-            cubeHandler.AddCube(std::move(std::make_unique<Cube>(
-                    Position{ i * 0.11f, 2,  n * 0.11f},
-                    Dimensions{0.1, 0.1, 0.1},
-                    Material{{1.0f, 1.0f, 1.0f},
-                             {(float)i / nrCubes - 0.2, (float)n / nrCubes - 0.2, (float)(i + n)/nrCubes*2 - 0.2},
-                             {1.0f, 0.5f, 0.31f},
-                             {0.5f, 0.5f, 0.5f},
-                             32.0f}, materialIndex++)));
-            if (materialIndex >= 128) {
-                materialIndex = 0;
-            }
-        }
-    }
-
-    cubeHandler.AddCube(std::make_unique<Cube>(
-            Position{0, 0, 0},
-            Dimensions{1000, 0, 1000},
-            Material{{0.2f, 0.8f, 0.31f},
-                     {0.2f, 0.2f, 0.2f},
-                     {1.0f, 0.5f, 0.31f},
-                     {0.5f, 0.5f, 0.5f},
-                     32.0f}, materialIndex++));
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_knight.vox", cubeHandler);
 
     cubeHandler.AddCube(std::make_unique<Cube>(
             Position{0, -1, 0},
@@ -112,14 +89,14 @@ int main()
                      {0.2f, 0.2f, 0.2f},
                      {1.0f, 0.5f, 0.31f},
                      {0.5f, 0.5f, 0.5f},
-                     32.0f}, materialIndex++));
+                     32.0f}, 1));
 
     cubeHandler.Init();
 
     LightSourceHandler lights(&lightCubeShader, &lightingShader);
 
     lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.6f, 0.6f}, {1.0f, 3.0f, 1.0f}));
-    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
+    //lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
 
     // render loop
     // -----------
