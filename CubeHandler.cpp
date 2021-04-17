@@ -3,6 +3,7 @@
 //
 
 #include "CubeHandler.h"
+#include <map>
 
 CubeHandler::CubeHandler(Shader *shader)
  : shader(shader) {
@@ -35,5 +36,20 @@ void CubeHandler::AddCube(std::unique_ptr<Cube>&& cube) {
     cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
     cube->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
+    if (cube->GetMaterialIndex() > nrMaterials) {
+        nrMaterials = cube->GetMaterialIndex();
+    }
     cubes.push_back(std::move(cube));
+}
+
+size_t CubeHandler::NrMaterials() const {
+    return nrMaterials;
+}
+
+size_t CubeHandler::NrVertex() const {
+    size_t output = 0;
+    for (auto& cube : cubes) {
+        output += cube->GetNrVertex();
+    }
+    return output;
 }

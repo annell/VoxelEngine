@@ -34,8 +34,8 @@ struct Dimensions {
 class Cube {
 public:
     Cube() {}
-    Cube(Position p, Dimensions d, Material m = {}, int materialIndex = -1)
-    : nVertices(42), position(p), dimensions(d), material(m), materialIndex(materialIndex) {
+    Cube(Position p, Dimensions d, Material m = {}, int materialIndex = -1, int i=0)
+    : nVertices(42), position(p), dimensions(d), material(m), materialIndex(materialIndex), i(i) {
         GenerateVertices(position, dimensions);
         CreateBuffers(&vertex[0], sizeof(float) * vertex.size());
     }
@@ -115,6 +115,10 @@ public:
         return materialIndex;
     }
 
+    size_t GetNrVertex() const {
+        return nVertices;
+    }
+
     void Draw() const {
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, nVertices);
@@ -135,6 +139,7 @@ private:
     unsigned int VAO;
     int nVertices;
     int attributes = 0;
+    int i = 0;
     Position position;
     Dimensions dimensions;
     Material material;

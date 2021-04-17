@@ -100,8 +100,8 @@ uint32_t count_solid_voxels_in_model(const ogt_vox_model* model)
 void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, CubeHandler& cubeHandler)
 {
     uint32_t voxel_index = 0;
-    uint32_t materialIndex = 0;
-    std::map<uint32_t, bool> materials;
+    std::map<uint32_t, int> materials;
+    int nrMaterials = 0;
     for (uint32_t z = 0; z < model->size_z; z++) {
         for (uint32_t y = 0; y < model->size_y; y++) {
             for (uint32_t x = 0; x < model->size_x; x++, voxel_index++) {
@@ -109,17 +109,19 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
                 uint32_t color_index = model->voxel_data[voxel_index];
                 bool is_voxel_solid = (color_index != 0);
                 if (is_voxel_solid) {
-                    materials[color_index] = true;
                     auto color = palette.color[color_index];
-                    float a = (float)color.a / 255.0f;
+                    auto iterator = materials.find(color_index);
+                    if (iterator == materials.end())
+                        materials[color_index] = nrMaterials++;
+                    float size = 0.1f;
                     cubeHandler.AddCube(std::move(std::make_unique<Cube>(
-                            Position{ (float)x, (float)z, (float)y},
-                            Dimensions{1.0, 1.0, 1.0},
-                            Material{{1.0f, 1.0f, 1.0f},
-                                    {(float)color.r/255.0f*a, (float)color.g/255.0f*a, (float)color.b/255.0f*a},
+                            Position{ (float)y*size, (float)z*size, (float)x*size}, // <---- They use different coordinate system, so here we compensate.
+                            Dimensions{size, size, size},
+                            Material{{0.2f, 0.8f, 0.3f},
+                                    {(float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f},
                                     {1.0f, 0.5f, 0.31f},
                                     {0.5f, 0.5f, 0.5f},
-                                    32.0f}, materials.size())));
+                                    32.0f}, materials[color_index], color_index)));
                 }
             }
         }

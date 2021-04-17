@@ -47,7 +47,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "VoxelEngine", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -80,7 +80,7 @@ int main()
 
     int nrCubes = 100;
     CubeHandler cubeHandler(&lightingShader);
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_knight.vox", cubeHandler);
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_sword.vox", cubeHandler);
 
     cubeHandler.AddCube(std::make_unique<Cube>(
             Position{0, -1, 0},
@@ -89,14 +89,16 @@ int main()
                      {0.2f, 0.2f, 0.2f},
                      {1.0f, 0.5f, 0.31f},
                      {0.5f, 0.5f, 0.5f},
-                     32.0f}, 1));
+                     32.0f}, cubeHandler.NrMaterials() + 1));
 
     cubeHandler.Init();
 
     LightSourceHandler lights(&lightCubeShader, &lightingShader);
 
     lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.6f, 0.6f}, {1.0f, 3.0f, 1.0f}));
-    //lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
+    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
+
+    std::cout << "NrVertex: " << cubeHandler.NrVertex() << std::endl;
 
     // render loop
     // -----------
@@ -110,7 +112,7 @@ int main()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         if (FPSUpdate-- <= 0) {
-            std::cout << "FPS: " << (int)(1/deltaTime) << std::endl;
+            //std::cout << "FPS: " << (int)(1/deltaTime) << std::endl;
             FPSUpdate = 20;
         }
         lastFrame = currentFrame;
@@ -130,7 +132,7 @@ int main()
 
         processInput(window);
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lights.Draw(camera);

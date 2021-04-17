@@ -16,8 +16,11 @@ public:
     void Init() const;
     void Draw(const Camera& camera) const;
     void AddCube(std::unique_ptr<Cube>&&);
+    size_t NrMaterials() const;
+    size_t NrVertex() const;
 
 private:
+    size_t nrMaterials = 0;
     std::vector<std::unique_ptr<Cube>> cubes;
     Shader* shader;
 };
