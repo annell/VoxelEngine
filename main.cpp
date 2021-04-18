@@ -69,6 +69,8 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
 
     // build and compile our shader zprogram
     // ------------------------------------
@@ -84,7 +86,7 @@ int main()
 
     cubeHandler.AddCube(std::make_unique<Cube>(
             Position{0, -1, 0},
-            Dimensions{1000, 0, 1000},
+            Dimensions{1000, 0.1, 1000},
             Material{{0.2f, 0.8f, 0.31f},
                      {0.2f, 0.2f, 0.2f},
                      {1.0f, 0.5f, 0.31f},
@@ -112,7 +114,7 @@ int main()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         if (FPSUpdate-- <= 0) {
-            //std::cout << "FPS: " << (int)(1/deltaTime) << std::endl;
+            std::cout << "FPS: " << (int)(1/deltaTime) << std::endl;
             FPSUpdate = 20;
         }
         lastFrame = currentFrame;

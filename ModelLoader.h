@@ -105,7 +105,6 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
     for (uint32_t z = 0; z < model->size_z; z++) {
         for (uint32_t y = 0; y < model->size_y; y++) {
             for (uint32_t x = 0; x < model->size_x; x++, voxel_index++) {
-                // if color index == 0, this voxel is empty, otherwise it is solid.
                 uint32_t color_index = model->voxel_data[voxel_index];
                 bool is_voxel_solid = (color_index != 0);
                 if (is_voxel_solid) {
@@ -114,14 +113,16 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
                     if (iterator == materials.end())
                         materials[color_index] = nrMaterials++;
                     float size = 0.1f;
-                    cubeHandler.AddCube(std::move(std::make_unique<Cube>(
+                    auto cube = std::make_unique<Cube>(
                             Position{ (float)y*size, (float)z*size, (float)x*size}, // <---- They use different coordinate system, so here we compensate.
                             Dimensions{size, size, size},
                             Material{{0.2f, 0.8f, 0.3f},
                                     {(float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f},
                                     {1.0f, 0.5f, 0.31f},
                                     {0.5f, 0.5f, 0.5f},
-                                    32.0f}, materials[color_index], color_index)));
+                                    32.0f}, materials[color_index]);
+                    cube->SetChunkPosition({(int)y, (int)z, (int)x});
+                    cubeHandler.AddCube(std::move(cube));
                 }
             }
         }

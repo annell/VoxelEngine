@@ -10,7 +10,17 @@ CubeHandler::CubeHandler(Shader *shader)
 
 }
 
-void CubeHandler::Init() const {
+void CubeHandler::Init() {
+    FaceCulling();
+    for (auto& cube : cubes) {
+        cube.get()->GenerateVertexAttributes();
+        cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+        cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+        cube->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
+        if (cube->GetMaterialIndex() > nrMaterials) {
+            nrMaterials = cube->GetMaterialIndex();
+        }
+    }
     shader->use();
     for (auto& cube : cubes) {
         auto& material = cube->GetMaterial();
@@ -33,12 +43,7 @@ void CubeHandler::Draw(const Camera &camera) const {
 }
 
 void CubeHandler::AddCube(std::unique_ptr<Cube>&& cube) {
-    cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-    cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-    cube->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
-    if (cube->GetMaterialIndex() > nrMaterials) {
-        nrMaterials = cube->GetMaterialIndex();
-    }
+    cubesMap[cube->GetChunkPosition()] = cube.get();
     cubes.push_back(std::move(cube));
 }
 
@@ -52,4 +57,37 @@ size_t CubeHandler::NrVertex() const {
         output += cube->GetNrVertex();
     }
     return output;
+}
+
+void CubeHandler::FaceCulling() const {
+    auto render = [&] (Cube* cube, Cube::Face face, const ChunkPosition& pos) {
+        auto it = cubesMap.find(pos);
+        if (it != cubesMap.end()) {
+            cube->SetRenderSide(face, false);
+        }
+    };
+    for (auto& cube : cubes) {
+        auto dimensions = cube->GetDimensions();
+        auto pos = cube->GetChunkPosition();
+        pos.x++;
+        render(cube.get(), Cube::Face::RIGHT, pos);
+        pos.x--;
+        pos.x--;
+        render(cube.get(), Cube::Face::LEFT, pos);
+        pos.x++;
+
+        pos.y++;
+        render(cube.get(), Cube::Face::TOP, pos);
+        pos.y--;
+        pos.y--;
+        render(cube.get(), Cube::Face::BOTTOM, pos);
+        pos.y++;
+
+        pos.z++;
+        render(cube.get(), Cube::Face::FRONT, pos);
+        pos.z--;
+        pos.z--;
+        render(cube.get(), Cube::Face::BACK, pos);
+        pos.z++;
+    }
 }
