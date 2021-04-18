@@ -24,10 +24,10 @@ private:
     void FaceCulling() const;
 
     size_t nrMaterials = 0;
-    std::vector<std::unique_ptr<Cube>> cubes;
+    std::vector<Cube*> cubesToRender;
     Shader* shader;
 
-    std::map<ChunkPosition, Cube*> cubesMap;
+    std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
 };
 
 #endif //VOXELENGINE_CUBEHANDLER_H

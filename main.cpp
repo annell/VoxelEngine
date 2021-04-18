@@ -82,16 +82,18 @@ int main()
 
     int nrCubes = 100;
     CubeHandler cubeHandler(&lightingShader);
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_sword.vox", cubeHandler);
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", cubeHandler);
 
-    cubeHandler.AddCube(std::make_unique<Cube>(
+    auto floor = std::make_unique<Cube>(
             Position{0, -1, 0},
             Dimensions{1000, 0.1, 1000},
             Material{{0.2f, 0.8f, 0.31f},
                      {0.2f, 0.2f, 0.2f},
                      {1.0f, 0.5f, 0.31f},
                      {0.5f, 0.5f, 0.5f},
-                     32.0f}, cubeHandler.NrMaterials() + 1));
+                     32.0f}, cubeHandler.NrMaterials() + 1);
+    floor->SetChunkPosition({0, -1, 0});
+    cubeHandler.AddCube(std::move(floor));
 
     cubeHandler.Init();
 
