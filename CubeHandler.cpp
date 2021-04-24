@@ -10,14 +10,25 @@ CubeHandler::CubeHandler(Shader *shader)
 
 }
 
+CubeHandler::~CubeHandler() {
+    ResetBuffers();
+}
+
 void CubeHandler::Init() {
+    SetupCubesForRendering();
+    SetupShader();
+}
+
+void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr, int& attributes)  {
+    glVertexAttribPointer(attributes, size, type, normalized, stride, ptr);
+    glEnableVertexAttribArray(attributes++);
+}
+
+void CubeHandler::SetupCubesForRendering() {
     FaceCulling();
     for (auto& pair : cubesMap) {
         auto& cube = pair.second;
         cube->GenerateVertexAttributes();
-        cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-        cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-        cube->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
         if (cube->GetMaterialIndex() > nrMaterials) {
             nrMaterials = cube->GetMaterialIndex();
         }
@@ -25,25 +36,34 @@ void CubeHandler::Init() {
             cubesToRender.push_back(cube.get());
         }
     }
+}
+
+void CubeHandler::SetupShader() {
     shader->use();
     for (auto cube : cubesToRender) {
+        nrVertex += cube->GetNrVertex();
         auto& material = cube->GetMaterial();
         std::string index = std::to_string(cube->GetMaterialIndex());
         shader->setVec3("materials["+ index +"].ambient", material.ambient);
         shader->setVec3("materials["+ index +"].diffuse", material.diffuse);
         shader->setVec3("materials["+ index +"].specular", material.specular);
         shader->setFloat("materials["+ index +"].shininess", material.shininess);
+        const auto& cubesVertexAttributes = cube->GetVertexAttributes();
+        vertexAttributes.insert(vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
     }
 
+    CreateBuffers(&vertexAttributes[0], sizeof(float) * vertexAttributes.size());
+    int attributes = 0;
+    SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0, attributes);
+    SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)), attributes);
+    SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)), attributes);
     glm::mat4 model = glm::mat4(1.0f);
-    shader->setMat4("model", model);  //<--- Not really using it atm, since no dynamic cubes.
-                                            // this should be passed to the vertex buffer instead.
+    shader->setMat4("model", model);
 }
 
 void CubeHandler::Draw(const Camera &camera) const {
-    for (auto cube : cubesToRender) {
-        cube->Draw();
-    }
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, NrVertex());
 }
 
 void CubeHandler::AddCube(std::unique_ptr<Cube>&& cube) {
@@ -55,11 +75,7 @@ size_t CubeHandler::NrMaterials() const {
 }
 
 size_t CubeHandler::NrVertex() const {
-    size_t output = 0;
-    for (auto cube : cubesToRender) {
-        output += cube->GetNrVertex();
-    }
-    return output;
+    return nrVertex;
 }
 
 void CubeHandler::FaceCulling() const {
@@ -94,4 +110,18 @@ void CubeHandler::FaceCulling() const {
         render(cube, Cube::Face::BACK, pos);
         pos.z++;
     }
+}
+
+void CubeHandler::CreateBuffers(float v[], size_t size) {
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, size, v, GL_STATIC_DRAW);
+
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+}
+
+void CubeHandler::ResetBuffers() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
 }

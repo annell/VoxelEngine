@@ -82,18 +82,20 @@ struct Side {
                 nVertices += 6;
             }
         }
+    }
+
+    void CreateRenderBuffers() {
         if (ShouldRender()) {
             CreateBuffers(&vertexAttributes[0], sizeof(float) * vertexAttributes.size());
         }
     }
 
-    void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr)  {
-        glVertexAttribPointer(attributes, size, type, normalized, stride, ptr);
-        glEnableVertexAttribArray(attributes++);
+    const std::vector<float>& GetVertexAttributes() {
+        return vertexAttributes;
     }
 
-    void SetIntVertexAttrib(GLuint size, GLenum type, GLsizei stride, const void* ptr)  {
-        glVertexAttribIPointer(attributes, size, type, stride, ptr);
+    void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr)  {
+        glVertexAttribPointer(attributes, size, type, normalized, stride, ptr);
         glEnableVertexAttribArray(attributes++);
     }
 
