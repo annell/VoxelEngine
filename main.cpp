@@ -7,7 +7,7 @@
 #include "Camera.h"
 #include "Cube.h"
 #include "Lightsource.h"
-#include "CubeHandler.h"
+#include "Chunk.h"
 #include "ModelLoader.h"
 
 #include <iostream>
@@ -66,34 +66,42 @@ int main()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
 
-    Shader lightingShader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
-                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs");
     Shader lightCubeShader("/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.vs",
                            "/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.fs");
 
-    CubeHandler cubeHandler(&lightingShader);
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", cubeHandler);
+    Chunk model(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
+                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", model);
+    model.Init();
 
-    auto floor = std::make_unique<Cube>(
+    Chunk model2(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
+                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", model2);
+    model2.Init();
+
+    Chunk floor(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
+                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
+    floor.AddCube(std::make_unique<Cube>(
             Position{0, -0.1, 0},
             Dimensions{10000, 0.1, 10000},
             Material{{0.0f, 0.0f, 0.0f},
                      {0.5f, 0.5f, 0.5f},
                      {0.5f, 0.5f, 0.5f},
                      {0.5f, 0.5f, 0.5f},
-                     32.0f}, 100);
-    floor->SetChunkPosition({0, -1, 0});
-    cubeHandler.AddCube(std::move(floor));
+                     32.0f}, 0));
+    floor.Init();
 
-    cubeHandler.Init();
-
-    LightSourceHandler lights(&lightCubeShader, &lightingShader);
+    std::vector<Shader*> shaders;
+    shaders.push_back(model.GetShader());
+    shaders.push_back(model2.GetShader());
+    shaders.push_back(floor.GetShader());
+    LightSourceHandler lights(&lightCubeShader, shaders);
 
     lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), 
                                 {1.0f, 1.0f, 1.0f}, 
                                 {1.0f, 1.0f, 1.0f}));
 
-    std::cout << "NrVertex: " << cubeHandler.NrVertex() << std::endl;
+    std::cout << "NrVertex: " << model.NrVertex() << std::endl;
 
     int n = 0;
     int FPSUpdate = 10;
@@ -119,6 +127,12 @@ int main()
             }
             light.SetPosition(pos);
         }
+        auto pos = model.GetPosition();
+        pos.x = pos.x + 0.01;
+        model.SetPosition(pos);
+        pos = model2.GetPosition();
+        pos.z = pos.z + 0.01;
+        model2.SetPosition(pos);
 
         processInput(window);
 
@@ -126,7 +140,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lights.Draw(camera);
-        cubeHandler.Draw(camera);
+        model.Draw();
+        model2.Draw();
+        floor.Draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

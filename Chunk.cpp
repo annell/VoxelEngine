@@ -2,19 +2,20 @@
 // Created by Stefan Annell on 2021-04-10.
 //
 
-#include "CubeHandler.h"
+#include "Chunk.h"
 #include <map>
+#include <glm.hpp>
 
-CubeHandler::CubeHandler(Shader *shader)
- : shader(shader) {
+Chunk::Chunk(Shader shader, Position position)
+ : shader(shader), position(position) {
 
 }
 
-CubeHandler::~CubeHandler() {
+Chunk::~Chunk() {
     ResetBuffers();
 }
 
-void CubeHandler::Init() {
+void Chunk::Init() {
     SetupCubesForRendering();
     SetupShader();
 }
@@ -24,7 +25,7 @@ void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei str
     glEnableVertexAttribArray(attributes++);
 }
 
-void CubeHandler::SetupCubesForRendering() {
+void Chunk::SetupCubesForRendering() {
     FaceCulling();
     for (auto& pair : cubesMap) {
         auto& cube = pair.second;
@@ -38,16 +39,16 @@ void CubeHandler::SetupCubesForRendering() {
     }
 }
 
-void CubeHandler::SetupShader() {
-    shader->use();
+void Chunk::SetupShader() {
+    shader.use();
     for (auto cube : cubesToRender) {
         nrVertex += cube->GetNrVertex();
         auto& material = cube->GetMaterial();
         std::string index = std::to_string(cube->GetMaterialIndex());
-        shader->setVec3("materials["+ index +"].ambient", material.ambient);
-        shader->setVec3("materials["+ index +"].diffuse", material.diffuse);
-        shader->setVec3("materials["+ index +"].specular", material.specular);
-        shader->setFloat("materials["+ index +"].shininess", material.shininess);
+        shader.setVec3("materials["+ index +"].ambient", material.ambient);
+        shader.setVec3("materials["+ index +"].diffuse", material.diffuse);
+        shader.setVec3("materials["+ index +"].specular", material.specular);
+        shader.setFloat("materials["+ index +"].shininess", material.shininess);
         const auto& cubesVertexAttributes = cube->GetVertexAttributes();
         vertexAttributes.insert(vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
     }
@@ -58,27 +59,28 @@ void CubeHandler::SetupShader() {
     SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)), attributes);
     SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)), attributes);
     glm::mat4 model = glm::mat4(1.0f);
-    shader->setMat4("model", model);
+    shader.setMat4("model", model);
 }
 
-void CubeHandler::Draw(const Camera &camera) const {
+void Chunk::Draw() const {
+    shader.use();
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, NrVertex());
 }
 
-void CubeHandler::AddCube(std::unique_ptr<Cube>&& cube) {
+void Chunk::AddCube(std::unique_ptr<Cube>&& cube) {
     cubesMap[cube->GetChunkPosition()] = std::move(cube);
 }
 
-size_t CubeHandler::NrMaterials() const {
+size_t Chunk::NrMaterials() const {
     return nrMaterials;
 }
 
-size_t CubeHandler::NrVertex() const {
+size_t Chunk::NrVertex() const {
     return nrVertex;
 }
 
-void CubeHandler::FaceCulling() const {
+void Chunk::FaceCulling() const {
     auto render = [&] (Cube* cube, Cube::Face face, const ChunkPosition& pos) {
         auto it = cubesMap.find(pos);
         if (it != cubesMap.end()) {
@@ -112,7 +114,7 @@ void CubeHandler::FaceCulling() const {
     }
 }
 
-void CubeHandler::CreateBuffers(float v[], size_t size) {
+void Chunk::CreateBuffers(float v[], size_t size) {
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, size, v, GL_STATIC_DRAW);
@@ -121,7 +123,24 @@ void CubeHandler::CreateBuffers(float v[], size_t size) {
     glBindVertexArray(VAO);
 }
 
-void CubeHandler::ResetBuffers() {
+void Chunk::ResetBuffers() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+}
+
+const Position& Chunk::GetPosition() const {
+    return position;
+}
+
+void Chunk::SetPosition(Position pos) {
+    position = pos;
+    glm::vec3 vecPos = {position.x, position.y, position.z};
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, vecPos);
+    shader.use();
+    shader.setMat4("model", model);
+}
+
+Shader* Chunk::GetShader() {
+    return &shader;
 }

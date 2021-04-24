@@ -11,15 +11,19 @@
 #include <map>
 #include <memory>
 
-class CubeHandler {
+class Chunk {
 public:
-    CubeHandler(Shader* shader);
-    ~CubeHandler();
+    Chunk(Shader, Position);
+    ~Chunk();
     void Init();
-    void Draw(const Camera& camera) const;
+    void Draw() const;
     void AddCube(std::unique_ptr<Cube>&&);
     size_t NrMaterials() const;
     size_t NrVertex() const;
+
+    const Position& GetPosition() const;
+    void SetPosition(Position);
+    Shader* GetShader();
 
 private:
     void SetupCubesForRendering();
@@ -28,10 +32,9 @@ private:
 
     size_t nrMaterials = 0;
     std::vector<Cube*> cubesToRender;
-    Shader* shader;
+    Shader shader;
 
     std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-
 
     void CreateBuffers(float v[], size_t size);
     void ResetBuffers();
@@ -39,7 +42,9 @@ private:
     unsigned int VBO;
     unsigned int VAO;
     std::vector<float> vertexAttributes;
-    size_t nrVertex;
+    size_t nrVertex = 0;
+
+    Position position;
 };
 
 #endif //VOXELENGINE_CUBEHANDLER_H

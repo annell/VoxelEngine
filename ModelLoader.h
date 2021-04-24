@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string>
 #include <map>
-#include "CubeHandler.h"
+#include "Chunk.h"
 
 namespace ModelLoader {
 namespace internal {
@@ -97,8 +97,9 @@ uint32_t count_solid_voxels_in_model(const ogt_vox_model* model)
     return solid_voxel_count;
 }
 
-void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, CubeHandler& cubeHandler)
+void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, Chunk& chunk)
 {
+    const auto chunkPos = chunk.GetPosition();
     uint32_t voxel_index = 0;
     std::map<uint32_t, int> materials;
     int nrMaterials = 0;
@@ -114,7 +115,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
                         materials[color_index] = nrMaterials++;
                     float size = 0.1f;
                     auto cube = std::make_unique<Cube>(
-                            Position{ (float)y*size, (float)z*size, (float)x*size}, // <---- They use different coordinate system, so here we compensate.
+                            Position{ (float)y*size + chunkPos.x, (float)z*size + chunkPos.y, (float)x*size + chunkPos.z}, // <---- They use different coordinate system, so here we compensate.
                             Dimensions{size, size, size},
                             Material{{0.2f, 0.8f, 0.3f},
                                     {(float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f},
@@ -122,7 +123,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
                                     {0.5f, 0.5f, 0.5f},
                                     32.0f}, materials[color_index]);
                     cube->SetChunkPosition({(int)y, (int)z, (int)x});
-                    cubeHandler.AddCube(std::move(cube));
+                    chunk.AddCube(std::move(cube));
                 }
             }
         }
@@ -131,7 +132,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
 
 }
 
-void LoadModel(std::string filename, CubeHandler& cubeHandler)
+void LoadModel(std::string filename, Chunk& chunk)
 {
     const ogt_vox_scene* scene = internal::load_vox_scene_with_groups(filename.c_str());
     if (scene)
@@ -187,7 +188,7 @@ void LoadModel(std::string filename, CubeHandler& cubeHandler)
             const ogt_vox_model* model = scene->models[model_index];
 
             uint32_t solid_voxel_count = internal::count_solid_voxels_in_model(model);
-            internal::fillHandlerWithCubes(model, scene->palette, cubeHandler);
+            internal::fillHandlerWithCubes(model, scene->palette, chunk);
             uint32_t total_voxel_count = model->size_x * model->size_y * model->size_z;
 
             printf(" model[%u] has dimension %ux%ux%u, with %u solid voxels of the total %u voxels (hash=%u)!\n",

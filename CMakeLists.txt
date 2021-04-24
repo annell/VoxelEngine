@@ -18,7 +18,7 @@ link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${SOIL_LINK})
 
 # Execute compilation command
 set(SOURCE_FILES main.cpp)
-add_executable(VoxelEngine main.cpp Shader.h Camera.h Cube.h Lightsource.cpp CubeHandler.cpp CubeHandler.h ModelLoader.h external/ogt_vox.h)
+add_executable(VoxelEngine main.cpp Shader.h Camera.h Cube.h Lightsource.cpp Chunk.cpp Chunk.h ModelLoader.h external/ogt_vox.h)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")

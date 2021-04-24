@@ -37,9 +37,9 @@ void LightSource::SetPosition(const glm::vec3& position) {
     model = glm::scale(model, glm::vec3(0.1f));
 }
 
-LightSourceHandler::LightSourceHandler(Shader *cubeShader, Shader *light)
+LightSourceHandler::LightSourceHandler(Shader *cubeShader, std::vector<Shader*> light)
  : lightCubeShader(cubeShader)
- , lightShader(light) {
+ , lightShaders(light) {
 
 }
 
@@ -51,15 +51,17 @@ void LightSourceHandler::Draw(const Camera& camera) const {
         light.Draw();
     }
 
-    lightShader->use();
-    lightShader->setInt("nrLights", lightSources.size());
-    camera.SetShaderParameters(*lightShader);
-    int n = 0;
-    for (auto& light : lightSources) {
-        std::string index = std::to_string(n);
-        lightShader->setVec3("lights[" + index +"].lightColor", light.GetColor());
-        lightShader->setVec3("lights[" + index + "].lightPos", light.GetPosition());
-        n++;
+    for (auto lightShader : lightShaders) {
+        lightShader->use();
+        lightShader->setInt("nrLights", lightSources.size());
+        camera.SetShaderParameters(*lightShader);
+        int n = 0;
+        for (auto& light : lightSources) {
+            std::string index = std::to_string(n);
+            lightShader->setVec3("lights[" + index +"].lightColor", light.GetColor());
+            lightShader->setVec3("lights[" + index + "].lightPos", light.GetPosition());
+            n++;
+        }
     }
 }
 

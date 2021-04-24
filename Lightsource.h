@@ -32,14 +32,14 @@ private:
 
 class LightSourceHandler {
 public:
-    LightSourceHandler(Shader* lightSource, Shader* light);
+    LightSourceHandler(Shader* lightSource, std::vector<Shader*> light);
     void Draw(const Camera& camera) const;
     void AddLight(const LightSource& light);
 
     std::vector<LightSource>& GetLightSources();
 private:
     Shader* lightCubeShader;
-    Shader* lightShader;
+    std::vector<Shader*> lightShaders;
     std::vector<LightSource> lightSources;
 };
 

@@ -113,7 +113,7 @@ public:
             Zoom = 90.0f;
     }
 
-    void SetShaderParameters(Shader& shader) const {
+    void SetShaderParameters(const Shader& shader) const {
         glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)800 / (float)600, 0.1f, 100.0f);
         glm::mat4 view = GetViewMatrix();
 
