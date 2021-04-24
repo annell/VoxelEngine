@@ -80,18 +80,17 @@ int main()
                            "/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.fs");
 
 
-    int nrCubes = 100;
     CubeHandler cubeHandler(&lightingShader);
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", cubeHandler);
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_sword.vox", cubeHandler);
 
     auto floor = std::make_unique<Cube>(
-            Position{0, -1, 0},
-            Dimensions{1000, 0.1, 1000},
-            Material{{0.2f, 0.8f, 0.31f},
-                     {0.2f, 0.2f, 0.2f},
-                     {1.0f, 0.5f, 0.31f},
+            Position{0, -0.1, 0},
+            Dimensions{10000, 0.1, 10000},
+            Material{{0.0f, 0.0f, 0.0f},
                      {0.5f, 0.5f, 0.5f},
-                     32.0f}, cubeHandler.NrMaterials() + 1);
+                     {0.5f, 0.5f, 0.5f},
+                     {0.5f, 0.5f, 0.5f},
+                     32.0f}, 100);
     floor->SetChunkPosition({0, -1, 0});
     cubeHandler.AddCube(std::move(floor));
 
@@ -99,8 +98,9 @@ int main()
 
     LightSourceHandler lights(&lightCubeShader, &lightingShader);
 
-    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.6f, 0.6f}, {1.0f, 3.0f, 1.0f}));
-    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), {0.6f, 0.2f, 0.2f}, {2.0f, 3.0f, 2.0f}));
+    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), 
+                                {1.0f, 1.0f, 1.0f}, 
+                                {1.0f, 1.0f, 1.0f}));
 
     std::cout << "NrVertex: " << cubeHandler.NrVertex() << std::endl;
 
@@ -136,7 +136,7 @@ int main()
 
         processInput(window);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lights.Draw(camera);
