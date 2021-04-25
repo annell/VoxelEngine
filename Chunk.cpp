@@ -63,9 +63,12 @@ void Chunk::SetupShader() {
 }
 
 void Chunk::Draw() const {
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     shader.use();
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, NrVertex());
+    glDisable(GL_CULL_FACE);
 }
 
 void Chunk::AddCube(std::unique_ptr<Cube>&& cube) {

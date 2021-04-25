@@ -9,6 +9,7 @@
 #include "Lightsource.h"
 #include "Chunk.h"
 #include "ModelLoader.h"
+#include "TextHandler.h"
 
 #include <iostream>
 #include <memory>
@@ -63,20 +64,21 @@ int main()
     glewInit();
 
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+
+    TextHandler text(SCR_WIDTH, SCR_HEIGHT, "/Users/stan/dev/C++/VoxelEngine/fonts/Arial.ttf", Shader("/Users/stan/dev/C++/VoxelEngine/shaders/text.vs", "/Users/stan/dev/C++/VoxelEngine/shaders/text.fs"));
+    text.Init();
 
     Shader lightCubeShader("/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.vs",
                            "/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.fs");
 
     Chunk model(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
                           "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", model);
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_knight.vox", model);
     model.Init();
 
     Chunk model2(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
                           "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/monu10.vox", model2);
+    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_sword.vox", model2);
     model2.Init();
 
     Chunk floor(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
@@ -105,14 +107,16 @@ int main()
 
     int n = 0;
     int FPSUpdate = 10;
+    std::string fps = "FPS: 0";
     while (!glfwWindowShouldClose(window)) {
         n++;
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
-        if (FPSUpdate-- <= 0) {
-            std::cout << "FPS: " << (int)(1/deltaTime) << std::endl;
-            FPSUpdate = 20;
+        if (FPSUpdate <= 0) {
+            fps = "FPS: " + std::to_string((int)(1/deltaTime));
+            FPSUpdate = 10;
         }
+        FPSUpdate--;
         lastFrame = currentFrame;
         bool first = true;
         for (auto& light : lights.GetLightSources()) {
@@ -143,6 +147,8 @@ int main()
         model.Draw();
         model2.Draw();
         floor.Draw();
+
+        text.RenderText(fps, 15.0f, SCR_HEIGHT - 25.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
