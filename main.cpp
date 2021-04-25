@@ -14,6 +14,11 @@
 #include <iostream>
 #include <memory>
 
+const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine";
+const std::string SHADERS = "/shaders";
+const std::string FONTS = "/fonts";
+const std::string MODELS = "/voxelObjects";
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -35,8 +40,6 @@ float lastFrame = 0.0f;
 
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -46,8 +49,6 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    // glfw window creation
-    // --------------------
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "VoxelEngine", NULL, NULL);
     if (window == NULL)
     {
@@ -65,24 +66,24 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    TextHandler text(SCR_WIDTH, SCR_HEIGHT, "/Users/stan/dev/C++/VoxelEngine/fonts/Arial.ttf", Shader("/Users/stan/dev/C++/VoxelEngine/shaders/text.vs", "/Users/stan/dev/C++/VoxelEngine/shaders/text.fs"));
+    TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", Shader(BASE_PATH + SHADERS + "/text.vs", BASE_PATH + SHADERS + "/text.fs"));
     text.Init();
 
-    Shader lightCubeShader("/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.vs",
-                           "/Users/stan/dev/C++/VoxelEngine/shaders/light_cube.fs");
+    Shader lightCubeShader(BASE_PATH + SHADERS + "/light_cube.vs",
+                           BASE_PATH + SHADERS + "/light_cube.fs");
 
-    Chunk model(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
-                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_knight.vox", model);
+    Chunk model(Shader(BASE_PATH + SHADERS + "/basic_light.vs",
+                        BASE_PATH + SHADERS + "/basic_light.fs"), {0, 0, 0});
+    ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", model);
     model.Init();
 
-    Chunk model2(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
-                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
-    ModelLoader::LoadModel("/Users/stan/dev/C++/VoxelEngine/voxelObjects/chr_sword.vox", model2);
+    Chunk model2(Shader(BASE_PATH + SHADERS + "/basic_light.vs",
+                        BASE_PATH + SHADERS + "/basic_light.fs"), {0, 0, 0});
+    ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", model2);
     model2.Init();
 
-    Chunk floor(Shader("/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.vs",
-                          "/Users/stan/dev/C++/VoxelEngine/shaders/basic_light.fs"), {0, 0, 0});
+    Chunk floor(Shader(BASE_PATH + SHADERS + "/basic_light.vs",
+                        BASE_PATH + SHADERS + "/basic_light.fs"), {0, 0, 0});
     floor.AddCube(std::make_unique<Cube>(
             Position{0, -0.1, 0},
             Dimensions{10000, 0.1, 10000},
