@@ -1,7 +1,7 @@
 #version 330 core
 out vec4 FragColor;
 
-#define MAXLIGHTS 128
+#define MAXLIGHTS 10
 #define MAXMATERIALS 128
 
 struct Material {
@@ -14,6 +14,12 @@ struct Material {
 struct Light {
     vec3 lightPos;
     vec3 lightColor;
+
+    int type;
+
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 
@@ -26,7 +32,7 @@ uniform Light lights[MAXLIGHTS];
 uniform Material materials[MAXMATERIALS];
 uniform vec3 viewPos;
 
-vec3 calculateLight(vec3 lightPos, vec3 lightColor) {
+vec3 ambientLight(vec3 lightPos, vec3 lightColor) {
     // ambient
     int i = MaterialIndex;
     vec3 ambient = lightColor * materials[i].ambient;
@@ -46,11 +52,26 @@ vec3 calculateLight(vec3 lightPos, vec3 lightColor) {
     return ambient + diffuse + specular;
 }
 
+float getAttenuation(vec3 lightPos, float constant, float linear, float quadratic) {
+    float distance    = length(lightPos - FragPos);
+    float attenuation = 1.0 / (constant + linear * distance + 
+                    quadratic * (distance * distance)); 
+    return attenuation;
+}
+
 void main()
 {
-    vec3 result = calculateLight(lights[0].lightPos, lights[0].lightColor);
+    vec3 result = ambientLight(lights[0].lightPos, lights[0].lightColor);
     for (int i = 1; i < nrLights; i++) {
-        vec3 light = calculateLight(lights[i].lightPos, lights[i].lightColor);
+        vec3 light = ambientLight(lights[i].lightPos, lights[i].lightColor);
+        if (lights[i].type == 1) {
+            light *= getAttenuation(
+                lights[i].lightPos, 
+                lights[i].constant, 
+                lights[i].linear, 
+                lights[i].quadratic
+            );
+        }
         result += light;
     }
     FragColor = vec4(result, 1.0);

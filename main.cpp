@@ -117,9 +117,29 @@ int main()
     shaders.push_back(floor.GetShader());
     LightSourceHandler lights(&lightCubeShader, shaders);
 
-    lights.AddLight(LightSource(new Cube({1, 1, 1}, {1.0, 1.0, 1.0}), 
-                                {1.0f, 1.0f, 1.0f}, 
-                                {1.0f, 1.0f, 1.0f}));
+    lights.AddLight(LightSource(new Cube({1, 1, 1}, {100.0, 100.0, 100.0}), 
+                                {0.15f, 0.15f, 0.15f}, 
+                                {1.0f, 100.0f, 1.0f}));
+                                
+    auto light = LightSource(new Cube({1, 1, 1}, {0.5, 0.5, 0.5}), 
+                                    {0.8f, 0.1f, 0.85f}, 
+                                    {0.5f, 0.5f, 0.5f});
+    light.constant = 1.0f;
+    light.linear = 1.5f;
+    light.quadratic = 3.8f;
+    light.type = 1;
+
+    lights.AddLight(light);
+
+    auto light2 = LightSource(new Cube({1, 1, 1}, {0.5, 0.5, 0.5}), 
+                                    {0.1f, 0.8f, 0.85f}, 
+                                    {1.5f, 0.7f, 1.5f});
+    light2.constant = 1.0f;
+    light2.linear = 1.5f;
+    light2.quadratic = 3.8f;
+    light2.type = 1;
+
+    lights.AddLight(light2);
 
     std::cout << "NrVertex: " << model.NrVertex() << std::endl;
 
@@ -140,21 +160,18 @@ int main()
         for (auto& light : lights.GetLightSources()) {
             auto pos = light.GetPosition();
             if (first) {
-                pos[0] = 1*sin((float)n / 40);
-                pos[2] = 1*cos((float)n / 40);
+                //pos[0] = 1*sin((float)n / 40);
+                //pos[2] = 1*cos((float)n / 40);
                 first = false;
             } else {
-                pos[0] = 1*cos((float)n / 40);
-                pos[2] = 1*sin((float)n / 40);
+                //pos[0] = 1*cos((float)n / 40);
+                //pos[2] = 1*sin((float)n / 40);
             }
             light.SetPosition(pos);
         }
         auto pos = model.GetPosition();
         pos.x = pos.x + 0.01;
         model.SetPosition(pos);
-        pos = model2.GetPosition();
-        pos.z = pos.z + 0.01;
-        model2.SetPosition(pos);
 
         processInput(window);
 

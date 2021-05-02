@@ -6,7 +6,11 @@
 LightSource::LightSource(Cube* cubeIn, glm::vec3 colorIn, glm::vec3 positionIn)
  : cube(cubeIn)
  , color(colorIn)
- , pos(positionIn) {
+ , pos(positionIn)
+ , constant(0)
+ , linear(0)
+ , quadratic(0)
+ , type(0) {
     cube->GenerateVertexAttributes();
     cube->CreateRenderBuffers();
     cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
@@ -28,6 +32,10 @@ const glm::vec3& LightSource::GetPosition() const {
 
 const glm::mat4& LightSource::GetModel() const {
     return model;
+}
+
+const int& LightSource::GetType() const {
+    return type;
 }
 
 void LightSource::SetPosition(const glm::vec3& position) {
@@ -60,6 +68,10 @@ void LightSourceHandler::Draw(const Camera& camera) const {
             std::string index = std::to_string(n);
             lightShader->setVec3("lights[" + index +"].lightColor", light.GetColor());
             lightShader->setVec3("lights[" + index + "].lightPos", light.GetPosition());
+            lightShader->setInt("lights[" + index + "].type", light.GetType());
+            lightShader->setFloat("lights[" + index + "].constant", light.constant);
+            lightShader->setFloat("lights[" + index + "].linear", light.linear);
+            lightShader->setFloat("lights[" + index + "].quadratic", light.quadratic);
             n++;
         }
     }

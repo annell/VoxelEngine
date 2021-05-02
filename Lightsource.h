@@ -20,9 +20,14 @@ public:
     void Draw() const;
     const glm::vec3& GetPosition() const;
     const glm::mat4& GetModel() const;
-    void SetPosition(const glm::vec3&);
     const glm::vec3& GetColor() const;
+    const int& GetType() const;
+    void SetPosition(const glm::vec3&);
 
+    float constant;
+    float linear;
+    float quadratic;
+    int type;
 private:
     Cube* cube;
     glm::vec3 color;
