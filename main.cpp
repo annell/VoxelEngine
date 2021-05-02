@@ -66,24 +66,41 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", Shader(BASE_PATH + SHADERS + "/text.vs", BASE_PATH + SHADERS + "/text.fs"));
+    TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", 
+        Shader(
+            {
+            std::make_pair(BASE_PATH + SHADERS + "/text.vs", GL_VERTEX_SHADER), 
+            std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)
+            }));
     text.Init();
 
-    Shader lightCubeShader(BASE_PATH + SHADERS + "/light_cube.vs",
-                           BASE_PATH + SHADERS + "/light_cube.fs");
+    Shader lightCubeShader(
+        {
+        std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+        std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
+        });
 
-    Chunk model(Shader(BASE_PATH + SHADERS + "/basic_light.vs",
-                        BASE_PATH + SHADERS + "/basic_light.fs"), {0, 0, 0});
+    Chunk model(Shader(
+        {
+            std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
+            std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
+        }), {0, 0, 0});
     ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", model);
     model.Init();
 
-    Chunk model2(Shader(BASE_PATH + SHADERS + "/basic_light.vs",
-                        BASE_PATH + SHADERS + "/basic_light.fs"), {0, 0, 0});
+    Chunk model2(Shader(
+        {
+            std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
+            std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
+        }), {0, 0, 0});
     ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", model2);
     model2.Init();
 
-    Chunk floor(Shader(BASE_PATH + SHADERS + "/basic_light.vs",
-                        BASE_PATH + SHADERS + "/basic_light.fs"), {0, 0, 0});
+    Chunk floor(Shader(
+        {
+            std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
+            std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER) 
+        }), {0, 0, 0});
     floor.AddCube(std::make_unique<Cube>(
             Position{0, -0.1, 0},
             Dimensions{10000, 0.1, 10000},
