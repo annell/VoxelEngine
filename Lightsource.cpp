@@ -3,45 +3,43 @@
 //
 #include "Lightsource.h"
 
-LightSource::LightSource(Cube* cubeIn, glm::vec3 colorIn, glm::vec3 positionIn)
- : cube(cubeIn)
- , color(colorIn)
- , pos(positionIn)
- , constant(0)
- , linear(0)
- , quadratic(0)
- , type(0) {
-    cube->GenerateVertexAttributes();
-    cube->CreateRenderBuffers();
-    cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+LightSource::LightSource(LightConfig config) 
+ : config(config) {
+    config.cube->GenerateVertexAttributes();
+    config.cube->CreateRenderBuffers();
+    config.cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     model = glm::mat4(1.0f);
-    model = glm::translate(model, pos);
-}
+    model = glm::translate(model, config.pos);
+ }
 
 void LightSource::Draw() const {
-    cube->Draw();
+    config.cube->Draw();
 }
 
 const glm::vec3 & LightSource::GetColor() const {
-    return color;
+    return config.color;
 }
 
 const glm::vec3& LightSource::GetPosition() const {
-    return pos;
+    return config.pos;
 }
 
 const glm::mat4& LightSource::GetModel() const {
     return model;
 }
 
-const int& LightSource::GetType() const {
-    return type;
+const LightType& LightSource::GetType() const {
+    return config.type;
+}
+
+const LightConfig& LightSource::GetConfig() const {
+    return config;
 }
 
 void LightSource::SetPosition(const glm::vec3& position) {
-    pos = position;
+    config.pos = position;
     model = glm::mat4(1.0f);
-    model = glm::translate(model, pos);
+    model = glm::translate(model, config.pos);
     model = glm::scale(model, glm::vec3(0.1f));
 }
 
@@ -68,10 +66,10 @@ void LightSourceHandler::Draw(const Camera& camera) const {
             std::string index = std::to_string(n);
             lightShader->setVec3("lights[" + index +"].lightColor", light.GetColor());
             lightShader->setVec3("lights[" + index + "].lightPos", light.GetPosition());
-            lightShader->setInt("lights[" + index + "].type", light.GetType());
-            lightShader->setFloat("lights[" + index + "].constant", light.constant);
-            lightShader->setFloat("lights[" + index + "].linear", light.linear);
-            lightShader->setFloat("lights[" + index + "].quadratic", light.quadratic);
+            lightShader->setInt("lights[" + index + "].type", static_cast<int>(light.GetType()));
+            lightShader->setFloat("lights[" + index + "].constant", light.GetConfig().atteunation.constant);
+            lightShader->setFloat("lights[" + index + "].linear", light.GetConfig().atteunation.linear);
+            lightShader->setFloat("lights[" + index + "].quadratic", light.GetConfig().atteunation.quadratic);
             n++;
         }
     }

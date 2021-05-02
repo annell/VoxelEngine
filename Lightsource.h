@@ -14,25 +14,40 @@
 #include "Shader.h"
 #include "Camera.h"
 
+enum class LightType {
+    AMBIENT = 0,
+    POINT = 1
+};
+
+struct Atteunation {
+    float constant = 0;
+    float linear = 0;
+    float quadratic = 0;
+};
+
+struct LightConfig {
+    LightType type;
+    Cube* cube;
+    glm::vec3 color;
+    glm::vec3 pos;
+    Atteunation atteunation;
+};
+
 class LightSource {
 public:
+    LightSource(LightConfig config);
     LightSource(Cube* cube, glm::vec3 color, glm::vec3 position);
     void Draw() const;
     const glm::vec3& GetPosition() const;
     const glm::mat4& GetModel() const;
     const glm::vec3& GetColor() const;
-    const int& GetType() const;
+    const LightType& GetType() const;
+    const LightConfig& GetConfig() const;
     void SetPosition(const glm::vec3&);
 
-    float constant;
-    float linear;
-    float quadratic;
-    int type;
 private:
-    Cube* cube;
-    glm::vec3 color;
-    glm::vec3 pos;
     glm::mat4 model;
+    LightConfig config;
 };
 
 class LightSourceHandler {
