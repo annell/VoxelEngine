@@ -35,7 +35,6 @@ bool Engine::Init() {
     glfwSetFramebufferSizeCallback(window, MouseHandler::framebuffer_size_callback);
     glfwSetCursorPosCallback(window, MouseHandler::mouse_callback);
     glfwSetScrollCallback(window, MouseHandler::scroll_callback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glewInit();
 

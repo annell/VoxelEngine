@@ -12,6 +12,7 @@
 #include "TextHandler.h"
 #include "Engine.h"
 #include "KeyboardHandler.h"
+#include "MouseHandler.h"
 
 #include <iostream>
 #include <memory>
@@ -59,6 +60,18 @@ int main()
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
                 engine.GetCamera()->ProcessKeyboard(RIGHT, engine.GetDeltaTime());
         }});
+
+    KeyboardHandler::RegisterAction({
+        [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+                MouseHandler::UnlockCamera();
+        }});
+
+    KeyboardHandler::RegisterAction({
+          [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+                MouseHandler::LockCamera();
+          }});
 
     TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", 
         Shader(
