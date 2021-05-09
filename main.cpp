@@ -10,6 +10,8 @@
 #include "Chunk.h"
 #include "ModelLoader.h"
 #include "TextHandler.h"
+#include "Engine.h"
+#include "KeyboardHandler.h"
 
 #include <iostream>
 #include <memory>
@@ -19,52 +21,44 @@ const std::string SHADERS = "/shaders";
 const std::string FONTS = "/fonts";
 const std::string MODELS = "/voxelObjects";
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow *window);
-
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-// camera
-Camera camera(glm::vec3(0.0f, 1.0f, 3.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
-
-// timing
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
 int main()
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    auto& engine = Engine::GetEngine();
+    engine.Init();
 
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+    KeyboardHandler::RegisterAction({
+        [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+                glfwSetWindowShouldClose(engine.GetWindow(), true);
+        }});
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "VoxelEngine", NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    KeyboardHandler::RegisterAction({
+        [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+                engine.GetCamera()->ProcessKeyboard(FORWARD, engine.GetDeltaTime());
+        }});
 
-    glewInit();
+    KeyboardHandler::RegisterAction({
+        [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+                engine.GetCamera()->ProcessKeyboard(BACKWARD, engine.GetDeltaTime());
+        }});
 
-    glEnable(GL_DEPTH_TEST);
+    KeyboardHandler::RegisterAction({
+            [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+                engine.GetCamera()->ProcessKeyboard(LEFT, engine.GetDeltaTime());
+        }});
+
+    KeyboardHandler::RegisterAction({
+            [&engine] () {
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+                engine.GetCamera()->ProcessKeyboard(RIGHT, engine.GetDeltaTime());
+        }});
 
     TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", 
         Shader(
@@ -148,92 +142,29 @@ int main()
     int n = 0;
     int FPSUpdate = 10;
     std::string fps = "FPS: 0";
-    while (!glfwWindowShouldClose(window)) {
+    engine.RegisterOnTick([&] (float deltaTime) {
         n++;
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
         if (FPSUpdate <= 0) {
             fps = "FPS: " + std::to_string((int)(1/deltaTime));
             FPSUpdate = 10;
         }
         FPSUpdate--;
-        lastFrame = currentFrame;
-        bool first = true;
         for (auto& light : lights.GetLightSources()) {
             auto pos = light.GetPosition();
-            if (first) {
-                //pos[0] = 1*sin((float)n / 40);
-                //pos[2] = 1*cos((float)n / 40);
-                first = false;
-            } else {
-                //pos[0] = 1*cos((float)n / 40);
-                //pos[2] = 1*sin((float)n / 40);
-            }
             light.SetPosition(pos);
         }
         auto pos = model.GetPosition();
         pos.x = pos.x + 0.01;
         model.SetPosition(pos);
 
-        processInput(window);
-
-        glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        lights.Draw(camera);
+        lights.Draw(*engine.GetCamera());
         model.Draw();
         model2.Draw();
         floor.Draw();
 
         text.RenderText(fps, 15.0f, SCR_HEIGHT - 25.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
+    });
+    engine.StartLoop();
     return 0;
 }
 
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    camera.ProcessMouseScroll(yoffset);
-}
