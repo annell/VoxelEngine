@@ -2,8 +2,7 @@
 // Created by Stefan Annell on 2021-04-10.
 //
 
-#ifndef VOXELENGINE_CUBEHANDLER_H
-#define VOXELENGINE_CUBEHANDLER_H
+#pragma once
 
 #include "Cube.h"
 #include "Camera.h"
@@ -11,9 +10,11 @@
 #include <map>
 #include <memory>
 
+namespace engine::entities {
+
 class Chunk {
 public:
-    Chunk(Shader, Position);
+    Chunk(rendering::Shader, Position);
     ~Chunk();
     void Init();
     void Draw() const;
@@ -23,7 +24,7 @@ public:
 
     const Position& GetPosition() const;
     void SetPosition(Position);
-    Shader* GetShader();
+    rendering::Shader* GetShader();
 
 private:
     void SetupCubesForRendering();
@@ -32,7 +33,7 @@ private:
 
     size_t nrMaterials = 0;
     std::vector<Cube*> cubesToRender;
-    Shader shader;
+    rendering::Shader shader;
 
     std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
 
@@ -47,4 +48,4 @@ private:
     Position position;
 };
 
-#endif //VOXELENGINE_CUBEHANDLER_H
+}

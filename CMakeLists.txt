@@ -41,7 +41,7 @@ add_executable(VoxelEngine
         entities/EntityComponentSystem.cpp
         entities/EntityComponentSystem.h)
 
-include_directories(entities utility input rendering)
+include_directories(entities utility input rendering core)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")

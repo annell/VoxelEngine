@@ -1,8 +1,7 @@
 //
 // Created by Stefan Annell on 2021-03-21.
 //
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 #include <glm.hpp>
 
@@ -12,6 +11,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
+
+namespace engine::rendering {
 
 class Shader
 {
@@ -56,7 +57,7 @@ public:
             glDeleteShader(shader);
         }
     }
-    
+
     // activate the shader
     // ------------------------------------------------------------------------
     void use() const
@@ -153,4 +154,6 @@ private:
         }
     }
 };
-#endif
+
+}
+

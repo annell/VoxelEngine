@@ -5,6 +5,8 @@
 #pragma once
 #include <map>
 
+namespace engine::entities {
+
 class Entity {
 public:
     using Identity = int;
@@ -47,4 +49,6 @@ std::shared_ptr<T> EntityComponentSystem::GetComponent(const Entity& handle) {
 template<typename T>
 void EntityComponentSystem::AddComponent(std::shared_ptr<T> component, const Entity& handle) {
     GetComponents<T>()[handle] = component;
+}
+
 }

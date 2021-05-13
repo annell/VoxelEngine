@@ -2,8 +2,7 @@
 // Created by Stefan Annell on 2021-03-21.
 //
 
-#ifndef VOXELENGINE_LIGHTSOURCE_H
-#define VOXELENGINE_LIGHTSOURCE_H
+#pragma once
 
 #include <glew.h>
 #include <glfw3.h>
@@ -13,6 +12,8 @@
 #include "Cube.h"
 #include "Shader.h"
 #include "Camera.h"
+
+namespace engine::entities {
 
 enum class LightType {
     AMBIENT = 0,
@@ -52,15 +53,15 @@ private:
 
 class LightSourceHandler {
 public:
-    LightSourceHandler(Shader* lightSource, std::vector<Shader*> light);
-    void Draw(const Camera& camera) const;
+    LightSourceHandler(rendering::Shader* lightSource, std::vector<rendering::Shader*> light);
+    void Draw(const rendering::Camera& camera) const;
     void AddLight(const LightSource& light);
 
     std::vector<LightSource>& GetLightSources();
 private:
-    Shader* lightCubeShader;
-    std::vector<Shader*> lightShaders;
+    rendering::Shader* lightCubeShader;
+    std::vector<rendering::Shader*> lightShaders;
     std::vector<LightSource> lightSources;
 };
 
-#endif //VOXELENGINE_LIGHTSOURCE_H
+}

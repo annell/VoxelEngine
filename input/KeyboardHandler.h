@@ -9,6 +9,8 @@
 #include <vector>
 #include <functional>
 
+namespace engine::input {
+
 using Action = std::function<void()>;
 
 struct KeyAction {
@@ -22,4 +24,4 @@ struct KeyboardHandler {
     static void RegisterAction(KeyAction);
 };
 
-
+}

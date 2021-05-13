@@ -2,14 +2,15 @@
 // Created by Stefan Annell on 2021-03-21.
 //
 
-#ifndef GRAPHICSLIGHTNING_CUBE_H
-#define GRAPHICSLIGHTNING_CUBE_H
+#pragma once
 
 #include <glew.h>
 #include <glfw3.h>
 #include <vector>
 
 #include "Shader.h"
+
+namespace engine::entities {
 
 struct Material {
     glm::vec3 color;
@@ -287,4 +288,4 @@ private:
     Side sides[6];
 };
 
-#endif //GRAPHICSLIGHTNING_CUBE_H
+}

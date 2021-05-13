@@ -6,7 +6,9 @@
 #include <map>
 #include <glm.hpp>
 
-Chunk::Chunk(Shader shader, Position position)
+namespace engine::entities {
+
+Chunk::Chunk(rendering::Shader shader, Position position)
  : shader(shader), position(position) {
 
 }
@@ -144,6 +146,8 @@ void Chunk::SetPosition(Position pos) {
     shader.setMat4("model", model);
 }
 
-Shader* Chunk::GetShader() {
+rendering::Shader* Chunk::GetShader() {
     return &shader;
+}
+
 }

@@ -28,130 +28,130 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
-    auto& engine = Engine::GetEngine();
+    auto& engine = engine::Engine::GetEngine();
     engine.Init();
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
                 glfwSetWindowShouldClose(engine.GetWindow(), true);
         }});
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(FORWARD, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(engine::rendering::FORWARD, engine.GetDeltaTime());
         }});
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(BACKWARD, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(engine::rendering::BACKWARD, engine.GetDeltaTime());
         }});
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
             [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(LEFT, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(engine::rendering::LEFT, engine.GetDeltaTime());
         }});
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
             [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(RIGHT, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(engine::rendering::RIGHT, engine.GetDeltaTime());
         }});
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-                MouseHandler::UnlockCamera();
+                engine::input::MouseHandler::UnlockCamera();
         }});
 
-    KeyboardHandler::RegisterAction({
+    engine::input::KeyboardHandler::RegisterAction({
           [&engine] () {
             if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
-                MouseHandler::LockCamera();
+                engine::input::MouseHandler::LockCamera();
           }});
 
-    TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", 
-        Shader(
+    engine::utility::TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf",
+          engine::rendering::Shader(
             {
             std::make_pair(BASE_PATH + SHADERS + "/text.vs", GL_VERTEX_SHADER), 
             std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)
             }));
     text.Init();
 
-    Shader lightCubeShader(
+    engine::rendering::Shader lightCubeShader(
         {
         std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
         std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
         });
 
-    Chunk model(Shader(
+    engine::entities::Chunk model(engine::rendering::Shader(
         {
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
         }), {0, 0, 0});
-    ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", model);
+    engine::utility::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", model);
     model.Init();
 
-    Chunk model2(Shader(
+    engine::entities::Chunk model2(engine::rendering::Shader(
         {
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
         }), {0, 0, 0});
-    ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", model2);
+    engine::utility::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", model2);
     model2.Init();
 
-    Chunk floor(Shader(
+    engine::entities::Chunk floor(engine::rendering::Shader(
         {
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER) 
         }), {0, 0, 0});
-    floor.AddCube(std::make_unique<Cube>(
-            Position{0, -0.1, 0},
-            Dimensions{10000, 0.1, 10000},
-            Material{{0.0f, 0.0f, 0.0f},
+    floor.AddCube(std::make_unique<engine::entities::Cube>(
+            engine::entities::Position{0, -0.1, 0},
+            engine::entities::Dimensions{10000, 0.1, 10000},
+            engine::entities::Material{{0.0f, 0.0f, 0.0f},
                      {0.5f, 0.5f, 0.5f},
                      {0.5f, 0.5f, 0.5f},
                      {0.5f, 0.5f, 0.5f},
                      32.0f}, 0));
     floor.Init();
-    Entity shaderEntity(5);
-    EngineHelper::AddComponent(std::make_shared<Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+    engine::entities::Entity shaderEntity(5);
+    engine::EngineHelper::AddComponent(std::make_shared<engine::rendering::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                              std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
                             }), shaderEntity);
 
-    auto component = EngineHelper::GetComponent<Shader>(shaderEntity);
-    auto component2 = EngineHelper::GetComponent<Cube>(shaderEntity);
+    auto component = engine::EngineHelper::GetComponent<engine::rendering::Shader>(shaderEntity);
+    auto component2 = engine::EngineHelper::GetComponent<engine::entities::Cube>(shaderEntity);
 
-    std::vector<Shader*> shaders;
+    std::vector<engine::rendering::Shader*> shaders;
     shaders.push_back(model.GetShader());
     shaders.push_back(model2.GetShader());
     shaders.push_back(floor.GetShader());
-    LightSourceHandler lights(&lightCubeShader, shaders);
+    engine::entities::LightSourceHandler lights(&lightCubeShader, shaders);
 
-    lights.AddLight(LightSource(
-        LightConfig{
-            LightType::AMBIENT,
-            new Cube({1, 1, 1}, {100.0, 100.0, 100.0}), 
+    lights.AddLight(engine::entities::LightSource(
+        engine::entities::LightConfig{
+            engine::entities::LightType::AMBIENT,
+            new engine::entities::Cube({1, 1, 1}, {100.0, 100.0, 100.0}),
             {0.15f, 0.15f, 0.15f}, 
             {1.0f, 100.0f, 1.0f}
         }));
                                 
-    lights.AddLight(LightSource(
-        LightConfig{
-            LightType::POINT,
-            new Cube({1, 1, 1}, {0.5, 0.5, 0.5}), 
+    lights.AddLight(engine::entities::LightSource(
+        engine::entities::LightConfig{
+            engine::entities::LightType::POINT,
+            new engine::entities::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
             {0.8f, 0.1f, 0.85f}, 
             {0.5f, 0.5f, 0.5f},
             {1.0f, 1.5f, 3.8f},
         }));
 
-    lights.AddLight(LightSource(
-        LightConfig{
-            LightType::POINT,
-            new Cube({1, 1, 1}, {0.5, 0.5, 0.5}), 
+    lights.AddLight(engine::entities::LightSource(
+            engine::entities::LightConfig{
+            engine::entities::LightType::POINT,
+            new engine::entities::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
             {0.1f, 0.8f, 0.85f}, 
             {1.5f, 0.7f, 1.5f},
             {1.0f, 1.5f, 3.8f},

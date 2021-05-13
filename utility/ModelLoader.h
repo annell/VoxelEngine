@@ -9,7 +9,7 @@
 #include <map>
 #include "Chunk.h"
 
-namespace ModelLoader {
+namespace engine::utility::ModelLoader {
 namespace internal {
 
 // a helper function to load a magica voxel scene given a filename.
@@ -97,7 +97,7 @@ uint32_t count_solid_voxels_in_model(const ogt_vox_model* model)
     return solid_voxel_count;
 }
 
-void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, Chunk& chunk)
+void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, entities::Chunk& chunk)
 {
     const auto chunkPos = chunk.GetPosition();
     uint32_t voxel_index = 0;
@@ -114,10 +114,10 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
                     if (iterator == materials.end())
                         materials[color_index] = nrMaterials++;
                     float size = 0.1f;
-                    auto cube = std::make_unique<Cube>(
-                            Position{ (float)y*size + chunkPos.x, (float)z*size + chunkPos.y, (float)x*size + chunkPos.z}, // <---- They use different coordinate system, so here we compensate.
-                            Dimensions{size, size, size},
-                            Material{{0.2f, 0.8f, 0.3f},
+                    auto cube = std::make_unique<entities::Cube>(
+                            entities::Position{ (float)y*size + chunkPos.x, (float)z*size + chunkPos.y, (float)x*size + chunkPos.z}, // <---- They use different coordinate system, so here we compensate.
+                            entities::Dimensions{size, size, size},
+                            entities::Material{{0.2f, 0.8f, 0.3f},
                                     {(float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f},
                                     {1.0f, 0.5f, 0.31f},
                                     {0.5f, 0.5f, 0.5f},
@@ -132,7 +132,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, C
 
 }
 
-void LoadModel(std::string filename, Chunk& chunk)
+void LoadModel(std::string filename, entities::Chunk& chunk)
 {
     const ogt_vox_scene* scene = internal::load_vox_scene_with_groups(filename.c_str());
     if (scene)

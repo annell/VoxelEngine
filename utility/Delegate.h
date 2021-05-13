@@ -7,6 +7,9 @@
 #include <functional>
 #include <map>
 
+namespace engine::utility {
+
+
 template <typename... Values>
 class Delegate {
     using Function = std::function<void(Values...)>;
@@ -37,4 +40,6 @@ void Delegate<Values...>::Broadcast(Values... args) {
         auto& callback = pair.second;
         callback(std::forward<Values>(args)...);
     }
+}
+
 }

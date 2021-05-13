@@ -13,9 +13,11 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H"freetype/freetype.h"
 
+namespace engine::utility {
+
 class TextHandler {
 public:
-    TextHandler(int screenWidth, int screenHeight, std::string font, Shader);
+    TextHandler(int screenWidth, int screenHeight, std::string font, rendering::Shader);
     void Init();
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
@@ -34,10 +36,10 @@ private:
     int ScreenWidth;
     int ScreenHeight;
     std::string Font;
-    Shader FontShader;
+    rendering::Shader FontShader;
 };
 
-TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, Shader shader)
+TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, rendering::Shader shader)
 : ScreenWidth(screenWidth)
 , ScreenHeight(screenHeight)
 , Font(font)
@@ -178,4 +180,6 @@ void TextHandler::_RenderText(std::string text, float x, float y, float scale, g
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 }

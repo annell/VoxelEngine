@@ -6,11 +6,16 @@
 #include "EntityComponentSystem.h"
 #define GL_SILENCE_DEPRECATION
 
-class Camera;
 class GLFWwindow;
 
+namespace engine {
 
-using OnTick = Delegate<float>;
+namespace rendering {
+    class Camera;
+}
+
+
+using OnTick = utility::Delegate<float>;
 class Engine {
 private:
     Engine() = default;
@@ -19,11 +24,11 @@ private:
 public:
     static Engine& GetEngine();
     bool Init();
-    Camera* GetCamera();
+    rendering::Camera* GetCamera();
     GLFWwindow* GetWindow();
     void StartLoop();
     float GetDeltaTime() const;
-    EntityComponentSystem& GetComponents();
+    entities::EntityComponentSystem& GetComponents();
 
     OnTick onTick;
 private:
@@ -32,17 +37,19 @@ private:
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     GLFWwindow* window = nullptr;
-    Camera* camera = nullptr;
-    EntityComponentSystem components;
+    rendering::Camera* camera = nullptr;
+    entities::EntityComponentSystem components;
 };
 namespace EngineHelper {
     template <typename T>
-    std::shared_ptr<T> GetComponent(const Entity& handle) {
+    std::shared_ptr<T> GetComponent(const entities::Entity& handle) {
         return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
     }
 
     template <typename T>
-    void AddComponent(std::shared_ptr<T> component, const Entity& handle) {
+    void AddComponent(std::shared_ptr<T> component, const entities::Entity& handle) {
         return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
     }
+}
+
 }

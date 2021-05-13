@@ -5,6 +5,8 @@
 #pragma once
 
 #include <glfw3.h>
+namespace engine::input {
+
 struct MouseHandler {
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -13,4 +15,4 @@ struct MouseHandler {
     static void LockCamera();
 };
 
-
+}

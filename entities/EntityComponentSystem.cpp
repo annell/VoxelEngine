@@ -4,6 +4,8 @@
 
 #include "EntityComponentSystem.h"
 
+namespace engine::entities {
+
 Entity::Entity(Entity::Identity id)
  : id(id) {
 }
@@ -18,4 +20,6 @@ auto Entity::as_tie() const {
 
 bool Entity::operator<(const Entity &rhs) const {
     return as_tie() < rhs.as_tie();
+}
+
 }

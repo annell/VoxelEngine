@@ -4,6 +4,8 @@
 
 #include "KeyboardHandler.h"
 
+namespace engine::input {
+
 namespace internal {
 RegistredKeys& GetRegisteredKeys() {
     static RegistredKeys registeredKeys;
@@ -22,4 +24,6 @@ void KeyboardHandler::processInput() {
 void KeyboardHandler::RegisterAction(KeyAction keyAction) {
     auto& keys = internal::GetRegisteredKeys();
     keys.push_back(keyAction);
+}
+
 }

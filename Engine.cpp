@@ -8,6 +8,8 @@
 #include "Camera.h"
 
 
+namespace engine {
+
 Engine::~Engine() {
     if (camera) {
         delete camera;
@@ -32,19 +34,19 @@ bool Engine::Init() {
         return false;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, MouseHandler::framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, MouseHandler::mouse_callback);
-    glfwSetScrollCallback(window, MouseHandler::scroll_callback);
+    glfwSetFramebufferSizeCallback(window, input::MouseHandler::framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, input::MouseHandler::mouse_callback);
+    glfwSetScrollCallback(window, input::MouseHandler::scroll_callback);
 
     glewInit();
 
     glEnable(GL_DEPTH_TEST);
 
-    camera = new Camera(glm::vec3(0.0f, 1.0f, 3.0f));
+    camera = new rendering::Camera(glm::vec3(0.0f, 1.0f, 3.0f));
     return true;
 }
 
-Camera *Engine::GetCamera() {
+rendering::Camera *Engine::GetCamera() {
     return camera;
 }
 
@@ -61,7 +63,7 @@ void Engine::StartLoop() {
         glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        KeyboardHandler::processInput();
+        input::KeyboardHandler::processInput();
         onTick.Broadcast(GetDeltaTime());
 
         glfwSwapBuffers(window);
@@ -80,6 +82,8 @@ Engine &Engine::GetEngine() {
     return engine;
 }
 
-EntityComponentSystem &Engine::GetComponents() {
+entities::EntityComponentSystem &Engine::GetComponents() {
     return components;
+}
+
 }

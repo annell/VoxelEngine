@@ -3,7 +3,9 @@
 //
 #include "Lightsource.h"
 
-LightSource::LightSource(LightConfig config) 
+namespace engine::entities {
+
+LightSource::LightSource(LightConfig config)
  : config(config) {
     config.cube->GenerateVertexAttributes();
     config.cube->CreateRenderBuffers();
@@ -43,13 +45,13 @@ void LightSource::SetPosition(const glm::vec3& position) {
     model = glm::scale(model, glm::vec3(0.1f));
 }
 
-LightSourceHandler::LightSourceHandler(Shader *cubeShader, std::vector<Shader*> light)
+LightSourceHandler::LightSourceHandler(rendering::Shader *cubeShader, std::vector<rendering::Shader*> light)
  : lightCubeShader(cubeShader)
  , lightShaders(light) {
 
 }
 
-void LightSourceHandler::Draw(const Camera& camera) const {
+void LightSourceHandler::Draw(const rendering::Camera& camera) const {
     lightCubeShader->use();
     camera.SetShaderParameters(*lightCubeShader);
     for (auto &light : lightSources) {
@@ -81,4 +83,6 @@ void LightSourceHandler::AddLight(const LightSource& light) {
 
 std::vector<LightSource> & LightSourceHandler::GetLightSources() {
     return lightSources;
+}
+
 }

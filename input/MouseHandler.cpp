@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "../Engine.h"
 
+namespace engine::input {
 namespace internal {
 
 const unsigned int SCR_WIDTH = 800;
@@ -61,3 +62,4 @@ void MouseHandler::LockCamera() {
     internal::mouseLock = true;
 }
 
+}
