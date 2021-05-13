@@ -17,7 +17,7 @@
 #include <iostream>
 #include <memory>
 
-const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine";
+const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine/resources";
 const std::string SHADERS = "/shaders";
 const std::string FONTS = "/fonts";
 const std::string MODELS = "/voxelObjects";
