@@ -117,6 +117,13 @@ int main()
                      {0.5f, 0.5f, 0.5f},
                      32.0f}, 0));
     floor.Init();
+    Entity shaderEntity(5);
+    EngineHelper::AddComponent(std::make_shared<Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+                             std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
+                            }), shaderEntity);
+
+    auto component = EngineHelper::GetComponent<Shader>(shaderEntity);
+    auto component2 = EngineHelper::GetComponent<Cube>(shaderEntity);
 
     std::vector<Shader*> shaders;
     shaders.push_back(model.GetShader());
@@ -155,7 +162,7 @@ int main()
     int n = 0;
     int FPSUpdate = 10;
     std::string fps = "FPS: 0";
-    engine.RegisterOnTick([&] (float deltaTime) {
+    engine.onTick.Bind([&] (float deltaTime) {
         n++;
         if (FPSUpdate <= 0) {
             fps = "FPS: " + std::to_string((int)(1/deltaTime));

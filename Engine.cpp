@@ -62,19 +62,13 @@ void Engine::StartLoop() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         KeyboardHandler::processInput();
-        for (auto callback : OnTickCallbacks) {
-            callback(deltaTime);
-        }
+        onTick.Broadcast(GetDeltaTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     glfwTerminate();
-}
-
-void Engine::RegisterOnTick(Engine::OnTick callback) {
-    OnTickCallbacks.push_back(callback);
 }
 
 float Engine::GetDeltaTime() const {
@@ -84,4 +78,8 @@ float Engine::GetDeltaTime() const {
 Engine &Engine::GetEngine() {
     static Engine engine;
     return engine;
+}
+
+EntityComponentSystem &Engine::GetComponents() {
+    return components;
 }

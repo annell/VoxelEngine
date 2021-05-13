@@ -31,7 +31,7 @@ add_executable(VoxelEngine
     ModelLoader.h 
     external/ogt_vox.h
     TextHandler.h
-        Engine.cpp Engine.h MouseHandler.cpp MouseHandler.h KeyboardHandler.cpp KeyboardHandler.h)
+        Engine.cpp Engine.h MouseHandler.cpp MouseHandler.h KeyboardHandler.cpp KeyboardHandler.h Delegate.h EntityComponentSystem.cpp EntityComponentSystem.h)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")
