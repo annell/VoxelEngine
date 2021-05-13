@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string>
 #include <map>
-#include "../entities/Chunk.h"
+#include "Chunk.h"
 
 namespace ModelLoader {
 namespace internal {

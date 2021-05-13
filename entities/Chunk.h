@@ -6,7 +6,7 @@
 #define VOXELENGINE_CUBEHANDLER_H
 
 #include "Cube.h"
-#include "../rendering/Camera.h"
+#include "Camera.h"
 #include <vector>
 #include <map>
 #include <memory>

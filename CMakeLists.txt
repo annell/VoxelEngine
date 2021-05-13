@@ -29,9 +29,19 @@ add_executable(VoxelEngine
         entities/Chunk.cpp
         entities/Chunk.h
         utility/ModelLoader.h
-    external/ogt_vox.h
+        external/ogt_vox.h
         utility/TextHandler.h
-        Engine.cpp Engine.h input/MouseHandler.cpp input/MouseHandler.h input/KeyboardHandler.cpp input/KeyboardHandler.h utility/Delegate.h entities/EntityComponentSystem.cpp entities/EntityComponentSystem.h)
+        Engine.cpp
+        Engine.h
+        input/MouseHandler.cpp
+        input/MouseHandler.h
+        input/KeyboardHandler.cpp
+        input/KeyboardHandler.h
+        utility/Delegate.h
+        entities/EntityComponentSystem.cpp
+        entities/EntityComponentSystem.h)
+
+include_directories(entities utility input rendering)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")
