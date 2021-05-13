@@ -19,19 +19,19 @@ set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
 link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
 
 # Execute compilation command
-set(SOURCE_FILES main.cpp)
-add_executable(VoxelEngine 
-    main.cpp 
-    Shader.h 
-    Camera.h 
-    Cube.h 
-    Lightsource.cpp 
-    Chunk.cpp 
-    Chunk.h 
-    ModelLoader.h 
+set(SOURCE_FILES Application.cpp)
+add_executable(VoxelEngine
+        Application.cpp
+        rendering/Shader.h
+        rendering/Camera.h
+        entities/Cube.h
+        entities/Lightsource.cpp
+        entities/Chunk.cpp
+        entities/Chunk.h
+        utility/ModelLoader.h
     external/ogt_vox.h
-    TextHandler.h
-        Engine.cpp Engine.h MouseHandler.cpp MouseHandler.h KeyboardHandler.cpp KeyboardHandler.h Delegate.h EntityComponentSystem.cpp EntityComponentSystem.h)
+        utility/TextHandler.h
+        Engine.cpp Engine.h input/MouseHandler.cpp input/MouseHandler.h input/KeyboardHandler.cpp input/KeyboardHandler.h utility/Delegate.h entities/EntityComponentSystem.cpp entities/EntityComponentSystem.h)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")

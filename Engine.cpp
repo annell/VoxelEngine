@@ -3,9 +3,9 @@
 #include <glfw3.h>
 #include <glm.hpp>
 #include <iostream>
-#include "MouseHandler.h"
-#include "KeyboardHandler.h"
-#include "Camera.h"
+#include "input/MouseHandler.h"
+#include "input/KeyboardHandler.h"
+#include "rendering/Camera.h"
 
 
 Engine::~Engine() {

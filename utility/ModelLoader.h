@@ -2,12 +2,12 @@
 #define VOXELENGINE_VOXELHANDLER_H
 
 #define OGT_VOX_IMPLEMENTATION
-#include "external/ogt_vox.h"
+#include "../external/ogt_vox.h"
 
 #include <stdio.h>
 #include <string>
 #include <map>
-#include "Chunk.h"
+#include "../entities/Chunk.h"
 
 namespace ModelLoader {
 namespace internal {

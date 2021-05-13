@@ -2,8 +2,8 @@
 
 #include <functional>
 #include <vector>
-#include "Delegate.h"
-#include "EntityComponentSystem.h"
+#include "utility/Delegate.h"
+#include "entities/EntityComponentSystem.h"
 #define GL_SILENCE_DEPRECATION
 
 class Camera;

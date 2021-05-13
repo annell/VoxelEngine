@@ -3,16 +3,16 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 
-#include "Shader.h"
-#include "Camera.h"
-#include "Cube.h"
-#include "Lightsource.h"
-#include "Chunk.h"
-#include "ModelLoader.h"
-#include "TextHandler.h"
+#include "rendering/Shader.h"
+#include "rendering/Camera.h"
+#include "entities/Cube.h"
+#include "entities/Lightsource.h"
+#include "entities/Chunk.h"
+#include "utility/ModelLoader.h"
+#include "utility/TextHandler.h"
 #include "Engine.h"
-#include "KeyboardHandler.h"
-#include "MouseHandler.h"
+#include "input/KeyboardHandler.h"
+#include "input/MouseHandler.h"
 
 #include <iostream>
 #include <memory>

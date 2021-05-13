@@ -9,7 +9,7 @@
 #include <glfw3.h>
 #include <vector>
 
-#include "Shader.h"
+#include "../rendering/Shader.h"
 
 struct Material {
     glm::vec3 color;

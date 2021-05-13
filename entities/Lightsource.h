@@ -11,8 +11,8 @@
 #include <vector>
 
 #include "Cube.h"
-#include "Shader.h"
-#include "Camera.h"
+#include "../rendering/Shader.h"
+#include "../rendering/Camera.h"
 
 enum class LightType {
     AMBIENT = 0,

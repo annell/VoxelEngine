@@ -8,10 +8,10 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include "Shader.h"
+#include "../rendering/Shader.h"
 
 #include <ft2build.h>
-#include FT_FREETYPE_H
+#include FT_FREETYPE_H"freetype/freetype.h"
 
 class TextHandler {
 public:
