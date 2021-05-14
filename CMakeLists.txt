@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(VoxelEngine)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # Add header file
 set(GLEW_H /usr/local/Cellar/glew/2.2.0_1/include/GL)
@@ -21,27 +21,31 @@ link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${FREETYPE_LINK} ${SOIL_LINK}
 # Execute compilation command
 set(SOURCE_FILES Application.cpp)
 add_executable(VoxelEngine
+        Core.h
         Application.cpp
-        rendering/Shader.h
-        rendering/Camera.h
-        entities/Cube.h
-        entities/Lightsource.cpp
-        entities/Chunk.cpp
-        entities/Chunk.h
-        utility/ModelLoader.h
-        external/ogt_vox.h
-        utility/TextHandler.h
         Engine.cpp
         Engine.h
+        rendering/Shader.h
+        rendering/Camera.h
+        rendering/VertexBufferArray.h
+        rendering/RenderingHandler.cpp
+        rendering/RenderingHandler.h
+        external/ogt_vox.h
+        utility/ModelLoader.h
+        utility/TextHandler.h
+        utility/Delegate.h
         input/MouseHandler.cpp
         input/MouseHandler.h
         input/KeyboardHandler.cpp
         input/KeyboardHandler.h
-        utility/Delegate.h
+        entities/Cube.h
+        entities/Lightsource.cpp
+        entities/Chunk.cpp
+        entities/Chunk.h
         entities/EntityComponentSystem.cpp
         entities/EntityComponentSystem.h)
 
-include_directories(entities utility input rendering core)
+include_directories(. entities utility input rendering core)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")

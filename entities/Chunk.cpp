@@ -4,27 +4,23 @@
 
 #include "Chunk.h"
 #include <map>
-#include <glm.hpp>
 
 namespace engine::entities {
 
-Chunk::Chunk(rendering::Shader shader, Position position)
- : shader(shader), position(position) {
+Chunk::Chunk(std::shared_ptr<rendering::Shader> shader, Position position)
+ : shader(shader)
+ , position(position)
+ , vertexBufferArray(std::make_shared<rendering::VertexBufferArray>()) {
 
 }
 
 Chunk::~Chunk() {
-    ResetBuffers();
+    vertexBufferArray->ResetBuffers();
 }
 
 void Chunk::Init() {
     SetupCubesForRendering();
     SetupShader();
-}
-
-void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr, int& attributes)  {
-    glVertexAttribPointer(attributes, size, type, normalized, stride, ptr);
-    glEnableVertexAttribArray(attributes++);
 }
 
 void Chunk::SetupCubesForRendering() {
@@ -42,33 +38,33 @@ void Chunk::SetupCubesForRendering() {
 }
 
 void Chunk::SetupShader() {
-    shader.use();
+    shader->use();
     for (auto cube : cubesToRender) {
-        nrVertex += cube->GetNrVertex();
+        vertexBufferArray->nrVertex += cube->GetNrVertex();
         auto& material = cube->GetMaterial();
         std::string index = std::to_string(cube->GetMaterialIndex());
-        shader.setVec3("materials["+ index +"].ambient", material.ambient);
-        shader.setVec3("materials["+ index +"].diffuse", material.diffuse);
-        shader.setVec3("materials["+ index +"].specular", material.specular);
-        shader.setFloat("materials["+ index +"].shininess", material.shininess);
+        shader->setVec3("materials["+ index +"].ambient", material.ambient);
+        shader->setVec3("materials["+ index +"].diffuse", material.diffuse);
+        shader->setVec3("materials["+ index +"].specular", material.specular);
+        shader->setFloat("materials["+ index +"].shininess", material.shininess);
         const auto& cubesVertexAttributes = cube->GetVertexAttributes();
-        vertexAttributes.insert(vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
+        vertexBufferArray->vertexAttributes.insert(vertexBufferArray->vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
     }
 
-    CreateBuffers(&vertexAttributes[0], sizeof(float) * vertexAttributes.size());
+    vertexBufferArray->CreateBuffers();
     int attributes = 0;
-    SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0, attributes);
-    SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)), attributes);
-    SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)), attributes);
+    vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+    vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+    vertexBufferArray->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
     glm::mat4 model = glm::mat4(1.0f);
-    shader.setMat4("model", model);
+    shader->setMat4("model", model);
 }
 
 void Chunk::Draw() const {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
-    shader.use();
-    glBindVertexArray(VAO);
+    shader->use();
+    glBindVertexArray(vertexBufferArray->VAO);
     glDrawArrays(GL_TRIANGLES, 0, NrVertex());
     glDisable(GL_CULL_FACE);
 }
@@ -82,7 +78,7 @@ size_t Chunk::NrMaterials() const {
 }
 
 size_t Chunk::NrVertex() const {
-    return nrVertex;
+    return vertexBufferArray->nrVertex;
 }
 
 void Chunk::FaceCulling() const {
@@ -119,20 +115,6 @@ void Chunk::FaceCulling() const {
     }
 }
 
-void Chunk::CreateBuffers(float v[], size_t size) {
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, size, v, GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-}
-
-void Chunk::ResetBuffers() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-}
-
 const Position& Chunk::GetPosition() const {
     return position;
 }
@@ -142,12 +124,38 @@ void Chunk::SetPosition(Position pos) {
     glm::vec3 vecPos = {position.x, position.y, position.z};
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, vecPos);
-    shader.use();
-    shader.setMat4("model", model);
+    shader->use();
+    shader->setMat4("model", model);
 }
 
-rendering::Shader* Chunk::GetShader() {
-    return &shader;
+std::shared_ptr<rendering::Shader> Chunk::GetShader() const {
+    return shader;
+}
+
+std::shared_ptr<rendering::VertexBufferArray> Chunk::GetVertexBufferArray() const {
+    return vertexBufferArray;
+}
+
+auto GetPreDrawAction() {
+    return [] () {
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+    };
+}
+
+auto GetPostDrawAction() {
+    return [] () {
+        glDisable(GL_CULL_FACE);
+    };
+}
+
+rendering::RenderingConfig Chunk::GetRenderingConfig() const {
+    return {
+        GetShader(),
+        GetVertexBufferArray(),
+        GetPreDrawAction(),
+        GetPostDrawAction()
+    };
 }
 
 }

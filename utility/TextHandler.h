@@ -11,13 +11,13 @@
 #include "Shader.h"
 
 #include <ft2build.h>
-#include FT_FREETYPE_H"freetype/freetype.h"
+#include "freetype/freetype.h"
 
 namespace engine::utility {
 
 class TextHandler {
 public:
-    TextHandler(int screenWidth, int screenHeight, std::string font, rendering::Shader);
+    TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<rendering::Shader>);
     void Init();
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
@@ -36,10 +36,12 @@ private:
     int ScreenWidth;
     int ScreenHeight;
     std::string Font;
-    rendering::Shader FontShader;
+
+    std::shared_ptr<rendering::Shader> FontShader;
+    std::shared_ptr<rendering::VertexBufferArray> vertexBufferArray;
 };
 
-TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, rendering::Shader shader)
+TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<rendering::Shader> shader)
 : ScreenWidth(screenWidth)
 , ScreenHeight(screenHeight)
 , Font(font)
@@ -48,8 +50,8 @@ TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, re
 
 void TextHandler::Init() {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(ScreenWidth), 0.0f, static_cast<float>(ScreenHeight));
-    FontShader.use();
-    glUniformMatrix4fv(glGetUniformLocation(FontShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    FontShader->use();
+    glUniformMatrix4fv(glGetUniformLocation(FontShader->ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     FT_Library ft;
     // All functions return a value different than 0 whenever an error occurred
@@ -131,7 +133,7 @@ void TextHandler::RenderText(std::string text, float x, float y, float scale, gl
     glDisable(GL_DEPTH_TEST);
 
     
-    glUniform1i(glGetUniformLocation(FontShader.ID, "text"), 0);
+    glUniform1i(glGetUniformLocation(FontShader->ID, "text"), 0);
     _RenderText(text, x, y, scale, color);
 
     glEnable(GL_DEPTH_TEST);
@@ -140,8 +142,8 @@ void TextHandler::RenderText(std::string text, float x, float y, float scale, gl
 
 void TextHandler::_RenderText(std::string text, float x, float y, float scale, glm::vec3 color) {
     // activate corresponding render state	
-    FontShader.use();
-    glUniform3f(glGetUniformLocation(FontShader.ID, "textColor"), color.x, color.y, color.z);
+    FontShader->use();
+    glUniform3f(glGetUniformLocation(FontShader->ID, "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 

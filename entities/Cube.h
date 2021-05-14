@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Shader.h"
+#include "VertexBufferArray.h"
 
 namespace engine::entities {
 
@@ -68,36 +69,38 @@ struct Side {
 };
     Cube() {}
     Cube(Position p, Dimensions d, Material m = {}, int materialIndex = -1)
-    : nVertices(0), position(p), dimensions(d), material(m), materialIndex(materialIndex) {
+    : position(p)
+    , dimensions(d)
+    , material(m)
+    , materialIndex(materialIndex)
+    , vertexBufferArray(std::make_shared<rendering::VertexBufferArray>()) {
         GenerateSides(position, dimensions);
     }
 
     ~Cube() {
-        ResetBuffers();
     }
 
     void GenerateVertexAttributes() {
         for (auto side : sides) {
             if (side.render) {
                 GenerateVerexAttributes(side);
-                nVertices += 6;
+                vertexBufferArray->nrVertex += 6;
             }
         }
     }
 
     void CreateRenderBuffers() {
         if (ShouldRender()) {
-            CreateBuffers(&vertexAttributes[0], sizeof(float) * vertexAttributes.size());
+            vertexBufferArray->CreateBuffers();
         }
     }
 
     const std::vector<float>& GetVertexAttributes() {
-        return vertexAttributes;
+        return vertexBufferArray->vertexAttributes;
     }
 
     void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void* ptr)  {
-        glVertexAttribPointer(attributes, size, type, normalized, stride, ptr);
-        glEnableVertexAttribArray(attributes++);
+        vertexBufferArray->SetVertexAttrib(size, type, normalized, stride, ptr);
     }
 
     void SetRenderSide(Face face, bool render) {
@@ -112,7 +115,7 @@ struct Side {
         chunkPosition = updatedPosition;
     }
 
-    glm::vec3 GetPosition() const {
+    __unused glm::vec3 GetPosition() const {
         return {position.x, position.y, position.z};
     }
 
@@ -129,12 +132,12 @@ struct Side {
     }
 
     size_t GetNrVertex() const {
-        return nVertices;
+        return vertexBufferArray->nrVertex;
     }
 
     void Draw() const {
         if (ShouldRender()) {
-            glBindVertexArray(VAO);
+            glBindVertexArray(vertexBufferArray->VAO);
             glDrawArrays(GL_TRIANGLES, 0, GetNrVertex());
         }
     }
@@ -143,43 +146,33 @@ struct Side {
         return GetNrVertex() != 0;
     }
 
+    std::shared_ptr<rendering::VertexBufferArray> GetVertexBufferArray() const {
+        return vertexBufferArray;
+    }
+
 private:
-    void CreateBuffers(float v[], size_t size) {
-        glGenBuffers(1, &VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, size, v, GL_STATIC_DRAW);
-
-        glGenVertexArrays(1, &VAO);
-        glBindVertexArray(VAO);
-    }
-
-    void ResetBuffers() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-    }
-
     void GenerateVerexAttributes(const Side& side) {
         int index = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                vertexAttributes.push_back(side.triangle1.vertex[index]);
+                vertexBufferArray->vertexAttributes.push_back(side.triangle1.vertex[index]);
                 index++;
             }
             for (int ii = 0; ii < 3; ii++) {
-                vertexAttributes.push_back(side.normal[ii]);
+                vertexBufferArray->vertexAttributes.push_back(side.normal[ii]);
             }
-            vertexAttributes.push_back(side.materialIndex);
+            vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
         }
         index = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                vertexAttributes.push_back(side.triangle2.vertex[index]);
+                vertexBufferArray->vertexAttributes.push_back(side.triangle2.vertex[index]);
                 index++;
             }
             for (int ii = 0; ii < 3; ii++) {
-                vertexAttributes.push_back(side.normal[ii]);
+                vertexBufferArray->vertexAttributes.push_back(side.normal[ii]);
             }
-            vertexAttributes.push_back(side.materialIndex);
+            vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
         }
     }
 
@@ -275,16 +268,13 @@ private:
         };
     }
 
-    unsigned int VBO;
-    unsigned int VAO;
-    int nVertices;
-    int attributes = 0;
+    std::shared_ptr<rendering::VertexBufferArray> vertexBufferArray;
+
     Position position;
     ChunkPosition chunkPosition;
     Dimensions dimensions;
     Material material;
     int materialIndex;
-    std::vector<float> vertexAttributes;
     Side sides[6];
 };
 

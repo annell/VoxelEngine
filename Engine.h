@@ -1,10 +1,12 @@
 #pragma once
+#define GL_SILENCE_DEPRECATION
 
+#include "Core.h"
 #include <functional>
 #include <vector>
+#include "RenderingHandler.h"
 #include "Delegate.h"
 #include "EntityComponentSystem.h"
-#define GL_SILENCE_DEPRECATION
 
 class GLFWwindow;
 
@@ -24,11 +26,12 @@ private:
 public:
     static Engine& GetEngine();
     bool Init();
-    rendering::Camera* GetCamera();
+    std::shared_ptr<rendering::Camera> GetCamera();
     GLFWwindow* GetWindow();
     void StartLoop();
     float GetDeltaTime() const;
     entities::EntityComponentSystem& GetComponents();
+    rendering::RenderingHandler& GetRenderingHandler();
 
     OnTick onTick;
 private:
@@ -37,10 +40,12 @@ private:
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     GLFWwindow* window = nullptr;
-    rendering::Camera* camera = nullptr;
+    std::shared_ptr<rendering::Camera> camera;
     entities::EntityComponentSystem components;
+    rendering::RenderingHandler renderingHandler;
 };
-namespace EngineHelper {
+
+namespace helper {
     template <typename T>
     std::shared_ptr<T> GetComponent(const entities::Entity& handle) {
         return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
@@ -50,6 +55,14 @@ namespace EngineHelper {
     void AddComponent(std::shared_ptr<T> component, const entities::Entity& handle) {
         return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
     }
+
+    namespace rendering {
+        void Begin();
+        void End();
+        void Submit(const engine::rendering::RenderingConfig& config);
+    }
+
 }
+
 
 }

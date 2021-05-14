@@ -8,12 +8,16 @@
 #include <glfw3.h>
 #include <glm.hpp>
 #include <vector>
+#include <RenderingHandler.h>
 
-#include "Cube.h"
-#include "Shader.h"
-#include "Camera.h"
+namespace engine::rendering {
+    class Shader;
+    class Camera;
+}
 
 namespace engine::entities {
+class Cube;
+
 
 enum class LightType {
     AMBIENT = 0,
@@ -53,14 +57,15 @@ private:
 
 class LightSourceHandler {
 public:
-    LightSourceHandler(rendering::Shader* lightSource, std::vector<rendering::Shader*> light);
+    LightSourceHandler(std::shared_ptr<rendering::Shader> lightSource, std::vector<std::shared_ptr<rendering::Shader>> light);
     void Draw(const rendering::Camera& camera) const;
     void AddLight(const LightSource& light);
 
     std::vector<LightSource>& GetLightSources();
+    std::vector<rendering::RenderingConfig> GetRenderingConfigs(const rendering::Camera&) const;
 private:
-    rendering::Shader* lightCubeShader;
-    std::vector<rendering::Shader*> lightShaders;
+    std::shared_ptr<rendering::Shader> lightCubeShader;
+    std::vector<std::shared_ptr<rendering::Shader>> lightShaders;
     std::vector<LightSource> lightSources;
 };
 

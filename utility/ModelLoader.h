@@ -1,13 +1,16 @@
-#ifndef VOXELENGINE_VOXELHANDLER_H
-#define VOXELENGINE_VOXELHANDLER_H
+#pragma once
 
 #define OGT_VOX_IMPLEMENTATION
 #include "../external/ogt_vox.h"
+#include "Chunk.h"
 
 #include <stdio.h>
 #include <string>
 #include <map>
-#include "Chunk.h"
+
+namespace engine::entities {
+    class Cube;
+}
 
 namespace engine::utility::ModelLoader {
 namespace internal {
@@ -97,9 +100,9 @@ uint32_t count_solid_voxels_in_model(const ogt_vox_model* model)
     return solid_voxel_count;
 }
 
-void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, entities::Chunk& chunk)
+void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, engine::entities::Chunk* chunk)
 {
-    const auto chunkPos = chunk.GetPosition();
+    const auto chunkPos = chunk->GetPosition();
     uint32_t voxel_index = 0;
     std::map<uint32_t, int> materials;
     int nrMaterials = 0;
@@ -123,7 +126,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, e
                                     {0.5f, 0.5f, 0.5f},
                                     32.0f}, materials[color_index]);
                     cube->SetChunkPosition({(int)y, (int)z, (int)x});
-                    chunk.AddCube(std::move(cube));
+                    chunk->AddCube(std::move(cube));
                 }
             }
         }
@@ -132,7 +135,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, e
 
 }
 
-void LoadModel(std::string filename, entities::Chunk& chunk)
+void LoadModel(std::string filename, entities::Chunk* chunk)
 {
     const ogt_vox_scene* scene = internal::load_vox_scene_with_groups(filename.c_str());
     if (scene)
@@ -203,5 +206,3 @@ void LoadModel(std::string filename, entities::Chunk& chunk)
     }
 }
 }
-
-#endif //VOXELENGINE_VOXELHANDLER_H

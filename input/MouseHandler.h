@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <glfw3.h>
+class GLFWwindow;
 namespace engine::input {
 
 struct MouseHandler {

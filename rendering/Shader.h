@@ -2,15 +2,14 @@
 // Created by Stefan Annell on 2021-03-21.
 //
 #pragma once
-
-#include <glm.hpp>
-
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <map>
 #include <vector>
+
+#include "Core.h"
 
 namespace engine::rendering {
 

@@ -3,8 +3,8 @@
 //
 
 #include "MouseHandler.h"
+#include "Engine.h"
 #include "Camera.h"
-#include "../Engine.h"
 
 namespace engine::input {
 namespace internal {

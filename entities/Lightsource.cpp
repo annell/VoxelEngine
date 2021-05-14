@@ -2,6 +2,9 @@
 // Created by Stefan Annell on 2021-04-10.
 //
 #include "Lightsource.h"
+#include "Core.h"
+#include "Cube.h"
+#include "Camera.h"
 
 namespace engine::entities {
 
@@ -45,7 +48,7 @@ void LightSource::SetPosition(const glm::vec3& position) {
     model = glm::scale(model, glm::vec3(0.1f));
 }
 
-LightSourceHandler::LightSourceHandler(rendering::Shader *cubeShader, std::vector<rendering::Shader*> light)
+LightSourceHandler::LightSourceHandler(std::shared_ptr<rendering::Shader> cubeShader, std::vector<std::shared_ptr<rendering::Shader>> light)
  : lightCubeShader(cubeShader)
  , lightShaders(light) {
 
@@ -83,6 +86,38 @@ void LightSourceHandler::AddLight(const LightSource& light) {
 
 std::vector<LightSource> & LightSourceHandler::GetLightSources() {
     return lightSources;
+}
+
+std::vector<rendering::RenderingConfig> LightSourceHandler::GetRenderingConfigs(const rendering::Camera& camera) const {
+    for (auto lightShader : lightShaders) {
+        lightShader->use();
+        lightShader->setInt("nrLights", lightSources.size());
+        camera.SetShaderParameters(*lightShader);
+        int n = 0;
+        for (auto& light : lightSources) {
+            std::string index = std::to_string(n);
+            lightShader->setVec3("lights[" + index +"].lightColor", light.GetColor());
+            lightShader->setVec3("lights[" + index + "].lightPos", light.GetPosition());
+            lightShader->setInt("lights[" + index + "].type", static_cast<int>(light.GetType()));
+            lightShader->setFloat("lights[" + index + "].constant", light.GetConfig().atteunation.constant);
+            lightShader->setFloat("lights[" + index + "].linear", light.GetConfig().atteunation.linear);
+            lightShader->setFloat("lights[" + index + "].quadratic", light.GetConfig().atteunation.quadratic);
+            n++;
+        }
+    }
+    std::vector<rendering::RenderingConfig> output;
+    for (auto& light : lightSources) {
+        output.push_back({
+            lightCubeShader,
+            light.GetConfig().cube->GetVertexBufferArray(),
+            [model = light.GetModel(), lightCubeShader = lightCubeShader, &camera] () {
+                lightCubeShader->use();
+                camera.SetShaderParameters(*lightCubeShader);
+                lightCubeShader->setMat4("model", model);
+            }
+        });
+    }
+    return output;
 }
 
 }

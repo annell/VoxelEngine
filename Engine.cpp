@@ -1,19 +1,12 @@
 #include "Engine.h"
-#include <glew.h>
-#include <glfw3.h>
-#include <glm.hpp>
 #include <iostream>
-#include "MouseHandler.h"
 #include "KeyboardHandler.h"
+#include "MouseHandler.h"
 #include "Camera.h"
-
 
 namespace engine {
 
 Engine::~Engine() {
-    if (camera) {
-        delete camera;
-    }
 }
 
 bool Engine::Init() {
@@ -42,11 +35,11 @@ bool Engine::Init() {
 
     glEnable(GL_DEPTH_TEST);
 
-    camera = new rendering::Camera(glm::vec3(0.0f, 1.0f, 3.0f));
+    camera = std::make_shared<rendering::Camera>(glm::vec3(0.0f, 1.0f, 3.0f));
     return true;
 }
 
-rendering::Camera *Engine::GetCamera() {
+std::shared_ptr<rendering::Camera> Engine::GetCamera() {
     return camera;
 }
 
@@ -84,6 +77,25 @@ Engine &Engine::GetEngine() {
 
 entities::EntityComponentSystem &Engine::GetComponents() {
     return components;
+}
+
+rendering::RenderingHandler &Engine::GetRenderingHandler() {
+    return renderingHandler;
+}
+
+namespace helper::rendering {
+
+void Begin() {
+    Engine::GetEngine().GetRenderingHandler().Begin(Engine::GetEngine().GetCamera());
+}
+
+void End() {
+    Engine::GetEngine().GetRenderingHandler().End();
+}
+
+void Submit(const engine::rendering::RenderingConfig& config) {
+    Engine::GetEngine().GetRenderingHandler().Submit(config);
+}
 }
 
 }
