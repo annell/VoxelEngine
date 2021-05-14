@@ -62,7 +62,7 @@ public:
     void AddLight(const LightSource& light);
 
     std::vector<LightSource>& GetLightSources();
-    std::vector<rendering::RenderingConfig> GetRenderingConfigs(const rendering::Camera&) const;
+    std::vector<rendering::RenderingConfig> GetRenderingConfigs(std::shared_ptr<rendering::Camera>) const;
 private:
     std::shared_ptr<rendering::Shader> lightCubeShader;
     std::vector<std::shared_ptr<rendering::Shader>> lightShaders;

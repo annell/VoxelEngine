@@ -88,11 +88,11 @@ std::vector<LightSource> & LightSourceHandler::GetLightSources() {
     return lightSources;
 }
 
-std::vector<rendering::RenderingConfig> LightSourceHandler::GetRenderingConfigs(const rendering::Camera& camera) const {
+std::vector<rendering::RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared_ptr<rendering::Camera> camera) const {
     for (auto lightShader : lightShaders) {
         lightShader->use();
         lightShader->setInt("nrLights", lightSources.size());
-        camera.SetShaderParameters(*lightShader);
+        camera->SetShaderParameters(*lightShader);
         int n = 0;
         for (auto& light : lightSources) {
             std::string index = std::to_string(n);
@@ -110,9 +110,9 @@ std::vector<rendering::RenderingConfig> LightSourceHandler::GetRenderingConfigs(
         output.push_back({
             lightCubeShader,
             light.GetConfig().cube->GetVertexBufferArray(),
-            [model = light.GetModel(), lightCubeShader = lightCubeShader, &camera] () {
+            [model = light.GetModel(), lightCubeShader = lightCubeShader, camera] () {
                 lightCubeShader->use();
-                camera.SetShaderParameters(*lightCubeShader);
+                camera->SetShaderParameters(*lightCubeShader);
                 lightCubeShader->setMat4("model", model);
             }
         });

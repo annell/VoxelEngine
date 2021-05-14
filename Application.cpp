@@ -174,11 +174,10 @@ int main()
         engine::helper::rendering::Submit(model.GetRenderingConfig());
         engine::helper::rendering::Submit(model2.GetRenderingConfig());
         engine::helper::rendering::Submit(floor.GetRenderingConfig());
-        for (auto config : lights.GetRenderingConfigs(*engine.GetCamera())) {
+        for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
             engine::helper::rendering::Submit(config);
         }
         engine::helper::rendering::End();
-
         text.RenderText(fps, 15.0f, SCR_HEIGHT - 25.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
     });
     engine.StartLoop();
