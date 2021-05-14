@@ -1,7 +1,7 @@
 #pragma once
 
 #define OGT_VOX_IMPLEMENTATION
-#include "../external/ogt_vox.h"
+#include "../external/vox/ogt_vox.h"
 #include "Chunk.h"
 
 #include <stdio.h>

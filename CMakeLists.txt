@@ -9,7 +9,13 @@ set(GLFW_H /usr/local/Cellar/glfw/3.3.3/include/GLFW)
 set(GLM_H /usr/local/Cellar/glm/0.9.9.8/include/GLM)
 set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
 set(SOIL_H /opt/local/include/SOIL)
-include_directories(${GLEW_H} ${GLFW_H} ${GLM_H} ${FT_FREETYPE_H} ${SOIL_H})
+include_directories(
+        ${GLEW_H}
+        ${GLFW_H}
+        ${GLM_H}
+        ${FT_FREETYPE_H}
+        ${SOIL_H}
+)
 
 # Add target link
 set(GLEW_LINK /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib)
@@ -30,7 +36,17 @@ add_executable(VoxelEngine
         rendering/VertexBufferArray.h
         rendering/RenderingHandler.cpp
         rendering/RenderingHandler.h
-        external/ogt_vox.h
+        external/vox/ogt_vox.h
+        external/imgui/imgui.cpp
+        external/imgui/imgui.h
+        external/imgui/imgui_draw.cpp
+        external/imgui/imgui_demo.cpp
+        external/imgui/imgui_tables.cpp
+        external/imgui/imgui_widgets.cpp
+        external/imgui/imgui_impl_glfw.cpp
+        external/imgui/imgui_impl_glfw.h
+        external/imgui/imgui_impl_opengl3.cpp
+        external/imgui/imgui_impl_opengl3.h
         utility/ModelLoader.h
         utility/TextHandler.h
         utility/Delegate.h
@@ -45,7 +61,7 @@ add_executable(VoxelEngine
         entities/EntityComponentSystem.cpp
         entities/EntityComponentSystem.h)
 
-include_directories(. entities utility input rendering core)
+include_directories(. entities utility input rendering core external/imgui)
 
 if (APPLE)
     target_link_libraries(VoxelEngine "-framework OpenGL")

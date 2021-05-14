@@ -10,6 +10,8 @@
 #include "Cube.h"
 #include "ModelLoader.h"
 #include "Lightsource.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine/resources";
 const std::string SHADERS = "/shaders";
@@ -57,13 +59,13 @@ int main()
 
     engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
                 engine::input::MouseHandler::UnlockCamera();
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
           [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
                 engine::input::MouseHandler::LockCamera();
           }});
 
@@ -151,9 +153,11 @@ int main()
 
     std::cout << "NrVertex: " << model.NrVertex() << std::endl;
 
+
     int n = 0;
     int FPSUpdate = 10;
     std::string fps = "FPS: 0";
+    std::string buf;
     engine.onTick.Bind([&] (float deltaTime) {
         n++;
         if (FPSUpdate <= 0) {
@@ -170,6 +174,11 @@ int main()
         model.SetPosition(pos);
 
 
+        // feed inputs to dear imgui, start new frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         engine::helper::rendering::Begin();
         engine::helper::rendering::Submit(model.GetRenderingConfig());
         engine::helper::rendering::Submit(model2.GetRenderingConfig());
@@ -179,6 +188,13 @@ int main()
         }
         engine::helper::rendering::End();
         text.RenderText(fps, 15.0f, SCR_HEIGHT - 25.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
+
+        ImGui::Begin("Demo window");
+        ImGui::Button("Hello!");
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     });
     engine.StartLoop();
     return 0;

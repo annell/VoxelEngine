@@ -1,5 +1,7 @@
 #include "Engine.h"
 #include <iostream>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include "KeyboardHandler.h"
 #include "MouseHandler.h"
 #include "Camera.h"
@@ -36,6 +38,15 @@ bool Engine::Init() {
     glEnable(GL_DEPTH_TEST);
 
     camera = std::make_shared<rendering::Camera>(glm::vec3(0.0f, 1.0f, 3.0f));
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
+    ImGui_ImplOpenGL3_Init(nullptr);
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
     return true;
 }
 
