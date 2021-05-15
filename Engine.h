@@ -4,9 +4,12 @@
 #include "Core.h"
 #include <functional>
 #include <vector>
+#include <string>
 #include "RenderingHandler.h"
 #include "Delegate.h"
 #include "EntityComponentSystem.h"
+#include "Logging.h"
+#include "MouseHandler.h"
 
 class GLFWwindow;
 
@@ -32,17 +35,19 @@ public:
     float GetDeltaTime() const;
     entities::EntityComponentSystem& GetComponents();
     rendering::RenderingHandler& GetRenderingHandler();
+    utility::Logging& GetLogger();
 
     OnTick onTick;
 private:
-    const unsigned int SCR_WIDTH = 800;
-    const unsigned int SCR_HEIGHT = 600;
+    const unsigned int SCR_WIDTH = 1024;
+    const unsigned int SCR_HEIGHT = 768;
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     GLFWwindow* window = nullptr;
     std::shared_ptr<rendering::Camera> camera;
     entities::EntityComponentSystem components;
     rendering::RenderingHandler renderingHandler;
+    utility::Logging logging;
 };
 
 namespace helper {
@@ -62,6 +67,7 @@ namespace helper {
         void Submit(const engine::rendering::RenderingConfig& config);
     }
 
+    void Log(std::string log);
 }
 
 

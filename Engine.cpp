@@ -9,6 +9,9 @@
 namespace engine {
 
 Engine::~Engine() {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
 
 bool Engine::Init() {
@@ -67,8 +70,17 @@ void Engine::StartLoop() {
         glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         input::KeyboardHandler::processInput();
         onTick.Broadcast(GetDeltaTime());
+        ImGui::SetNextWindowSize({(float)SCR_WIDTH, (float)SCR_HEIGHT / 4});
+        ImGui::SetNextWindowPos({0, (float)SCR_HEIGHT - (float)SCR_HEIGHT / 4});
+        logging.Draw("Logger", nullptr);
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -92,6 +104,16 @@ entities::EntityComponentSystem &Engine::GetComponents() {
 
 rendering::RenderingHandler &Engine::GetRenderingHandler() {
     return renderingHandler;
+}
+
+utility::Logging &Engine::GetLogger() {
+    return logging;
+}
+
+namespace helper {
+void Log(std::string log) {
+    Engine::GetEngine().GetLogger().AddLog(log.c_str());
+}
 }
 
 namespace helper::rendering {

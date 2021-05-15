@@ -5,7 +5,6 @@
 #include "KeyboardHandler.h"
 #include "Camera.h"
 #include "TextHandler.h"
-#include "MouseHandler.h"
 #include "Chunk.h"
 #include "Cube.h"
 #include "ModelLoader.h"
@@ -21,6 +20,43 @@ const std::string MODELS = "/voxelObjects";
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+void ShowExampleAppSimpleOverlay(std::string text, bool* p_open = nullptr)
+{
+    const float PAD = 10.0f;
+    static int corner = 1;
+    ImGuiIO& io = ImGui::GetIO();
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+    if (corner != -1)
+    {
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+        ImVec2 work_size = viewport->WorkSize;
+        ImVec2 window_pos, window_pos_pivot;
+        window_pos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+        window_pos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+        window_pos_pivot.x = (corner & 1) ? 1.0f : 0.0f;
+        window_pos_pivot.y = (corner & 2) ? 1.0f : 0.0f;
+        ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+        window_flags |= ImGuiWindowFlags_NoMove;
+    }
+    ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+    if (ImGui::Begin("Example: Simple overlay", p_open, window_flags))
+    {
+        ImGui::Text(text.c_str());
+        if (ImGui::BeginPopupContextWindow())
+        {
+            if (ImGui::MenuItem("Custom",       NULL, corner == -1)) corner = -1;
+            if (ImGui::MenuItem("Top-left",     NULL, corner == 0)) corner = 0;
+            if (ImGui::MenuItem("Top-right",    NULL, corner == 1)) corner = 1;
+            if (ImGui::MenuItem("Bottom-left",  NULL, corner == 2)) corner = 2;
+            if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+            if (p_open && ImGui::MenuItem("Close")) *p_open = false;
+            ImGui::EndPopup();
+        }
+    }
+    ImGui::End();
+}
 
 int main()
 {
@@ -169,15 +205,27 @@ int main()
             auto pos = light.GetPosition();
             light.SetPosition(pos);
         }
+        std::string log = fps + "\n";
+
+
         auto pos = model.GetPosition();
-        pos.x = pos.x + 0.01;
+
+        float translation[3] = {pos.x, pos.y, pos.z};
+        ImGui::Begin("Demo window");
+        ImGui::BeginChild("scrolling");
+        ImGui::SliderFloat3("position", translation, -1.0f, 1.0f);
+        ImGui::EndChild();
+        ImGui::SliderFloat3("position", translation, -1.0f, 1.0f);
+
+        pos.x = translation[0];
+        pos.y = translation[1];
+        pos.z = translation[2];
+
         model.SetPosition(pos);
+        ImGui::End();
+        engine::helper::Log("hej\n");
 
-
-        // feed inputs to dear imgui, start new frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        ShowExampleAppSimpleOverlay(fps);
 
         engine::helper::rendering::Begin();
         engine::helper::rendering::Submit(model.GetRenderingConfig());
@@ -187,14 +235,7 @@ int main()
             engine::helper::rendering::Submit(config);
         }
         engine::helper::rendering::End();
-        text.RenderText(fps, 15.0f, SCR_HEIGHT - 25.0f, 0.4f, glm::vec3(0.0f, 0.0f, 0.0f));
 
-        ImGui::Begin("Demo window");
-        ImGui::Button("Hello!");
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     });
     engine.StartLoop();
     return 0;

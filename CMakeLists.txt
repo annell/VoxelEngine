@@ -50,6 +50,7 @@ add_executable(VoxelEngine
         utility/ModelLoader.h
         utility/TextHandler.h
         utility/Delegate.h
+        utility/Logging.h
         input/MouseHandler.cpp
         input/MouseHandler.h
         input/KeyboardHandler.cpp
@@ -59,7 +60,8 @@ add_executable(VoxelEngine
         entities/Chunk.cpp
         entities/Chunk.h
         entities/EntityComponentSystem.cpp
-        entities/EntityComponentSystem.h)
+        entities/EntityComponentSystem.h
+        )
 
 include_directories(. entities utility input rendering core external/imgui)
 
