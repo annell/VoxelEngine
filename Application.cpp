@@ -9,8 +9,6 @@
 #include "Cube.h"
 #include "ModelLoader.h"
 #include "Lightsource.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 
 const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine/resources";
 const std::string SHADERS = "/shaders";
