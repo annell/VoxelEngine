@@ -10,6 +10,7 @@
 #include "EntityComponentSystem.h"
 #include "Logging.h"
 #include "MouseHandler.h"
+#include "Window.h"
 
 class GLFWwindow;
 
@@ -30,7 +31,7 @@ public:
     static Engine& GetEngine();
     bool Init();
     std::shared_ptr<rendering::Camera> GetCamera();
-    GLFWwindow* GetWindow();
+    std::shared_ptr<rendering::Window> GetWindow();
     void StartLoop();
     float GetDeltaTime() const;
     entities::EntityComponentSystem& GetComponents();
@@ -43,7 +44,7 @@ private:
     const unsigned int SCR_HEIGHT = 768;
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
-    GLFWwindow* window = nullptr;
+    std::shared_ptr<rendering::Window> window;
     std::shared_ptr<rendering::Camera> camera;
     entities::EntityComponentSystem components;
     rendering::RenderingHandler renderingHandler;

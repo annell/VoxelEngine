@@ -63,43 +63,43 @@ int main()
 
     engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-                glfwSetWindowShouldClose(engine.GetWindow(), true);
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+                glfwSetWindowShouldClose(engine.GetWindow()->GetWindow(), true);
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
                 engine.GetCamera()->ProcessKeyboard(engine::rendering::FORWARD, engine.GetDeltaTime());
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
                 engine.GetCamera()->ProcessKeyboard(engine::rendering::BACKWARD, engine.GetDeltaTime());
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
             [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
                 engine.GetCamera()->ProcessKeyboard(engine::rendering::LEFT, engine.GetDeltaTime());
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
             [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
                 engine.GetCamera()->ProcessKeyboard(engine::rendering::RIGHT, engine.GetDeltaTime());
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
                 engine::input::MouseHandler::UnlockCamera();
         }});
 
     engine::input::KeyboardHandler::RegisterAction({
           [&engine] () {
-            if (glfwGetKey(engine.GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
                 engine::input::MouseHandler::LockCamera();
           }});
 
@@ -146,9 +146,6 @@ int main()
     engine::helper::AddComponent(std::make_shared<engine::rendering::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                              std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
                             }), shaderEntity);
-
-    auto component = engine::helper::GetComponent<engine::rendering::Shader>(shaderEntity);
-    auto component2 = engine::helper::GetComponent<engine::entities::Cube>(shaderEntity);
 
     std::vector<std::shared_ptr<engine::rendering::Shader>> shaders;
     shaders.push_back(model.GetShader());

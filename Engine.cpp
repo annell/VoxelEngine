@@ -24,17 +24,17 @@ bool Engine::Init() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "VoxelEngine", NULL, NULL);
+    window = std::make_shared<rendering::Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "VoxelEngine", NULL, NULL), SCR_WIDTH, SCR_HEIGHT);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return false;
     }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, input::MouseHandler::framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, input::MouseHandler::mouse_callback);
-    glfwSetScrollCallback(window, input::MouseHandler::scroll_callback);
+    glfwMakeContextCurrent(window->GetWindow());
+    glfwSetFramebufferSizeCallback(window->GetWindow(), input::MouseHandler::framebuffer_size_callback);
+    glfwSetCursorPosCallback(window->GetWindow(), input::MouseHandler::mouse_callback);
+    glfwSetScrollCallback(window->GetWindow(), input::MouseHandler::scroll_callback);
 
     glewInit();
 
@@ -46,7 +46,7 @@ bool Engine::Init() {
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(GetWindow(), true);
+    ImGui_ImplGlfw_InitForOpenGL(GetWindow()->GetWindow(), true);
     ImGui_ImplOpenGL3_Init(nullptr);
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -57,12 +57,12 @@ std::shared_ptr<rendering::Camera> Engine::GetCamera() {
     return camera;
 }
 
-GLFWwindow *Engine::GetWindow() {
+std::shared_ptr<rendering::Window> Engine::GetWindow() {
     return window;
 }
 
 void Engine::StartLoop() {
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window->GetWindow())) {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -82,7 +82,7 @@ void Engine::StartLoop() {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window->GetWindow());
         glfwPollEvents();
     }
 

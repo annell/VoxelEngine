@@ -50,12 +50,12 @@ void MouseHandler::scroll_callback(GLFWwindow* window, double xoffset, double yo
 }
 
 void MouseHandler::UnlockCamera() {
-    glfwSetInputMode(Engine::GetEngine().GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(Engine::GetEngine().GetWindow()->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     internal::mouseLock = false;
 }
 
 void MouseHandler::LockCamera() {
-    glfwSetInputMode(Engine::GetEngine().GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(Engine::GetEngine().GetWindow()->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     if (!internal::mouseLock) {
         internal::firstMouse = true;
     }

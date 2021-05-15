@@ -25,10 +25,10 @@ set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
 link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
 
 # Execute compilation command
-set(SOURCE_FILES Application.cpp)
+set(SOURCE_FILES Editor/EditorApplication.cpp)
 add_executable(VoxelEngine
         Core.h
-        Application.cpp
+        Editor/EditorApplication.cpp
         Engine.cpp
         Engine.h
         rendering/Shader.h
@@ -61,7 +61,7 @@ add_executable(VoxelEngine
         entities/Chunk.h
         entities/EntityComponentSystem.cpp
         entities/EntityComponentSystem.h
-        )
+        Editor/gui/Panel.cpp Editor/gui/Panel.h rendering/Window.h)
 
 include_directories(. entities utility input rendering core external/imgui)
 
