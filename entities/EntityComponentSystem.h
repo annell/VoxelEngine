@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 
-namespace engine::entities {
+namespace voxie {
 
 class Entity {
 public:

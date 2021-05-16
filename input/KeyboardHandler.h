@@ -7,7 +7,7 @@
 #include <vector>
 #include <functional>
 
-namespace engine::input {
+namespace voxie {
 
 using Action = std::function<void()>;
 

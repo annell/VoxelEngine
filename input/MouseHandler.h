@@ -5,7 +5,7 @@
 #pragma once
 
 class GLFWwindow;
-namespace engine::input {
+namespace voxie {
 
 struct MouseHandler {
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);

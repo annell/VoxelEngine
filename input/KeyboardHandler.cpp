@@ -4,7 +4,7 @@
 
 #include "KeyboardHandler.h"
 
-namespace engine::input {
+namespace voxie {
 
 namespace internal {
 RegistredKeys& GetRegisteredKeys() {

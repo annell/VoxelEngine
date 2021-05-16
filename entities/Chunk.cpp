@@ -6,13 +6,13 @@
 #include <map>
 #include "Engine.h"
 
-namespace engine::entities {
+namespace voxie {
 
-Chunk::Chunk(std::string name, std::shared_ptr<rendering::Shader> shader, std::shared_ptr<Position> position)
- : entity(entities::Entity::MakeEntity(name)) {
+Chunk::Chunk(std::string name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+ : entity(Entity::MakeEntity(name)) {
     helper::AddComponent(position, *entity);
     helper::AddComponent(shader, *entity);
-    helper::AddComponent(std::make_shared<rendering::VertexBufferArray>(), *entity);
+    helper::AddComponent(std::make_shared<VertexBufferArray>(), *entity);
 }
 
 Chunk::~Chunk() {
@@ -119,7 +119,7 @@ void Chunk::FaceCulling() const {
 }
 
 std::shared_ptr<Position> Chunk::GetPosition() const {
-    return engine::helper::GetComponent<Position>(*entity);
+    return voxie::helper::GetComponent<Position>(*entity);
 }
 
 void Chunk::SetPosition(Position pos) {
@@ -128,12 +128,12 @@ void Chunk::SetPosition(Position pos) {
     GetShader()->setMat4("model", GetPosition()->model);
 }
 
-std::shared_ptr<rendering::Shader> Chunk::GetShader() const {
-    return engine::helper::GetComponent<rendering::Shader>(*entity);
+std::shared_ptr<Shader> Chunk::GetShader() const {
+    return voxie::helper::GetComponent<Shader>(*entity);
 }
 
-std::shared_ptr<rendering::VertexBufferArray> Chunk::GetVertexBufferArray() const {
-    return engine::helper::GetComponent<rendering::VertexBufferArray>(*entity);
+std::shared_ptr<VertexBufferArray> Chunk::GetVertexBufferArray() const {
+    return voxie::helper::GetComponent<VertexBufferArray>(*entity);
 }
 
 auto GetPreDrawAction() {
@@ -149,7 +149,7 @@ auto GetPostDrawAction() {
     };
 }
 
-rendering::RenderingConfig Chunk::GetRenderingConfig() const {
+RenderingConfig Chunk::GetRenderingConfig() const {
     return {
         GetShader(),
         GetVertexBufferArray(),
@@ -158,7 +158,7 @@ rendering::RenderingConfig Chunk::GetRenderingConfig() const {
     };
 }
 
-std::shared_ptr<entities::Entity> Chunk::GetEntity() const {
+std::shared_ptr<Entity> Chunk::GetEntity() const {
     return entity;
 }
 

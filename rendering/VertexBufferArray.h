@@ -5,7 +5,7 @@
 #pragma once
 #include <vector>
 
-namespace engine::rendering {
+namespace voxie {
 
 struct VertexBufferArray {
     void CreateBuffers() {

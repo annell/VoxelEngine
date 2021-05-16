@@ -10,12 +10,12 @@
 #include <vector>
 #include <RenderingHandler.h>
 
-namespace engine::rendering {
+namespace voxie {
     class Shader;
     class Camera;
 }
 
-namespace engine::entities {
+namespace voxie {
 class Cube;
 
 
@@ -57,15 +57,15 @@ private:
 
 class LightSourceHandler {
 public:
-    LightSourceHandler(std::shared_ptr<rendering::Shader> lightSource, std::vector<std::shared_ptr<rendering::Shader>> light);
-    void Draw(const rendering::Camera& camera) const;
+    LightSourceHandler(std::shared_ptr<Shader> lightSource, std::vector<std::shared_ptr<Shader>> light);
+    void Draw(const Camera& camera) const;
     void AddLight(const LightSource& light);
 
     std::vector<LightSource>& GetLightSources();
-    std::vector<rendering::RenderingConfig> GetRenderingConfigs(std::shared_ptr<rendering::Camera>) const;
+    std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>) const;
 private:
-    std::shared_ptr<rendering::Shader> lightCubeShader;
-    std::vector<std::shared_ptr<rendering::Shader>> lightShaders;
+    std::shared_ptr<Shader> lightCubeShader;
+    std::vector<std::shared_ptr<Shader>> lightShaders;
     std::vector<LightSource> lightSources;
 };
 

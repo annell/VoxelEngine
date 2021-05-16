@@ -14,11 +14,11 @@
 #include "Cube.h"
 #include "EntityComponentSystem.h"
 
-namespace engine::entities {
+namespace voxie {
 
 class Chunk {
 public:
-    Chunk(std::string name, std::shared_ptr<rendering::Shader>, std::shared_ptr<Position>);
+    Chunk(std::string name, std::shared_ptr<Shader>, std::shared_ptr<Position>);
     ~Chunk();
     void Init();
     void Draw() const;
@@ -28,10 +28,10 @@ public:
 
     std::shared_ptr<Position> GetPosition() const;
     void SetPosition(Position);
-    rendering::RenderingConfig GetRenderingConfig() const;
-    std::shared_ptr<rendering::Shader> GetShader() const;
-    std::shared_ptr<rendering::VertexBufferArray> GetVertexBufferArray() const;
-    std::shared_ptr<entities::Entity> GetEntity() const;
+    RenderingConfig GetRenderingConfig() const;
+    std::shared_ptr<Shader> GetShader() const;
+    std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+    std::shared_ptr<Entity> GetEntity() const;
 
 private:
     void SetupCubesForRendering();
@@ -42,7 +42,7 @@ private:
     std::vector<Cube*> cubesToRender;
 
     std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-    std::shared_ptr<entities::Entity> entity;
+    std::shared_ptr<Entity> entity;
 };
 
 }

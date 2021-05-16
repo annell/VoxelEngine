@@ -6,7 +6,7 @@
 
 #include "imgui.h"
 
-namespace engine::utility {
+namespace voxie {
 
 struct Logging
 {

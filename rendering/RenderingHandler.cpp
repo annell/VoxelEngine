@@ -7,11 +7,13 @@
 #include "Shader.h"
 #include "VertexBufferArray.h"
 
-void engine::rendering::RenderingHandler::Begin(std::shared_ptr<Camera> camera) {
+namespace voxie {
+
+void RenderingHandler::Begin(std::shared_ptr<Camera> camera) {
     selectedCamera = camera;
 }
 
-void engine::rendering::RenderingHandler::End() {
+void RenderingHandler::End() {
     for (auto& config : renderingQueue) {
         config.preDraw();
         config.shader->use();
@@ -22,6 +24,7 @@ void engine::rendering::RenderingHandler::End() {
     renderingQueue.clear();
 }
 
-void engine::rendering::RenderingHandler::Submit(const engine::rendering::RenderingConfig& config) {
+void RenderingHandler::Submit(const RenderingConfig& config) {
     renderingQueue.push_back(config);
+}
 }

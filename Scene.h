@@ -6,13 +6,12 @@
 #include <vector>
 #include <EntityComponentSystem.h>
 
-namespace engine {
-
+namespace voxie {
 
 class Scene {
 public:
-    using SceneEntities = std::vector<std::shared_ptr<entities::Entity>>;
-    void AddEntity(std::shared_ptr<entities::Entity>);
+    using SceneEntities = std::vector<std::shared_ptr<Entity>>;
+    void AddEntity(std::shared_ptr<Entity>);
     const SceneEntities& GetEntities();
 private:
     SceneEntities entities;

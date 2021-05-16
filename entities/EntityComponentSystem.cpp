@@ -4,7 +4,7 @@
 
 #include "EntityComponentSystem.h"
 
-namespace engine::entities {
+namespace voxie {
 
 Entity::Entity(Entity::Identity id, std::string name, Type type)
  : id(id), name(name), type(type) {

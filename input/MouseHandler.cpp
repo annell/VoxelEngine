@@ -6,7 +6,7 @@
 #include "Engine.h"
 #include "Camera.h"
 
-namespace engine::input {
+namespace voxie {
 namespace internal {
 
 const unsigned int SCR_WIDTH = 800;

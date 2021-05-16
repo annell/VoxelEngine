@@ -23,15 +23,15 @@ void ShowEntityPositionController() {
     static int selected = 0;
     ImGui::Begin("Entities controller");
     std::vector<const char*> items;
-    auto& entities = engine::Engine::GetEngine().GetScene().GetEntities();
+    auto& entities = voxie::Engine::GetEngine().GetScene().GetEntities();
     for (auto& entity : entities) {
         items.push_back(entity->GetName().c_str());
     }
-    auto pos = engine::helper::GetComponent<engine::entities::Position>(*entities.at(selected));
+    auto pos = voxie::helper::GetComponent<voxie::Position>(*entities.at(selected));
     float translation[3] = {pos->x, pos->y, pos->z};
     ImGui::ListBox("Entities", &selected, &items[0], entities.size());
     ImGui::SliderFloat3("(X, Y, Z)", translation, -2.0f, 2.0f);
-    auto shader = engine::helper::GetComponent<engine::rendering::Shader>(*entities.at(selected));
+    auto shader = voxie::helper::GetComponent<voxie::Shader>(*entities.at(selected));
     pos->SetPosition(translation[0], translation[1], translation[2]);
     shader->use();
     shader->setMat4("model", pos->model);
@@ -77,47 +77,47 @@ void ShowExampleAppSimpleOverlay(std::string text, bool* p_open = nullptr)
 
 int main()
 {
-    auto& engine = engine::Engine::GetEngine();
+    auto& engine = voxie::Engine::GetEngine();
     engine.Init();
 
-    engine::input::KeyboardHandler::RegisterAction({
+    voxie::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(engine::rendering::FORWARD, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(voxie::FORWARD, engine.GetDeltaTime());
         }});
 
-    engine::input::KeyboardHandler::RegisterAction({
+    voxie::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(engine::rendering::BACKWARD, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(voxie::BACKWARD, engine.GetDeltaTime());
         }});
 
-    engine::input::KeyboardHandler::RegisterAction({
+    voxie::KeyboardHandler::RegisterAction({
             [&engine] () {
             if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(engine::rendering::LEFT, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(voxie::LEFT, engine.GetDeltaTime());
         }});
 
-    engine::input::KeyboardHandler::RegisterAction({
+    voxie::KeyboardHandler::RegisterAction({
             [&engine] () {
             if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(engine::rendering::RIGHT, engine.GetDeltaTime());
+                engine.GetCamera()->ProcessKeyboard(voxie::RIGHT, engine.GetDeltaTime());
         }});
 
-    engine::input::KeyboardHandler::RegisterAction({
+    voxie::KeyboardHandler::RegisterAction({
         [&engine] () {
             if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
-                engine::input::MouseHandler::UnlockCamera();
+                voxie::MouseHandler::UnlockCamera();
         }});
 
-    engine::input::KeyboardHandler::RegisterAction({
+    voxie::KeyboardHandler::RegisterAction({
           [&engine] () {
             if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-                engine::input::MouseHandler::LockCamera();
+                voxie::MouseHandler::LockCamera();
           }});
 
-    engine::utility::TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf",
-          std::make_shared<engine::rendering::Shader>(
+    voxie::TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf",
+          std::make_shared<voxie::Shader>(
             std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/text.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)
@@ -125,74 +125,74 @@ int main()
     text.Init();
 
 
-    engine::entities::Chunk model("Girl", std::make_shared<engine::rendering::Shader>(
+    voxie::Chunk model("Girl", std::make_shared<voxie::Shader>(
         std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
-        }), std::make_shared<engine::entities::Position>(0, 0, 0));
-    engine::utility::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", &model);
+        }), std::make_shared<voxie::Position>(0, 0, 0));
+    voxie::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", &model);
     model.Init();
     engine.GetScene().AddEntity(model.GetEntity());
 
-    engine::entities::Chunk model2("Boy", std::make_shared<engine::rendering::Shader>(
+    voxie::Chunk model2("Boy", std::make_shared<voxie::Shader>(
         std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
-        }), std::make_shared<engine::entities::Position>(0, 0, 0));
-    engine::utility::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", &model2);
+        }), std::make_shared<voxie::Position>(0, 0, 0));
+    voxie::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", &model2);
     model2.Init();
     engine.GetScene().AddEntity(model2.GetEntity());
 
-    engine::entities::Chunk floor("Floor", std::make_shared<engine::rendering::Shader>(
+    voxie::Chunk floor("Floor", std::make_shared<voxie::Shader>(
         std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER) 
-        }), std::make_shared<engine::entities::Position>(0, 0, 0));
-    floor.AddCube(std::make_unique<engine::entities::Cube>(
-            engine::entities::Position{0, -0.1, 0},
-            engine::entities::Dimensions{10000, 0.1, 10000},
-            engine::entities::Material{{0.0f, 0.0f, 0.0f},
+        }), std::make_shared<voxie::Position>(0, 0, 0));
+    floor.AddCube(std::make_unique<voxie::Cube>(
+            voxie::Position{0, -0.1, 0},
+            voxie::Dimensions{10000, 0.1, 10000},
+            voxie::Material{{0.0f, 0.0f, 0.0f},
                      {0.5f, 0.5f, 0.5f},
                      {0.5f, 0.5f, 0.5f},
                      {0.5f, 0.5f, 0.5f},
                      32.0f}, 0));
     floor.Init();
     engine.GetScene().AddEntity(floor.GetEntity());
-    auto shaderEntity = engine::entities::Entity::MakeEntity("shaderEntity");
-    engine::helper::AddComponent(std::make_shared<engine::rendering::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+    auto shaderEntity = voxie::Entity::MakeEntity("shaderEntity");
+    voxie::helper::AddComponent(std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                              std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
                             }), *shaderEntity);
 
-    std::vector<std::shared_ptr<engine::rendering::Shader>> shaders;
+    std::vector<std::shared_ptr<voxie::Shader>> shaders;
     shaders.push_back(model.GetShader());
     shaders.push_back(model2.GetShader());
     shaders.push_back(floor.GetShader());
-    engine::entities::LightSourceHandler lights(std::make_shared<engine::rendering::Shader>(std::map<std::string, unsigned int>{
+    voxie::LightSourceHandler lights(std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
         std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
         std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
     }), shaders);
 
-    lights.AddLight(engine::entities::LightSource(
-        engine::entities::LightConfig{
-            engine::entities::LightType::AMBIENT,
-            new engine::entities::Cube({1, 1, 1}, {100.0, 100.0, 100.0}),
+    lights.AddLight(voxie::LightSource(
+        voxie::LightConfig{
+            voxie::LightType::AMBIENT,
+            new voxie::Cube({1, 1, 1}, {100.0, 100.0, 100.0}),
             {0.15f, 0.15f, 0.15f}, 
             {1.0f, 100.0f, 1.0f}
         }));
                                 
-    lights.AddLight(engine::entities::LightSource(
-        engine::entities::LightConfig{
-            engine::entities::LightType::POINT,
-            new engine::entities::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
+    lights.AddLight(voxie::LightSource(
+        voxie::LightConfig{
+            voxie::LightType::POINT,
+            new voxie::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
             {0.8f, 0.1f, 0.85f}, 
             {0.5f, 0.5f, 0.5f},
             {1.0f, 1.5f, 3.8f},
         }));
 
-    lights.AddLight(engine::entities::LightSource(
-            engine::entities::LightConfig{
-            engine::entities::LightType::POINT,
-            new engine::entities::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
+    lights.AddLight(voxie::LightSource(
+            voxie::LightConfig{
+            voxie::LightType::POINT,
+            new voxie::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
             {0.1f, 0.8f, 0.85f}, 
             {1.5f, 0.7f, 1.5f},
             {1.0f, 1.5f, 3.8f},
@@ -221,14 +221,14 @@ int main()
         ShowEntityPositionController();
         ShowExampleAppSimpleOverlay(fps);
 
-        engine::helper::rendering::Begin();
-        engine::helper::rendering::Submit(model.GetRenderingConfig());
-        engine::helper::rendering::Submit(model2.GetRenderingConfig());
-        engine::helper::rendering::Submit(floor.GetRenderingConfig());
+        voxie::helper::Begin();
+        voxie::helper::Submit(model.GetRenderingConfig());
+        voxie::helper::Submit(model2.GetRenderingConfig());
+        voxie::helper::Submit(floor.GetRenderingConfig());
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
-            engine::helper::rendering::Submit(config);
+            voxie::helper::Submit(config);
         }
-        engine::helper::rendering::End();
+        voxie::helper::End();
 
     });
     engine.StartLoop();

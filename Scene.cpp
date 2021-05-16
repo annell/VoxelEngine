@@ -4,10 +4,14 @@
 
 #include "Scene.h"
 
-void engine::Scene::AddEntity(std::shared_ptr<entities::Entity> entity) {
+namespace voxie {
+
+void Scene::AddEntity(std::shared_ptr<Entity> entity) {
     entities.push_back(entity);
 }
 
-const engine::Scene::SceneEntities &engine::Scene::GetEntities() {
+const Scene::SceneEntities &Scene::GetEntities() {
     return entities;
+}
+
 }

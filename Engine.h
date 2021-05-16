@@ -15,14 +15,12 @@
 
 class GLFWwindow;
 
-namespace engine {
+namespace voxie {
 
-namespace rendering {
-    class Camera;
-}
+class Camera;
 
 
-using OnTick = utility::Delegate<float>;
+using OnTick = Delegate<float>;
 class Engine {
 private:
     Engine() = default;
@@ -31,14 +29,14 @@ private:
 public:
     static Engine& GetEngine();
     bool Init();
-    std::shared_ptr<rendering::Camera> GetCamera();
-    std::shared_ptr<rendering::Window> GetWindow();
+    std::shared_ptr<Camera> GetCamera();
+    std::shared_ptr<Window> GetWindow();
     void StartLoop();
     float GetDeltaTime() const;
-    entities::EntityComponentSystem& GetComponents();
-    rendering::RenderingHandler& GetRenderingHandler();
+    EntityComponentSystem& GetComponents();
+    RenderingHandler& GetRenderingHandler();
     Scene& GetScene();
-    utility::Logging& GetLogger();
+    Logging& GetLogger();
 
     OnTick onTick;
 private:
@@ -46,30 +44,28 @@ private:
     const unsigned int SCR_HEIGHT = 768;
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
-    std::shared_ptr<rendering::Window> window;
-    std::shared_ptr<rendering::Camera> camera;
-    entities::EntityComponentSystem components;
+    std::shared_ptr<Window> window;
+    std::shared_ptr<Camera> camera;
+    EntityComponentSystem components;
     Scene scene;
-    rendering::RenderingHandler renderingHandler;
-    utility::Logging logging;
+    RenderingHandler renderingHandler;
+    Logging logging;
 };
 
 namespace helper {
     template <typename T>
-    std::shared_ptr<T> GetComponent(const entities::Entity& handle) {
+    std::shared_ptr<T> GetComponent(const Entity& handle) {
         return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
     }
 
     template <typename T>
-    void AddComponent(std::shared_ptr<T> component, entities::Entity& handle) {
+    void AddComponent(std::shared_ptr<T> component, Entity& handle) {
         return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
     }
 
-    namespace rendering {
-        void Begin();
-        void End();
-        void Submit(const engine::rendering::RenderingConfig& config);
-    }
+    void Begin();
+    void End();
+    void Submit(const RenderingConfig& config);
 
     void Log(std::string log);
 }

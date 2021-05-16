@@ -6,7 +6,7 @@
 #include "MouseHandler.h"
 #include "Camera.h"
 
-namespace engine {
+namespace voxie {
 
 Engine::~Engine() {
     ImGui_ImplOpenGL3_Shutdown();
@@ -24,7 +24,7 @@ bool Engine::Init() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = std::make_shared<rendering::Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "VoxelEngine", NULL, NULL), SCR_WIDTH, SCR_HEIGHT);
+    window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH, SCR_HEIGHT);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -32,15 +32,15 @@ bool Engine::Init() {
         return false;
     }
     glfwMakeContextCurrent(window->GetWindow());
-    glfwSetFramebufferSizeCallback(window->GetWindow(), input::MouseHandler::framebuffer_size_callback);
-    glfwSetCursorPosCallback(window->GetWindow(), input::MouseHandler::mouse_callback);
-    glfwSetScrollCallback(window->GetWindow(), input::MouseHandler::scroll_callback);
+    glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
+    glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_callback);
+    glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
 
     glewInit();
 
     glEnable(GL_DEPTH_TEST);
 
-    camera = std::make_shared<rendering::Camera>(glm::vec3(0.0f, 1.0f, 3.0f));
+    camera = std::make_shared<Camera>(glm::vec3(0.0f, 1.0f, 3.0f));
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -53,11 +53,11 @@ bool Engine::Init() {
     return true;
 }
 
-std::shared_ptr<rendering::Camera> Engine::GetCamera() {
+std::shared_ptr<Camera> Engine::GetCamera() {
     return camera;
 }
 
-std::shared_ptr<rendering::Window> Engine::GetWindow() {
+std::shared_ptr<Window> Engine::GetWindow() {
     return window;
 }
 
@@ -74,7 +74,7 @@ void Engine::StartLoop() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        input::KeyboardHandler::processInput();
+        KeyboardHandler::processInput();
         onTick.Broadcast(GetDeltaTime());
         logging.Draw("Logger", nullptr);
         ImGui::Render();
@@ -96,15 +96,15 @@ Engine &Engine::GetEngine() {
     return engine;
 }
 
-entities::EntityComponentSystem &Engine::GetComponents() {
+EntityComponentSystem &Engine::GetComponents() {
     return components;
 }
 
-rendering::RenderingHandler &Engine::GetRenderingHandler() {
+RenderingHandler &Engine::GetRenderingHandler() {
     return renderingHandler;
 }
 
-utility::Logging &Engine::GetLogger() {
+Logging &Engine::GetLogger() {
     return logging;
 }
 
@@ -112,13 +112,11 @@ Scene &Engine::GetScene() {
     return scene;
 }
 
-    namespace helper {
+namespace helper {
+
 void Log(std::string log) {
     Engine::GetEngine().GetLogger().AddLog(log.c_str());
 }
-}
-
-namespace helper::rendering {
 
 void Begin() {
     Engine::GetEngine().GetRenderingHandler().Begin(Engine::GetEngine().GetCamera());
@@ -128,7 +126,7 @@ void End() {
     Engine::GetEngine().GetRenderingHandler().End();
 }
 
-void Submit(const engine::rendering::RenderingConfig& config) {
+void Submit(const voxie::RenderingConfig& config) {
     Engine::GetEngine().GetRenderingHandler().Submit(config);
 }
 }

@@ -11,7 +11,7 @@
 
 #include "Core.h"
 
-namespace engine::rendering {
+namespace voxie {
 
 class Shader
 {

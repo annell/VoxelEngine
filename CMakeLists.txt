@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(VoxelEngine)
+project(Voxie)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -26,7 +26,7 @@ link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${FREETYPE_LINK} ${SOIL_LINK}
 
 # Execute compilation command
 set(SOURCE_FILES Editor/EditorApplication.cpp)
-add_executable(VoxelEngine
+add_executable(Voxie
         Core.h
         Editor/EditorApplication.cpp
         Engine.cpp
@@ -66,6 +66,6 @@ add_executable(VoxelEngine
 include_directories(. entities utility input rendering core external/imgui)
 
 if (APPLE)
-    target_link_libraries(VoxelEngine "-framework OpenGL")
-    target_link_libraries(VoxelEngine "-framework GLUT")
+    target_link_libraries(Voxie "-framework OpenGL")
+    target_link_libraries(Voxie "-framework GLUT")
 endif()

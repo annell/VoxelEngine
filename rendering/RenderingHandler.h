@@ -8,7 +8,7 @@
 #include <functional>
 #include <deque>
 
-namespace engine::rendering {
+namespace voxie {
 
 class Camera;
 class VertexBufferArray;

@@ -13,11 +13,11 @@
 #include <ft2build.h>
 #include "freetype/freetype.h"
 
-namespace engine::utility {
+namespace voxie {
 
 class TextHandler {
 public:
-    TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<rendering::Shader>);
+    TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<Shader>);
     void Init();
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
@@ -37,11 +37,11 @@ private:
     int ScreenHeight;
     std::string Font;
 
-    std::shared_ptr<rendering::Shader> FontShader;
-    std::shared_ptr<rendering::VertexBufferArray> vertexBufferArray;
+    std::shared_ptr<Shader> FontShader;
+    std::shared_ptr<VertexBufferArray> vertexBufferArray;
 };
 
-TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<rendering::Shader> shader)
+TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<Shader> shader)
 : ScreenWidth(screenWidth)
 , ScreenHeight(screenHeight)
 , Font(font)

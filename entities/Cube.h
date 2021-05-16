@@ -11,7 +11,7 @@
 #include "Shader.h"
 #include "VertexBufferArray.h"
 
-namespace engine::entities {
+namespace voxie {
 
 struct Material {
     glm::vec3 color;
@@ -84,7 +84,7 @@ struct Side {
     , dimensions(d)
     , material(m)
     , materialIndex(materialIndex)
-    , vertexBufferArray(std::make_shared<rendering::VertexBufferArray>()) {
+    , vertexBufferArray(std::make_shared<VertexBufferArray>()) {
         GenerateSides(position, dimensions);
     }
 
@@ -157,7 +157,7 @@ struct Side {
         return GetNrVertex() != 0;
     }
 
-    std::shared_ptr<rendering::VertexBufferArray> GetVertexBufferArray() const {
+    std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const {
         return vertexBufferArray;
     }
 
@@ -279,7 +279,7 @@ private:
         };
     }
 
-    std::shared_ptr<rendering::VertexBufferArray> vertexBufferArray;
+    std::shared_ptr<VertexBufferArray> vertexBufferArray;
 
     Position position;
     ChunkPosition chunkPosition;

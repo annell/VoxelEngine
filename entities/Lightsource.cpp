@@ -6,7 +6,7 @@
 #include "Cube.h"
 #include "Camera.h"
 
-namespace engine::entities {
+namespace voxie {
 
 LightSource::LightSource(LightConfig config)
  : config(config) {
@@ -48,13 +48,13 @@ void LightSource::SetPosition(const glm::vec3& position) {
     model = glm::scale(model, glm::vec3(0.1f));
 }
 
-LightSourceHandler::LightSourceHandler(std::shared_ptr<rendering::Shader> cubeShader, std::vector<std::shared_ptr<rendering::Shader>> light)
+LightSourceHandler::LightSourceHandler(std::shared_ptr<Shader> cubeShader, std::vector<std::shared_ptr<Shader>> light)
  : lightCubeShader(cubeShader)
  , lightShaders(light) {
 
 }
 
-void LightSourceHandler::Draw(const rendering::Camera& camera) const {
+void LightSourceHandler::Draw(const Camera& camera) const {
     lightCubeShader->use();
     camera.SetShaderParameters(*lightCubeShader);
     for (auto &light : lightSources) {
@@ -88,7 +88,7 @@ std::vector<LightSource> & LightSourceHandler::GetLightSources() {
     return lightSources;
 }
 
-std::vector<rendering::RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared_ptr<rendering::Camera> camera) const {
+std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared_ptr<Camera> camera) const {
     for (auto lightShader : lightShaders) {
         lightShader->use();
         lightShader->setInt("nrLights", lightSources.size());
@@ -105,7 +105,7 @@ std::vector<rendering::RenderingConfig> LightSourceHandler::GetRenderingConfigs(
             n++;
         }
     }
-    std::vector<rendering::RenderingConfig> output;
+    std::vector<RenderingConfig> output;
     for (auto& light : lightSources) {
         output.push_back({
             lightCubeShader,

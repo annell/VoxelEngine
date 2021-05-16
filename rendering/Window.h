@@ -6,7 +6,7 @@
 
 #include <glfw3.h>
 
-namespace engine::rendering {
+namespace voxie {
 
 class Window {
 public:
