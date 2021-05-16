@@ -26,7 +26,7 @@ public:
     size_t NrMaterials() const;
     size_t NrVertex() const;
 
-    const Position& GetPosition() const;
+    std::shared_ptr<Position> GetPosition() const;
     void SetPosition(Position);
     rendering::RenderingConfig GetRenderingConfig() const;
     std::shared_ptr<rendering::Shader> GetShader() const;
@@ -40,16 +40,9 @@ private:
 
     size_t nrMaterials = 0;
     std::vector<Cube*> cubesToRender;
-    std::shared_ptr<rendering::Shader> shader;
 
     std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-
-    void CreateBuffers(float v[], size_t size);
-    void ResetBuffers();
-
     std::shared_ptr<entities::Entity> entity;
-    std::shared_ptr<rendering::VertexBufferArray> vertexBufferArray;
-    std::shared_ptr<Position> position;
 };
 
 }

@@ -102,7 +102,7 @@ uint32_t count_solid_voxels_in_model(const ogt_vox_model* model)
 
 void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, engine::entities::Chunk* chunk)
 {
-    const auto chunkPos = chunk->GetPosition();
+    auto chunkPos = chunk->GetPosition();
     uint32_t voxel_index = 0;
     std::map<uint32_t, int> materials;
     int nrMaterials = 0;
@@ -118,7 +118,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, e
                         materials[color_index] = nrMaterials++;
                     float size = 0.1f;
                     auto cube = std::make_unique<entities::Cube>(
-                            entities::Position{ (float)y*size + chunkPos.x, (float)z*size + chunkPos.y, (float)x*size + chunkPos.z}, // <---- They use different coordinate system, so here we compensate.
+                            entities::Position{ (float)y*size + chunkPos->x, (float)z*size + chunkPos->y, (float)x*size + chunkPos->z}, // <---- They use different coordinate system, so here we compensate.
                             entities::Dimensions{size, size, size},
                             entities::Material{{0.2f, 0.8f, 0.3f},
                                     {(float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f},

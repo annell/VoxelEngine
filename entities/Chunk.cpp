@@ -9,23 +9,19 @@
 namespace engine::entities {
 
 Chunk::Chunk(std::string name, std::shared_ptr<rendering::Shader> shader, std::shared_ptr<Position> position)
- : shader(shader)
- , entity(entities::Entity::MakeEntity(name))
- , position(position)
- , vertexBufferArray(std::make_shared<rendering::VertexBufferArray>()) {
-
+ : entity(entities::Entity::MakeEntity(name)) {
+    helper::AddComponent(position, *entity);
+    helper::AddComponent(shader, *entity);
+    helper::AddComponent(std::make_shared<rendering::VertexBufferArray>(), *entity);
 }
 
 Chunk::~Chunk() {
-    vertexBufferArray->ResetBuffers();
+    GetVertexBufferArray()->ResetBuffers();
 }
 
 void Chunk::Init() {
     SetupCubesForRendering();
     SetupShader();
-    helper::AddComponent(position, *entity);
-    helper::AddComponent(shader, *entity);
-    helper::AddComponent(vertexBufferArray, *entity);
 }
 
 void Chunk::SetupCubesForRendering() {
@@ -43,6 +39,9 @@ void Chunk::SetupCubesForRendering() {
 }
 
 void Chunk::SetupShader() {
+    auto shader = GetShader();
+    auto vertexBufferArray = GetVertexBufferArray();
+    auto position = GetPosition();
     shader->use();
     for (auto cube : cubesToRender) {
         vertexBufferArray->nrVertex += cube->GetNrVertex();
@@ -61,14 +60,14 @@ void Chunk::SetupShader() {
     vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
     vertexBufferArray->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
-    shader->setMat4("model", position->model);
+    shader->setMat4("model", GetPosition()->model);
 }
 
 void Chunk::Draw() const {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
-    shader->use();
-    glBindVertexArray(vertexBufferArray->VAO);
+    GetShader()->use();
+    glBindVertexArray(GetVertexBufferArray()->VAO);
     glDrawArrays(GL_TRIANGLES, 0, NrVertex());
     glDisable(GL_CULL_FACE);
 }
@@ -82,7 +81,7 @@ size_t Chunk::NrMaterials() const {
 }
 
 size_t Chunk::NrVertex() const {
-    return vertexBufferArray->nrVertex;
+    return GetVertexBufferArray()->nrVertex;
 }
 
 void Chunk::FaceCulling() const {
@@ -119,22 +118,22 @@ void Chunk::FaceCulling() const {
     }
 }
 
-const Position& Chunk::GetPosition() const {
-    return *position;
+std::shared_ptr<Position> Chunk::GetPosition() const {
+    return engine::helper::GetComponent<Position>(*entity);
 }
 
 void Chunk::SetPosition(Position pos) {
-    position->SetPosition(pos.x, pos.y, pos.z);
-    shader->use();
-    shader->setMat4("model", position->model);
+    GetPosition()->SetPosition(pos.x, pos.y, pos.z);
+    GetShader()->use();
+    GetShader()->setMat4("model", GetPosition()->model);
 }
 
 std::shared_ptr<rendering::Shader> Chunk::GetShader() const {
-    return shader;
+    return engine::helper::GetComponent<rendering::Shader>(*entity);
 }
 
 std::shared_ptr<rendering::VertexBufferArray> Chunk::GetVertexBufferArray() const {
-    return vertexBufferArray;
+    return engine::helper::GetComponent<rendering::VertexBufferArray>(*entity);
 }
 
 auto GetPreDrawAction() {
