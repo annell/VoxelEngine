@@ -12,12 +12,13 @@
 
 #include "Shader.h"
 #include "Cube.h"
+#include "EntityComponentSystem.h"
 
 namespace engine::entities {
 
 class Chunk {
 public:
-    Chunk(std::shared_ptr<rendering::Shader>, Position);
+    Chunk(std::string name, std::shared_ptr<rendering::Shader>, std::shared_ptr<Position>);
     ~Chunk();
     void Init();
     void Draw() const;
@@ -30,6 +31,7 @@ public:
     rendering::RenderingConfig GetRenderingConfig() const;
     std::shared_ptr<rendering::Shader> GetShader() const;
     std::shared_ptr<rendering::VertexBufferArray> GetVertexBufferArray() const;
+    std::shared_ptr<entities::Entity> GetEntity() const;
 
 private:
     void SetupCubesForRendering();
@@ -45,9 +47,9 @@ private:
     void CreateBuffers(float v[], size_t size);
     void ResetBuffers();
 
+    std::shared_ptr<entities::Entity> entity;
     std::shared_ptr<rendering::VertexBufferArray> vertexBufferArray;
-
-    Position position;
+    std::shared_ptr<Position> position;
 };
 
 }

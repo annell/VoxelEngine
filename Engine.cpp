@@ -76,8 +76,6 @@ void Engine::StartLoop() {
 
         input::KeyboardHandler::processInput();
         onTick.Broadcast(GetDeltaTime());
-        ImGui::SetNextWindowSize({(float)SCR_WIDTH, (float)SCR_HEIGHT / 4});
-        ImGui::SetNextWindowPos({0, (float)SCR_HEIGHT - (float)SCR_HEIGHT / 4});
         logging.Draw("Logger", nullptr);
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -110,7 +108,11 @@ utility::Logging &Engine::GetLogger() {
     return logging;
 }
 
-namespace helper {
+Scene &Engine::GetScene() {
+    return scene;
+}
+
+    namespace helper {
 void Log(std::string log) {
     Engine::GetEngine().GetLogger().AddLog(log.c_str());
 }

@@ -19,6 +19,25 @@ const std::string MODELS = "/voxelObjects";
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+void ShowEntityPositionController() {
+    static int selected = 0;
+    ImGui::Begin("Entities controller");
+    std::vector<const char*> items;
+    auto& entities = engine::Engine::GetEngine().GetScene().GetEntities();
+    for (auto& entity : entities) {
+        items.push_back(entity->GetName().c_str());
+    }
+    auto pos = engine::helper::GetComponent<engine::entities::Position>(*entities.at(selected));
+    float translation[3] = {pos->x, pos->y, pos->z};
+    ImGui::ListBox("Entities", &selected, &items[0], entities.size());
+    ImGui::SliderFloat3("(X, Y, Z)", translation, -2.0f, 2.0f);
+    auto shader = engine::helper::GetComponent<engine::rendering::Shader>(*entities.at(selected));
+    pos->SetPosition(translation[0], translation[1], translation[2]);
+    shader->use();
+    shader->setMat4("model", pos->model);
+    ImGui::End();
+}
+
 void ShowExampleAppSimpleOverlay(std::string text, bool* p_open = nullptr)
 {
     const float PAD = 10.0f;
@@ -60,12 +79,6 @@ int main()
 {
     auto& engine = engine::Engine::GetEngine();
     engine.Init();
-
-    engine::input::KeyboardHandler::RegisterAction({
-        [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-                glfwSetWindowShouldClose(engine.GetWindow()->GetWindow(), true);
-        }});
 
     engine::input::KeyboardHandler::RegisterAction({
         [&engine] () {
@@ -112,27 +125,29 @@ int main()
     text.Init();
 
 
-    engine::entities::Chunk model(std::make_shared<engine::rendering::Shader>(
+    engine::entities::Chunk model("Girl", std::make_shared<engine::rendering::Shader>(
         std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
-        }), {0, 0, 0});
+        }), std::make_shared<engine::entities::Position>(0, 0, 0));
     engine::utility::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", &model);
     model.Init();
+    engine.GetScene().AddEntity(model.GetEntity());
 
-    engine::entities::Chunk model2(std::make_shared<engine::rendering::Shader>(
+    engine::entities::Chunk model2("Boy", std::make_shared<engine::rendering::Shader>(
         std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
-        }), {0, 0, 0});
+        }), std::make_shared<engine::entities::Position>(0, 0, 0));
     engine::utility::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", &model2);
     model2.Init();
+    engine.GetScene().AddEntity(model2.GetEntity());
 
-    engine::entities::Chunk floor(std::make_shared<engine::rendering::Shader>(
+    engine::entities::Chunk floor("Floor", std::make_shared<engine::rendering::Shader>(
         std::map<std::string, unsigned int>{
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
             std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER) 
-        }), {0, 0, 0});
+        }), std::make_shared<engine::entities::Position>(0, 0, 0));
     floor.AddCube(std::make_unique<engine::entities::Cube>(
             engine::entities::Position{0, -0.1, 0},
             engine::entities::Dimensions{10000, 0.1, 10000},
@@ -142,10 +157,11 @@ int main()
                      {0.5f, 0.5f, 0.5f},
                      32.0f}, 0));
     floor.Init();
-    engine::entities::Entity shaderEntity(5);
+    engine.GetScene().AddEntity(floor.GetEntity());
+    auto shaderEntity = engine::entities::Entity::MakeEntity("shaderEntity");
     engine::helper::AddComponent(std::make_shared<engine::rendering::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                              std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
-                            }), shaderEntity);
+                            }), *shaderEntity);
 
     std::vector<std::shared_ptr<engine::rendering::Shader>> shaders;
     shaders.push_back(model.GetShader());
@@ -202,24 +218,7 @@ int main()
         }
         std::string log = fps + "\n";
 
-
-        auto pos = model.GetPosition();
-
-        float translation[3] = {pos.x, pos.y, pos.z};
-        ImGui::Begin("Demo window");
-        ImGui::BeginChild("scrolling");
-        ImGui::SliderFloat3("position", translation, -1.0f, 1.0f);
-        ImGui::EndChild();
-        ImGui::SliderFloat3("position", translation, -1.0f, 1.0f);
-
-        pos.x = translation[0];
-        pos.y = translation[1];
-        pos.z = translation[2];
-
-        model.SetPosition(pos);
-        ImGui::End();
-        engine::helper::Log("hej\n");
-
+        ShowEntityPositionController();
         ShowExampleAppSimpleOverlay(fps);
 
         engine::helper::rendering::Begin();

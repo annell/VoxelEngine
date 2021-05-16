@@ -61,7 +61,7 @@ add_executable(VoxelEngine
         entities/Chunk.h
         entities/EntityComponentSystem.cpp
         entities/EntityComponentSystem.h
-        Editor/gui/Panel.cpp Editor/gui/Panel.h rendering/Window.h)
+        Editor/gui/Panel.cpp Editor/gui/Panel.h rendering/Window.h Scene.cpp Scene.h)
 
 include_directories(. entities utility input rendering core external/imgui)
 

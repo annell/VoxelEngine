@@ -22,13 +22,25 @@ struct Material {
 };
 
 struct Position {
-    float x;
-    float y;
-    float z;
+    Position(float x, float y, float z)
+    : x(x), y(y), z(z), model(glm::mat4(1.0f)) {}
+
+    Position(const Position& p)
+    : Position(p.x, p.y, p.z) {}
 
     bool operator<(const Position& pos) const {
         return std::tie(x, y, z) < std::tie(pos.x, pos.y, pos.z);
     }
+
+    void SetPosition(float x, float y, float z) {
+        this->x = x; this->y = y; this->z = z;
+        this->model = glm::translate(glm::mat4(1.0f), {x, y, z});
+    }
+
+    float x;
+    float y;
+    float z;
+    glm::mat4 model;
 };
 
 struct ChunkPosition {
@@ -67,7 +79,6 @@ struct Side {
     float materialIndex;
     bool render = true;
 };
-    Cube() {}
     Cube(Position p, Dimensions d, Material m = {}, int materialIndex = -1)
     : position(p)
     , dimensions(d)

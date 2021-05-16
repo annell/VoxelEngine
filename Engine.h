@@ -11,6 +11,7 @@
 #include "Logging.h"
 #include "MouseHandler.h"
 #include "Window.h"
+#include "Scene.h"
 
 class GLFWwindow;
 
@@ -36,6 +37,7 @@ public:
     float GetDeltaTime() const;
     entities::EntityComponentSystem& GetComponents();
     rendering::RenderingHandler& GetRenderingHandler();
+    Scene& GetScene();
     utility::Logging& GetLogger();
 
     OnTick onTick;
@@ -47,6 +49,7 @@ private:
     std::shared_ptr<rendering::Window> window;
     std::shared_ptr<rendering::Camera> camera;
     entities::EntityComponentSystem components;
+    Scene scene;
     rendering::RenderingHandler renderingHandler;
     utility::Logging logging;
 };
@@ -58,7 +61,7 @@ namespace helper {
     }
 
     template <typename T>
-    void AddComponent(std::shared_ptr<T> component, const entities::Entity& handle) {
+    void AddComponent(std::shared_ptr<T> component, entities::Entity& handle) {
         return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
     }
 

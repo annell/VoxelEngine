@@ -42,8 +42,7 @@ struct Logging
 
     void    Draw(const char* title, bool* p_open = NULL)
     {
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;
-        if (!ImGui::Begin(title, p_open, window_flags))
+        if (!ImGui::Begin(title, p_open))
         {
             ImGui::End();
             return;

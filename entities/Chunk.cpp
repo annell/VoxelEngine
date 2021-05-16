@@ -4,11 +4,13 @@
 
 #include "Chunk.h"
 #include <map>
+#include "Engine.h"
 
 namespace engine::entities {
 
-Chunk::Chunk(std::shared_ptr<rendering::Shader> shader, Position position)
+Chunk::Chunk(std::string name, std::shared_ptr<rendering::Shader> shader, std::shared_ptr<Position> position)
  : shader(shader)
+ , entity(entities::Entity::MakeEntity(name))
  , position(position)
  , vertexBufferArray(std::make_shared<rendering::VertexBufferArray>()) {
 
@@ -21,6 +23,9 @@ Chunk::~Chunk() {
 void Chunk::Init() {
     SetupCubesForRendering();
     SetupShader();
+    helper::AddComponent(position, *entity);
+    helper::AddComponent(shader, *entity);
+    helper::AddComponent(vertexBufferArray, *entity);
 }
 
 void Chunk::SetupCubesForRendering() {
@@ -56,8 +61,7 @@ void Chunk::SetupShader() {
     vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
     vertexBufferArray->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
-    glm::mat4 model = glm::mat4(1.0f);
-    shader->setMat4("model", model);
+    shader->setMat4("model", position->model);
 }
 
 void Chunk::Draw() const {
@@ -116,16 +120,13 @@ void Chunk::FaceCulling() const {
 }
 
 const Position& Chunk::GetPosition() const {
-    return position;
+    return *position;
 }
 
 void Chunk::SetPosition(Position pos) {
-    position = pos;
-    glm::vec3 vecPos = {position.x, position.y, position.z};
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, vecPos);
+    position->SetPosition(pos.x, pos.y, pos.z);
     shader->use();
-    shader->setMat4("model", model);
+    shader->setMat4("model", position->model);
 }
 
 std::shared_ptr<rendering::Shader> Chunk::GetShader() const {
@@ -156,6 +157,10 @@ rendering::RenderingConfig Chunk::GetRenderingConfig() const {
         GetPreDrawAction(),
         GetPostDrawAction()
     };
+}
+
+std::shared_ptr<entities::Entity> Chunk::GetEntity() const {
+    return entity;
 }
 
 }
