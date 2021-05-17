@@ -10,78 +10,32 @@
 
 #include "Shader.h"
 #include "VertexBufferArray.h"
+#include "BaseComponents.h"
 
 namespace voxie {
 
-struct Material {
-    glm::vec3 color;
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    float shininess;
-};
-
-struct Position {
-    Position(float x, float y, float z)
-    : x(x), y(y), z(z), model(glm::mat4(1.0f)) {}
-
-    Position(const Position& p)
-    : Position(p.x, p.y, p.z) {}
-
-    bool operator<(const Position& pos) const {
-        return std::tie(x, y, z) < std::tie(pos.x, pos.y, pos.z);
-    }
-
-    void SetPosition(float x, float y, float z) {
-        this->x = x; this->y = y; this->z = z;
-        this->model = glm::translate(glm::mat4(1.0f), {x, y, z});
-    }
-
-    float x;
-    float y;
-    float z;
-    glm::mat4 model;
-};
-
-struct ChunkPosition {
-    int x;
-    int y;
-    int z;
-
-    bool operator<(const ChunkPosition& pos) const {
-        return std::tie(x, y, z) < std::tie(pos.x, pos.y, pos.z);
-    }
-};
-
-struct Dimensions {
-    float width;
-    float height;
-    float depth;
-};
-
 class Cube {
 public:
-struct Triangle {
-    float vertex[9];
-};
-enum Face {
-    BACK = 0,
-    FRONT = 1,
-    LEFT = 2,
-    RIGHT = 3,
-    BOTTOM = 4,
-    TOP = 5,
-};
-struct Side {
-    Triangle triangle1;    
-    Triangle triangle2;    
-    float normal[3];
-    float materialIndex;
-    bool render = true;
-};
-    Cube(Position p, Dimensions d, Material m = {}, int materialIndex = -1)
-    : position(p)
-    , dimensions(d)
+    struct Triangle {
+        float vertex[9];
+    };
+    enum Face {
+        BACK = 0,
+        FRONT = 1,
+        LEFT = 2,
+        RIGHT = 3,
+        BOTTOM = 4,
+        TOP = 5,
+    };
+    struct Side {
+        Triangle triangle1;
+        Triangle triangle2;
+        float normal[3];
+        float materialIndex;
+        bool render = true;
+    };
+    Cube(Position position, Dimensions d, Material m = {}, int materialIndex = -1)
+    : dimensions(d)
     , material(m)
     , materialIndex(materialIndex)
     , vertexBufferArray(std::make_shared<VertexBufferArray>()) {
@@ -126,10 +80,6 @@ struct Side {
         chunkPosition = updatedPosition;
     }
 
-    __unused glm::vec3 GetPosition() const {
-        return {position.x, position.y, position.z};
-    }
-
     Dimensions GetDimensions() const {
         return dimensions;
     }
@@ -144,13 +94,6 @@ struct Side {
 
     size_t GetNrVertex() const {
         return vertexBufferArray->nrVertex;
-    }
-
-    void Draw() const {
-        if (ShouldRender()) {
-            glBindVertexArray(vertexBufferArray->VAO);
-            glDrawArrays(GL_TRIANGLES, 0, GetNrVertex());
-        }
     }
 
     bool ShouldRender() const {
@@ -281,7 +224,6 @@ private:
 
     std::shared_ptr<VertexBufferArray> vertexBufferArray;
 
-    Position position;
     ChunkPosition chunkPosition;
     Dimensions dimensions;
     Material material;

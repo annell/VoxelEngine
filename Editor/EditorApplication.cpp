@@ -31,10 +31,11 @@ void ShowEntityPositionController() {
     float translation[3] = {pos->x, pos->y, pos->z};
     ImGui::ListBox("Entities", &selected, &items[0], entities.size());
     ImGui::SliderFloat3("(X, Y, Z)", translation, -2.0f, 2.0f);
-    auto shader = voxie::helper::GetComponent<voxie::Shader>(*entities.at(selected));
     pos->SetPosition(translation[0], translation[1], translation[2]);
-    shader->use();
-    shader->setMat4("model", pos->model);
+    if (auto shader = voxie::helper::GetComponent<voxie::Shader>(*entities.at(selected))) {
+        shader->use();
+        shader->setMat4("model", pos->model);
+    }
     ImGui::End();
 }
 
@@ -167,23 +168,31 @@ int main()
     shaders.push_back(model.GetShader());
     shaders.push_back(model2.GetShader());
     shaders.push_back(floor.GetShader());
-    voxie::LightSourceHandler lights(std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
-        std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
-        std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
-    }), shaders);
+    voxie::LightSourceHandler lights(shaders);
 
     lights.AddLight(voxie::LightSource(
         voxie::LightConfig{
+            voxie::Entity::MakeEntity("Ambient"),
+            std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
+                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
+            }),
             voxie::LightType::AMBIENT,
-            new voxie::Cube({1, 1, 1}, {100.0, 100.0, 100.0}),
+            new voxie::Cube({0, 0, 0}, {10.0, 10.0, 10.0}),
             {0.15f, 0.15f, 0.15f}, 
             {1.0f, 100.0f, 1.0f}
         }));
-                                
+
+
     lights.AddLight(voxie::LightSource(
         voxie::LightConfig{
+            voxie::Entity::MakeEntity("Point Light 1"),
+            std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
+                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
+            }),
             voxie::LightType::POINT,
-            new voxie::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
+            new voxie::Cube({0, 0, 0}, {0.05, 0.05, 0.05}),
             {0.8f, 0.1f, 0.85f}, 
             {0.5f, 0.5f, 0.5f},
             {1.0f, 1.5f, 3.8f},
@@ -191,8 +200,13 @@ int main()
 
     lights.AddLight(voxie::LightSource(
             voxie::LightConfig{
+            voxie::Entity::MakeEntity("Point Light 2"),
+            std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
+                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
+            }),
             voxie::LightType::POINT,
-            new voxie::Cube({1, 1, 1}, {0.5, 0.5, 0.5}),
+            new voxie::Cube({0, 0, 0}, {0.05, 0.05, 0.05}),
             {0.1f, 0.8f, 0.85f}, 
             {1.5f, 0.7f, 1.5f},
             {1.0f, 1.5f, 3.8f},
@@ -212,22 +226,18 @@ int main()
             FPSUpdate = 10;
         }
         FPSUpdate--;
-        for (auto& light : lights.GetLightSources()) {
-            auto pos = light.GetPosition();
-            light.SetPosition(pos);
-        }
         std::string log = fps + "\n";
 
         ShowEntityPositionController();
         ShowExampleAppSimpleOverlay(fps);
 
         voxie::helper::Begin();
-        voxie::helper::Submit(model.GetRenderingConfig());
-        voxie::helper::Submit(model2.GetRenderingConfig());
-        voxie::helper::Submit(floor.GetRenderingConfig());
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
             voxie::helper::Submit(config);
         }
+        voxie::helper::Submit(model.GetRenderingConfig());
+        voxie::helper::Submit(model2.GetRenderingConfig());
+        voxie::helper::Submit(floor.GetRenderingConfig());
         voxie::helper::End();
 
     });

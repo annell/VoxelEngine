@@ -113,7 +113,7 @@ public:
     }
 
     void SetShaderParameters(const Shader& shader) const {
-        glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)800 / (float)600, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)800 / (float)600, 0.1f, 100000.0f);
         glm::mat4 view = GetViewMatrix();
 
         shader.setVec3("viewPos", Position);

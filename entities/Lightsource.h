@@ -9,6 +9,7 @@
 #include <glm.hpp>
 #include <vector>
 #include <RenderingHandler.h>
+#include "Chunk.h"
 
 namespace voxie {
     class Shader;
@@ -17,6 +18,7 @@ namespace voxie {
 
 namespace voxie {
 class Cube;
+class Entity;
 
 
 enum class LightType {
@@ -31,10 +33,12 @@ struct Atteunation {
 };
 
 struct LightConfig {
+    std::shared_ptr<Entity> entity;
+    std::shared_ptr<Shader> shader;
     LightType type;
     Cube* cube;
     glm::vec3 color;
-    glm::vec3 pos;
+    Position pos;
     Atteunation atteunation;
 };
 
@@ -42,29 +46,26 @@ class LightSource {
 public:
     LightSource(LightConfig config);
     LightSource(Cube* cube, glm::vec3 color, glm::vec3 position);
-    void Draw() const;
     const glm::vec3& GetPosition() const;
     const glm::mat4& GetModel() const;
     const glm::vec3& GetColor() const;
     const LightType& GetType() const;
+    std::shared_ptr<Shader> GetShader() const;
     const LightConfig& GetConfig() const;
-    void SetPosition(const glm::vec3&);
 
 private:
-    glm::mat4 model;
     LightConfig config;
+    std::shared_ptr<Position> position;
 };
 
 class LightSourceHandler {
 public:
-    LightSourceHandler(std::shared_ptr<Shader> lightSource, std::vector<std::shared_ptr<Shader>> light);
-    void Draw(const Camera& camera) const;
+    LightSourceHandler(std::vector<std::shared_ptr<Shader>> light);
     void AddLight(const LightSource& light);
 
-    std::vector<LightSource>& GetLightSources();
     std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>) const;
+    const std::vector<LightSource>& GetLightSources() const;
 private:
-    std::shared_ptr<Shader> lightCubeShader;
     std::vector<std::shared_ptr<Shader>> lightShaders;
     std::vector<LightSource> lightSources;
 };

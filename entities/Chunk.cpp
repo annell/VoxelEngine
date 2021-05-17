@@ -56,7 +56,6 @@ void Chunk::SetupShader() {
     }
 
     vertexBufferArray->CreateBuffers();
-    int attributes = 0;
     vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
     vertexBufferArray->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(6 * sizeof(float)));
