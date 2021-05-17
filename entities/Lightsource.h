@@ -35,10 +35,10 @@ struct Atteunation {
 struct LightConfig {
     std::shared_ptr<Entity> entity;
     std::shared_ptr<Shader> shader;
+    std::shared_ptr<Position> position;
     LightType type;
     Cube* cube;
     glm::vec3 color;
-    Position pos;
     Atteunation atteunation;
 };
 
@@ -55,7 +55,6 @@ public:
 
 private:
     LightConfig config;
-    std::shared_ptr<Position> position;
 };
 
 class LightSourceHandler {

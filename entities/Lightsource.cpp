@@ -15,10 +15,10 @@ LightSource::LightSource(LightConfig config)
     config.cube->GenerateVertexAttributes();
     config.cube->CreateRenderBuffers();
     config.cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-    position = std::make_shared<Position>(config.pos);
-    position->model = glm::translate(position->model, position->pos);
-    helper::AddComponent(position, *config.entity);
+    config.position->model = glm::translate(config.position->model, config.position->pos);
+    helper::AddComponent(config.position, *config.entity);
     helper::AddComponent(config.cube->GetVertexBufferArray(), *config.entity);
+    helper::AddComponent(config.shader, *config.entity);
  }
 
 const glm::vec3 & LightSource::GetColor() const {
@@ -26,11 +26,11 @@ const glm::vec3 & LightSource::GetColor() const {
 }
 
 const glm::vec3& LightSource::GetPosition() const {
-    return position->pos;
+    return config.position->pos;
 }
 
 const glm::mat4& LightSource::GetModel() const {
-    return position->model;
+    return config.position->model;
 }
 
 std::shared_ptr<Shader> LightSource::GetShader() const {

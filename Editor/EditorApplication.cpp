@@ -177,10 +177,10 @@ int main()
                     std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                     std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
             }),
+            std::make_shared<voxie::Position>(1.0f, 100.0f, 1.0f),
             voxie::LightType::AMBIENT,
             new voxie::Cube({0, 0, 0}, {10.0, 10.0, 10.0}),
-            {0.15f, 0.15f, 0.15f}, 
-            {1.0f, 100.0f, 1.0f}
+            {0.15f, 0.15f, 0.15f}
         }));
 
 
@@ -191,11 +191,11 @@ int main()
                     std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                     std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
             }),
+            std::make_shared<voxie::Position>(0.5f, 1.5f, 0.8f),
             voxie::LightType::POINT,
             new voxie::Cube({0, 0, 0}, {0.05, 0.05, 0.05}),
             {0.8f, 0.1f, 0.85f}, 
-            {0.5f, 0.5f, 0.5f},
-            {1.0f, 1.5f, 3.8f},
+            {1.0f, 1.5f, 3.8f}
         }));
 
     lights.AddLight(voxie::LightSource(
@@ -205,10 +205,10 @@ int main()
                     std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                     std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
             }),
+            std::make_shared<voxie::Position>(1.5f, 0.7f, 1.5f),
             voxie::LightType::POINT,
             new voxie::Cube({0, 0, 0}, {0.05, 0.05, 0.05}),
             {0.1f, 0.8f, 0.85f}, 
-            {1.5f, 0.7f, 1.5f},
             {1.0f, 1.5f, 3.8f},
         }));
 
