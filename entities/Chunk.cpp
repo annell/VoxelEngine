@@ -71,8 +71,8 @@ void Chunk::Draw() const {
     glDisable(GL_CULL_FACE);
 }
 
-void Chunk::AddCube(std::unique_ptr<Cube>&& cube) {
-    cubesMap[cube->GetChunkPosition()] = std::move(cube);
+void Chunk::AddCube(ChunkPosition position, std::unique_ptr<Cube>&& cube) {
+    cubesMap[position] = std::move(cube);
 }
 
 size_t Chunk::NrMaterials() const {
@@ -92,8 +92,7 @@ void Chunk::FaceCulling() const {
     };
     for (auto& pair : cubesMap) {
         auto cube = pair.second.get();
-        auto dimensions = cube->GetDimensions();
-        auto pos = cube->GetChunkPosition();
+        auto pos = pair.first;
         pos.x++;
         render(cube, Cube::Face::RIGHT, pos);
         pos.x--;

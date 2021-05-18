@@ -37,7 +37,7 @@ struct LightConfig {
     std::shared_ptr<Shader> shader;
     std::shared_ptr<Position> position;
     LightType type;
-    Cube* cube;
+    std::shared_ptr<Cube> cube;
     glm::vec3 color;
     Atteunation atteunation;
 };

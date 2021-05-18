@@ -122,8 +122,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, v
                                     {1.0f, 0.5f, 0.31f},
                                     {0.5f, 0.5f, 0.5f},
                                     32.0f}, materials[color_index]);
-                    cube->SetChunkPosition({(int)y, (int)z, (int)x});
-                    chunk->AddCube(std::move(cube));
+                    chunk->AddCube({(int)y, (int)z, (int)x}, std::move(cube));
                 }
             }
         }

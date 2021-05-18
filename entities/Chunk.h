@@ -22,7 +22,7 @@ public:
     ~Chunk();
     void Init();
     void Draw() const;
-    void AddCube(std::unique_ptr<Cube>&&);
+    void AddCube(ChunkPosition, std::unique_ptr<Cube>&&);
     size_t NrMaterials() const;
     size_t NrVertex() const;
 
