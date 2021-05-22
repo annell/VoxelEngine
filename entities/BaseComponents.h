@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "Core.h"
+#include <tuple>
 
 namespace voxie {
 
@@ -49,6 +51,26 @@ struct Position {
 
     glm::mat4 model;
     glm::vec3 pos;
+};
+
+struct Direction {
+    Direction(float yaw, float pitch)
+            : yaw(yaw)
+            , pitch(pitch) {
+    }
+    void SetDirection(float yaw, float pitch, bool constrainPitch) {
+        this->yaw = yaw;
+        this->pitch = pitch;
+
+        if (constrainPitch) {
+            if (this->pitch > 89.0f)
+                this->pitch = 89.0f;
+            if (this->pitch < -89.0f)
+                this->pitch = -89.0f;
+        }
+    }
+    float yaw;
+    float pitch;
 };
 
 struct ChunkPosition {

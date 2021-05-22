@@ -13,10 +13,9 @@ Camera::Camera(std::shared_ptr<Entity> entity, glm::vec3 position, glm::vec3 up,
 , MouseSensitivity(SENSITIVITY)
 , Zoom(ZOOM)
 , WorldUp(up)
-, Yaw(yaw)
-, Pitch(pitch)
 , entity(entity) {
     helper::AddComponent(std::make_shared<Position>(position), *entity);
+    helper::AddComponent(std::make_shared<Direction>(yaw, pitch), *entity);
     updateCameraVectors();
 }
 
@@ -41,15 +40,8 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
 
-    Yaw   += xoffset;
-    Pitch += yoffset;
-
-    if (constrainPitch) {
-        if (Pitch > 89.0f)
-            Pitch = 89.0f;
-        if (Pitch < -89.0f)
-            Pitch = -89.0f;
-    }
+    const auto& direction = GetDirection();
+    direction->SetDirection(direction->yaw + xoffset, direction->pitch + yoffset, constrainPitch);
 
     updateCameraVectors();
 }
@@ -73,9 +65,10 @@ void Camera::SetShaderParameters(const Shader& shader) const {
 
 void Camera::updateCameraVectors() {
     glm::vec3 front;
-    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = sin(glm::radians(Pitch));
-    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    const auto& direction = GetDirection();
+    front.x = cos(glm::radians(direction->yaw)) * cos(glm::radians(direction->pitch));
+    front.y = sin(glm::radians(direction->pitch));
+    front.z = sin(glm::radians(direction->yaw)) * cos(glm::radians(direction->pitch));
     Front = glm::normalize(front);
     Right = glm::normalize(glm::cross(Front, WorldUp));
     Up    = glm::normalize(glm::cross(Right, Front));
@@ -87,6 +80,10 @@ std::shared_ptr<Entity> Camera::GetEntity() const {
 
 std::shared_ptr<Position> Camera::GetPosition() const {
     return helper::GetComponent<Position>(*entity);
+}
+
+std::shared_ptr<Direction> Camera::GetDirection() const {
+    return helper::GetComponent<Direction>(*entity);
 }
 
 
