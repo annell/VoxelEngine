@@ -91,14 +91,14 @@ void Cube::GenerateSides(Position p, Dimensions d) {
     sides[Face::BACK].normal[1] = 0;
     sides[Face::BACK].normal[2] = -1;
     sides[Face::BACK].triangle1 = {
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2
     };
     sides[Face::BACK].triangle2 = {
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2,
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2,
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2
     };
 
     sides[Face::FRONT].materialIndex = materialIndex;
@@ -106,14 +106,14 @@ void Cube::GenerateSides(Position p, Dimensions d) {
     sides[Face::FRONT].normal[1] = 0;
     sides[Face::FRONT].normal[2] = 1;
     sides[Face::FRONT].triangle1 = {
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2,
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2
     };
     sides[Face::FRONT].triangle2 = {
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2
     };
 
     sides[Face::LEFT].materialIndex = materialIndex;
@@ -121,14 +121,14 @@ void Cube::GenerateSides(Position p, Dimensions d) {
     sides[Face::LEFT].normal[1] = 0;
     sides[Face::LEFT].normal[2] = 0;
     sides[Face::LEFT].triangle1 = {
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2
     };
     sides[Face::LEFT].triangle2 = {
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2
     };
 
     sides[Face::RIGHT].materialIndex = materialIndex;
@@ -136,14 +136,14 @@ void Cube::GenerateSides(Position p, Dimensions d) {
     sides[Face::RIGHT].normal[1] = 0;
     sides[Face::RIGHT].normal[2] = 0;
     sides[Face::RIGHT].triangle1 = {
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2
     };
     sides[Face::RIGHT].triangle2 = {
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2,
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2
     };
 
     sides[Face::BOTTOM].materialIndex = materialIndex;
@@ -151,14 +151,14 @@ void Cube::GenerateSides(Position p, Dimensions d) {
     sides[Face::BOTTOM].normal[1] = -1;
     sides[Face::BOTTOM].normal[2] = 0;
     sides[Face::BOTTOM].triangle1 = {
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2,
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2
     };
     sides[Face::BOTTOM].triangle2 = {
-            p.x + (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z - (d.depth) / 2,
-            p.x - (d.width) / 2, p.y - (d.height) / 2, p.z + (d.depth) / 2
+            p.pos[0] + (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] - (d.height) / 2, p.pos[2] + (d.depth) / 2
     };
 
     sides[Face::TOP].materialIndex = materialIndex;
@@ -166,14 +166,14 @@ void Cube::GenerateSides(Position p, Dimensions d) {
     sides[Face::TOP].normal[1] = 1;
     sides[Face::TOP].normal[2] = 0;
     sides[Face::TOP].triangle1 = {
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2,
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2,
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2
     };
     sides[Face::TOP].triangle2 = {
-            p.x + (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z + (d.depth) / 2,
-            p.x - (d.width) / 2, p.y + (d.height) / 2, p.z - (d.depth) / 2
+            p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
+            p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2
     };
 }
 

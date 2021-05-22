@@ -28,7 +28,7 @@ void ShowEntityColorController(const voxie::Entity& entity) {
 
 void ShowEntityPositionController(const voxie::Entity& entity) {
     auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
-    float translation[3] = {pos->x, pos->y, pos->z};
+    float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
     ImGui::InputFloat3("Position", translation);
     pos->SetPosition(translation[0], translation[1], translation[2]);
     if (auto shader = voxie::helper::GetComponent<voxie::Shader>(entity)) {

@@ -24,28 +24,29 @@ struct Color {
 };
 
 struct Position {
+    Position(const glm::vec3& position) {
+        SetPosition(position);
+    }
+
     Position(float x, float y, float z)
-            : x(x), y(y), z(z), model(glm::mat4(1.0f)), pos({x, y, z}) {}
+        : Position(glm::vec3{x, y, z}) {}
 
     Position(const Position& p)
-            : Position(p.x, p.y, p.z) {}
-
-    Position(const glm::vec3& position)
-            : Position(position[0], position[1], position[2]) {}
+        : Position(p.pos) {}
 
     bool operator<(const Position& pos) const {
-        return std::tie(x, y, z) < std::tie(pos.x, pos.y, pos.z);
+        return std::tie(pos.pos[0], pos.pos[1], pos.pos[2]) < std::tie(pos.pos[0], pos.pos[1], pos.pos[2]);
     }
 
     void SetPosition(float x, float y, float z) {
-        this->x = x; this->y = y; this->z = z;
-        pos = {x, y, z};
+        SetPosition({x, y, z});
+    }
+
+    void SetPosition(const glm::vec3& pos) {
+        this->pos = pos;
         this->model = glm::translate(glm::mat4(1.0f), pos);
     }
 
-    float x;
-    float y;
-    float z;
     glm::mat4 model;
     glm::vec3 pos;
 };

@@ -121,7 +121,7 @@ std::shared_ptr<Position> Chunk::GetPosition() const {
 }
 
 void Chunk::SetPosition(Position pos) {
-    GetPosition()->SetPosition(pos.x, pos.y, pos.z);
+    GetPosition()->SetPosition(pos.pos);
     GetShader()->use();
     GetShader()->setMat4("model", GetPosition()->model);
 }

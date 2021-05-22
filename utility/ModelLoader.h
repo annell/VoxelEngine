@@ -115,7 +115,7 @@ void fillHandlerWithCubes(const ogt_vox_model* model, ogt_vox_palette palette, v
                         materials[color_index] = nrMaterials++;
                     float size = 0.1f;
                     auto cube = std::make_unique<Cube>(
-                            Position{ (float)y*size + chunkPos->x, (float)z*size + chunkPos->y, (float)x*size + chunkPos->z}, // <---- They use different coordinate system, so here we compensate.
+                            Position{ (float)y*size + chunkPos->pos[0], (float)z*size + chunkPos->pos[1], (float)x*size + chunkPos->pos[2]}, // <---- They use different coordinate system, so here we compensate.
                             Dimensions{size, size, size},
                             Material{{0.2f, 0.8f, 0.3f},
                                     {(float)color.r/255.0f, (float)color.g/255.0f, (float)color.b/255.0f},
