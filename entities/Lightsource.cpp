@@ -19,10 +19,11 @@ LightSource::LightSource(LightConfig config)
     helper::AddComponent(config.position, *config.entity);
     helper::AddComponent(config.cube->GetVertexBufferArray(), *config.entity);
     helper::AddComponent(config.shader, *config.entity);
+    helper::AddComponent(config.color, *config.entity);
  }
 
 const glm::vec3 & LightSource::GetColor() const {
-    return config.color;
+    return config.color->color;
 }
 
 const glm::vec3& LightSource::GetPosition() const {

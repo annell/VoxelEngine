@@ -19,27 +19,46 @@ const std::string MODELS = "/voxelObjects";
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-void ShowEntityPositionController() {
+void ShowEntityColorController(const voxie::Entity& entity) {
+    auto color = voxie::helper::GetComponent<voxie::Color>(entity);
+    float updatedColor[3] = {color->color[0], color->color[1], color->color[2]};
+    ImGui::ColorPicker3("Color", updatedColor);
+    color->SetColor(updatedColor[0], updatedColor[1], updatedColor[2]);
+}
+
+void ShowEntityPositionController(const voxie::Entity& entity) {
+    auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
+    float translation[3] = {pos->x, pos->y, pos->z};
+    ImGui::InputFloat3("Position", translation);
+    pos->SetPosition(translation[0], translation[1], translation[2]);
+    if (auto shader = voxie::helper::GetComponent<voxie::Shader>(entity)) {
+        shader->use();
+        shader->setMat4("model", pos->model);
+    }
+}
+
+void ShowSceneOverview() {
     static int selected = 0;
-    ImGui::Begin("Entities controller");
+    ImGui::Begin("Controllers");
     std::vector<const char*> items;
     auto& entities = voxie::Engine::GetEngine().GetScene().GetEntities();
     for (auto& entity : entities) {
         items.push_back(entity->GetName().c_str());
     }
-    auto pos = voxie::helper::GetComponent<voxie::Position>(*entities.at(selected));
-    float translation[3] = {pos->x, pos->y, pos->z};
-    ImGui::ListBox("Entities", &selected, &items[0], entities.size());
-    ImGui::SliderFloat3("(X, Y, Z)", translation, -2.0f, 2.0f);
-    pos->SetPosition(translation[0], translation[1], translation[2]);
-    if (auto shader = voxie::helper::GetComponent<voxie::Shader>(*entities.at(selected))) {
-        shader->use();
-        shader->setMat4("model", pos->model);
+    ImGui::ListBox("", &selected, &items[0], entities.size());
+
+    auto& entity = *entities.at(selected);
+    if (voxie::helper::HasComponent<voxie::Position>(entity)) {
+        ShowEntityPositionController(entity);
     }
+    if (voxie::helper::HasComponent<voxie::Color>(entity)) {
+        ShowEntityColorController(entity);
+    }
+
     ImGui::End();
 }
 
-void ShowExampleAppSimpleOverlay(std::string text, bool* p_open = nullptr)
+void ShowSimpleOverlay(std::string text, bool* p_open = nullptr)
 {
     const float PAD = 10.0f;
     static int corner = 1;
@@ -180,7 +199,7 @@ int main()
             std::make_shared<voxie::Position>(1.0f, 100.0f, 1.0f),
             voxie::LightType::AMBIENT,
             std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{10.0, 10.0, 10.0}),
-            {0.15f, 0.15f, 0.15f}
+            std::make_shared<voxie::Color>(glm::vec3{0.15f, 0.15f, 0.15f})
         }));
 
 
@@ -194,7 +213,7 @@ int main()
             std::make_shared<voxie::Position>(0.5f, 1.5f, 0.8f),
             voxie::LightType::POINT,
             std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{0.05, 0.05, 0.05}),
-            {0.8f, 0.1f, 0.85f}, 
+            std::make_shared<voxie::Color>(glm::vec3{0.8f, 0.1f, 0.85f}),
             {1.0f, 1.5f, 3.8f}
         }));
 
@@ -208,7 +227,7 @@ int main()
             std::make_shared<voxie::Position>(1.5f, 0.7f, 1.5f),
             voxie::LightType::POINT,
             std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{0.05, 0.05, 0.05}),
-            {0.1f, 0.8f, 0.85f}, 
+            std::make_shared<voxie::Color>(glm::vec3{0.1f, 0.8f, 0.85f}),
             {1.0f, 1.5f, 3.8f},
         }));
 
@@ -228,8 +247,8 @@ int main()
         FPSUpdate--;
         std::string log = fps + "\n";
 
-        ShowEntityPositionController();
-        ShowExampleAppSimpleOverlay(fps);
+        ShowSceneOverview();
+        ShowSimpleOverlay(fps);
 
         voxie::helper::Begin();
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {

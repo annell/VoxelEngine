@@ -2,6 +2,8 @@
 // Created by Stefan Annell on 2021-05-17.
 //
 
+#pragma once
+
 namespace voxie {
 
 struct Material {
@@ -12,12 +14,24 @@ struct Material {
     float shininess;
 };
 
+struct Color {
+    Color(glm::vec3 color) : color(color) { }
+    glm::vec3 color;
+
+    void SetColor(float r, float g, float b) {
+        color = {r, g, b};
+    }
+};
+
 struct Position {
     Position(float x, float y, float z)
             : x(x), y(y), z(z), model(glm::mat4(1.0f)), pos({x, y, z}) {}
 
     Position(const Position& p)
             : Position(p.x, p.y, p.z) {}
+
+    Position(const glm::vec3& position)
+            : Position(position[0], position[1], position[2]) {}
 
     bool operator<(const Position& pos) const {
         return std::tie(x, y, z) < std::tie(pos.x, pos.y, pos.z);

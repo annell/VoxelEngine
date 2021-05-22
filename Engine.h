@@ -30,7 +30,7 @@ public:
     static Engine& GetEngine();
     bool Init();
     std::shared_ptr<Camera> GetCamera();
-    std::shared_ptr<Window> GetWindow();
+    std::shared_ptr<Window> GetWindow() const;
     void StartLoop();
     float GetDeltaTime() const;
     EntityComponentSystem& GetComponents();
@@ -40,6 +40,8 @@ public:
 
     OnTick onTick;
 private:
+    void InitImGui() const;
+
     const unsigned int SCR_WIDTH = 1024;
     const unsigned int SCR_HEIGHT = 768;
     float deltaTime = 0.0f;
@@ -56,6 +58,11 @@ namespace helper {
     template <typename T>
     std::shared_ptr<T> GetComponent(const Entity& handle) {
         return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
+    }
+
+    template <typename T>
+    bool HasComponent(const Entity& handle) {
+        return Engine::GetEngine().GetComponents().GetComponent<T>(handle) != nullptr;
     }
 
     template <typename T>

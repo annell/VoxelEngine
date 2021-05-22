@@ -40,16 +40,11 @@ bool Engine::Init() {
 
     glEnable(GL_DEPTH_TEST);
 
-    camera = std::make_shared<Camera>(glm::vec3(0.0f, 1.0f, 3.0f));
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
-    // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(GetWindow()->GetWindow(), true);
-    ImGui_ImplOpenGL3_Init(nullptr);
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
+    camera = std::make_shared<Camera>(Entity::MakeEntity("Editor camera"), glm::vec3(-3.0f, 1.0f, -3.0f));
+    GetScene().AddEntity(camera->GetEntity());
+
+    InitImGui();
+
     return true;
 }
 
@@ -57,7 +52,7 @@ std::shared_ptr<Camera> Engine::GetCamera() {
     return camera;
 }
 
-std::shared_ptr<Window> Engine::GetWindow() {
+std::shared_ptr<Window> Engine::GetWindow() const {
     return window;
 }
 
@@ -112,7 +107,16 @@ Scene &Engine::GetScene() {
     return scene;
 }
 
-namespace helper {
+void Engine::InitImGui() const {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    ImGui_ImplGlfw_InitForOpenGL(GetWindow()->GetWindow(), true);
+    ImGui_ImplOpenGL3_Init(nullptr);
+    ImGui::StyleColorsDark();
+}
+
+    namespace helper {
 
 void Log(std::string log) {
     Engine::GetEngine().GetLogger().AddLog(log.c_str());
