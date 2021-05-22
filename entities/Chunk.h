@@ -27,7 +27,6 @@ public:
     size_t NrVertex() const;
 
     std::shared_ptr<Position> GetPosition() const;
-    void SetPosition(Position);
     RenderingConfig GetRenderingConfig() const;
     std::shared_ptr<Shader> GetShader() const;
     std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;

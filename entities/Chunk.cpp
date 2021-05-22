@@ -120,12 +120,6 @@ std::shared_ptr<Position> Chunk::GetPosition() const {
     return voxie::helper::GetComponent<Position>(*entity);
 }
 
-void Chunk::SetPosition(Position pos) {
-    GetPosition()->SetPosition(pos.pos);
-    GetShader()->use();
-    GetShader()->setMat4("model", GetPosition()->model);
-}
-
 std::shared_ptr<Shader> Chunk::GetShader() const {
     return voxie::helper::GetComponent<Shader>(*entity);
 }
@@ -134,10 +128,12 @@ std::shared_ptr<VertexBufferArray> Chunk::GetVertexBufferArray() const {
     return voxie::helper::GetComponent<VertexBufferArray>(*entity);
 }
 
-auto GetPreDrawAction() {
-    return [] () {
+auto GetPreDrawAction(std::shared_ptr<Shader> shader, std::shared_ptr<Position> pos) {
+    return [=] () {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
+        shader->use();
+        shader->setMat4("model", pos->model);
     };
 }
 
@@ -151,7 +147,7 @@ RenderingConfig Chunk::GetRenderingConfig() const {
     return {
         GetShader(),
         GetVertexBufferArray(),
-        GetPreDrawAction(),
+        GetPreDrawAction(GetShader(), GetPosition()),
         GetPostDrawAction()
     };
 }

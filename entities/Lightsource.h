@@ -27,6 +27,18 @@ enum class LightType {
 };
 
 struct Atteunation {
+    Atteunation(float constant, float linear, float quadratic)
+    : constant(constant)
+    , linear(linear)
+    , quadratic(quadratic) {
+
+    }
+
+    void SetAtteunation(float constant, float linear, float quadratic) {
+        this->constant = constant;
+        this->linear = linear;
+        this->quadratic = quadratic;
+    }
     float constant = 0;
     float linear = 0;
     float quadratic = 0;
@@ -39,22 +51,24 @@ struct LightConfig {
     LightType type;
     std::shared_ptr<Cube> cube;
     std::shared_ptr<Color> color;
-    Atteunation atteunation;
+    std::shared_ptr<Atteunation> atteunation;
 };
 
 class LightSource {
 public:
     LightSource(LightConfig config);
     LightSource(Cube* cube, glm::vec3 color, glm::vec3 position);
-    const glm::vec3& GetPosition() const;
-    const glm::mat4& GetModel() const;
-    const glm::vec3& GetColor() const;
+    std::shared_ptr<Position> GetPosition() const;
+    std::shared_ptr<Color> GetColor() const;
     const LightType& GetType() const;
     std::shared_ptr<Shader> GetShader() const;
-    const LightConfig& GetConfig() const;
+    std::shared_ptr<Entity> GetEntity() const;
+    std::shared_ptr<Atteunation> GetAttuenation() const;
+    std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
 private:
-    LightConfig config;
+    std::shared_ptr<Entity> entity;
+    LightType type;
 };
 
 class LightSourceHandler {
@@ -65,7 +79,7 @@ public:
     std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>) const;
     const std::vector<LightSource>& GetLightSources() const;
 private:
-    std::vector<std::shared_ptr<Shader>> lightShaders;
+    std::vector<std::shared_ptr<Shader>> shaders;
     std::vector<LightSource> lightSources;
 };
 

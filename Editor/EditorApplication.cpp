@@ -26,15 +26,18 @@ void ShowEntityColorController(const voxie::Entity& entity) {
     color->SetColor(updatedColor[0], updatedColor[1], updatedColor[2]);
 }
 
+void ShowEntityAtteunationController(const voxie::Entity& entity) {
+    auto atteunation = voxie::helper::GetComponent<voxie::Atteunation>(entity);
+    ImGui::InputFloat("Quadratic", &atteunation->quadratic);
+    ImGui::InputFloat("Linear", &atteunation->linear);
+    ImGui::InputFloat("Constant", &atteunation->constant);
+}
+
 void ShowEntityPositionController(const voxie::Entity& entity) {
     auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
     float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
     ImGui::InputFloat3("Position", translation);
     pos->SetPosition(translation[0], translation[1], translation[2]);
-    if (auto shader = voxie::helper::GetComponent<voxie::Shader>(entity)) {
-        shader->use();
-        shader->setMat4("model", pos->model);
-    }
 }
 
 void ShowSceneOverview() {
@@ -51,8 +54,12 @@ void ShowSceneOverview() {
     if (voxie::helper::HasComponent<voxie::Position>(entity)) {
         ShowEntityPositionController(entity);
     }
+
     if (voxie::helper::HasComponent<voxie::Color>(entity)) {
         ShowEntityColorController(entity);
+    }
+    if (voxie::helper::HasComponent<voxie::Atteunation>(entity)) {
+        ShowEntityAtteunationController(entity);
     }
 
     ImGui::End();
@@ -202,7 +209,6 @@ int main()
             std::make_shared<voxie::Color>(glm::vec3{0.15f, 0.15f, 0.15f})
         }));
 
-
     lights.AddLight(voxie::LightSource(
         voxie::LightConfig{
             voxie::Entity::MakeEntity("Point Light 1"),
@@ -214,7 +220,7 @@ int main()
             voxie::LightType::POINT,
             std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{0.05, 0.05, 0.05}),
             std::make_shared<voxie::Color>(glm::vec3{0.8f, 0.1f, 0.85f}),
-            {1.0f, 1.5f, 3.8f}
+            std::make_shared<voxie::Atteunation>(1.0f, 1.5f, 3.8f)
         }));
 
     lights.AddLight(voxie::LightSource(
@@ -228,7 +234,7 @@ int main()
             voxie::LightType::POINT,
             std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{0.05, 0.05, 0.05}),
             std::make_shared<voxie::Color>(glm::vec3{0.1f, 0.8f, 0.85f}),
-            {1.0f, 1.5f, 3.8f},
+            std::make_shared<voxie::Atteunation>(1.0f, 1.5f, 3.8f)
         }));
 
     std::cout << "NrVertex: " << model.NrVertex() << std::endl;
