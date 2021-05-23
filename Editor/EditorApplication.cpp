@@ -5,7 +5,6 @@
 #include "gui/Panel.h"
 #include "KeyboardHandler.h"
 #include "Camera.h"
-#include "TextHandler.h"
 #include "Chunk.h"
 #include "Cube.h"
 #include "ModelLoader.h"
@@ -16,9 +15,40 @@ const std::string SHADERS = "/shaders";
 const std::string FONTS = "/fonts";
 const std::string MODELS = "/voxelObjects";
 
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+std::unique_ptr<voxie::Chunk> MakeModel(std::string name, std::string modelPath = "") {
+    auto model = std::make_unique<voxie::Chunk>(name, std::make_shared<voxie::Shader>(
+            std::map<std::string, unsigned int>{
+                    std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
+                    std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
+            }), std::make_shared<voxie::Position>(0, 0, 0));
+    if (!modelPath.empty()) {
+        voxie::ModelLoader::LoadModel(BASE_PATH + MODELS + modelPath, model.get());
+    }
+    model->Init();
+    voxie::Engine::GetEngine().GetScene().AddEntity(model->GetEntity());
+    return std::move(model);
+}
+
+voxie::LightSource MakeLight(std::string name,
+                             voxie::LightType type,
+                             voxie::Position position = {0, 0, 0},
+                             voxie::Dimensions dimensions = {10, 10, 10},
+                             voxie::Color color = glm::vec3{0, 0, 0},
+                             voxie::Atteunation atteunation = {0, 0, 0}) {
+    return voxie::LightSource(
+            voxie::LightConfig{
+                    voxie::Entity::MakeEntity(name),
+                    std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
+                            std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
+                            std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
+                    }),
+                    std::make_shared<voxie::Position>(position),
+                    type,
+                    std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, dimensions),
+                    std::make_shared<voxie::Color>(color),
+                    std::make_shared<voxie::Atteunation>(atteunation)
+            });
+}
 
 int main()
 {
@@ -61,126 +91,46 @@ int main()
                 voxie::MouseHandler::LockCamera();
           }});
 
-    voxie::TextHandler text(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf",
-          std::make_shared<voxie::Shader>(
-            std::map<std::string, unsigned int>{
-            std::make_pair(BASE_PATH + SHADERS + "/text.vs", GL_VERTEX_SHADER),
-            std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)
-            }));
-    text.Init();
-
-
-    voxie::Chunk model("Girl", std::make_shared<voxie::Shader>(
-        std::map<std::string, unsigned int>{
-            std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
-            std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
-        }), std::make_shared<voxie::Position>(0, 0, 0));
-    voxie::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_knight.vox", &model);
-    model.Init();
-    engine.GetScene().AddEntity(model.GetEntity());
-
-    voxie::Chunk model2("Boy", std::make_shared<voxie::Shader>(
-        std::map<std::string, unsigned int>{
-            std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
-            std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
-        }), std::make_shared<voxie::Position>(0, 0, 0));
-    voxie::ModelLoader::LoadModel(BASE_PATH + MODELS + "/chr_sword.vox", &model2);
-    model2.Init();
-    engine.GetScene().AddEntity(model2.GetEntity());
-
-    voxie::Chunk floor("Floor", std::make_shared<voxie::Shader>(
-        std::map<std::string, unsigned int>{
-            std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
-            std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER) 
-        }), std::make_shared<voxie::Position>(0, 0, 0));
-    floor.AddCube({0, 0, 0}, std::make_unique<voxie::Cube>(
-            voxie::Position{0, -0.1, 0},
-            voxie::Dimensions{10000, 0.1, 10000},
-            voxie::Material{{0.0f, 0.0f, 0.0f},
-                     {0.5f, 0.5f, 0.5f},
-                     {0.5f, 0.5f, 0.5f},
-                     {0.5f, 0.5f, 0.5f},
-                     32.0f}, 0));
-    floor.Init();
-    engine.GetScene().AddEntity(floor.GetEntity());
-    auto shaderEntity = voxie::Entity::MakeEntity("shaderEntity");
-    voxie::helper::AddComponent(std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
-                             std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
-                            }), *shaderEntity);
+    std::vector<std::unique_ptr<voxie::Chunk>> models;
+    models.push_back(MakeModel("Girl", "/chr_knight.vox"));
+    models.push_back(MakeModel("Boy", "/chr_sword.vox"));
+    models.push_back(MakeModel("Floor", "/floor.vox"));
 
     std::vector<std::shared_ptr<voxie::Shader>> shaders;
-    shaders.push_back(model.GetShader());
-    shaders.push_back(model2.GetShader());
-    shaders.push_back(floor.GetShader());
+    for (auto& model : models) {
+        shaders.push_back(model->GetShader());
+    }
     voxie::LightSourceHandler lights(shaders);
 
-    lights.AddLight(voxie::LightSource(
-        voxie::LightConfig{
-            voxie::Entity::MakeEntity("Ambient"),
-            std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
-                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
-                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
-            }),
-            std::make_shared<voxie::Position>(1.0f, 100.0f, 1.0f),
-            voxie::LightType::AMBIENT,
-            std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{10.0, 10.0, 10.0}),
-            std::make_shared<voxie::Color>(glm::vec3{0.15f, 0.15f, 0.15f})
-        }));
+    lights.AddLight(MakeLight( "Ambient",
+                               voxie::LightType::AMBIENT,
+                               {1, 100, 1},
+                               {10, 10, 10},
+                               glm::vec3{0.1, 0.1, 0.1}));
+    lights.AddLight(MakeLight( "Point light 1",
+                               voxie::LightType::POINT,
+                               {0.5, 1.5, 0.8},
+                               {0.05, 0.05, 0.05},
+                               glm::vec3{0.8, 0.1, 0.85},
+                               {1.0f, 1.5f, 3.8f}));
 
-    lights.AddLight(voxie::LightSource(
-        voxie::LightConfig{
-            voxie::Entity::MakeEntity("Point Light 1"),
-            std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
-                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
-                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
-            }),
-            std::make_shared<voxie::Position>(0.5f, 1.5f, 0.8f),
-            voxie::LightType::POINT,
-            std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{0.05, 0.05, 0.05}),
-            std::make_shared<voxie::Color>(glm::vec3{0.8f, 0.1f, 0.85f}),
-            std::make_shared<voxie::Atteunation>(1.0f, 1.5f, 3.8f)
-        }));
-
-    lights.AddLight(voxie::LightSource(
-            voxie::LightConfig{
-            voxie::Entity::MakeEntity("Point Light 2"),
-            std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
-                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
-                    std::make_pair(BASE_PATH + SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)
-            }),
-            std::make_shared<voxie::Position>(1.5f, 0.7f, 1.5f),
-            voxie::LightType::POINT,
-            std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, voxie::Dimensions{0.05, 0.05, 0.05}),
-            std::make_shared<voxie::Color>(glm::vec3{0.1f, 0.8f, 0.85f}),
-            std::make_shared<voxie::Atteunation>(1.0f, 1.5f, 3.8f)
-        }));
-
-    std::cout << "NrVertex: " << model.NrVertex() << std::endl;
-
-
-    int n = 0;
-    int FPSUpdate = 10;
-    std::string fps = "FPS: 0";
-    std::string buf;
+    lights.AddLight(MakeLight( "Point light 2",
+                               voxie::LightType::POINT,
+                               {1.5, 0.7, 1.8},
+                               {0.05, 0.05, 0.05},
+                               glm::vec3{0.1, 0.8, 0.85},
+                               {1.0f, 1.5f, 3.8f}));
     engine.onTick.Bind([&] (float deltaTime) {
-        n++;
-        if (FPSUpdate <= 0) {
-            fps = "FPS: " + std::to_string((int)(1/deltaTime));
-            FPSUpdate = 10;
-        }
-        FPSUpdate--;
-        std::string log = fps + "\n";
-
         gui::ShowSceneOverview();
-        gui::ShowSimpleOverlay(fps);
+        gui::ShowSimpleOverlay("FPS: " + std::to_string((int)(1/deltaTime)));
 
         voxie::helper::Begin();
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
             voxie::helper::Submit(config);
         }
-        voxie::helper::Submit(model.GetRenderingConfig());
-        voxie::helper::Submit(model2.GetRenderingConfig());
-        voxie::helper::Submit(floor.GetRenderingConfig());
+        for (auto& model : models) {
+            voxie::helper::Submit(model->GetRenderingConfig());
+        }
         voxie::helper::End();
 
     });

@@ -47,6 +47,8 @@ add_executable(Voxie
         external/imgui/imgui_impl_glfw.h
         external/imgui/imgui_impl_opengl3.cpp
         external/imgui/imgui_impl_opengl3.h
+        external/ImGuizmo/ImGuizmo.cpp
+        external/ImGuizmo/ImGuizmo.h
         utility/ModelLoader.h
         utility/TextHandler.h
         utility/Delegate.h
@@ -63,7 +65,7 @@ add_executable(Voxie
         entities/EntityComponentSystem.h
         Editor/gui/Panel.cpp Editor/gui/Panel.h rendering/Window.h Scene.cpp Scene.h entities/BaseComponents.h entities/Cube.cpp rendering/Camera.cpp)
 
-include_directories(. entities utility input rendering core external/imgui)
+include_directories(. entities utility input rendering core external/imgui external/ImGuizmo)
 
 if (APPLE)
     target_link_libraries(Voxie "-framework OpenGL")

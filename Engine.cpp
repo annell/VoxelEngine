@@ -1,7 +1,6 @@
 #include "Engine.h"
 #include <iostream>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+#include <TextHandler.h>
 #include "KeyboardHandler.h"
 #include "MouseHandler.h"
 #include "Camera.h"
@@ -73,7 +72,6 @@ void Engine::StartLoop() {
         KeyboardHandler::processInput();
 
         onTick.Broadcast(GetDeltaTime());
-        logging.Draw("Logger", nullptr);
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

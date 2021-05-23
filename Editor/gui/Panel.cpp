@@ -2,10 +2,13 @@
 // Created by Stefan Annell on 2021-05-15.
 //
 
+
 #include <BaseComponents.h>
+#include "Core.h"
 #include <Lightsource.h>
 #include "Panel.h"
 #include "Engine.h"
+#include "Camera.h"
 
 namespace gui {
 
@@ -26,8 +29,15 @@ void ShowEntityAtteunationController(const voxie::Entity& entity) {
 void ShowEntityPositionController(const voxie::Entity& entity) {
     auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
     float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
+    float rotation[3] = {pos->rotation.x, pos->rotation.y, pos->rotation.z};
+    float scale[3] = {pos->scale.x, pos->scale.y, pos->scale.z};
     ImGui::InputFloat3("Position", translation);
-    pos->SetPosition(translation[0], translation[1], translation[2]);
+    ImGui::InputFloat3("Scale", scale);
+    ImGui::InputFloat3("Rotation", rotation);
+    pos->SetRotation({rotation[0], rotation[1], rotation[2]});
+    pos->SetScale({scale[0], scale[1], scale[2]});
+    pos->SetPosition({translation[0], translation[1], translation[2]});
+    pos->UpdateModel();
 }
 
 void ShowEntityDirectionController(const voxie::Entity& entity) {
@@ -36,7 +46,40 @@ void ShowEntityDirectionController(const voxie::Entity& entity) {
     ImGui::InputFloat("Pitch", &direction->pitch);
 }
 
+void ShowGuizmo(const voxie::Entity& entity) {
+    static auto mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+    static auto mCurrentGizmoMode = ImGuizmo::WORLD;
+    if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+        mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Rotate", mCurrentGizmoOperation == ImGuizmo::ROTATE))
+        mCurrentGizmoOperation = ImGuizmo::ROTATE;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
+        mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+    if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
+        mCurrentGizmoMode = ImGuizmo::LOCAL;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
+        mCurrentGizmoMode = ImGuizmo::WORLD;
+
+    ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList(ImGui::GetMainViewport()));
+    ImGuizmo::SetRect(0, 0, voxie::Engine::GetEngine().GetWindow()->GetWidth(), voxie::Engine::GetEngine().GetWindow()->GetHeight());
+
+    auto camera = voxie::Engine::GetEngine().GetCamera();
+    auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
+    auto mat = pos->model;
+    float* view = (float*)glm::value_ptr(camera->GetViewMatrix());
+    float* proj = (float*)glm::value_ptr(camera->GetProjectionMatrix());
+
+    if (ImGuizmo::Manipulate(view, proj, mCurrentGizmoOperation, mCurrentGizmoMode, (float*)glm::value_ptr(mat), NULL, NULL, NULL, NULL)) {
+        pos->SetModel(mat);
+    }
+}
+
 void ShowSceneOverview() {
+    ImGuizmo::BeginFrame();
     static int selected = 0;
     ImGui::Begin("Controllers");
     std::vector<const char*> items;
@@ -63,6 +106,9 @@ void ShowSceneOverview() {
         ShowEntityAtteunationController(entity);
     }
 
+    if (voxie::helper::HasComponent<voxie::Position>(entity)) {
+        ShowGuizmo(entity);
+    }
     ImGui::End();
 }
 

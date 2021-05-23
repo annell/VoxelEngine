@@ -23,6 +23,10 @@ glm::mat4 Camera::GetViewMatrix() const {
     return glm::lookAt(GetPosition()->pos, GetPosition()->pos + Front, Up);
 }
 
+glm::mat4 Camera::GetProjectionMatrix() const {
+    return glm::perspective(glm::radians(Zoom), (float)Engine::GetEngine().GetWindow()->GetWidth() / (float)Engine::GetEngine().GetWindow()->GetHeight(), 1.0f, GetFarDistance());
+}
+
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     float velocity = MovementSpeed * deltaTime;
     auto& Position = GetPosition()->pos;
@@ -55,12 +59,10 @@ void Camera::ProcessMouseScroll(float yoffset) {
 }
 
 void Camera::SetShaderParameters(const Shader& shader) const {
-    glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)800 / (float)600, 0.1f, 100000.0f);
-    glm::mat4 view = GetViewMatrix();
 
     shader.setVec3("viewPos", GetPosition()->pos);
-    shader.setMat4("projection", projection);
-    shader.setMat4("view", view);
+    shader.setMat4("projection", GetProjectionMatrix());
+    shader.setMat4("view", GetViewMatrix());
 }
 
 void Camera::updateCameraVectors() {
@@ -84,6 +86,10 @@ std::shared_ptr<Position> Camera::GetPosition() const {
 
 std::shared_ptr<Direction> Camera::GetDirection() const {
     return helper::GetComponent<Direction>(*entity);
+}
+
+float Camera::GetFarDistance() const {
+    return 100.0f;
 }
 
 
