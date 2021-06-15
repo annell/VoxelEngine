@@ -89,7 +89,7 @@ std::shared_ptr<Direction> Camera::GetDirection() const {
 }
 
 float Camera::GetFarDistance() const {
-    return 100.0f;
+    return 1000.0f;
 }
 
 

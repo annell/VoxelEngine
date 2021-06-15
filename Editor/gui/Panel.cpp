@@ -92,6 +92,7 @@ void ShowSceneOverview() {
     auto& entity = *entities.at(selected);
     if (voxie::helper::HasComponent<voxie::Position>(entity)) {
         ShowEntityPositionController(entity);
+        ShowGuizmo(entity);
     }
 
     if (voxie::helper::HasComponent<voxie::Direction>(entity)) {
@@ -106,9 +107,6 @@ void ShowSceneOverview() {
         ShowEntityAtteunationController(entity);
     }
 
-    if (voxie::helper::HasComponent<voxie::Position>(entity)) {
-        ShowGuizmo(entity);
-    }
     ImGui::End();
 }
 

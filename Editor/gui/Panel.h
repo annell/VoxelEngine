@@ -5,7 +5,8 @@
 #pragma once
 
 namespace gui {
-void ShowSceneOverview();
 
+void ShowSceneOverview();
 void ShowSimpleOverlay(std::string text, bool* p_open = nullptr);
+
 }
