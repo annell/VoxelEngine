@@ -84,6 +84,7 @@ void ShowGuizmo(const voxie::Entity& entity) {
 }
 
 void ShowSceneOverview() {
+    ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
     ImGuizmo::BeginFrame();
     static int selected = 0;
     ImGui::Begin("Scene entities");

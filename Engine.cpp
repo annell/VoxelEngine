@@ -112,6 +112,7 @@ void Engine::InitImGui() const {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui_ImplGlfw_InitForOpenGL(GetWindow()->GetWindow(), true);
     ImGui_ImplOpenGL3_Init(nullptr);
     ImGui::StyleColorsDark();
