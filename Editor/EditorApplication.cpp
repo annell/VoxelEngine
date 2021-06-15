@@ -50,6 +50,13 @@ voxie::LightSource MakeLight(std::string name,
             });
 }
 
+int FilterSample(int new_sample) {
+    static int last_result = 0;
+    const int smoothing = 100;
+    last_result = (new_sample - last_result) / smoothing + last_result;
+    return last_result;
+}
+
 int main()
 {
     auto& engine = voxie::Engine::GetEngine();
@@ -122,7 +129,7 @@ int main()
                                {1.0f, 1.5f, 3.8f}));
     engine.onTick.Bind([&] (float deltaTime) {
         gui::ShowSceneOverview();
-        gui::ShowSimpleOverlay("FPS: " + std::to_string((int)(1/deltaTime)));
+        gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
 
         voxie::helper::Begin();
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {

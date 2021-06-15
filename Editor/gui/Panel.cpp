@@ -13,6 +13,7 @@
 namespace gui {
 
 void ShowEntityColorController(const voxie::Entity& entity) {
+    ImGui::Separator();
     auto color = voxie::helper::GetComponent<voxie::Color>(entity);
     float updatedColor[3] = {color->color[0], color->color[1], color->color[2]};
     ImGui::ColorPicker3("Color", updatedColor);
@@ -20,6 +21,7 @@ void ShowEntityColorController(const voxie::Entity& entity) {
 }
 
 void ShowEntityAtteunationController(const voxie::Entity& entity) {
+    ImGui::Separator();
     auto atteunation = voxie::helper::GetComponent<voxie::Atteunation>(entity);
     ImGui::InputFloat("Quadratic", &atteunation->quadratic);
     ImGui::InputFloat("Linear", &atteunation->linear);
@@ -27,6 +29,7 @@ void ShowEntityAtteunationController(const voxie::Entity& entity) {
 }
 
 void ShowEntityPositionController(const voxie::Entity& entity) {
+    ImGui::Separator();
     auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
     float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
     float rotation[3] = {pos->rotation.x, pos->rotation.y, pos->rotation.z};
@@ -41,12 +44,14 @@ void ShowEntityPositionController(const voxie::Entity& entity) {
 }
 
 void ShowEntityDirectionController(const voxie::Entity& entity) {
+    ImGui::Separator();
     auto direction = voxie::helper::GetComponent<voxie::Direction>(entity);
     ImGui::InputFloat("Yaw", &direction->yaw);
     ImGui::InputFloat("Pitch", &direction->pitch);
 }
 
 void ShowGuizmo(const voxie::Entity& entity) {
+    ImGui::Separator();
     static auto mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
     static auto mCurrentGizmoMode = ImGuizmo::WORLD;
     if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
@@ -81,7 +86,7 @@ void ShowGuizmo(const voxie::Entity& entity) {
 void ShowSceneOverview() {
     ImGuizmo::BeginFrame();
     static int selected = 0;
-    ImGui::Begin("Controllers");
+    ImGui::Begin("Scene entities");
     std::vector<const char*> items;
     auto& entities = voxie::Engine::GetEngine().GetScene().GetEntities();
     for (auto& entity : entities) {
