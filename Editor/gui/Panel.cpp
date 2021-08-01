@@ -3,10 +3,11 @@
 //
 
 
-#include <BaseComponents.h>
-#include "Core.h"
-#include <Lightsource.h>
 #include "Panel.h"
+#include <BaseComponents.h>
+#include <Lightsource.h>
+#include <Factory.h>
+#include "Core.h"
 #include "Engine.h"
 #include "Camera.h"
 
@@ -83,19 +84,42 @@ void ShowGuizmo(const voxie::Entity& entity) {
     }
 }
 
-void ShowSceneOverview() {
-    ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
-    ImGuizmo::BeginFrame();
+void AddNewComponent() {
+    if (ImGui::Button("Add Component"))
+        ImGui::OpenPopup("add_popup");
+    if (ImGui::BeginPopup("add_popup")) {
+        auto models = voxie::GetModels();
+        for (auto& model : models) {
+            if (ImGui::Selectable(model.name.c_str())) {
+                voxie::Engine::GetEngine().GetModelHandler().AddModel(std::move(voxie::MakeModel(model)));
+            }
+        }
+        ImGui::EndPopup();
+    }
+}
+
+auto ShowEntityList() {
     static int selected = 0;
     ImGui::Begin("Scene entities");
     std::vector<const char*> items;
     auto& entities = voxie::Engine::GetEngine().GetScene().GetEntities();
+
     for (auto& entity : entities) {
         items.push_back(entity->GetName().c_str());
     }
     ImGui::ListBox("", &selected, &items[0], entities.size());
 
     auto& entity = *entities.at(selected);
+    return entity;
+}
+
+void ShowSceneOverview() {
+    ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
+    ImGuizmo::BeginFrame();
+    auto entity = ShowEntityList();
+
+    AddNewComponent();
+
     if (voxie::helper::HasComponent<voxie::Position>(entity)) {
         ShowEntityPositionController(entity);
         ShowGuizmo(entity);
@@ -115,6 +139,7 @@ void ShowSceneOverview() {
 
     ImGui::End();
 }
+
 
 void ShowSimpleOverlay(std::string text, bool* p_open)
 {
@@ -138,7 +163,7 @@ void ShowSimpleOverlay(std::string text, bool* p_open)
     ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
     if (ImGui::Begin("Example: Simple overlay", p_open, window_flags))
     {
-        ImGui::Text(text.c_str());
+        ImGui::Text("%s", text.c_str());
         if (ImGui::BeginPopupContextWindow())
         {
             if (ImGui::MenuItem("Custom",       NULL, corner == -1)) corner = -1;

@@ -63,7 +63,16 @@ add_executable(Voxie
         entities/Chunk.h
         entities/EntityComponentSystem.cpp
         entities/EntityComponentSystem.h
-        Editor/gui/Panel.cpp Editor/gui/Panel.h rendering/Window.h Scene.cpp Scene.h entities/BaseComponents.h entities/Cube.cpp rendering/Camera.cpp)
+        Editor/gui/Panel.cpp
+        Editor/gui/Panel.h
+        rendering/Window.h
+        Scene.cpp
+        Scene.h
+        entities/BaseComponents.h
+        entities/Cube.cpp
+        rendering/Camera.cpp
+        Factory.h
+        Factory.cpp entities/ModelHandler.cpp entities/ModelHandler.h)
 
 include_directories(. entities utility input rendering core external/imgui external/ImGuizmo)
 

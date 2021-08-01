@@ -73,14 +73,14 @@ private:
 
 class LightSourceHandler {
 public:
-    LightSourceHandler(std::vector<std::shared_ptr<Shader>> light);
-    void AddLight(const LightSource& light);
+    LightSourceHandler() = default;
+    void AddLight(std::unique_ptr<LightSource>&&);
+    void AddShader(std::shared_ptr<Shader>);
 
     std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>) const;
-    const std::vector<LightSource>& GetLightSources() const;
 private:
     std::vector<std::shared_ptr<Shader>> shaders;
-    std::vector<LightSource> lightSources;
+    std::vector<std::unique_ptr<LightSource>> lightSources;
 };
 
 }

@@ -51,12 +51,7 @@ std::shared_ptr<VertexBufferArray> LightSource::GetVertexBufferArray() const {
     return voxie::helper::GetComponent<VertexBufferArray>(*entity);
 }
 
-LightSourceHandler::LightSourceHandler(std::vector<std::shared_ptr<Shader>> shaders)
- : shaders(shaders) {
-
-}
-
-void LightSourceHandler::AddLight(const LightSource& light) {
+void LightSourceHandler::AddLight(std::unique_ptr<LightSource>&& light) {
     lightSources.push_back(std::move(light));
 }
 
@@ -66,15 +61,15 @@ std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared
         shader->setInt("nrLights", lightSources.size());
         camera->SetShaderParameters(*shader);
         int n = 0;
-        for (const auto& light : GetLightSources()) {
+        for (const auto& light : lightSources) {
             std::string index = std::to_string(n);
-            shader->setVec3("lights[" + index +"].lightColor", light.GetColor()->color);
-            shader->setVec3("lights[" + index + "].lightPos", light.GetPosition()->pos);
-            shader->setInt("lights[" + index + "].type", static_cast<int>(light.GetType()));
-            if (light.GetType() == LightType::POINT) {
-                shader->setFloat("lights[" + index + "].constant", light.GetAttuenation()->constant);
-                shader->setFloat("lights[" + index + "].linear", light.GetAttuenation()->linear);
-                shader->setFloat("lights[" + index + "].quadratic", light.GetAttuenation()->quadratic);
+            shader->setVec3("lights[" + index +"].lightColor", light->GetColor()->color);
+            shader->setVec3("lights[" + index + "].lightPos", light->GetPosition()->pos);
+            shader->setInt("lights[" + index + "].type", static_cast<int>(light->GetType()));
+            if (light->GetType() == LightType::POINT) {
+                shader->setFloat("lights[" + index + "].constant", light->GetAttuenation()->constant);
+                shader->setFloat("lights[" + index + "].linear", light->GetAttuenation()->linear);
+                shader->setFloat("lights[" + index + "].quadratic", light->GetAttuenation()->quadratic);
             }
             n++;
         }
@@ -82,9 +77,9 @@ std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared
     std::vector<RenderingConfig> output;
     for (auto& light : lightSources) {
         output.push_back({
-            light.GetShader(),
-            light.GetVertexBufferArray(),
-            [model = light.GetPosition()->model, lightCubeShader = light.GetShader(), camera] () {
+            light->GetShader(),
+            light->GetVertexBufferArray(),
+            [model = light->GetPosition()->model, lightCubeShader = light->GetShader(), camera] () {
                 lightCubeShader->use();
                 camera->SetShaderParameters(*lightCubeShader);
                 lightCubeShader->setMat4("model", model);
@@ -94,8 +89,8 @@ std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared
     return output;
 }
 
-    const std::vector<LightSource> &LightSourceHandler::GetLightSources() const {
-        return lightSources;
-    }
+void LightSourceHandler::AddShader(std::shared_ptr<Shader> shader) {
+    shaders.push_back(shader);
+}
 
 }

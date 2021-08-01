@@ -5,6 +5,8 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include <Lightsource.h>
+#include <ModelHandler.h>
 #include "RenderingHandler.h"
 #include "Delegate.h"
 #include "EntityComponentSystem.h"
@@ -37,6 +39,8 @@ public:
     RenderingHandler& GetRenderingHandler();
     Scene& GetScene();
     Logging& GetLogger();
+    LightSourceHandler& GetLightSourceHandler();
+    ModelHandler& GetModelHandler();
 
     OnTick onTick;
 private:
@@ -51,6 +55,8 @@ private:
     EntityComponentSystem components;
     Scene scene;
     RenderingHandler renderingHandler;
+    LightSourceHandler lights;
+    ModelHandler models;
     Logging logging;
 
     bool InitWindow();
