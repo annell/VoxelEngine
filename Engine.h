@@ -40,7 +40,7 @@ public:
 
     OnTick onTick;
 private:
-    void InitImGui() const;
+    void InitGUI() const;
 
     const unsigned int SCR_WIDTH = 1024;
     const unsigned int SCR_HEIGHT = 768;
@@ -52,6 +52,14 @@ private:
     Scene scene;
     RenderingHandler renderingHandler;
     Logging logging;
+
+    bool InitWindow();
+    void InitCamera();
+    void UpdateTime();
+
+    void NewFrame() const;
+
+    void RenderFrame() const;
 };
 
 namespace helper {
@@ -70,8 +78,8 @@ namespace helper {
         return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
     }
 
-    void Begin();
-    void End();
+    void RenderingBegin();
+    void RenderingEnd();
     void Submit(const RenderingConfig& config);
 
     void Log(std::string log);

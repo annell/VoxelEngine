@@ -131,14 +131,14 @@ int main()
         gui::ShowSceneOverview();
         gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
 
-        voxie::helper::Begin();
+        voxie::helper::RenderingBegin();
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
             voxie::helper::Submit(config);
         }
         for (auto& model : models) {
             voxie::helper::Submit(model->GetRenderingConfig());
         }
-        voxie::helper::End();
+        voxie::helper::RenderingEnd();
 
     });
     engine.StartLoop();

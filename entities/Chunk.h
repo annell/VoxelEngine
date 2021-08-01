@@ -23,7 +23,6 @@ public:
     void Init();
     void Draw() const;
     void AddCube(ChunkPosition, std::unique_ptr<Cube>&&);
-    size_t NrMaterials() const;
     size_t NrVertex() const;
 
     std::shared_ptr<Position> GetPosition() const;

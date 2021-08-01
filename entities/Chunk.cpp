@@ -75,10 +75,6 @@ void Chunk::AddCube(ChunkPosition position, std::unique_ptr<Cube>&& cube) {
     cubesMap[position] = std::move(cube);
 }
 
-size_t Chunk::NrMaterials() const {
-    return nrMaterials;
-}
-
 size_t Chunk::NrVertex() const {
     return GetVertexBufferArray()->nrVertex;
 }

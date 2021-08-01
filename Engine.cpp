@@ -1,6 +1,5 @@
 #include "Engine.h"
 #include <iostream>
-#include <TextHandler.h>
 #include "KeyboardHandler.h"
 #include "MouseHandler.h"
 #include "Camera.h"
@@ -14,6 +13,21 @@ Engine::~Engine() {
 }
 
 bool Engine::Init() {
+    if (!InitWindow()) {
+        return false;
+    }
+    InitCamera();
+    InitGUI();
+
+    return true;
+}
+
+void Engine::InitCamera() {
+    camera = std::__1::make_shared<Camera>(Entity::MakeEntity("Editor camera"), glm::vec3(-3.0f, 1.0f, -3.0f));
+    GetScene().AddEntity(camera->GetEntity());
+}
+
+bool Engine::InitWindow() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -23,7 +37,8 @@ bool Engine::Init() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH, SCR_HEIGHT);
+    window = std::__1::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH,
+                                           SCR_HEIGHT);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -39,12 +54,6 @@ bool Engine::Init() {
     glewInit();
 
     glEnable(GL_DEPTH_TEST);
-
-    camera = std::make_shared<Camera>(Entity::MakeEntity("Editor camera"), glm::vec3(-3.0f, 1.0f, -3.0f));
-    GetScene().AddEntity(camera->GetEntity());
-
-    InitImGui();
-
     return true;
 }
 
@@ -58,29 +67,40 @@ std::shared_ptr<Window> Engine::GetWindow() const {
 
 void Engine::StartLoop() {
     while (!glfwWindowShouldClose(window->GetWindow())) {
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        UpdateTime();
 
-        glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        NewFrame();
 
         KeyboardHandler::processInput();
-
         onTick.Broadcast(GetDeltaTime());
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        glfwSwapBuffers(window->GetWindow());
-        glfwPollEvents();
+        RenderFrame();
     }
 
     glfwTerminate();
+}
+
+void Engine::RenderFrame() const {
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    glfwSwapBuffers(window->GetWindow());
+    glfwPollEvents();
+}
+
+void Engine::NewFrame() const {
+    glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void Engine::UpdateTime() {
+    float currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
 }
 
 float Engine::GetDeltaTime() const {
@@ -108,7 +128,7 @@ Scene &Engine::GetScene() {
     return scene;
 }
 
-void Engine::InitImGui() const {
+void Engine::InitGUI() const {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -118,17 +138,17 @@ void Engine::InitImGui() const {
     ImGui::StyleColorsDark();
 }
 
-    namespace helper {
+namespace helper {
 
 void Log(std::string log) {
     Engine::GetEngine().GetLogger().AddLog(log.c_str());
 }
 
-void Begin() {
+void RenderingBegin() {
     Engine::GetEngine().GetRenderingHandler().Begin(Engine::GetEngine().GetCamera());
 }
 
-void End() {
+void RenderingEnd() {
     Engine::GetEngine().GetRenderingHandler().End();
 }
 
