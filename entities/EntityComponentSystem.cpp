@@ -6,8 +6,8 @@
 
 namespace voxie {
 
-Entity::Entity(Entity::Identity id, std::string name, Type type)
- : id(id), name(name), type(type) {
+Entity::Entity(Entity::Identity id, Type type)
+ : id(id), type(type) {
 }
 
 const Entity::Identity &Entity::GetId() const {
@@ -22,13 +22,9 @@ bool Entity::operator<(const Entity &rhs) const {
     return as_tie() < rhs.as_tie();
 }
 
-std::shared_ptr<Entity> Entity::MakeEntity(std::string name) {
+std::shared_ptr<Entity> Entity::MakeEntity() {
     static int id = 0;
-    return std::make_shared<Entity>(id++, name, 0);
-}
-
-const std::string &Entity::GetName() const {
-    return name;
+    return std::make_shared<Entity>(id++, 0);
 }
 
 }

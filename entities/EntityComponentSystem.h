@@ -12,10 +12,9 @@ class Entity {
 public:
     using Identity = int;
     using Type = int;
-    Entity(Identity, std::string name, Type);
-    static std::shared_ptr<Entity> MakeEntity(std::string name);
+    Entity(Identity, Type);
+    static std::shared_ptr<Entity> MakeEntity();
     const Identity& GetId() const;
-    const std::string& GetName() const;
 
     bool operator<(const Entity& rhs) const;
 
@@ -23,7 +22,6 @@ private:
     auto as_tie() const;
 
     const Entity::Identity id;
-    std::string name;
     Type type;
 };
 

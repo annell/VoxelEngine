@@ -18,6 +18,7 @@ LightSource::LightSource(LightConfig config)
     config.cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     config.position->model = glm::translate(config.position->model, config.position->pos);
     config.position->SetPosition(config.position->pos);
+    helper::AddComponent(config.name, *entity);
     helper::AddComponent(config.position, *entity);
     helper::AddComponent(config.cube->GetVertexBufferArray(), *entity);
     helper::AddComponent(config.shader, *entity);

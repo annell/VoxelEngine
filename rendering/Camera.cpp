@@ -7,13 +7,14 @@
 
 namespace voxie {
 
-Camera::Camera(std::shared_ptr<Entity> entity, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+Camera::Camera(std::shared_ptr<Entity> entity, std::string name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 : Front(glm::vec3(0.0f, 0.0f, 0.0f))
 , MovementSpeed(SPEED)
 , MouseSensitivity(SENSITIVITY)
 , Zoom(ZOOM)
 , WorldUp(up)
 , entity(entity) {
+    helper::AddComponent(std::make_shared<std::string>(name), *entity);
     helper::AddComponent(std::make_shared<Position>(position), *entity);
     helper::AddComponent(std::make_shared<Direction>(yaw, pitch), *entity);
     updateCameraVectors();

@@ -44,6 +44,20 @@ void ShowEntityPositionController(const voxie::Entity& entity) {
     pos->UpdateModel();
 }
 
+void ShowEntityNameController(const voxie::Entity& entity) {
+    ImGui::Separator();
+    auto name = voxie::helper::GetComponent<std::string>(entity);
+    char* buf = (char*)name->c_str();
+    auto callback = [] (ImGuiInputTextCallbackData* data) -> int {
+        voxie::Entity* entity = (voxie::Entity*)data->UserData;
+        auto name = voxie::helper::GetComponent<std::string>(*entity);
+        name->resize(data->BufSize);
+        *name = std::string(data->Buf);
+        return 1;
+    };
+    ImGui::InputText("name", buf, 20, 0, callback, (void*)&entity);
+}
+
 void ShowEntityDirectionController(const voxie::Entity& entity) {
     ImGui::Separator();
     auto direction = voxie::helper::GetComponent<voxie::Direction>(entity);
@@ -105,7 +119,8 @@ auto ShowEntityList() {
     auto& entities = voxie::Engine::GetEngine().GetScene().GetEntities();
 
     for (auto& entity : entities) {
-        items.push_back(entity->GetName().c_str());
+        auto name = voxie::helper::GetComponent<std::string>(*entity);
+        items.push_back(name->c_str());
     }
     ImGui::ListBox("", &selected, &items[0], entities.size());
 
@@ -119,6 +134,10 @@ void ShowSceneOverview() {
     auto entity = ShowEntityList();
 
     AddNewComponent();
+
+    if (voxie::helper::HasComponent<std::string>(entity)) {
+        ShowEntityNameController(entity);
+    }
 
     if (voxie::helper::HasComponent<voxie::Position>(entity)) {
         ShowEntityPositionController(entity);

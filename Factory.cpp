@@ -46,7 +46,8 @@ std::unique_ptr<voxie::LightSource> MakeLight(std::string name,
                                               voxie::Atteunation atteunation) {
     return std::make_unique<voxie::LightSource>(
             voxie::LightConfig{
-                    voxie::Entity::MakeEntity(name),
+                    std::make_shared<std::string>(name),
+                    voxie::Entity::MakeEntity(),
                     std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
                             std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                             std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)

@@ -23,7 +23,7 @@ bool Engine::Init() {
 }
 
 void Engine::InitCamera() {
-    camera = std::__1::make_shared<Camera>(Entity::MakeEntity("Editor camera"), glm::vec3(-3.0f, 1.0f, -3.0f));
+    camera = std::__1::make_shared<Camera>(Entity::MakeEntity(), "Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f));
     GetScene().AddEntity(camera->GetEntity());
 }
 

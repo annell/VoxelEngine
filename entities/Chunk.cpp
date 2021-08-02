@@ -9,7 +9,8 @@
 namespace voxie {
 
 Chunk::Chunk(std::string name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
- : entity(Entity::MakeEntity(name)) {
+ : entity(Entity::MakeEntity()) {
+    helper::AddComponent(std::make_shared<std::string>(name), *entity);
     helper::AddComponent(position, *entity);
     helper::AddComponent(shader, *entity);
     helper::AddComponent(std::make_shared<VertexBufferArray>(), *entity);
