@@ -18,6 +18,11 @@ Chunk::Chunk(std::string name, std::shared_ptr<Shader> shader, std::shared_ptr<P
 
 Chunk::~Chunk() {
     GetVertexBufferArray()->ResetBuffers();
+    helper::RemoveComponent<std::string>(*entity);
+    helper::RemoveComponent<Position>(*entity);
+    helper::RemoveComponent<Shader>(*entity);
+    helper::RemoveComponent<VertexBufferArray>(*entity);
+    voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
 }
 
 void Chunk::Init() {

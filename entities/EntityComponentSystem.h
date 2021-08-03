@@ -32,6 +32,9 @@ public:
 
     template <typename T>
     void AddComponent(std::shared_ptr<T> component, const Entity& handle);
+
+    template <typename T>
+    void RemoveComponent(const Entity& handle);
 private:
 };
 
@@ -54,6 +57,15 @@ std::shared_ptr<T> EntityComponentSystem::GetComponent(const Entity& handle) {
 template<typename T>
 void EntityComponentSystem::AddComponent(std::shared_ptr<T> component, const Entity& handle) {
     GetComponents<T>()[handle] = component;
+}
+
+template<typename T>
+void EntityComponentSystem::RemoveComponent(const Entity &handle) {
+    auto components = GetComponents<T>();
+    auto it = components.find(handle);
+    if (it != components.end()) {
+        components.erase(it);
+    }
 }
 
 }

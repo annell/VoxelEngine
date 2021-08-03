@@ -99,7 +99,7 @@ void ShowGuizmo(const voxie::Entity& entity) {
 }
 
 void AddNewComponent() {
-    if (ImGui::Button("Add Component"))
+    if (ImGui::Button("Add"))
         ImGui::OpenPopup("add_popup");
     if (ImGui::BeginPopup("add_popup")) {
         auto models = voxie::GetModels();
@@ -110,6 +110,11 @@ void AddNewComponent() {
         }
         ImGui::EndPopup();
     }
+}
+
+void RemoveComponent(const voxie::Entity& entity) {
+    if (ImGui::Button("Remove"))
+        voxie::Engine::GetEngine().GetModelHandler().RemoveModel(entity);
 }
 
 auto ShowEntityList() {
@@ -124,7 +129,10 @@ auto ShowEntityList() {
     }
     ImGui::ListBox("", &selected, &items[0], entities.size());
 
-    auto& entity = *entities.at(selected);
+    if (selected >= entities.size()) {
+        return *entities.back();
+    }
+    const auto& entity = *entities.at(selected);
     return entity;
 }
 
@@ -134,6 +142,8 @@ void ShowSceneOverview() {
     auto entity = ShowEntityList();
 
     AddNewComponent();
+    ImGui::SameLine();
+    RemoveComponent(entity);
 
     if (voxie::helper::HasComponent<std::string>(entity)) {
         ShowEntityNameController(entity);

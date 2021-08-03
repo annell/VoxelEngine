@@ -84,6 +84,11 @@ namespace helper {
         return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
     }
 
+    template <typename T>
+    void RemoveComponent(Entity& handle) {
+        return Engine::GetEngine().GetComponents().RemoveComponent<T>(handle);
+    }
+
     void RenderingBegin();
     void RenderingEnd();
     void Submit(const RenderingConfig& config);

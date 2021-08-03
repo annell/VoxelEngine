@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <vector>
+#include <map>
 #include <memory>
 #include "Chunk.h"
 
@@ -12,9 +12,11 @@ class ModelHandler {
 public:
     ModelHandler() = default;
     void AddModel(std::unique_ptr<voxie::Chunk>&&);
+    void RemoveModel(voxie::Entity entity);
     std::vector<voxie::RenderingConfig> GetRenderingConfigs() const;
+
 private:
-    std::vector<std::unique_ptr<voxie::Chunk>> models;
+    std::map<voxie::Entity, std::unique_ptr<voxie::Chunk>> models;
 };
 
 

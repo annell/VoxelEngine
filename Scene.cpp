@@ -14,4 +14,8 @@ const Scene::SceneEntities &Scene::GetEntities() {
     return entities;
 }
 
+void Scene::RemoveEntity(std::shared_ptr<Entity> entity) {
+    entities.erase(std::find(entities.begin(), entities.end(), entity));
+}
+
 }
