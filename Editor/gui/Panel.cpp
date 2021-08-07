@@ -102,6 +102,11 @@ void ShowEntityDirectionController(const voxie::Entity& entity) {
     ImGui::InputFloat("Pitch", &direction->pitch);
 }
 
+void ShowCameraSelectorController(const voxie::Entity& entity) {
+    if (ImGui::Button("Set as camera"))
+        voxie::Engine::GetEngine().SetCamera(entity);
+}
+
 void ShowGuizmo(const voxie::Entity& entity) {
     ImGui::Separator();
     static auto mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
@@ -160,6 +165,14 @@ void AddNewComponent() {
             }
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Camera")) {
+            if (ImGui::Selectable("Camera")) {
+                auto camera = voxie::MakeCamera({"Camera"});
+                voxie::helper::AddComponent(camera->GetEntity(), std::move(camera));
+            }
+            ImGui::EndMenu();
+        }
         ImGui::EndPopup();
     }
 }
@@ -213,6 +226,10 @@ void ShowSceneOverview() {
 
     if (voxie::helper::HasComponent<voxie::Atteunation>(entity)) {
         ShowEntityAtteunationController(entity);
+    }
+
+    if (voxie::helper::HasComponent<voxie::Camera>(entity)) {
+        ShowCameraSelectorController(entity);
     }
 
     ImGui::End();

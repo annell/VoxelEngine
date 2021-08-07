@@ -3,6 +3,7 @@
 #include "KeyboardHandler.h"
 #include "MouseHandler.h"
 #include "Camera.h"
+#include "Factory.h"
 
 namespace voxie {
 
@@ -23,8 +24,8 @@ bool Engine::Init() {
 }
 
 void Engine::InitCamera() {
-    camera = std::__1::make_shared<Camera>(Entity::MakeEntity(), Name("Editor Camera"), glm::vec3(-3.0f, 1.0f, -3.0f));
-    GetScene().AddEntity(camera->GetEntity());
+    camera = MakeCamera({"Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f)});
+    voxie::helper::AddComponent(camera->GetEntity(), camera);
 }
 
 bool Engine::InitWindow() {
@@ -39,7 +40,7 @@ bool Engine::InitWindow() {
 
     const unsigned int SCR_WIDTH = 1024;
     const unsigned int SCR_HEIGHT = 768;
-    window = std::__1::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH,
+    window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH,
                                            SCR_HEIGHT);
     if (window == NULL)
     {
@@ -138,6 +139,10 @@ void Engine::InitGUI() const {
     ImGui_ImplGlfw_InitForOpenGL(GetWindow()->GetWindow(), true);
     ImGui_ImplOpenGL3_Init(nullptr);
     ImGui::StyleColorsDark();
+}
+
+void Engine::SetCamera(const Entity& entity) {
+    camera = helper::GetComponent<Camera>(entity);
 }
 
 namespace helper {

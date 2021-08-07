@@ -19,9 +19,7 @@ struct ModelConfig {
     std::string path;
 };
 
-
 std::vector<ModelConfig> GetModels();
-
 std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig);
 
 struct LightFactoryConfig {
@@ -35,5 +33,12 @@ struct LightFactoryConfig {
 
 std::vector<LightFactoryConfig> GetLights();
 std::shared_ptr<voxie::LightSource> MakeLight(LightFactoryConfig);
+
+struct CameraFactoryConfig {
+    std::string name;
+    glm::vec3 position = {0, 0, 0};
+};
+
+std::shared_ptr<voxie::Camera> MakeCamera(CameraFactoryConfig);
 
 }

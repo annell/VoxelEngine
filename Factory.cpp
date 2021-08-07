@@ -8,6 +8,7 @@
 #include "Engine.h"
 #include "Chunk.h"
 #include <filesystem>
+#include "Camera.h"
 
 namespace internal {
 
@@ -81,6 +82,12 @@ std::shared_ptr<voxie::LightSource> MakeLight(LightFactoryConfig config) {
             });
     voxie::Engine::GetEngine().GetScene().AddEntity(obj->GetEntity());
     return std::move(obj);
+}
+
+std::shared_ptr<voxie::Camera> MakeCamera(CameraFactoryConfig config) {
+    auto camera = std::make_shared<voxie::Camera>(voxie::Entity::MakeEntity(), config.name, config.position);
+    voxie::Engine::GetEngine().GetScene().AddEntity(camera->GetEntity());
+    return std::move(camera);
 }
 
 }

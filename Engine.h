@@ -31,6 +31,7 @@ public:
     static Engine& GetEngine();
     bool Init();
     std::shared_ptr<Camera> GetCamera();
+    void SetCamera(const Entity&);
     std::shared_ptr<Window> GetWindow() const;
     void StartLoop();
     float GetDeltaTime() const;
