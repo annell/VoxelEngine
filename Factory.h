@@ -22,12 +22,18 @@ struct ModelConfig {
 
 std::vector<ModelConfig> GetModels();
 
-std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig config);
-std::unique_ptr<voxie::LightSource> MakeLight(std::string name,
-                                              voxie::LightType type,
-                                              voxie::Position position = {0, 0, 0},
-                                              voxie::Dimensions dimensions = {10, 10, 10},
-                                              voxie::Color color = glm::vec3{0, 0, 0},
-                                              voxie::Atteunation atteunation = {0, 0, 0});
+std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig);
+
+struct LightFactoryConfig {
+    std::string name;
+    voxie::LightType type;
+    voxie::Position position = {0, 0, 0};
+    voxie::Dimensions dimensions = {1, 1, 1};
+    voxie::Color color = glm::vec3{0.5, 0.5, 0.5};
+    voxie::Atteunation atteunation = {0, 0, 0};
+};
+
+std::vector<LightFactoryConfig> GetLights();
+std::shared_ptr<voxie::LightSource> MakeLight(LightFactoryConfig);
 
 }

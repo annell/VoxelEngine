@@ -4,29 +4,27 @@
 
 #include "Chunk.h"
 #include <map>
+#include "ModelLoader.h"
 #include "Engine.h"
 
 namespace voxie {
 
-Chunk::Chunk(std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+Chunk::Chunk(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
  : entity(Entity::MakeEntity()) {
     helper::AddComponent(entity, name);
     helper::AddComponent(entity, position);
     helper::AddComponent(entity, shader);
     helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
+    voxie::ModelLoader::LoadModel(path, this);
+    SetupCubesForRendering();
+    SetupShader();
 }
 
 Chunk::~Chunk() {
-    GetVertexBufferArray()->ResetBuffers();
     helper::RemoveComponent<std::string>(entity);
     helper::RemoveComponent<Position>(entity);
     helper::RemoveComponent<Shader>(entity);
     helper::RemoveComponent<VertexBufferArray>(entity);
-}
-
-void Chunk::Init() {
-    SetupCubesForRendering();
-    SetupShader();
 }
 
 void Chunk::SetupCubesForRendering() {

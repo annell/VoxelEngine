@@ -59,11 +59,12 @@ class LightSource {
 public:
     LightSource(LightConfig config);
     LightSource(Cube* cube, glm::vec3 color, glm::vec3 position);
+    ~LightSource();
     std::shared_ptr<Position> GetPosition() const;
     std::shared_ptr<Color> GetColor() const;
     const LightType& GetType() const;
     std::shared_ptr<Shader> GetShader() const;
-    std::shared_ptr<Entity> GetEntity() const;
+    const Entity& GetEntity() const;
     std::shared_ptr<Atteunation> GetAttuenation() const;
     std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
@@ -72,16 +73,6 @@ private:
     LightType type;
 };
 
-class LightSourceHandler {
-public:
-    LightSourceHandler() = default;
-    void AddLight(std::unique_ptr<LightSource>&&);
-    void AddShader(std::shared_ptr<Shader>);
-
-    std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>) const;
-private:
-    std::vector<std::shared_ptr<Shader>> shaders;
-    std::vector<std::unique_ptr<LightSource>> lightSources;
-};
+std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>, const std::vector<Entity>&);
 
 }

@@ -139,6 +139,14 @@ void AddNewComponent() {
     if (ImGui::Button("Add"))
         ImGui::OpenPopup("add_popup");
     if (ImGui::BeginPopup("add_popup")) {
+        auto lights = voxie::GetLights();
+        for (auto& light : lights) {
+            if (ImGui::Selectable(light.name.c_str())) {
+                auto obj = voxie::MakeLight(light);
+                voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+            }
+        }
+
         auto models = voxie::GetModels();
         for (auto& model : models) {
             if (ImGui::Selectable(model.name.c_str())) {

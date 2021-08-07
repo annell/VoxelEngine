@@ -38,7 +38,6 @@ public:
     RenderingHandler& GetRenderingHandler();
     Scene& GetScene();
     Logging& GetLogger();
-    LightSourceHandler& GetLightSourceHandler();
 
     OnTick onTick;
 private:
@@ -53,7 +52,6 @@ private:
     EntityComponentSystem components;
     Scene scene;
     RenderingHandler renderingHandler;
-    LightSourceHandler lights;
     Logging logging;
 
     bool InitWindow();
@@ -69,6 +67,17 @@ namespace helper {
     template <typename T>
     std::shared_ptr<T> GetComponent(const Entity& handle) {
         return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
+    }
+
+    template <typename T>
+    std::vector<std::shared_ptr<T>> GetComponents(std::vector<Entity> entities) {
+        std::vector<std::shared_ptr<T>> components;
+        for (auto& entity : entities) {
+            if (auto component = GetComponent<T>(entity)) {
+                components.push_back(component);
+            }
+        }
+        return components;
     }
 
     template <typename T>

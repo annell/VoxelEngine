@@ -18,9 +18,8 @@ namespace voxie {
 
 class Chunk {
 public:
-    Chunk(std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
+    Chunk(std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
     ~Chunk();
-    void Init();
     void Draw() const;
     void AddCube(ChunkPosition, std::unique_ptr<Cube>&&);
     size_t NrVertex() const;

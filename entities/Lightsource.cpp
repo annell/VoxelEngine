@@ -12,7 +12,6 @@ namespace voxie {
 LightSource::LightSource(LightConfig config)
  : entity(config.entity)
  , type(config.type) {
-    voxie::Engine::GetEngine().GetScene().AddEntity(entity);
     config.cube->GenerateVertexAttributes();
     config.cube->CreateRenderBuffers();
     config.cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
@@ -27,6 +26,14 @@ LightSource::LightSource(LightConfig config)
         helper::AddComponent(entity, config.atteunation);
     }
  }
+
+LightSource::~LightSource() {
+    helper::RemoveComponent<Name>(entity);
+    helper::RemoveComponent<Position>(entity);
+    //helper::RemoveComponent<VertexBufferArray>(entity);
+    //helper::RemoveComponent<Shader>(entity);
+    helper::RemoveComponent<Color>(entity);
+}
 
 std::shared_ptr<Color> LightSource::GetColor() const {
     return voxie::helper::GetComponent<Color>(entity);
@@ -52,12 +59,13 @@ std::shared_ptr<VertexBufferArray> LightSource::GetVertexBufferArray() const {
     return voxie::helper::GetComponent<VertexBufferArray>(entity);
 }
 
-void LightSourceHandler::AddLight(std::unique_ptr<LightSource>&& light) {
-    lightSources.push_back(std::move(light));
+const Entity &LightSource::GetEntity() const {
+    return entity;
 }
 
-std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared_ptr<Camera> camera) const {
-    for (auto shader : shaders) {
+std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera> camera, const std::vector<Entity>& entities) {
+    auto lightSources = helper::GetComponents<LightSource>(entities);
+    for (auto shader : helper::GetComponents<Shader>(entities)) {
         shader->use();
         shader->setInt("nrLights", lightSources.size());
         camera->SetShaderParameters(*shader);
@@ -75,6 +83,7 @@ std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared
             n++;
         }
     }
+
     std::vector<RenderingConfig> output;
     for (auto& light : lightSources) {
         output.push_back({
@@ -88,10 +97,6 @@ std::vector<RenderingConfig> LightSourceHandler::GetRenderingConfigs(std::shared
         });
     }
     return output;
-}
-
-void LightSourceHandler::AddShader(std::shared_ptr<Shader> shader) {
-    shaders.push_back(shader);
 }
 
 }

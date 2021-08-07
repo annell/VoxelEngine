@@ -138,10 +138,6 @@ void Engine::InitGUI() const {
     ImGui::StyleColorsDark();
 }
 
-LightSourceHandler& Engine::GetLightSourceHandler() {
-    return lights;
-}
-
 namespace helper {
 
 void Log(std::string log) {

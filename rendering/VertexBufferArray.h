@@ -8,6 +8,10 @@
 namespace voxie {
 
 struct VertexBufferArray {
+
+    ~VertexBufferArray() {
+        ResetBuffers();
+    }
     void CreateBuffers() {
         glGenBuffers(1, &VBO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);

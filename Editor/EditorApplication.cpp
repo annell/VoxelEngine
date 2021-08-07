@@ -53,32 +53,12 @@ int main()
                 voxie::MouseHandler::LockCamera();
           }});
 
-    auto& lights = engine.GetLightSourceHandler();
-
-    lights.AddLight(MakeLight( "Ambient",
-                               voxie::LightType::AMBIENT,
-                               {1, 100, 1},
-                               {10, 10, 10},
-                               glm::vec3{0.1, 0.1, 0.1}));
-    lights.AddLight(MakeLight( "Point light 1",
-                               voxie::LightType::POINT,
-                               {0.5, 1.5, 0.8},
-                               {0.05, 0.05, 0.05},
-                               glm::vec3{0.8, 0.1, 0.85},
-                               {1.0f, 1.5f, 3.8f}));
-
-    lights.AddLight(MakeLight( "Point light 2",
-                               voxie::LightType::POINT,
-                               {1.5, 0.7, 1.8},
-                               {0.05, 0.05, 0.05},
-                               glm::vec3{0.1, 0.8, 0.85},
-                               {1.0f, 1.5f, 3.8f}));
     engine.onTick.Bind([&] (float deltaTime) {
         gui::ShowSceneOverview();
         gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
 
         voxie::helper::RenderingBegin();
-        for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
+        for (auto config : GetRenderingConfigs(engine.GetCamera(), engine.GetScene().GetEntities())) {
             voxie::helper::Submit(config);
         }
         for (auto entity : engine.GetScene().GetEntities()) {
