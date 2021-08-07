@@ -18,26 +18,26 @@ LightSource::LightSource(LightConfig config)
     config.cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     config.position->model = glm::translate(config.position->model, config.position->pos);
     config.position->SetPosition(config.position->pos);
-    helper::AddComponent(config.name, *entity);
-    helper::AddComponent(config.position, *entity);
-    helper::AddComponent(config.cube->GetVertexBufferArray(), *entity);
-    helper::AddComponent(config.shader, *entity);
-    helper::AddComponent(config.color, *entity);
+    helper::AddComponent(entity, config.name);
+    helper::AddComponent(entity, config.position);
+    helper::AddComponent(entity, config.cube->GetVertexBufferArray());
+    helper::AddComponent(entity, config.shader);
+    helper::AddComponent(entity, config.color);
     if (type == LightType::POINT) {
-        helper::AddComponent(config.atteunation, *entity);
+        helper::AddComponent(entity, config.atteunation);
     }
  }
 
 std::shared_ptr<Color> LightSource::GetColor() const {
-    return voxie::helper::GetComponent<Color>(*entity);
+    return voxie::helper::GetComponent<Color>(entity);
 }
 
 std::shared_ptr<Position> LightSource::GetPosition() const {
-    return voxie::helper::GetComponent<Position>(*entity);
+    return voxie::helper::GetComponent<Position>(entity);
 }
 
 std::shared_ptr<Shader> LightSource::GetShader() const {
-    return voxie::helper::GetComponent<Shader>(*entity);
+    return voxie::helper::GetComponent<Shader>(entity);
 }
 
 const LightType& LightSource::GetType() const {
@@ -45,11 +45,11 @@ const LightType& LightSource::GetType() const {
 }
 
 std::shared_ptr<Atteunation> LightSource::GetAttuenation()const {
-    return voxie::helper::GetComponent<Atteunation>(*entity);
+    return voxie::helper::GetComponent<Atteunation>(entity);
 }
 
 std::shared_ptr<VertexBufferArray> LightSource::GetVertexBufferArray() const {
-    return voxie::helper::GetComponent<VertexBufferArray>(*entity);
+    return voxie::helper::GetComponent<VertexBufferArray>(entity);
 }
 
 void LightSourceHandler::AddLight(std::unique_ptr<LightSource>&& light) {

@@ -80,8 +80,8 @@ namespace helper {
     }
 
     template <typename T>
-    void AddComponent(std::shared_ptr<T> component, Entity& handle) {
-        return Engine::GetEngine().GetComponents().AddComponent<T>(component, handle);
+    void AddComponent(const Entity& handle, std::shared_ptr<T> component) {
+        return Engine::GetEngine().GetComponents().AddComponent<T>(handle, component);
     }
 
     template <typename T>

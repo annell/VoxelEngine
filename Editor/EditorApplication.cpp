@@ -7,7 +7,7 @@
 
 int FilterSample(int new_sample) {
     static int last_result = 0;
-    const int smoothing = 100;
+    const int smoothing = 5;
     last_result = (new_sample - last_result) / smoothing + last_result;
     return last_result;
 }
@@ -54,10 +54,6 @@ int main()
           }});
 
     auto& models = engine.GetModelHandler();
-    for (auto model : voxie::GetModels()) {
-        models.AddModel(std::move(voxie::MakeModel(model)));
-    }
-
     auto& lights = engine.GetLightSourceHandler();
 
     lights.AddLight(MakeLight( "Ambient",

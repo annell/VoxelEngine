@@ -8,6 +8,14 @@
 
 namespace voxie {
 
+struct Name {
+    Name(std::string name)
+    : name(name) {
+    }
+
+    std::string name;
+};
+
 struct Material {
     glm::vec3 color;
     glm::vec3 ambient;

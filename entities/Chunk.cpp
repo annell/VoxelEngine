@@ -8,20 +8,20 @@
 
 namespace voxie {
 
-Chunk::Chunk(std::string name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+Chunk::Chunk(std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
  : entity(Entity::MakeEntity()) {
-    helper::AddComponent(std::make_shared<std::string>(name), *entity);
-    helper::AddComponent(position, *entity);
-    helper::AddComponent(shader, *entity);
-    helper::AddComponent(std::make_shared<VertexBufferArray>(), *entity);
+    helper::AddComponent(entity, name);
+    helper::AddComponent(entity, position);
+    helper::AddComponent(entity, shader);
+    helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
 }
 
 Chunk::~Chunk() {
     GetVertexBufferArray()->ResetBuffers();
-    helper::RemoveComponent<std::string>(*entity);
-    helper::RemoveComponent<Position>(*entity);
-    helper::RemoveComponent<Shader>(*entity);
-    helper::RemoveComponent<VertexBufferArray>(*entity);
+    helper::RemoveComponent<std::string>(entity);
+    helper::RemoveComponent<Position>(entity);
+    helper::RemoveComponent<Shader>(entity);
+    helper::RemoveComponent<VertexBufferArray>(entity);
     voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
 }
 
@@ -119,15 +119,15 @@ void Chunk::FaceCulling() const {
 }
 
 std::shared_ptr<Position> Chunk::GetPosition() const {
-    return voxie::helper::GetComponent<Position>(*entity);
+    return voxie::helper::GetComponent<Position>(entity);
 }
 
 std::shared_ptr<Shader> Chunk::GetShader() const {
-    return voxie::helper::GetComponent<Shader>(*entity);
+    return voxie::helper::GetComponent<Shader>(entity);
 }
 
 std::shared_ptr<VertexBufferArray> Chunk::GetVertexBufferArray() const {
-    return voxie::helper::GetComponent<VertexBufferArray>(*entity);
+    return voxie::helper::GetComponent<VertexBufferArray>(entity);
 }
 
 auto GetPreDrawAction(std::shared_ptr<Shader> shader, std::shared_ptr<Position> pos) {
@@ -154,7 +154,7 @@ RenderingConfig Chunk::GetRenderingConfig() const {
     };
 }
 
-std::shared_ptr<Entity> Chunk::GetEntity() const {
+const Entity& Chunk::GetEntity() const {
     return entity;
 }
 

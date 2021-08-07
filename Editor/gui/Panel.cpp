@@ -13,6 +13,43 @@
 
 namespace gui {
 
+void ShowSimpleOverlay(std::string text, bool* p_open)
+{
+    const float PAD = 10.0f;
+    static int corner = 1;
+    ImGuiIO& io = ImGui::GetIO();
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+    if (corner != -1)
+    {
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+        ImVec2 work_size = viewport->WorkSize;
+        ImVec2 window_pos, window_pos_pivot;
+        window_pos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+        window_pos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+        window_pos_pivot.x = (corner & 1) ? 1.0f : 0.0f;
+        window_pos_pivot.y = (corner & 2) ? 1.0f : 0.0f;
+        ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+        window_flags |= ImGuiWindowFlags_NoMove;
+    }
+    ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+    if (ImGui::Begin("Example: Simple overlay", p_open, window_flags))
+    {
+        ImGui::Text("%s", text.c_str());
+        if (ImGui::BeginPopupContextWindow())
+        {
+            if (ImGui::MenuItem("Custom",       NULL, corner == -1)) corner = -1;
+            if (ImGui::MenuItem("Top-left",     NULL, corner == 0)) corner = 0;
+            if (ImGui::MenuItem("Top-right",    NULL, corner == 1)) corner = 1;
+            if (ImGui::MenuItem("Bottom-left",  NULL, corner == 2)) corner = 2;
+            if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+            if (p_open && ImGui::MenuItem("Close")) *p_open = false;
+            ImGui::EndPopup();
+        }
+    }
+    ImGui::End();
+}
+
 void ShowEntityColorController(const voxie::Entity& entity) {
     ImGui::Separator();
     auto color = voxie::helper::GetComponent<voxie::Color>(entity);
@@ -46,8 +83,8 @@ void ShowEntityPositionController(const voxie::Entity& entity) {
 
 void ShowEntityNameController(const voxie::Entity& entity) {
     ImGui::Separator();
-    auto name = voxie::helper::GetComponent<std::string>(entity);
-    char* buf = (char*)name->c_str();
+    auto name = voxie::helper::GetComponent<voxie::Name>(entity);
+    char* buf = (char*)name->name.c_str();
     auto callback = [] (ImGuiInputTextCallbackData* data) -> int {
         voxie::Entity* entity = (voxie::Entity*)data->UserData;
         auto name = voxie::helper::GetComponent<std::string>(*entity);
@@ -124,16 +161,12 @@ auto ShowEntityList() {
     auto& entities = voxie::Engine::GetEngine().GetScene().GetEntities();
 
     for (auto& entity : entities) {
-        auto name = voxie::helper::GetComponent<std::string>(*entity);
-        items.push_back(name->c_str());
+        auto name = voxie::helper::GetComponent<voxie::Name>(entity);
+        items.push_back(name->name.c_str());
     }
     ImGui::ListBox("", &selected, &items[0], entities.size());
 
-    if (selected >= entities.size()) {
-        return *entities.back();
-    }
-    const auto& entity = *entities.at(selected);
-    return entity;
+    return selected >= entities.size() ? entities.back() : entities.at(selected);
 }
 
 void ShowSceneOverview() {
@@ -145,7 +178,7 @@ void ShowSceneOverview() {
     ImGui::SameLine();
     RemoveComponent(entity);
 
-    if (voxie::helper::HasComponent<std::string>(entity)) {
+    if (voxie::helper::HasComponent<voxie::Name>(entity)) {
         ShowEntityNameController(entity);
     }
 
@@ -169,42 +202,5 @@ void ShowSceneOverview() {
     ImGui::End();
 }
 
-
-void ShowSimpleOverlay(std::string text, bool* p_open)
-{
-    const float PAD = 10.0f;
-    static int corner = 1;
-    ImGuiIO& io = ImGui::GetIO();
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-    if (corner != -1)
-    {
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
-        ImVec2 work_size = viewport->WorkSize;
-        ImVec2 window_pos, window_pos_pivot;
-        window_pos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
-        window_pos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
-        window_pos_pivot.x = (corner & 1) ? 1.0f : 0.0f;
-        window_pos_pivot.y = (corner & 2) ? 1.0f : 0.0f;
-        ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-        window_flags |= ImGuiWindowFlags_NoMove;
-    }
-    ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-    if (ImGui::Begin("Example: Simple overlay", p_open, window_flags))
-    {
-        ImGui::Text("%s", text.c_str());
-        if (ImGui::BeginPopupContextWindow())
-        {
-            if (ImGui::MenuItem("Custom",       NULL, corner == -1)) corner = -1;
-            if (ImGui::MenuItem("Top-left",     NULL, corner == 0)) corner = 0;
-            if (ImGui::MenuItem("Top-right",    NULL, corner == 1)) corner = 1;
-            if (ImGui::MenuItem("Bottom-left",  NULL, corner == 2)) corner = 2;
-            if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
-            if (p_open && ImGui::MenuItem("Close")) *p_open = false;
-            ImGui::EndPopup();
-        }
-    }
-    ImGui::End();
-}
 
 }

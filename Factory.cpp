@@ -23,7 +23,9 @@ std::vector<ModelConfig> GetModels() {
 
 
 std::unique_ptr<voxie::Chunk> MakeModel(ModelConfig config) {
-    auto model = std::make_unique<voxie::Chunk>(config.name, std::make_shared<voxie::Shader>(
+    auto model = std::make_unique<voxie::Chunk>(
+            std::make_shared<voxie::Name>(config.name),
+            std::make_shared<voxie::Shader>(
             std::map<std::string, unsigned int>{
                     std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
                     std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)
@@ -46,7 +48,7 @@ std::unique_ptr<voxie::LightSource> MakeLight(std::string name,
                                               voxie::Atteunation atteunation) {
     return std::make_unique<voxie::LightSource>(
             voxie::LightConfig{
-                    std::make_shared<std::string>(name),
+                    std::make_shared<voxie::Name>(name),
                     voxie::Entity::MakeEntity(),
                     std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
                             std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),

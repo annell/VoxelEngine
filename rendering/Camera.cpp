@@ -7,16 +7,16 @@
 
 namespace voxie {
 
-Camera::Camera(std::shared_ptr<Entity> entity, std::string name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+Camera::Camera(Entity entity, Name name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
 : Front(glm::vec3(0.0f, 0.0f, 0.0f))
 , MovementSpeed(SPEED)
 , MouseSensitivity(SENSITIVITY)
 , Zoom(ZOOM)
 , WorldUp(up)
 , entity(entity) {
-    helper::AddComponent(std::make_shared<std::string>(name), *entity);
-    helper::AddComponent(std::make_shared<Position>(position), *entity);
-    helper::AddComponent(std::make_shared<Direction>(yaw, pitch), *entity);
+    helper::AddComponent(entity, std::make_shared<Name>(name));
+    helper::AddComponent(entity, std::make_shared<Position>(position));
+    helper::AddComponent(entity, std::make_shared<Direction>(yaw, pitch));
     updateCameraVectors();
 }
 
@@ -77,16 +77,16 @@ void Camera::updateCameraVectors() {
     Up    = glm::normalize(glm::cross(Right, Front));
 }
 
-std::shared_ptr<Entity> Camera::GetEntity() const {
+const Entity& Camera::GetEntity() const {
     return entity;
 }
 
 std::shared_ptr<Position> Camera::GetPosition() const {
-    return helper::GetComponent<Position>(*entity);
+    return helper::GetComponent<Position>(entity);
 }
 
 std::shared_ptr<Direction> Camera::GetDirection() const {
-    return helper::GetComponent<Direction>(*entity);
+    return helper::GetComponent<Direction>(entity);
 }
 
 float Camera::GetFarDistance() const {

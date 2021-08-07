@@ -18,7 +18,7 @@ namespace voxie {
 
 class Chunk {
 public:
-    Chunk(std::string name, std::shared_ptr<Shader>, std::shared_ptr<Position>);
+    Chunk(std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
     ~Chunk();
     void Init();
     void Draw() const;
@@ -29,7 +29,7 @@ public:
     RenderingConfig GetRenderingConfig() const;
     std::shared_ptr<Shader> GetShader() const;
     std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
-    std::shared_ptr<Entity> GetEntity() const;
+    const Entity& GetEntity() const;
 
 private:
     void SetupCubesForRendering();
@@ -40,7 +40,7 @@ private:
     std::vector<Cube*> cubesToRender;
 
     std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-    std::shared_ptr<Entity> entity;
+    Entity entity;
 };
 
 }

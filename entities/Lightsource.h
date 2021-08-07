@@ -45,8 +45,8 @@ struct Atteunation {
 };
 
 struct LightConfig {
-    std::shared_ptr<std::string> name;
-    std::shared_ptr<Entity> entity;
+    std::shared_ptr<Name> name;
+    Entity entity;
     std::shared_ptr<Shader> shader;
     std::shared_ptr<Position> position;
     LightType type;
@@ -68,7 +68,7 @@ public:
     std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
 private:
-    std::shared_ptr<Entity> entity;
+    Entity entity;
     LightType type;
 };
 

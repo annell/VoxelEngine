@@ -10,9 +10,9 @@ namespace voxie {
 
 class Scene {
 public:
-    using SceneEntities = std::vector<std::shared_ptr<Entity>>;
-    void AddEntity(std::shared_ptr<Entity>);
-    void RemoveEntity(std::shared_ptr<Entity>);
+    using SceneEntities = std::vector<Entity>;
+    void AddEntity(Entity);
+    void RemoveEntity(Entity);
     const SceneEntities& GetEntities();
 private:
     SceneEntities entities;

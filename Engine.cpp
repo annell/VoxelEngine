@@ -23,7 +23,7 @@ bool Engine::Init() {
 }
 
 void Engine::InitCamera() {
-    camera = std::__1::make_shared<Camera>(Entity::MakeEntity(), "Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f));
+    camera = std::__1::make_shared<Camera>(Entity::MakeEntity(), Name("Editor Camera"), glm::vec3(-3.0f, 1.0f, -3.0f));
     GetScene().AddEntity(camera->GetEntity());
 }
 
@@ -49,7 +49,7 @@ bool Engine::InitWindow() {
     glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
     glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_callback);
     glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
-    glfwSwapInterval(0);
+    //glfwSwapInterval(0);
 
     glewInit();
 

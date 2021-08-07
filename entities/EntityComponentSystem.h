@@ -5,24 +5,26 @@
 #pragma once
 #include <map>
 #include <string>
+#include <algorithm>
 
 namespace voxie {
 
 class Entity {
 public:
     using Identity = int;
-    using Type = int;
-    Entity(Identity, Type);
-    static std::shared_ptr<Entity> MakeEntity();
+    Entity(Identity);
+
+    static Entity MakeEntity();
     const Identity& GetId() const;
 
     bool operator<(const Entity& rhs) const;
 
+    bool operator==(const Entity& rhs) const;
+
 private:
     auto as_tie() const;
 
-    const Entity::Identity id;
-    Type type;
+    Entity::Identity id;
 };
 
 class EntityComponentSystem {
@@ -31,7 +33,7 @@ public:
     std::shared_ptr<T> GetComponent(const Entity& handle);
 
     template <typename T>
-    void AddComponent(std::shared_ptr<T> component, const Entity& handle);
+    void AddComponent(const Entity& handle, std::shared_ptr<T> component);
 
     template <typename T>
     void RemoveComponent(const Entity& handle);
@@ -55,7 +57,7 @@ std::shared_ptr<T> EntityComponentSystem::GetComponent(const Entity& handle) {
 }
 
 template<typename T>
-void EntityComponentSystem::AddComponent(std::shared_ptr<T> component, const Entity& handle) {
+void EntityComponentSystem::AddComponent(const Entity& handle, std::shared_ptr<T> component) {
     GetComponents<T>()[handle] = component;
 }
 

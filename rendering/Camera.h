@@ -26,12 +26,12 @@ const float ZOOM        =  45.0f;
 
 class Camera {
 public:
-    Camera(std::shared_ptr<Entity> entity, std::string name, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+    Camera(Entity entity, Name name, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 
     glm::mat4 GetViewMatrix() const;
     float GetFarDistance() const;
     glm::mat4 GetProjectionMatrix() const;
-    std::shared_ptr<Entity> GetEntity() const;
+    const Entity& GetEntity() const;
     std::shared_ptr<Direction> GetDirection() const;
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
@@ -41,7 +41,7 @@ public:
 private:
     void updateCameraVectors();
     std::shared_ptr<Position> GetPosition() const;
-    std::shared_ptr<Entity> entity;
+    Entity entity;
 
     glm::vec3 Front;
     glm::vec3 Up;

@@ -5,7 +5,7 @@
 #include "ModelHandler.h"
 
 void ModelHandler::AddModel(std::unique_ptr <voxie::Chunk>&& model) {
-    models[*model->GetEntity()] = std::move(model);
+    models[model->GetEntity()] = std::move(model);
 }
 
 void ModelHandler::RemoveModel(voxie::Entity entity) {
