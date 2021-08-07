@@ -21,10 +21,6 @@ Chunk::Chunk(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shade
 }
 
 Chunk::~Chunk() {
-    helper::RemoveComponent<std::string>(entity);
-    helper::RemoveComponent<Position>(entity);
-    helper::RemoveComponent<Shader>(entity);
-    helper::RemoveComponent<VertexBufferArray>(entity);
 }
 
 void Chunk::SetupCubesForRendering() {

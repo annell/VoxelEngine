@@ -28,11 +28,6 @@ LightSource::LightSource(LightConfig config)
  }
 
 LightSource::~LightSource() {
-    helper::RemoveComponent<Name>(entity);
-    helper::RemoveComponent<Position>(entity);
-    //helper::RemoveComponent<VertexBufferArray>(entity);
-    //helper::RemoveComponent<Shader>(entity);
-    helper::RemoveComponent<Color>(entity);
 }
 
 std::shared_ptr<Color> LightSource::GetColor() const {

@@ -30,7 +30,7 @@ struct LightFactoryConfig {
     voxie::Position position = {0, 0, 0};
     voxie::Dimensions dimensions = {1, 1, 1};
     voxie::Color color = glm::vec3{0.5, 0.5, 0.5};
-    voxie::Atteunation atteunation = {0, 0, 0};
+    voxie::Atteunation atteunation = {10, 10, 10};
 };
 
 std::vector<LightFactoryConfig> GetLights();
