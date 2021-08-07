@@ -9,26 +9,22 @@
 namespace voxie {
 namespace internal {
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
+float lastX = 0;
+float lastY = 0;
 bool firstMouse = true;
 bool mouseLock = false;
 
 }
 
-void MouseHandler::framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
+void MouseHandler::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+    voxie::Engine::GetEngine().GetWindow()->SetWidth(width);
+    voxie::Engine::GetEngine().GetWindow()->SetHeight(height);
 }
 
-void MouseHandler::mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
+void MouseHandler::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if (internal::mouseLock) {
-
-        if (internal::firstMouse)
-        {
+        if (internal::firstMouse) {
             internal::lastX = xpos;
             internal::lastY = ypos;
             internal::firstMouse = false;
@@ -44,9 +40,7 @@ void MouseHandler::mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 }
 
-void MouseHandler::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    Engine::GetEngine().GetCamera()->ProcessMouseScroll(yoffset);
+void MouseHandler::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 }
 
 void MouseHandler::UnlockCamera() {

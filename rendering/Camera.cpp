@@ -25,7 +25,11 @@ glm::mat4 Camera::GetViewMatrix() const {
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const {
-    return glm::perspective(glm::radians(Zoom), (float)Engine::GetEngine().GetWindow()->GetWidth() / (float)Engine::GetEngine().GetWindow()->GetHeight(), 1.0f, GetFarDistance());
+    return glm::perspective(
+            glm::radians(Zoom),
+            (float)Engine::GetEngine().GetWindow()->GetWidth() / (float)Engine::GetEngine().GetWindow()->GetHeight(),
+            1.0f,
+            GetFarDistance());
 }
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
@@ -49,14 +53,6 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
     direction->SetDirection(direction->yaw + xoffset, direction->pitch + yoffset, constrainPitch);
 
     updateCameraVectors();
-}
-
-void Camera::ProcessMouseScroll(float yoffset) {
-    Zoom -= (float)yoffset;
-    if (Zoom < 1.0f)
-        Zoom = 1.0f;
-    if (Zoom > 90.0f)
-        Zoom = 90.0f;
 }
 
 void Camera::SetShaderParameters(const Shader& shader) const {
@@ -89,7 +85,7 @@ std::shared_ptr<Direction> Camera::GetDirection() const {
 }
 
 float Camera::GetFarDistance() const {
-    return 1000.0f;
+    return 10000.0f;
 }
 
 

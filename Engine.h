@@ -43,8 +43,6 @@ public:
 private:
     void InitGUI() const;
 
-    const unsigned int SCR_WIDTH = 1024;
-    const unsigned int SCR_HEIGHT = 768;
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     std::shared_ptr<Window> window;

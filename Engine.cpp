@@ -37,6 +37,8 @@ bool Engine::InitWindow() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
+    const unsigned int SCR_WIDTH = 1024;
+    const unsigned int SCR_HEIGHT = 768;
     window = std::__1::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH,
                                            SCR_HEIGHT);
     if (window == NULL)

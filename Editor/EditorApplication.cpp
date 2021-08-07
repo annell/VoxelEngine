@@ -58,10 +58,11 @@ int main()
         gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
 
         voxie::helper::RenderingBegin();
-        for (auto config : GetRenderingConfigs(engine.GetCamera(), engine.GetScene().GetEntities())) {
+        auto sceneObjects = engine.GetScene().GetEntities();
+        for (auto config : GetRenderingConfigs(engine.GetCamera(), sceneObjects)) {
             voxie::helper::Submit(config);
         }
-        for (auto entity : engine.GetScene().GetEntities()) {
+        for (auto entity : sceneObjects) {
             if (auto model = voxie::helper::GetComponent<voxie::Chunk>(entity)) {
                 voxie::helper::Submit(model->GetRenderingConfig());
             }

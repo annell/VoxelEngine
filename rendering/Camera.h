@@ -35,7 +35,6 @@ public:
     std::shared_ptr<Direction> GetDirection() const;
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
-    void ProcessMouseScroll(float yoffset);
     void SetShaderParameters(const Shader& shader) const;
 
 private:
