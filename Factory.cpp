@@ -7,21 +7,38 @@
 #include "Core.h"
 #include "Engine.h"
 #include "Chunk.h"
+#include <filesystem>
+
+namespace internal {
+
+void eraseSubStr(std::string & mainStr, const std::string & toErase) {
+    // Search for the substring in string
+    size_t pos = mainStr.find(toErase);
+    if (pos != std::string::npos) {
+        // If found then erase it from string
+        mainStr.erase(pos, toErase.length());
+    }
+}
+
+}
 
 namespace voxie
 {
 
 std::vector<ModelConfig> GetModels() {
-    return {
-            {"Girl", "/chr_knight.vox"},
-            {"Boy", "/chr_sword.vox"},
-            {"Floor", "/floor.vox"}
-    };
+    std::vector<ModelConfig> output;
+    for (const auto& entry : std::filesystem::directory_iterator(BASE_PATH + MODELS)) {
+        std::string path = entry.path();
+        std::string name = path;
+        internal::eraseSubStr(name, BASE_PATH + MODELS);
+        output.push_back(ModelConfig{name, path});
+    }
+    return output;
 }
 
 std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig config) {
     auto model = std::make_shared<voxie::Chunk>(
-            BASE_PATH + MODELS + config.path,
+            config.path,
             std::make_shared<voxie::Name>(config.name),
             std::make_shared<voxie::Shader>(
             std::map<std::string, unsigned int>{

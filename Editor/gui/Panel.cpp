@@ -140,19 +140,25 @@ void AddNewComponent() {
         ImGui::OpenPopup("add_popup");
     if (ImGui::BeginPopup("add_popup")) {
         auto lights = voxie::GetLights();
-        for (auto& light : lights) {
-            if (ImGui::Selectable(light.name.c_str())) {
-                auto obj = voxie::MakeLight(light);
-                voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+        if (ImGui::BeginMenu("Lights")) {
+            for (auto& light : lights) {
+                if (ImGui::Selectable(light.name.c_str())) {
+                    auto obj = voxie::MakeLight(light);
+                    voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+                }
             }
+            ImGui::EndMenu();
         }
 
-        auto models = voxie::GetModels();
-        for (auto& model : models) {
-            if (ImGui::Selectable(model.name.c_str())) {
-                auto obj = voxie::MakeModel(model);
-                voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+        if (ImGui::BeginMenu("Models")) {
+            auto models = voxie::GetModels();
+            for (auto& model : models) {
+                if (ImGui::Selectable(model.name.c_str())) {
+                    auto obj = voxie::MakeModel(model);
+                    voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+                }
             }
+            ImGui::EndMenu();
         }
         ImGui::EndPopup();
     }
