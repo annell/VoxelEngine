@@ -54,7 +54,6 @@ int main()
           }});
 
     engine.onTick.Bind([&] (float deltaTime) {
-        ImGui::ShowDemoWindow();
         gui::ShowSceneOverview();
         gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
 
