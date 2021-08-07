@@ -142,10 +142,6 @@ LightSourceHandler& Engine::GetLightSourceHandler() {
     return lights;
 }
 
-ModelHandler& Engine::GetModelHandler() {
-    return models;
-}
-
 namespace helper {
 
 void Log(std::string log) {

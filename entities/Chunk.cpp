@@ -22,7 +22,6 @@ Chunk::~Chunk() {
     helper::RemoveComponent<Position>(entity);
     helper::RemoveComponent<Shader>(entity);
     helper::RemoveComponent<VertexBufferArray>(entity);
-    voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
 }
 
 void Chunk::Init() {

@@ -142,7 +142,8 @@ void AddNewComponent() {
         auto models = voxie::GetModels();
         for (auto& model : models) {
             if (ImGui::Selectable(model.name.c_str())) {
-                voxie::Engine::GetEngine().GetModelHandler().AddModel(std::move(voxie::MakeModel(model)));
+                auto obj = voxie::MakeModel(model);
+                voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
             }
         }
         ImGui::EndPopup();
@@ -151,7 +152,8 @@ void AddNewComponent() {
 
 void RemoveComponent(const voxie::Entity& entity) {
     if (ImGui::Button("Remove"))
-        voxie::Engine::GetEngine().GetModelHandler().RemoveModel(entity);
+        voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
+        voxie::helper::RemoveComponent<voxie::Chunk>(entity);
 }
 
 auto ShowEntityList() {

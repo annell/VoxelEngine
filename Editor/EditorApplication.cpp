@@ -53,7 +53,6 @@ int main()
                 voxie::MouseHandler::LockCamera();
           }});
 
-    auto& models = engine.GetModelHandler();
     auto& lights = engine.GetLightSourceHandler();
 
     lights.AddLight(MakeLight( "Ambient",
@@ -82,8 +81,10 @@ int main()
         for (auto config : lights.GetRenderingConfigs(engine.GetCamera())) {
             voxie::helper::Submit(config);
         }
-        for (auto& config : models.GetRenderingConfigs()) {
-            voxie::helper::Submit(config);
+        for (auto entity : engine.GetScene().GetEntities()) {
+            if (auto model = voxie::helper::GetComponent<voxie::Chunk>(entity)) {
+                voxie::helper::Submit(model->GetRenderingConfig());
+            }
         }
         voxie::helper::RenderingEnd();
     });

@@ -72,7 +72,7 @@ add_executable(Voxie
         entities/Cube.cpp
         rendering/Camera.cpp
         Factory.h
-        Factory.cpp entities/ModelHandler.cpp entities/ModelHandler.h)
+        Factory.cpp)
 
 include_directories(. entities utility input rendering core external/imgui external/ImGuizmo)
 

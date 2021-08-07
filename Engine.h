@@ -6,7 +6,6 @@
 #include <vector>
 #include <string>
 #include <Lightsource.h>
-#include <ModelHandler.h>
 #include "RenderingHandler.h"
 #include "Delegate.h"
 #include "EntityComponentSystem.h"
@@ -40,7 +39,6 @@ public:
     Scene& GetScene();
     Logging& GetLogger();
     LightSourceHandler& GetLightSourceHandler();
-    ModelHandler& GetModelHandler();
 
     OnTick onTick;
 private:
@@ -56,7 +54,6 @@ private:
     Scene scene;
     RenderingHandler renderingHandler;
     LightSourceHandler lights;
-    ModelHandler models;
     Logging logging;
 
     bool InitWindow();
@@ -85,7 +82,7 @@ namespace helper {
     }
 
     template <typename T>
-    void RemoveComponent(Entity& handle) {
+    void RemoveComponent(const Entity& handle) {
         return Engine::GetEngine().GetComponents().RemoveComponent<T>(handle);
     }
 

@@ -22,7 +22,7 @@ struct ModelConfig {
 
 std::vector<ModelConfig> GetModels();
 
-std::unique_ptr<voxie::Chunk> MakeModel(ModelConfig config);
+std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig config);
 std::unique_ptr<voxie::LightSource> MakeLight(std::string name,
                                               voxie::LightType type,
                                               voxie::Position position = {0, 0, 0},

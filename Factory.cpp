@@ -22,8 +22,8 @@ std::vector<ModelConfig> GetModels() {
 }
 
 
-std::unique_ptr<voxie::Chunk> MakeModel(ModelConfig config) {
-    auto model = std::make_unique<voxie::Chunk>(
+std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig config) {
+    auto model = std::make_shared<voxie::Chunk>(
             std::make_shared<voxie::Name>(config.name),
             std::make_shared<voxie::Shader>(
             std::map<std::string, unsigned int>{
