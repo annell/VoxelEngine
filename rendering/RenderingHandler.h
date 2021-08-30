@@ -16,12 +16,14 @@ class Shader;
 
 using PreDrawAction = std::function<void ()>;
 using PostDrawAction = std::function<void ()>;
+using DrawAction = std::function<void ()>;
 
 struct RenderingConfig {
     std::shared_ptr<Shader> shader;
     std::shared_ptr<VertexBufferArray> vertexBufferArray;
     PreDrawAction preDraw = [] () {};
     PostDrawAction postDraw = [] () {};
+    DrawAction draw = [] () {};
 };
 
 class RenderingHandler {

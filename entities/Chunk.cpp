@@ -40,7 +40,6 @@ void Chunk::SetupCubesForRendering() {
 void Chunk::SetupShader() {
     auto shader = GetShader();
     auto vertexBufferArray = GetVertexBufferArray();
-    auto position = GetPosition();
     shader->use();
     for (auto cube : cubesToRender) {
         vertexBufferArray->nrVertex += cube->GetNrVertex();
@@ -143,7 +142,11 @@ RenderingConfig Chunk::GetRenderingConfig() const {
         GetShader(),
         GetVertexBufferArray(),
         GetPreDrawAction(GetShader(), GetPosition()),
-        GetPostDrawAction()
+        GetPostDrawAction(),
+        [&] () {
+            glBindVertexArray(GetVertexBufferArray()->VAO);
+            glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
+        }
     };
 }
 

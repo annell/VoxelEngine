@@ -17,8 +17,7 @@ void RenderingHandler::End() {
     for (auto& config : renderingQueue) {
         config.preDraw();
         config.shader->use();
-        glBindVertexArray(config.vertexBufferArray->VAO);
-        glDrawArrays(GL_TRIANGLES, 0, config.vertexBufferArray->nrVertex);
+        config.draw();
         config.postDraw();
     }
     renderingQueue.clear();

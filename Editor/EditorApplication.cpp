@@ -1,3 +1,4 @@
+#include <Sprite.h>
 #include "Engine.h"
 #include "Factory.h"
 #include "gui/Panel.h"
@@ -53,6 +54,8 @@ int main()
                 voxie::MouseHandler::LockCamera();
           }});
 
+    auto sprite = voxie::MakeSprite({"Hello", "/wall.jpeg"});
+    voxie::helper::AddComponent(sprite->GetEntity(), std::move(sprite));
     engine.onTick.Bind([&] (float deltaTime) {
         gui::ShowSceneOverview();
         gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
@@ -65,6 +68,8 @@ int main()
         for (auto entity : sceneObjects) {
             if (auto model = voxie::helper::GetComponent<voxie::Chunk>(entity)) {
                 voxie::helper::Submit(model->GetRenderingConfig());
+            } else if (auto sprite = voxie::helper::GetComponent<voxie::Sprite>(entity)) {
+                voxie::helper::Submit(sprite->GetRenderingConfig());
             }
         }
         voxie::helper::RenderingEnd();

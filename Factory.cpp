@@ -8,6 +8,7 @@
 #include "Engine.h"
 #include "Chunk.h"
 #include <filesystem>
+#include <Sprite.h>
 #include "Camera.h"
 
 namespace internal {
@@ -88,6 +89,19 @@ std::shared_ptr<voxie::Camera> MakeCamera(CameraFactoryConfig config) {
     auto camera = std::make_shared<voxie::Camera>(voxie::Entity::MakeEntity(), config.name, config.position);
     voxie::Engine::GetEngine().GetScene().AddEntity(camera->GetEntity());
     return std::move(camera);
+}
+
+std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig config) {
+    auto sprite = std::make_shared<voxie::Sprite>(
+            BASE_PATH + SPRITES + config.path,
+            std::make_shared<voxie::Name>(config.name),
+            std::make_shared<voxie::Shader>(
+                    std::map<std::string, unsigned int>{
+                            std::make_pair(BASE_PATH + SHADERS + "/sprite.vs", GL_VERTEX_SHADER),
+                            std::make_pair(BASE_PATH + SHADERS + "/sprite.fs", GL_FRAGMENT_SHADER)
+                    }), std::make_shared<voxie::Position2D>(0, 0));
+    voxie::Engine::GetEngine().GetScene().AddEntity(sprite->GetEntity());
+    return std::move(sprite);
 }
 
 }

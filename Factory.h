@@ -6,6 +6,7 @@
 #include <string>
 #include <Lightsource.h>
 #include <Chunk.h>
+#include <Sprite.h>
 
 namespace voxie {
 
@@ -13,6 +14,7 @@ const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine/resources";
 const std::string SHADERS = "/shaders";
 const std::string FONTS = "/fonts";
 const std::string MODELS = "/voxelObjects";
+const std::string SPRITES = "/sprites";
 
 struct ModelConfig {
     std::string name;
@@ -40,5 +42,12 @@ struct CameraFactoryConfig {
 };
 
 std::shared_ptr<voxie::Camera> MakeCamera(CameraFactoryConfig);
+
+struct SpriteConfig {
+    std::string name;
+    std::string path;
+};
+
+std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig);
 
 }

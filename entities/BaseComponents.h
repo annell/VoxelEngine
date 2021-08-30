@@ -5,6 +5,8 @@
 #pragma once
 #include "Core.h"
 #include <tuple>
+#include <string>
+
 
 namespace voxie {
 
@@ -105,6 +107,71 @@ struct Position {
     glm::vec3 rotation;
     glm::vec3 scale;
     glm::quat rotationQuat;
+};
+
+struct Position2D {
+    Position2D(const glm::vec2& position)
+            : pos(glm::vec2(1.0f))
+            , rotation(0.0)
+            , scale(glm::vec2(1.0f)) {
+        SetPosition(position);
+        UpdateModel();
+    }
+
+    Position2D(float x, float y)
+            : Position2D(glm::vec2{x, y}) {}
+
+    Position2D(const Position2D& p)
+            : Position2D(p.pos) {}
+
+    bool operator<(const Position2D& pos) const {
+        return std::tie(pos.pos[0], pos.pos[1]) < std::tie(pos.pos[0], pos.pos[1]);
+    }
+
+    void SetPosition(float x, float y) {
+        SetPosition({x, y});
+    }
+
+    void SetPosition(const glm::vec2& pos) {
+        if (this->pos != pos) {
+            this->pos = pos;
+        }
+    }
+
+    void SetScale(const glm::vec2& scale) {
+        if (this->scale != scale) {
+            this->scale = scale;
+            if (this->scale.x <= 0.001) {
+                this->scale.x = 1;
+            }
+            if (this->scale.y <= 0.001) {
+                this->scale.y = 1;
+            }
+        }
+    }
+
+    void SetRotation(float rotation) {
+        if (this->rotation != rotation) {
+            this->rotation = rotation;
+        }
+    }
+
+    void UpdateModel() {
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(pos, 0.0f));
+
+        model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, 0.0f));
+
+        model = glm::scale(model, glm::vec3(scale, 1.0f));
+    }
+
+    glm::mat4 model;
+
+    glm::vec2 pos;
+    float rotation;
+    glm::vec2 scale;
 };
 
 struct Direction {

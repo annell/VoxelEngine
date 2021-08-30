@@ -81,6 +81,21 @@ void ShowEntityPositionController(const voxie::Entity& entity) {
     pos->UpdateModel();
 }
 
+void ShowEntityPosition2DController(const voxie::Entity& entity) {
+    ImGui::Separator();
+    auto pos = voxie::helper::GetComponent<voxie::Position2D>(entity);
+    float translation[2] = {pos->pos.x, pos->pos.y};
+    float rotation = pos->rotation;
+    float scale[2] = {pos->scale.x, pos->scale.y};
+    ImGui::InputFloat2("Position", translation);
+    ImGui::InputFloat2("Scale", scale);
+    ImGui::InputFloat("Rotation", &rotation);
+    pos->SetRotation(rotation);
+    pos->SetScale({scale[0], scale[1]});
+    pos->SetPosition({translation[0], translation[1]});
+    pos->UpdateModel();
+}
+
 void ShowEntityNameController(const voxie::Entity& entity) {
     ImGui::Separator();
     auto name = voxie::helper::GetComponent<voxie::Name>(entity);
@@ -214,6 +229,10 @@ void ShowSceneOverview() {
     if (voxie::helper::HasComponent<voxie::Position>(entity)) {
         ShowEntityPositionController(entity);
         ShowGuizmo(entity);
+    }
+
+    if (voxie::helper::HasComponent<voxie::Position2D>(entity)) {
+        ShowEntityPosition2DController(entity);
     }
 
     if (voxie::helper::HasComponent<voxie::Direction>(entity)) {
