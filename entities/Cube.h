@@ -34,18 +34,18 @@ namespace voxie {
             float materialIndex;
             bool render = true;
         };
-        Cube(Position position, Dimensions d, Material m = {}, int materialIndex = -1);
+        Cube(const Position& position, Dimensions d, Material m = {}, int materialIndex = -1);
         void GenerateVertexAttributes();
         void CreateRenderBuffers();
         const std::vector<float> &GetVertexAttributes();
         void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void *ptr);
         void SetRenderSide(Face face, bool render);
-        const Material &GetMaterial() const;
-        const int &GetMaterialIndex() const;
-        size_t GetNrVertex() const;
-        bool ShouldRender() const;
+        [[nodiscard]] const Material &GetMaterial() const;
+        [[nodiscard]] const int &GetMaterialIndex() const;
+        [[nodiscard]] size_t GetNrVertex() const;
+        [[nodiscard]] bool ShouldRender() const;
 
-        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
         void GenerateVerexAttributes(const Side &side);

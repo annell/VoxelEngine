@@ -6,7 +6,7 @@
 
 namespace voxie {
 
-    Cube::Cube(Position position, Dimensions dimensions, Material material, int materialIndex)
+    Cube::Cube(const Position& position, Dimensions dimensions, Material material, int materialIndex)
         : material(material), materialIndex(materialIndex), vertexBufferArray(std::make_shared<VertexBufferArray>()) {
         GenerateSides(position, dimensions);
     }
@@ -65,8 +65,8 @@ namespace voxie {
                 vertexBufferArray->vertexAttributes.push_back(side.triangle1.vertex[index]);
                 index++;
             }
-            for (int ii = 0; ii < 3; ii++) {
-                vertexBufferArray->vertexAttributes.push_back(side.normal[ii]);
+            for (float ii : side.normal) {
+                vertexBufferArray->vertexAttributes.push_back(ii);
             }
             vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
         }
@@ -76,8 +76,8 @@ namespace voxie {
                 vertexBufferArray->vertexAttributes.push_back(side.triangle2.vertex[index]);
                 index++;
             }
-            for (int ii = 0; ii < 3; ii++) {
-                vertexBufferArray->vertexAttributes.push_back(side.normal[ii]);
+            for (float ii : side.normal) {
+                vertexBufferArray->vertexAttributes.push_back(ii);
             }
             vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
         }

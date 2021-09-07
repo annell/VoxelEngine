@@ -6,22 +6,22 @@
 #include "Engine.h"
 #include "ModelLoader.h"
 #include <map>
+#include <utility>
 
 namespace voxie {
 
     Chunk::Chunk(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
         : entity(Entity::MakeEntity()) {
-        helper::AddComponent(entity, name);
-        helper::AddComponent(entity, position);
-        helper::AddComponent(entity, shader);
+        helper::AddComponent(entity, std::move(name));
+        helper::AddComponent(entity, std::move(position));
+        helper::AddComponent(entity, std::move(shader));
         helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
-        voxie::ModelLoader::LoadModel(path, this);
+        voxie::ModelLoader::LoadModel(std::move(path), this);
         SetupCubesForRendering();
         SetupShader();
     }
 
-    Chunk::~Chunk() {
-    }
+    Chunk::~Chunk() = default;
 
     void Chunk::SetupCubesForRendering() {
         FaceCulling();
@@ -122,7 +122,7 @@ namespace voxie {
         return voxie::helper::GetComponent<VertexBufferArray>(entity);
     }
 
-    auto GetPreDrawAction(std::shared_ptr<Shader> shader, std::shared_ptr<Position> pos) {
+    auto GetPreDrawAction(const std::shared_ptr<Shader>& shader, const std::shared_ptr<Position>& pos) {
         return [=]() {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);

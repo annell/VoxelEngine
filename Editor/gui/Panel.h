@@ -8,6 +8,6 @@
 namespace gui {
 
     void ShowSceneOverview();
-    void ShowSimpleOverlay(std::string text, bool *p_open = nullptr);
+    void ShowSimpleOverlay(const std::string& text, bool *p_open = nullptr);
 
 }// namespace gui

@@ -18,12 +18,12 @@ namespace voxie {
         Sprite(std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
 
         void Draw() const;
-        RenderingConfig GetRenderingConfig() const;
-        std::shared_ptr<Position2D> GetPosition() const;
-        std::shared_ptr<Shader> GetShader() const;
-        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        [[nodiscard]] RenderingConfig GetRenderingConfig() const;
+        [[nodiscard]] std::shared_ptr<Position2D> GetPosition() const;
+        [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
+        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
-        const Entity &GetEntity() const;
+        [[nodiscard]] const Entity &GetEntity() const;
 
     private:
         void Setup() const;

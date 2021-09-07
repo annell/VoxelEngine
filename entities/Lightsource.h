@@ -54,22 +54,22 @@ namespace voxie {
 
     class LightSource {
     public:
-        LightSource(LightConfig config);
+        explicit LightSource(const LightConfig& config);
         LightSource(Cube *cube, glm::vec3 color, glm::vec3 position);
         ~LightSource();
-        std::shared_ptr<Position> GetPosition() const;
-        std::shared_ptr<Color> GetColor() const;
-        const LightType &GetType() const;
-        std::shared_ptr<Shader> GetShader() const;
-        const Entity &GetEntity() const;
-        std::shared_ptr<Atteunation> GetAttuenation() const;
-        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
+        [[nodiscard]] std::shared_ptr<Color> GetColor() const;
+        [[nodiscard]] const LightType &GetType() const;
+        [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
+        [[nodiscard]] const Entity &GetEntity() const;
+        [[nodiscard]] std::shared_ptr<Atteunation> GetAttuenation() const;
+        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
         Entity entity;
         LightType type;
     };
 
-    std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera>, const std::vector<Entity> &);
+    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera>&, const std::vector<Entity> &);
 
 }// namespace voxie

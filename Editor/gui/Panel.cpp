@@ -13,7 +13,7 @@
 
 namespace gui {
 
-    void ShowSimpleOverlay(std::string text, bool *p_open) {
+    void ShowSimpleOverlay(const std::string& text, bool *p_open) {
         const float PAD = 10.0f;
         static int corner = 1;
         ImGuiIO &io = ImGui::GetIO();
@@ -34,11 +34,11 @@ namespace gui {
         if (ImGui::Begin("Example: Simple overlay", p_open, window_flags)) {
             ImGui::Text("%s", text.c_str());
             if (ImGui::BeginPopupContextWindow()) {
-                if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
-                if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
-                if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
-                if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
-                if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+                if (ImGui::MenuItem("Custom", nullptr, corner == -1)) corner = -1;
+                if (ImGui::MenuItem("Top-left", nullptr, corner == 0)) corner = 0;
+                if (ImGui::MenuItem("Top-right", nullptr, corner == 1)) corner = 1;
+                if (ImGui::MenuItem("Bottom-left", nullptr, corner == 2)) corner = 2;
+                if (ImGui::MenuItem("Bottom-right", nullptr, corner == 3)) corner = 3;
                 if (p_open && ImGui::MenuItem("Close")) *p_open = false;
                 ImGui::EndPopup();
             }
@@ -97,7 +97,7 @@ namespace gui {
         auto name = voxie::helper::GetComponent<voxie::Name>(entity);
         char *buf = (char *) name->name.c_str();
         auto callback = [](ImGuiInputTextCallbackData *data) -> int {
-            voxie::Entity *entity = (voxie::Entity *) data->UserData;
+            auto *entity = (voxie::Entity *) data->UserData;
             auto name = voxie::helper::GetComponent<std::string>(*entity);
             name->resize(data->BufSize);
             *name = std::string(data->Buf);
@@ -146,7 +146,7 @@ namespace gui {
         float *view = (float *) glm::value_ptr(camera->GetViewMatrix());
         float *proj = (float *) glm::value_ptr(camera->GetProjectionMatrix());
 
-        if (ImGuizmo::Manipulate(view, proj, mCurrentGizmoOperation, mCurrentGizmoMode, (float *) glm::value_ptr(mat), NULL, NULL, NULL, NULL)) {
+        if (ImGuizmo::Manipulate(view, proj, mCurrentGizmoOperation, mCurrentGizmoMode, (float *) glm::value_ptr(mat), nullptr, nullptr, nullptr, nullptr)) {
             pos->SetModel(mat);
         }
     }

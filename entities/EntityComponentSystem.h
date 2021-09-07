@@ -12,17 +12,17 @@ namespace voxie {
     class Entity {
     public:
         using Identity = int;
-        Entity(Identity);
+        explicit Entity(Identity);
 
         static Entity MakeEntity();
-        const Identity &GetId() const;
+        [[nodiscard]] const Identity &GetId() const;
 
         bool operator<(const Entity &rhs) const;
 
         bool operator==(const Entity &rhs) const;
 
     private:
-        auto as_tie() const;
+        [[nodiscard]] auto as_tie() const;
 
         Entity::Identity id;
     };

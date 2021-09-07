@@ -9,7 +9,7 @@
 
 namespace voxie {
 
-    LightSource::LightSource(LightConfig config)
+    LightSource::LightSource(const LightConfig& config)
         : entity(config.entity), type(config.type) {
         config.cube->GenerateVertexAttributes();
         config.cube->CreateRenderBuffers();
@@ -26,8 +26,7 @@ namespace voxie {
         }
     }
 
-    LightSource::~LightSource() {
-    }
+    LightSource::~LightSource() = default;
 
     std::shared_ptr<Color> LightSource::GetColor() const {
         return voxie::helper::GetComponent<Color>(entity);
@@ -57,9 +56,9 @@ namespace voxie {
         return entity;
     }
 
-    std::vector<RenderingConfig> GetRenderingConfigs(std::shared_ptr<Camera> camera, const std::vector<Entity> &entities) {
+    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera>& camera, const std::vector<Entity> &entities) {
         auto lightSources = helper::GetComponents<LightSource>(entities);
-        for (auto shader : helper::GetComponents<Shader>(entities)) {
+        for (const auto& shader : helper::GetComponents<Shader>(entities)) {
             shader->use();
             shader->setInt("nrLights", lightSources.size());
             camera->SetShaderParameters(*shader);

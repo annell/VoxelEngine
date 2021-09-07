@@ -7,9 +7,11 @@
 #include <Engine.h>
 #include <SOIL.h>
 
+#include <utility>
+
 
 namespace internal {
-    voxie::Sprite::Texture2D loadTextureFromFile(std::string file) {
+    voxie::Sprite::Texture2D loadTextureFromFile(const std::string& file) {
         int width, height, nrChannels;
 
         voxie::Sprite::Texture2D texture;
@@ -36,10 +38,10 @@ namespace internal {
 namespace voxie {
 
     Sprite::Sprite(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : entity(Entity::MakeEntity()), texture(internal::loadTextureFromFile(path)) {
-        helper::AddComponent(entity, name);
-        helper::AddComponent(entity, position);
-        helper::AddComponent(entity, shader);
+        : entity(Entity::MakeEntity()), texture(internal::loadTextureFromFile(std::move(path))) {
+        helper::AddComponent(entity, std::move(name));
+        helper::AddComponent(entity, std::move(position));
+        helper::AddComponent(entity, std::move(shader));
         helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
         Setup();
     }

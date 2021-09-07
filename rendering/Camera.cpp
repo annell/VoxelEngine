@@ -79,7 +79,7 @@ namespace voxie {
         return helper::GetComponent<Direction>(entity);
     }
 
-    float Camera::GetFarDistance() const {
+    float Camera::GetFarDistance() {
         return 10000.0f;
     }
 
