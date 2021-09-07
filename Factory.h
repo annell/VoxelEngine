@@ -10,7 +10,7 @@
 
 namespace voxie {
 
-    const std::string BASE_PATH = "/Users/stan/dev/C++/VoxelEngine/resources";
+    const std::string BASE_PATH = std::filesystem::current_path().string() + std::string("/resources");
     const std::string SHADERS = "/shaders";
     const std::string FONTS = "/fonts";
     const std::string MODELS = "/voxelObjects";
