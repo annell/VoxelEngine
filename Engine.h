@@ -2,104 +2,105 @@
 #define GL_SILENCE_DEPRECATION
 
 #include "Core.h"
-#include <functional>
-#include <vector>
-#include <string>
-#include <Lightsource.h>
-#include "RenderingHandler.h"
 #include "Delegate.h"
 #include "EntityComponentSystem.h"
 #include "Logging.h"
 #include "MouseHandler.h"
-#include "Window.h"
+#include "RenderingHandler.h"
 #include "Scene.h"
+#include "Window.h"
+#include <Lightsource.h>
+#include <functional>
+#include <string>
+#include <vector>
 
 class GLFWwindow;
 
 namespace voxie {
 
-class Camera;
+    class Camera;
 
 
-using OnTick = Delegate<float>;
-class Engine {
-private:
-    Engine() = default;
-    ~Engine();
+    using OnTick = Delegate<float>;
+    class Engine {
+    private:
+        Engine() = default;
+        ~Engine();
 
-public:
-    static Engine& GetEngine();
-    bool Init();
-    std::shared_ptr<Camera> GetCamera();
-    void SetCamera(const Entity&);
-    std::shared_ptr<Window> GetWindow() const;
-    void StartLoop();
-    float GetDeltaTime() const;
-    EntityComponentSystem& GetComponents();
-    RenderingHandler& GetRenderingHandler();
-    Scene& GetScene();
-    Logging& GetLogger();
+    public:
+        static Engine &GetEngine();
+        bool Init();
+        std::shared_ptr<Camera> GetCamera();
+        void SetCamera(const Entity &);
+        std::shared_ptr<Window> GetWindow() const;
+        void StartLoop();
+        float GetDeltaTime() const;
+        EntityComponentSystem &GetComponents();
+        RenderingHandler &GetRenderingHandler();
+        Scene &GetScene();
+        Logging &GetLogger();
 
-    OnTick onTick;
-private:
-    void InitGUI() const;
+        OnTick onTick;
 
-    float deltaTime = 0.0f;
-    float lastFrame = 0.0f;
-    std::shared_ptr<Window> window;
-    std::shared_ptr<Camera> camera;
-    EntityComponentSystem components;
-    Scene scene;
-    RenderingHandler renderingHandler;
-    Logging logging;
+    private:
+        void InitGUI() const;
 
-    bool InitWindow();
-    void InitCamera();
-    void UpdateTime();
+        float deltaTime = 0.0f;
+        float lastFrame = 0.0f;
+        std::shared_ptr<Window> window;
+        std::shared_ptr<Camera> camera;
+        EntityComponentSystem components;
+        Scene scene;
+        RenderingHandler renderingHandler;
+        Logging logging;
 
-    void NewFrame() const;
+        bool InitWindow();
+        void InitCamera();
+        void UpdateTime();
 
-    void RenderFrame() const;
-};
+        void NewFrame() const;
 
-namespace helper {
-    template <typename T>
-    std::shared_ptr<T> GetComponent(const Entity& handle) {
-        return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
-    }
+        void RenderFrame() const;
+    };
 
-    template <typename T>
-    std::vector<std::shared_ptr<T>> GetComponents(std::vector<Entity> entities) {
-        std::vector<std::shared_ptr<T>> components;
-        for (auto& entity : entities) {
-            if (auto component = GetComponent<T>(entity)) {
-                components.push_back(component);
-            }
+    namespace helper {
+        template<typename T>
+        std::shared_ptr<T> GetComponent(const Entity &handle) {
+            return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
         }
-        return components;
-    }
 
-    template <typename T>
-    bool HasComponent(const Entity& handle) {
-        return Engine::GetEngine().GetComponents().GetComponent<T>(handle) != nullptr;
-    }
+        template<typename T>
+        std::vector<std::shared_ptr<T>> GetComponents(std::vector<Entity> entities) {
+            std::vector<std::shared_ptr<T>> components;
+            for (auto &entity : entities) {
+                if (auto component = GetComponent<T>(entity)) {
+                    components.push_back(component);
+                }
+            }
+            return components;
+        }
 
-    template <typename T>
-    void AddComponent(const Entity& handle, std::shared_ptr<T> component) {
-        return Engine::GetEngine().GetComponents().AddComponent<T>(handle, component);
-    }
+        template<typename T>
+        bool HasComponent(const Entity &handle) {
+            return Engine::GetEngine().GetComponents().GetComponent<T>(handle) != nullptr;
+        }
 
-    template <typename T>
-    void RemoveComponent(const Entity& handle) {
-        return Engine::GetEngine().GetComponents().RemoveComponent<T>(handle);
-    }
+        template<typename T>
+        void AddComponent(const Entity &handle, std::shared_ptr<T> component) {
+            return Engine::GetEngine().GetComponents().AddComponent<T>(handle, component);
+        }
 
-    void RenderingBegin();
-    void RenderingEnd();
-    void Submit(const RenderingConfig& config);
+        template<typename T>
+        void RemoveComponent(const Entity &handle) {
+            return Engine::GetEngine().GetComponents().RemoveComponent<T>(handle);
+        }
 
-    void Log(std::string log);
-}
+        void RenderingBegin();
+        void RenderingEnd();
+        void Submit(const RenderingConfig &config);
+
+        void Log(std::string log);
+    }// namespace helper
 
 
-}
+}// namespace voxie

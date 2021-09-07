@@ -9,21 +9,21 @@
 
 namespace voxie {
 
-void RenderingHandler::Begin(std::shared_ptr<Camera> camera) {
-    selectedCamera = camera;
-}
-
-void RenderingHandler::End() {
-    for (auto& config : renderingQueue) {
-        config.preDraw();
-        config.shader->use();
-        config.draw();
-        config.postDraw();
+    void RenderingHandler::Begin(std::shared_ptr<Camera> camera) {
+        selectedCamera = camera;
     }
-    renderingQueue.clear();
-}
 
-void RenderingHandler::Submit(const RenderingConfig& config) {
-    renderingQueue.push_back(config);
-}
-}
+    void RenderingHandler::End() {
+        for (auto &config : renderingQueue) {
+            config.preDraw();
+            config.shader->use();
+            config.draw();
+            config.postDraw();
+        }
+        renderingQueue.clear();
+    }
+
+    void RenderingHandler::Submit(const RenderingConfig &config) {
+        renderingQueue.push_back(config);
+    }
+}// namespace voxie

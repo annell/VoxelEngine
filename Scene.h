@@ -3,19 +3,20 @@
 //
 
 #pragma once
-#include <vector>
 #include <EntityComponentSystem.h>
+#include <vector>
 
 namespace voxie {
 
-class Scene {
-public:
-    using SceneEntities = std::vector<Entity>;
-    void AddEntity(Entity);
-    void RemoveEntity(Entity);
-    const SceneEntities& GetEntities();
-private:
-    SceneEntities entities;
-};
+    class Scene {
+    public:
+        using SceneEntities = std::vector<Entity>;
+        void AddEntity(Entity);
+        void RemoveEntity(Entity);
+        const SceneEntities &GetEntities();
 
-}
+    private:
+        SceneEntities entities;
+    };
+
+}// namespace voxie

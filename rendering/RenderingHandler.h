@@ -4,39 +4,39 @@
 
 #pragma once
 
-#include <memory>
-#include <functional>
 #include <deque>
+#include <functional>
+#include <memory>
 
 namespace voxie {
 
-class Camera;
-class VertexBufferArray;
-class Shader;
+    class Camera;
+    class VertexBufferArray;
+    class Shader;
 
-using PreDrawAction = std::function<void ()>;
-using PostDrawAction = std::function<void ()>;
-using DrawAction = std::function<void ()>;
+    using PreDrawAction = std::function<void()>;
+    using PostDrawAction = std::function<void()>;
+    using DrawAction = std::function<void()>;
 
-struct RenderingConfig {
-    std::shared_ptr<Shader> shader;
-    std::shared_ptr<VertexBufferArray> vertexBufferArray;
-    PreDrawAction preDraw = [] () {};
-    PostDrawAction postDraw = [] () {};
-    DrawAction draw = [] () {};
-};
+    struct RenderingConfig {
+        std::shared_ptr<Shader> shader;
+        std::shared_ptr<VertexBufferArray> vertexBufferArray;
+        PreDrawAction preDraw = []() {};
+        PostDrawAction postDraw = []() {};
+        DrawAction draw = []() {};
+    };
 
-class RenderingHandler {
-public:
-    void Begin(std::shared_ptr<Camera> camera);
-    void End();
+    class RenderingHandler {
+    public:
+        void Begin(std::shared_ptr<Camera> camera);
+        void End();
 
-    void Submit(const RenderingConfig&);
+        void Submit(const RenderingConfig &);
 
-private:
-    using RenderingQueue = std::deque<RenderingConfig>;
-    std::shared_ptr<Camera> selectedCamera;
-    RenderingQueue renderingQueue;
-};
+    private:
+        using RenderingQueue = std::deque<RenderingConfig>;
+        std::shared_ptr<Camera> selectedCamera;
+        RenderingQueue renderingQueue;
+    };
 
-}
+}// namespace voxie

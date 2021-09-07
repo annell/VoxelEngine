@@ -4,22 +4,22 @@
 
 #pragma once
 
-#include <vector>
 #include <functional>
+#include <vector>
 
 namespace voxie {
 
-using Action = std::function<void()>;
+    using Action = std::function<void()>;
 
-struct KeyAction {
-    Action action;
-};
+    struct KeyAction {
+        Action action;
+    };
 
-using RegistredKeys = std::vector<KeyAction>;
+    using RegistredKeys = std::vector<KeyAction>;
 
-struct KeyboardHandler {
-    static void processInput();
-    static void RegisterAction(KeyAction);
-};
+    struct KeyboardHandler {
+        static void processInput();
+        static void RegisterAction(KeyAction);
+    };
 
-}
+}// namespace voxie

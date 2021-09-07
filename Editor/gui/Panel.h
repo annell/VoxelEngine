@@ -7,7 +7,7 @@
 
 namespace gui {
 
-void ShowSceneOverview();
-void ShowSimpleOverlay(std::string text, bool* p_open = nullptr);
+    void ShowSceneOverview();
+    void ShowSimpleOverlay(std::string text, bool *p_open = nullptr);
 
-}
+}// namespace gui

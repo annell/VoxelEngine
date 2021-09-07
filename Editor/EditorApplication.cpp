@@ -1,9 +1,9 @@
-#include <Sprite.h>
+#include "Camera.h"
 #include "Engine.h"
 #include "Factory.h"
-#include "gui/Panel.h"
 #include "KeyboardHandler.h"
-#include "Camera.h"
+#include "gui/Panel.h"
+#include <Sprite.h>
 
 
 int FilterSample(int new_sample) {
@@ -13,52 +13,45 @@ int FilterSample(int new_sample) {
     return last_result;
 }
 
-int main()
-{
-    auto& engine = voxie::Engine::GetEngine();
+int main() {
+    auto &engine = voxie::Engine::GetEngine();
     engine.Init();
 
-    voxie::KeyboardHandler::RegisterAction({
-        [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(voxie::FORWARD, engine.GetDeltaTime());
-        }});
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+            engine.GetCamera()->ProcessKeyboard(voxie::FORWARD, engine.GetDeltaTime());
+    }});
 
-    voxie::KeyboardHandler::RegisterAction({
-        [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(voxie::BACKWARD, engine.GetDeltaTime());
-        }});
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+            engine.GetCamera()->ProcessKeyboard(voxie::BACKWARD, engine.GetDeltaTime());
+    }});
 
-    voxie::KeyboardHandler::RegisterAction({
-            [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(voxie::LEFT, engine.GetDeltaTime());
-        }});
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+            engine.GetCamera()->ProcessKeyboard(voxie::LEFT, engine.GetDeltaTime());
+    }});
 
-    voxie::KeyboardHandler::RegisterAction({
-            [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-                engine.GetCamera()->ProcessKeyboard(voxie::RIGHT, engine.GetDeltaTime());
-        }});
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+            engine.GetCamera()->ProcessKeyboard(voxie::RIGHT, engine.GetDeltaTime());
+    }});
 
-    voxie::KeyboardHandler::RegisterAction({
-        [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
-                voxie::MouseHandler::UnlockCamera();
-        }});
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+            voxie::MouseHandler::UnlockCamera();
+    }});
 
-    voxie::KeyboardHandler::RegisterAction({
-          [&engine] () {
-            if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-                voxie::MouseHandler::LockCamera();
-          }});
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            voxie::MouseHandler::LockCamera();
+    }});
 
     auto sprite = voxie::MakeSprite({"Hello", "/wall.jpeg"});
     voxie::helper::AddComponent(sprite->GetEntity(), std::move(sprite));
-    engine.onTick.Bind([&] (float deltaTime) {
+    engine.onTick.Bind([&](float deltaTime) {
         gui::ShowSceneOverview();
-        gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int)(1/deltaTime))));
+        gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int) (1 / deltaTime))));
 
         voxie::helper::RenderingBegin();
         auto sceneObjects = engine.GetScene().GetEntities();
@@ -77,4 +70,3 @@ int main()
     engine.StartLoop();
     return 0;
 }
-

@@ -6,24 +6,24 @@
 
 namespace voxie {
 
-namespace internal {
-RegistredKeys& GetRegisteredKeys() {
-    static RegistredKeys registeredKeys;
+    namespace internal {
+        RegistredKeys &GetRegisteredKeys() {
+            static RegistredKeys registeredKeys;
 
-    return registeredKeys;
-}
+            return registeredKeys;
+        }
 
-}
+    }// namespace internal
 
-void KeyboardHandler::processInput() {
-    for (auto& key : internal::GetRegisteredKeys()) {
-        key.action();
+    void KeyboardHandler::processInput() {
+        for (auto &key : internal::GetRegisteredKeys()) {
+            key.action();
+        }
     }
-}
 
-void KeyboardHandler::RegisterAction(KeyAction keyAction) {
-    auto& keys = internal::GetRegisteredKeys();
-    keys.push_back(keyAction);
-}
+    void KeyboardHandler::RegisterAction(KeyAction keyAction) {
+        auto &keys = internal::GetRegisteredKeys();
+        keys.push_back(keyAction);
+    }
 
-}
+}// namespace voxie
