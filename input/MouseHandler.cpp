@@ -16,13 +16,13 @@ namespace voxie {
 
     }// namespace internal
 
-    void MouseHandler::framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+    void MouseHandler::framebuffer_size_callback(GLFWwindow*, int width, int height) {
         glViewport(0, 0, width, height);
         voxie::Engine::GetEngine().GetWindow()->SetWidth(width);
         voxie::Engine::GetEngine().GetWindow()->SetHeight(height);
     }
 
-    void MouseHandler::mouse_callback(GLFWwindow *window, double xpos, double ypos) {
+    void MouseHandler::mouse_callback(GLFWwindow*, double xpos, double ypos) {
         if (internal::mouseLock) {
             if (internal::firstMouse) {
                 internal::lastX = xpos;
@@ -40,7 +40,7 @@ namespace voxie {
         }
     }
 
-    void MouseHandler::scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
+    void MouseHandler::scroll_callback(GLFWwindow*, double, double) {
     }
 
     void MouseHandler::UnlockCamera() {

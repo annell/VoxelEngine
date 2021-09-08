@@ -32,9 +32,9 @@ namespace voxie {
         bool Init();
         std::shared_ptr<Camera> GetCamera();
         void SetCamera(const Entity &);
-        std::shared_ptr<Window> GetWindow() const;
+        [[nodiscard]] std::shared_ptr<Window> GetWindow() const;
         void StartLoop();
-        float GetDeltaTime() const;
+        [[nodiscard]] float GetDeltaTime() const;
         EntityComponentSystem &GetComponents();
         RenderingHandler &GetRenderingHandler();
         Scene &GetScene();
@@ -99,7 +99,7 @@ namespace voxie {
         void RenderingEnd();
         void Submit(const RenderingConfig &config);
 
-        void Log(std::string log);
+        void Log(const std::string& log);
     }// namespace helper
 
 

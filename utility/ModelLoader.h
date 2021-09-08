@@ -6,7 +6,7 @@
 
 #include "Cube.h"
 #include <map>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 namespace voxie::ModelLoader {
@@ -23,7 +23,7 @@ namespace voxie::ModelLoader {
             FILE *fp = fopen(filename, "rb");
 #endif
             if (!fp)
-                return NULL;
+                return nullptr;
 
             // get the buffer size which matches the size of the file
             fseek(fp, 0, SEEK_END);
@@ -31,7 +31,7 @@ namespace voxie::ModelLoader {
             fseek(fp, 0, SEEK_SET);
 
             // load the file into a memory buffer
-            uint8_t *buffer = new uint8_t[buffer_size];
+            auto *buffer = new uint8_t[buffer_size];
             fread(buffer, buffer_size, 1, fp);
             fclose(fp);
 
@@ -127,7 +127,7 @@ namespace voxie::ModelLoader {
 
     }// namespace internal
 
-    void LoadModel(std::string filename, Chunk *chunk) {
+    void LoadModel(const std::string& filename, Chunk *chunk) {
         const ogt_vox_scene *scene = internal::load_vox_scene_with_groups(filename.c_str());
         if (scene) {
             printf("#layers: %u\n", scene->num_layers);
@@ -154,7 +154,6 @@ namespace voxie::ModelLoader {
             printf("# instances: %u\n", scene->num_instances);
             for (uint32_t instance_index = 0; instance_index < scene->num_instances; instance_index++) {
                 const ogt_vox_instance *instance = &scene->instances[instance_index];
-                const ogt_vox_model *model = scene->models[instance->model_index];
 
                 const char *layer_name =
                         instance->layer_index == UINT32_MAX ? "(no layer)" : scene->layers[instance->layer_index].name ? scene->layers[instance->layer_index].name

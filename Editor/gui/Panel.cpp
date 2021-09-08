@@ -160,7 +160,8 @@ namespace gui {
                 for (auto &light : lights) {
                     if (ImGui::Selectable(light.name.c_str())) {
                         auto obj = voxie::MakeLight(light);
-                        voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+                        auto entity = obj->GetEntity();
+                        voxie::helper::AddComponent(entity, std::move(obj));
                     }
                 }
                 ImGui::EndMenu();
@@ -171,7 +172,8 @@ namespace gui {
                 for (auto &model : models) {
                     if (ImGui::Selectable(model.name.c_str())) {
                         auto obj = voxie::MakeModel(model);
-                        voxie::helper::AddComponent(obj->GetEntity(), std::move(obj));
+                        auto entity = obj->GetEntity();
+                        voxie::helper::AddComponent(entity, std::move(obj));
                     }
                 }
                 ImGui::EndMenu();
@@ -180,7 +182,8 @@ namespace gui {
             if (ImGui::BeginMenu("Camera")) {
                 if (ImGui::Selectable("Camera")) {
                     auto camera = voxie::MakeCamera({"Camera"});
-                    voxie::helper::AddComponent(camera->GetEntity(), std::move(camera));
+                    auto entity = camera->GetEntity();
+                    voxie::helper::AddComponent(entity, std::move(camera));
                 }
                 ImGui::EndMenu();
             }

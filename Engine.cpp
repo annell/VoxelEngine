@@ -40,9 +40,9 @@ namespace voxie {
 
         const unsigned int SCR_WIDTH = 1024;
         const unsigned int SCR_HEIGHT = 768;
-        window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", NULL, NULL), SCR_WIDTH,
+        window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", nullptr, nullptr), SCR_WIDTH,
                                           SCR_HEIGHT);
-        if (window == NULL) {
+        if (window == nullptr) {
             std::cout << "Failed to create GLFW window" << std::endl;
             glfwTerminate();
             return false;
@@ -146,7 +146,7 @@ namespace voxie {
 
     namespace helper {
 
-        void Log(std::string log) {
+        void Log(const std::string& log) {
             Engine::GetEngine().GetLogger().AddLog(log.c_str());
         }
 

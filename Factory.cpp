@@ -82,7 +82,7 @@ namespace voxie {
         return std::move(obj);
     }
 
-    std::shared_ptr<voxie::Camera> MakeCamera(CameraFactoryConfig config) {
+    std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig& config) {
         auto camera = std::make_shared<voxie::Camera>(voxie::Entity::MakeEntity(), config.name, config.position);
         voxie::Engine::GetEngine().GetScene().AddEntity(camera->GetEntity());
         return std::move(camera);

@@ -3,6 +3,8 @@
 //
 
 #include "RenderingHandler.h"
+
+#include <utility>
 #include "Core.h"
 #include "Shader.h"
 #include "VertexBufferArray.h"
@@ -10,7 +12,7 @@
 namespace voxie {
 
     void RenderingHandler::Begin(std::shared_ptr<Camera> camera) {
-        selectedCamera = camera;
+        selectedCamera = std::move(camera);
     }
 
     void RenderingHandler::End() {

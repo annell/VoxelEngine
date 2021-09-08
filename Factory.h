@@ -29,7 +29,7 @@ namespace voxie {
         voxie::LightType type;
         voxie::Position position = {0, 0, 0};
         voxie::Dimensions dimensions = {1, 1, 1};
-        voxie::Color color = glm::vec3{0.5, 0.5, 0.5};
+        voxie::Color color = voxie::Color({0.5, 0.5, 0.5});
         voxie::Atteunation atteunation = {10, 10, 10};
     };
 
@@ -41,7 +41,7 @@ namespace voxie {
         glm::vec3 position = {0, 0, 0};
     };
 
-    std::shared_ptr<voxie::Camera> MakeCamera(CameraFactoryConfig);
+    std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig&);
 
     struct SpriteConfig {
         std::string name;

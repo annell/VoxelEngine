@@ -55,7 +55,6 @@ namespace voxie {
     class LightSource {
     public:
         explicit LightSource(const LightConfig& config);
-        LightSource(Cube *cube, glm::vec3 color, glm::vec3 position);
         ~LightSource();
         [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
         [[nodiscard]] std::shared_ptr<Color> GetColor() const;

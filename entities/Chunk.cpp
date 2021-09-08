@@ -10,13 +10,13 @@
 
 namespace voxie {
 
-    Chunk::Chunk(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+    Chunk::Chunk(const std::string& path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
         : entity(Entity::MakeEntity()) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
         helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
-        voxie::ModelLoader::LoadModel(std::move(path), this);
+        voxie::ModelLoader::LoadModel(path, this);
         SetupCubesForRendering();
         SetupShader();
     }
@@ -54,7 +54,7 @@ namespace voxie {
         }
 
         vertexBufferArray->CreateBuffers();
-        vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
+        vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) nullptr);
         vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
         vertexBufferArray->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
         shader->setMat4("model", GetPosition()->model);

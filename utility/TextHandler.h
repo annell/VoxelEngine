@@ -9,9 +9,12 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+#include <utility>
+#include <utility>
 
 #include "freetype/freetype.h"
 #include <ft2build.h>
+#include "VertexBufferArray.h"
 
 namespace voxie {
 
@@ -22,7 +25,7 @@ namespace voxie {
         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
     private:
-        void _RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
+        void RenderTextImplementation(std::string text, float x, float y, float scale, glm::vec3 color);
         struct Character {
             unsigned int TextureID;// ID handle of the glyph texture
             glm::ivec2 Size;       // Size of glyph
@@ -31,18 +34,18 @@ namespace voxie {
         };
 
         std::map<GLchar, Character> Characters;
-        unsigned int VAO;
-        unsigned int VBO;
+        unsigned int VAO{};
+        unsigned int VBO{};
         int ScreenWidth;
         int ScreenHeight;
         std::string Font;
 
         std::shared_ptr<Shader> FontShader;
-        std::shared_ptr<VertexBufferArray> vertexBufferArray;
+        std::shared_ptr<VertexBufferArray> vertexBufferArray{};
     };
 
     TextHandler::TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<Shader> shader)
-        : ScreenWidth(screenWidth), ScreenHeight(screenHeight), Font(font), FontShader(shader) {
+        : ScreenWidth(screenWidth), ScreenHeight(screenHeight), Font(std::move(font)), FontShader(std::move(shader)) {
     }
 
     void TextHandler::Init() {
@@ -112,9 +115,9 @@ namespace voxie {
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
@@ -125,13 +128,13 @@ namespace voxie {
 
 
         glUniform1i(glGetUniformLocation(FontShader->ID, "text"), 0);
-        _RenderText(text, x, y, scale, color);
+        RenderTextImplementation(std::move(text), x, y, scale, color);
 
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
     }
 
-    void TextHandler::_RenderText(std::string text, float x, float y, float scale, glm::vec3 color) {
+    void TextHandler::RenderTextImplementation(std::string text, float x, float y, float scale, glm::vec3 color) {
         // activate corresponding render state
         FontShader->use();
         glUniform3f(glGetUniformLocation(FontShader->ID, "textColor"), color.x, color.y, color.z);

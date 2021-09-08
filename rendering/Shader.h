@@ -11,17 +11,38 @@
 
 #include "Core.h"
 
-namespace voxie {
+namespace {
+    void checkCompileErrors(GLuint shader, const std::string& type) {
+        GLint success;
+        GLchar infoLog[1024];
+        if (type != "PROGRAM") {
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+            if (!success) {
+                glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
+                std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+                          << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            }
+        } else {
+            glGetProgramiv(shader, GL_LINK_STATUS, &success);
+            if (!success) {
+                glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
+                std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
+                          << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+            }
+        }
+    }
+}
 
+namespace voxie {
     class Shader {
     public:
         unsigned int ID;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        Shader(std::map<std::string, unsigned int> shaders) {
+        explicit Shader(const std::map<std::string, unsigned int>& shaders) {
             ID = glCreateProgram();
             std::vector<unsigned int> compiledShaders;
-            for (auto pair : shaders) {
+            for (const auto& pair : shaders) {
                 const auto &path = pair.first;
                 const unsigned int &type = pair.second;
                 std::string code;
@@ -39,7 +60,7 @@ namespace voxie {
                 unsigned int shader;
                 shader = glCreateShader(type);
                 const char *codeConst = code.c_str();
-                glShaderSource(shader, 1, &codeConst, NULL);
+                glShaderSource(shader, 1, &codeConst, nullptr);
                 glCompileShader(shader);
                 compiledShaders.push_back(shader);
 
@@ -92,7 +113,7 @@ namespace voxie {
         void setVec4(const std::string &name, const glm::vec4 &value) const {
             glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
         }
-        void setVec4(const std::string &name, float x, float y, float z, float w) {
+        void setVec4(const std::string &name, float x, float y, float z, float w) const {
             glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
         }
         // ------------------------------------------------------------------------
@@ -111,25 +132,6 @@ namespace voxie {
     private:
         // utility function for checking shader compilation/linking errors.
         // ------------------------------------------------------------------------
-        void checkCompileErrors(GLuint shader, std::string type) {
-            GLint success;
-            GLchar infoLog[1024];
-            if (type != "PROGRAM") {
-                glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-                if (!success) {
-                    glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-                    std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
-                              << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-                }
-            } else {
-                glGetProgramiv(shader, GL_LINK_STATUS, &success);
-                if (!success) {
-                    glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-                    std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
-                              << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
-                }
-            }
-        }
     };
 
 }// namespace voxie

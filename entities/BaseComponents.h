@@ -6,13 +6,14 @@
 #include "Core.h"
 #include <string>
 #include <tuple>
+#include <utility>
 
 
 namespace voxie {
 
     struct Name {
         Name(std::string name)
-            : name(name) {
+            : name(std::move(name)) {
         }
 
         std::string name;
@@ -98,7 +99,7 @@ namespace voxie {
             model *= glm::toMat4(rotationQuat);
         }
 
-        glm::mat4 model;
+        glm::mat4 model{};
 
         glm::vec3 pos;
         glm::vec3 rotation;
@@ -162,7 +163,7 @@ namespace voxie {
             model = glm::scale(model, glm::vec3(scale, 1.0f));
         }
 
-        glm::mat4 model;
+        glm::mat4 model{};
 
         glm::vec2 pos;
         float rotation;
