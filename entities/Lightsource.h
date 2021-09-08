@@ -26,16 +26,11 @@ namespace voxie {
         POINT = 1
     };
 
-    struct Atteunation {
-        Atteunation(float constant, float linear, float quadratic)
+    struct Attenuation {
+        Attenuation(float constant, float linear, float quadratic)
             : constant(constant), linear(linear), quadratic(quadratic) {
         }
 
-        void SetAtteunation(float constant, float linear, float quadratic) {
-            this->constant = constant;
-            this->linear = linear;
-            this->quadratic = quadratic;
-        }
         float constant = 0;
         float linear = 0;
         float quadratic = 0;
@@ -49,7 +44,7 @@ namespace voxie {
         LightType type;
         std::shared_ptr<Cube> cube;
         std::shared_ptr<Color> color;
-        std::shared_ptr<Atteunation> atteunation;
+        std::shared_ptr<Attenuation> attenuation;
     };
 
     class LightSource {
@@ -61,7 +56,7 @@ namespace voxie {
         [[nodiscard]] const LightType &GetType() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] const Entity &GetEntity() const;
-        [[nodiscard]] std::shared_ptr<Atteunation> GetAttuenation() const;
+        [[nodiscard]] std::shared_ptr<Attenuation> GetAttenuation() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:

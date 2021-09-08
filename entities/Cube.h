@@ -48,7 +48,7 @@ namespace voxie {
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
-        void GenerateVerexAttributes(const Side &side);
+        void GenerateVertexAttributes(const Side &side);
         void GenerateSides(Position p, Dimensions d);
 
         Material material;

@@ -22,7 +22,7 @@ namespace voxie {
         helper::AddComponent(entity, config.shader);
         helper::AddComponent(entity, config.color);
         if (type == LightType::POINT) {
-            helper::AddComponent(entity, config.atteunation);
+            helper::AddComponent(entity, config.attenuation);
         }
     }
 
@@ -44,8 +44,8 @@ namespace voxie {
         return type;
     }
 
-    std::shared_ptr<Atteunation> LightSource::GetAttuenation() const {
-        return voxie::helper::GetComponent<Atteunation>(entity);
+    std::shared_ptr<Attenuation> LightSource::GetAttenuation() const {
+        return voxie::helper::GetComponent<Attenuation>(entity);
     }
 
     std::shared_ptr<VertexBufferArray> LightSource::GetVertexBufferArray() const {
@@ -69,9 +69,9 @@ namespace voxie {
                 shader->setVec3("lights[" + index + "].lightPos", light->GetPosition()->pos);
                 shader->setInt("lights[" + index + "].type", static_cast<int>(light->GetType()));
                 if (light->GetType() == LightType::POINT) {
-                    shader->setFloat("lights[" + index + "].constant", light->GetAttuenation()->constant);
-                    shader->setFloat("lights[" + index + "].linear", light->GetAttuenation()->linear);
-                    shader->setFloat("lights[" + index + "].quadratic", light->GetAttuenation()->quadratic);
+                    shader->setFloat("lights[" + index + "].constant", light->GetAttenuation()->constant);
+                    shader->setFloat("lights[" + index + "].linear", light->GetAttenuation()->linear);
+                    shader->setFloat("lights[" + index + "].quadratic", light->GetAttenuation()->quadratic);
                 }
                 n++;
             }

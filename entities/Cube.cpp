@@ -14,7 +14,7 @@ namespace voxie {
     void Cube::GenerateVertexAttributes() {
         for (auto side : sides) {
             if (side.render) {
-                GenerateVerexAttributes(side);
+                GenerateVertexAttributes(side);
                 vertexBufferArray->nrVertex += 6;
             }
         }
@@ -58,7 +58,7 @@ namespace voxie {
         return vertexBufferArray;
     }
 
-    void Cube::GenerateVerexAttributes(const Side &side) {
+    void Cube::GenerateVertexAttributes(const Side &side) {
         int index = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

@@ -77,7 +77,7 @@ namespace voxie {
                         config.type,
                         std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, config.dimensions),
                         std::make_shared<voxie::Color>(config.color),
-                        std::make_shared<voxie::Atteunation>(config.atteunation)});
+                        std::make_shared<voxie::Attenuation>(config.atteunation)});
         voxie::Engine::GetEngine().GetScene().AddEntity(obj->GetEntity());
         return std::move(obj);
     }

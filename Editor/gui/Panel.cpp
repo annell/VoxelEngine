@@ -54,12 +54,12 @@ namespace gui {
         color->SetColor(updatedColor[0], updatedColor[1], updatedColor[2]);
     }
 
-    void ShowEntityAtteunationController(const voxie::Entity &entity) {
+    void ShowEntityAttenuationController(const voxie::Entity &entity) {
         ImGui::Separator();
-        auto atteunation = voxie::helper::GetComponent<voxie::Atteunation>(entity);
-        ImGui::InputFloat("Quadratic", &atteunation->quadratic);
-        ImGui::InputFloat("Linear", &atteunation->linear);
-        ImGui::InputFloat("Constant", &atteunation->constant);
+        auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
+        ImGui::InputFloat("Quadratic", &attenuation->quadratic);
+        ImGui::InputFloat("Linear", &attenuation->linear);
+        ImGui::InputFloat("Constant", &attenuation->constant);
     }
 
     void ShowEntityPositionController(const voxie::Entity &entity) {
@@ -242,8 +242,8 @@ namespace gui {
             ShowEntityColorController(entity);
         }
 
-        if (voxie::helper::HasComponent<voxie::Atteunation>(entity)) {
-            ShowEntityAtteunationController(entity);
+        if (voxie::helper::HasComponent<voxie::Attenuation>(entity)) {
+            ShowEntityAttenuationController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::Camera>(entity)) {
