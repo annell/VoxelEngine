@@ -28,7 +28,7 @@ namespace voxie {
 
     Entity Entity::MakeEntity() {
         static int id = 0;
-        return Entity(id++);
+        return Entity(++id);
     }
 
 }// namespace voxie

@@ -3,6 +3,9 @@ project(Voxie)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Address sanitizer
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+
 # Add header file
 set(GLEW_H /usr/local/Cellar/glew/2.2.0_1/include/GL)
 set(GLFW_H /usr/local/Cellar/glfw/3.3.3/include/GLFW)

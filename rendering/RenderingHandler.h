@@ -28,14 +28,13 @@ namespace voxie {
 
     class RenderingHandler {
     public:
-        void Begin(std::shared_ptr<Camera> camera);
+        void Begin();
         void End();
 
         void Submit(const RenderingConfig &);
 
     private:
         using RenderingQueue = std::deque<RenderingConfig>;
-        std::shared_ptr<Camera> selectedCamera;
         RenderingQueue renderingQueue;
     };
 

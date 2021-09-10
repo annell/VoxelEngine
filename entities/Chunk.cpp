@@ -21,7 +21,12 @@ namespace voxie {
         SetupShader();
     }
 
-    Chunk::~Chunk() = default;
+    Chunk::~Chunk() {
+        helper::RemoveComponent<Name>(entity);
+        helper::RemoveComponent<Shader>(entity);
+        helper::RemoveComponent<Position>(entity);
+        helper::RemoveComponent<VertexBufferArray>(entity);
+    }
 
     void Chunk::SetupCubesForRendering() {
         FaceCulling();

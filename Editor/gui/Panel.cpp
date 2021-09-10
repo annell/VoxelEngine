@@ -142,12 +142,12 @@ namespace gui {
 
         auto camera = voxie::Engine::GetEngine().GetCamera();
         auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
-        auto mat = pos->model;
-        float *view = (float *) glm::value_ptr(camera->GetViewMatrix());
-        float *proj = (float *) glm::value_ptr(camera->GetProjectionMatrix());
+        auto mModel = pos->model;
+        const auto view = camera->GetViewMatrix();
+        const auto proj = camera->GetProjectionMatrix();
 
-        if (ImGuizmo::Manipulate(view, proj, mCurrentGizmoOperation, mCurrentGizmoMode, (float *) glm::value_ptr(mat), nullptr, nullptr, nullptr, nullptr)) {
-            pos->SetModel(mat);
+        if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
+            pos->SetModel(mModel);
         }
     }
 
@@ -192,9 +192,9 @@ namespace gui {
     }
 
     void RemoveComponent(const voxie::Entity &entity) {
-        if (ImGui::Button("Remove"))
+        if (ImGui::Button("Remove")) {
             voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
-        voxie::helper::RemoveComponent<voxie::Chunk>(entity);
+        }
     }
 
     auto ShowEntityList() {

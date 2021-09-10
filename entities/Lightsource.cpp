@@ -26,7 +26,16 @@ namespace voxie {
         }
     }
 
-    LightSource::~LightSource() = default;
+    LightSource::~LightSource() {
+        helper::RemoveComponent<Name>(entity);
+        helper::RemoveComponent<Position>(entity);
+        helper::RemoveComponent<Shader>(entity);
+        helper::RemoveComponent<Color>(entity);
+        if (type == LightType::POINT) {
+            helper::RemoveComponent<Attenuation>(entity);
+        }
+        helper::RemoveComponent<VertexBufferArray>(entity);
+    }
 
     std::shared_ptr<Color> LightSource::GetColor() const {
         return voxie::helper::GetComponent<Color>(entity);

@@ -15,6 +15,12 @@ namespace voxie {
         updateCameraVectors();
     }
 
+    Camera::~Camera() {
+        helper::RemoveComponent<Name>(entity);
+        helper::RemoveComponent<Position>(entity);
+        helper::RemoveComponent<Direction>(entity);
+    }
+
     glm::mat4 Camera::GetViewMatrix() const {
         return glm::lookAt(GetPosition()->pos, GetPosition()->pos + Front, Up);
     }

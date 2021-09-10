@@ -46,6 +46,13 @@ namespace voxie {
         Setup();
     }
 
+    Sprite::~Sprite() {
+        helper::RemoveComponent<Name>(entity);
+        helper::RemoveComponent<Position2D>(entity);
+        helper::RemoveComponent<Shader>(entity);
+        helper::RemoveComponent<VertexBufferArray>(entity);
+    }
+
     void Sprite::Draw() const {
         auto shader = GetShader();
         shader->use();

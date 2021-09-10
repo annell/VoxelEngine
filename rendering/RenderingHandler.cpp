@@ -11,8 +11,7 @@
 
 namespace voxie {
 
-    void RenderingHandler::Begin(std::shared_ptr<Camera> camera) {
-        selectedCamera = std::move(camera);
+    void RenderingHandler::Begin() {
     }
 
     void RenderingHandler::End() {

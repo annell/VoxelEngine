@@ -24,8 +24,9 @@ namespace voxie {
     }
 
     void Engine::InitCamera() {
-        camera = MakeCamera({"Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f)});
-        voxie::helper::AddComponent(camera->GetEntity(), camera);
+        auto obj = MakeCamera({"Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f)});
+        camera = obj.get();
+        voxie::helper::AddComponent(camera->GetEntity(), std::move(obj));
     }
 
     bool Engine::InitWindow() {
@@ -60,7 +61,7 @@ namespace voxie {
     }
 
     std::shared_ptr<Camera> Engine::GetCamera() {
-        return camera;
+        return camera ? helper::GetComponent<Camera>(camera->GetEntity()) : nullptr;
     }
 
     std::shared_ptr<Window> Engine::GetWindow() const {
@@ -141,7 +142,7 @@ namespace voxie {
     }
 
     void Engine::SetCamera(const Entity &entity) {
-        camera = helper::GetComponent<Camera>(entity);
+        camera = helper::GetComponent<Camera>(entity).get();
     }
 
     namespace helper {
@@ -151,7 +152,7 @@ namespace voxie {
         }
 
         void RenderingBegin() {
-            Engine::GetEngine().GetRenderingHandler().Begin(Engine::GetEngine().GetCamera());
+            Engine::GetEngine().GetRenderingHandler().Begin();
         }
 
         void RenderingEnd() {

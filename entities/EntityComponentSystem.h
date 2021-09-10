@@ -68,6 +68,8 @@ namespace voxie {
         auto it = components.find(handle);
         if (it != components.end()) {
             components.erase(it);
+        } else {
+            assert(false && "No component to remove!");
         }
     }
 

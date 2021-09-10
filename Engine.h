@@ -47,8 +47,8 @@ namespace voxie {
 
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
+        Camera* camera = nullptr;
         std::shared_ptr<Window> window;
-        std::shared_ptr<Camera> camera;
         EntityComponentSystem components;
         Scene scene;
         RenderingHandler renderingHandler;
