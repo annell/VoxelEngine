@@ -7,13 +7,25 @@
 #include <string>
 #include <tuple>
 #include <utility>
-
+#include <yaml-cpp/yaml.h>
 
 namespace voxie {
 
     struct Name {
         Name(std::string name)
             : name(std::move(name)) {
+        }
+
+        void encode(YAML::Node& node) const {
+            node.push_back(name);
+        }
+
+        bool decode(const YAML::Node& node) {
+            if(!node.IsSequence() || node.size() != 1) {
+                return false;
+            }
+            name = node[0].as<std::string>();
+            return true;
         }
 
         std::string name;
@@ -25,15 +37,59 @@ namespace voxie {
         glm::vec3 diffuse;
         glm::vec3 specular;
         float shininess;
+
+        void encode(YAML::Node& node) const {
+            node.push_back(color[0]);
+            node.push_back(color[1]);
+            node.push_back(color[2]);
+
+            node.push_back(ambient[0]);
+            node.push_back(ambient[1]);
+            node.push_back(ambient[2]);
+
+            node.push_back(diffuse[0]);
+            node.push_back(diffuse[1]);
+            node.push_back(diffuse[2]);
+
+            node.push_back(specular[0]);
+            node.push_back(specular[1]);
+            node.push_back(specular[2]);
+
+            node.push_back(shininess);
+        }
+
+        bool decode(const YAML::Node& node) {
+            if(!node.IsSequence() || node.size() != 3) {
+                return false;
+            }
+            return true;
+        }
     };
 
     struct Color {
         Color(glm::vec3 color) : color(color) {}
-        glm::vec3 color;
+
+        void encode(YAML::Node& node) const {
+            node.push_back(color[0]);
+            node.push_back(color[1]);
+            node.push_back(color[2]);
+        }
+
+        bool decode(const YAML::Node& node) {
+            if(!node.IsSequence() || node.size() != 3) {
+                return false;
+            }
+            color[0] = node[0].as<float>();
+            color[1] = node[1].as<float>();
+            color[2] = node[2].as<float>();
+            return true;
+        }
 
         void SetColor(float r, float g, float b) {
             color = {r, g, b};
         }
+
+        glm::vec3 color;
     };
 
     struct Position {
@@ -51,6 +107,22 @@ namespace voxie {
 
         bool operator<(const Position &pos) const {
             return std::tie(pos.pos[0], pos.pos[1], pos.pos[2]) < std::tie(pos.pos[0], pos.pos[1], pos.pos[2]);
+        }
+
+        void encode(YAML::Node& node) const {
+            node.push_back(pos[0]);
+            node.push_back(pos[1]);
+            node.push_back(pos[2]);
+        }
+
+        bool decode(const YAML::Node& node) {
+            if(!node.IsSequence() || node.size() != 3) {
+                return false;
+            }
+            pos[0] = node[0].as<float>();
+            pos[1] = node[1].as<float>();
+            pos[2] = node[2].as<float>();
+            return true;
         }
 
         void SetPosition(float x, float y, float z) {
@@ -120,6 +192,20 @@ namespace voxie {
         Position2D(const Position2D &p)
             : Position2D(p.pos) {}
 
+        void encode(YAML::Node& node) const {
+            node.push_back(pos[0]);
+            node.push_back(pos[1]);
+        }
+
+        bool decode(const YAML::Node& node) {
+            if(!node.IsSequence() || node.size() != 3) {
+                return false;
+            }
+            pos[0] = node[0].as<float>();
+            pos[1] = node[1].as<float>();
+            return true;
+        }
+
         bool operator<(const Position2D &pos) const {
             return std::tie(pos.pos[0], pos.pos[1]) < std::tie(pos.pos[0], pos.pos[1]);
         }
@@ -174,6 +260,21 @@ namespace voxie {
         Direction(float yaw, float pitch)
             : yaw(yaw), pitch(pitch) {
         }
+
+        void encode(YAML::Node& node) const {
+            node.push_back(yaw);
+            node.push_back(pitch);
+        }
+
+        bool decode(const YAML::Node& node) {
+            if(!node.IsSequence() || node.size() != 3) {
+                return false;
+            }
+            yaw = node[0].as<float>();
+            pitch = node[1].as<float>();
+            return true;
+        }
+
         void SetDirection(float yaw, float pitch, bool constrainPitch) {
             this->yaw = yaw;
             this->pitch = pitch;
@@ -206,3 +307,18 @@ namespace voxie {
     };
 
 }// namespace voxie
+
+namespace YAML {
+    template<typename T>
+    struct convert {
+        static Node encode(const T& rhs) {
+            Node node;
+            rhs.encode(node);
+            return node;
+        }
+
+        static bool decode(const Node& node, T& rhs) {
+            return rhs.decode(node);
+        }
+    };
+}

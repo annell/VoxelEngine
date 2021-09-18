@@ -9,7 +9,8 @@
 #include "RenderingHandler.h"
 #include "Scene.h"
 #include "Window.h"
-#include <Lightsource.h>
+#include "Lightsource.h"
+#include "Camera.h"
 #include <functional>
 #include <string>
 #include <vector>
@@ -17,9 +18,6 @@
 class GLFWwindow;
 
 namespace voxie {
-
-    class Camera;
-
 
     using OnTick = Delegate<float>;
     class Engine {

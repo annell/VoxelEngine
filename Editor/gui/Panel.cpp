@@ -179,6 +179,17 @@ namespace gui {
                 ImGui::EndMenu();
             }
 
+            if (ImGui::BeginMenu("Sprites")) {
+                for (auto &sprite : voxie::GetSprites()) {
+                    if (ImGui::Selectable(sprite.name.c_str())) {
+                        auto obj = voxie::MakeSprite(sprite);
+                        auto entity = obj->GetEntity();
+                        voxie::helper::AddComponent(entity, std::move(obj));
+                    }
+                }
+                ImGui::EndMenu();
+            }
+
             if (ImGui::BeginMenu("Camera")) {
                 if (ImGui::Selectable("Camera")) {
                     auto camera = voxie::MakeCamera({"Camera"});

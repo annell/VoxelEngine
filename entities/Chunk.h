@@ -20,6 +20,10 @@ namespace voxie {
     public:
         Chunk(const std::string& path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
         ~Chunk();
+
+        void encode(YAML::Node&) const;
+        bool decode(const YAML::Node&);
+
         void Draw() const;
         void AddCube(ChunkPosition, std::unique_ptr<Cube> &&);
         [[nodiscard]] size_t NrVertex() const;

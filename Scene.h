@@ -10,6 +10,8 @@ namespace voxie {
 
     class Scene {
     public:
+        Scene() = default;
+        void Save() const;
         using SceneEntities = std::vector<Entity>;
         void AddEntity(Entity);
         void RemoveEntity(Entity);

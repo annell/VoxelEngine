@@ -2,6 +2,7 @@
 // Created by Stefan Annell on 2021-03-21.
 //
 #pragma once
+#include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -36,10 +37,13 @@ namespace {
 namespace voxie {
     class Shader {
     public:
+        using ShaderDefinition = std::string;
+        using ShaderType = unsigned int;
         unsigned int ID;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        explicit Shader(const std::map<std::string, unsigned int>& shaders) {
+        explicit Shader(const std::map<ShaderDefinition , ShaderType>& shaders) {
+            shaderCode = shaders;
             ID = glCreateProgram();
             std::vector<unsigned int> compiledShaders;
             for (const auto& pair : shaders) {
@@ -72,6 +76,14 @@ namespace voxie {
             for (auto shader : compiledShaders) {
                 glDeleteShader(shader);
             }
+        }
+
+        void encode(YAML::Node& node) const {
+            node = shaderCode;
+        }
+
+        bool decode(const YAML::Node& node) {
+            return true;
         }
 
         // activate the shader
@@ -132,6 +144,7 @@ namespace voxie {
     private:
         // utility function for checking shader compilation/linking errors.
         // ------------------------------------------------------------------------
+        std::map<ShaderDefinition , ShaderType> shaderCode;
     };
 
 }// namespace voxie

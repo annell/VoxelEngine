@@ -88,9 +88,20 @@ namespace voxie {
         return std::move(camera);
     }
 
+    std::vector<SpriteConfig> GetSprites() {
+        std::vector<SpriteConfig> output;
+        for (const auto &entry : std::filesystem::directory_iterator(BASE_PATH + SPRITES)) {
+            std::string path = entry.path();
+            std::string name = path;
+            internal::eraseSubStr(name, BASE_PATH + SPRITES);
+            output.push_back(SpriteConfig{name, path});
+        }
+        return output;
+    }
+
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig config) {
         auto sprite = std::make_shared<voxie::Sprite>(
-                BASE_PATH + SPRITES + config.path,
+                config.path,
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
                         std::map<std::string, unsigned int>{

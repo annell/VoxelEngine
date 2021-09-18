@@ -10,12 +10,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(GLEW_H /usr/local/Cellar/glew/2.2.0_1/include/GL)
 set(GLFW_H /usr/local/Cellar/glfw/3.3.3/include/GLFW)
 set(GLM_H /usr/local/Cellar/glm/0.9.9.8/include/GLM)
+set(YAMLCPP_H /usr/local/Cellar/yaml-cpp/0.6.3_1/include)
 set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
 set(SOIL_H /opt/local/include/SOIL)
 include_directories(
         ${GLEW_H}
         ${GLFW_H}
         ${GLM_H}
+        ${YAMLCPP_H}
         ${FT_FREETYPE_H}
         ${SOIL_H}
 )
@@ -24,12 +26,13 @@ include_directories(
 set(GLEW_LINK /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib)
 set(GLFW_LINK /usr/local/Cellar/glfw/3.3.3/lib/libglfw.3.dylib)
 set(SOIL_LINK /opt/local/lib/libSOIL.dylib)
+set(YAMLCPP_LINK /usr/local/Cellar/yaml-cpp/0.6.3_1/lib/libyaml-cpp.0.6.3.dylib)
 set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
-link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
+link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${YAMLCPP_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
 
 # Execute compilation command
 set(SOURCE_FILES Editor/EditorApplication.cpp)
-add_executable(Voxie
+add_executable(VoxieEditor
         Core.h
         Editor/EditorApplication.cpp
         Engine.cpp
@@ -81,6 +84,6 @@ add_executable(Voxie
 include_directories(. entities utility input rendering core external/imgui external/ImGuizmo external/stb)
 
 if (APPLE)
-    target_link_libraries(Voxie "-framework OpenGL")
-    target_link_libraries(Voxie "-framework GLUT")
+    target_link_libraries(VoxieEditor "-framework OpenGL")
+    target_link_libraries(VoxieEditor "-framework GLUT")
 endif()

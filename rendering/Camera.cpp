@@ -21,6 +21,31 @@ namespace voxie {
         helper::RemoveComponent<Direction>(entity);
     }
 
+    void Camera::encode(YAML::Node& node) const {
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<Name>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<Position>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<Direction>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+    }
+
+    bool Camera::decode(const YAML::Node& node) {
+        return true;
+    }
+
     glm::mat4 Camera::GetViewMatrix() const {
         return glm::lookAt(GetPosition()->pos, GetPosition()->pos + Front, Up);
     }

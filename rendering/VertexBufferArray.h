@@ -12,6 +12,17 @@ namespace voxie {
         ~VertexBufferArray() {
             ResetBuffers();
         }
+
+        void encode(YAML::Node& node) const {
+            //node["vertexAttributes"] = vertexAttributes;
+            node["nrVertex"] = nrVertex;
+            node["attributes"] = attributes;
+        }
+
+        bool decode(const YAML::Node& node) {
+            return true;
+        }
+
         void CreateBuffers() {
             glGenBuffers(1, &VBO);
             glBindBuffer(GL_ARRAY_BUFFER, VBO);

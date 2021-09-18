@@ -5,7 +5,6 @@
 #include "Sprite.h"
 #include "stb_image.h"
 #include <Engine.h>
-#include <SOIL.h>
 
 #include <utility>
 
@@ -26,7 +25,16 @@ namespace internal {
         unsigned char *image = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
         assert(image && "No image found!");
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        if (nrChannels == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        }
+        else if (nrChannels == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+        }
+        else {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+            assert(!"Unsupported color format");
+        }
 
         stbi_image_free(image);
 

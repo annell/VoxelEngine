@@ -47,9 +47,6 @@ int main() {
             voxie::MouseHandler::LockCamera();
     }});
 
-    auto sprite = voxie::MakeSprite({"Hello", "/wall.jpeg"});
-    auto spriteEntity = sprite->GetEntity();
-    voxie::helper::AddComponent(spriteEntity, std::move(sprite));
     engine.onTick.Bind([&](float deltaTime) {
         gui::ShowSceneOverview();
         gui::ShowSimpleOverlay("FPS: " + std::to_string(FilterSample((int) (1 / deltaTime))));

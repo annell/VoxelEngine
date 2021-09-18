@@ -48,6 +48,7 @@ namespace voxie {
         std::string path;
     };
 
+    std::vector<SpriteConfig> GetSprites();
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig);
 
 }// namespace voxie

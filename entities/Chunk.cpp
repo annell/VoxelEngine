@@ -28,6 +28,37 @@ namespace voxie {
         helper::RemoveComponent<VertexBufferArray>(entity);
     }
 
+    void Chunk::encode(YAML::Node& node) const {
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<Name>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<Shader>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<Position>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+        {
+            YAML::Node n;
+            auto name = helper::GetComponent<VertexBufferArray>(entity).get();
+            n.push_back(*name);
+            node.push_back(n);
+        }
+    }
+
+    bool Chunk::decode(const YAML::Node& node) {
+        return true;
+    }
+
     void Chunk::SetupCubesForRendering() {
         FaceCulling();
         for (auto &pair : cubesMap) {

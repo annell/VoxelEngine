@@ -79,6 +79,7 @@ namespace voxie {
 
             RenderFrame();
         }
+        GetScene().Save();
 
         glfwTerminate();
     }
