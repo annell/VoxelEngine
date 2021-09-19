@@ -22,6 +22,7 @@ namespace voxie {
     }
 
     void Camera::encode(YAML::Node& node) const {
+        node["type"] = "Chunk";
         {
             YAML::Node n;
             auto name = helper::GetComponent<Name>(entity).get();

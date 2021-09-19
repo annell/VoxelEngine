@@ -4,6 +4,7 @@
 
 #pragma once
 #include "Core.h"
+#include <iostream>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -110,23 +111,43 @@ namespace voxie {
         }
 
         void encode(YAML::Node& node) const {
-            node["x"] = pos[0];
-            node["y"] = pos[1];
-            node["z"] = pos[2];
+            YAML::Node posNode;
+            posNode["x"] = pos[0];
+            posNode["y"] = pos[1];
+            posNode["z"] = pos[2];
+            node["position"] = posNode;
+
+            YAML::Node rotationNode;
+            rotationNode["x"] = rotation[0];
+            rotationNode["y"] = rotation[1];
+            rotationNode["z"] = rotation[2];
+            node["rotation"] = rotationNode;
+
+            YAML::Node scaleNode;
+            scaleNode["x"] = scale[0];
+            scaleNode["y"] = scale[1];
+            scaleNode["z"] = scale[2];
+            node["scale"] = scaleNode;
         }
 
         bool decode(const YAML::Node& node) {
-            if(!node.IsSequence() || node.size() != 3) {
-                return false;
-            }
-            pos[0] = node["x"].as<float>();
-            pos[1] = node["y"].as<float>();
-            pos[2] = node["z"].as<float>();
-            return true;
-        }
+            auto pos = node["position"];
+            SetPosition({
+                pos["x"].as<float>(),
+                pos["y"].as<float>(),
+                pos["z"].as<float>()});
 
-        void SetPosition(float x, float y, float z) {
-            SetPosition({x, y, z});
+            auto rot = node["rotation"];
+            SetRotation({rot["x"].as<float>(),
+                         rot["y"].as<float>(),
+                         rot["z"].as<float>()});
+
+            auto scale = node["scale"];
+            SetScale({scale["x"].as<float>(),
+                         scale["y"].as<float>(),
+                         scale["z"].as<float>()});
+            UpdateModel();
+            return true;
         }
 
         void SetPosition(const glm::vec3 &pos) {

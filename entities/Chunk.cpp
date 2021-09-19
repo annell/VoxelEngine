@@ -29,28 +29,15 @@ namespace voxie {
     }
 
     void Chunk::encode(YAML::Node& node) const {
+        node["type"] = "Chunk";
         node["path"] = path;
-        {
-            YAML::Node n;
-            auto name = helper::GetComponent<Name>(entity).get();
-            n.push_back(*name);
-            node["name"] = n;
-        }
-        {
-            YAML::Node n;
-            auto shader = helper::GetComponent<Shader>(entity).get();
-            n.push_back(*shader);
-            node["shader"] = n;
-        }
-        {
-            YAML::Node n;
-            auto position = helper::GetComponent<Position>(entity).get();
-            n.push_back(*position);
-            node["position"] = n;
-        }
+        auto name = helper::GetComponent<Name>(entity).get();
+        node["name"] = name->name;
+        node["position"] = *helper::GetComponent<Position>(entity).get();
     }
 
     bool Chunk::decode(const YAML::Node& node) {
+        GetPosition()->decode(node["position"]);
         return true;
     }
 

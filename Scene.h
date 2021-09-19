@@ -12,6 +12,7 @@ namespace voxie {
     public:
         Scene() = default;
         void Save() const;
+        void Load(std::string_view path);
         using SceneEntities = std::vector<Entity>;
         void AddEntity(Entity);
         void RemoveEntity(Entity);

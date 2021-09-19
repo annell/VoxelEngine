@@ -20,6 +20,8 @@ namespace voxie {
         InitCamera();
         InitGUI();
 
+        scene.Load("config.yaml");
+
         return true;
     }
 
