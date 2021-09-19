@@ -34,7 +34,7 @@ namespace voxie {
             float materialIndex;
             bool render = true;
         };
-        Cube(const Position& position, Dimensions d, Material m = {}, int materialIndex = -1);
+        Cube(const Position &position, Dimensions d, Material m = {}, int materialIndex = -1);
         void GenerateVertexAttributes();
         void CreateRenderBuffers();
         const std::vector<float> &GetVertexAttributes();

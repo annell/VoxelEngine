@@ -9,7 +9,7 @@
 
 namespace voxie {
 
-    LightSource::LightSource(const LightConfig& config)
+    LightSource::LightSource(const LightConfig &config)
         : entity(config.entity), type(config.type), cube(std::move(config.cube)) {
         cube->GenerateVertexAttributes();
         cube->CreateRenderBuffers();
@@ -35,9 +35,9 @@ namespace voxie {
         }
     }
 
-    void LightSource::encode(YAML::Node& node) const {
+    void LightSource::encode(YAML::Node &node) const {
         node["type"] = "LightSource";
-        node["lightType"] = (int)GetType();
+        node["lightType"] = (int) GetType();
         auto name = helper::GetComponent<Name>(entity).get();
         node["name"] = name->name;
         node["position"] = *helper::GetComponent<Position>(entity).get();
@@ -47,7 +47,7 @@ namespace voxie {
         }
     }
 
-    bool LightSource::decode(const YAML::Node& node) {
+    bool LightSource::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         GetColor()->decode(node["color"]);
         if (node["attenuation"].IsDefined()) {
@@ -84,9 +84,9 @@ namespace voxie {
         return entity;
     }
 
-    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera>& camera, const std::vector<Entity> &entities) {
+    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const std::vector<Entity> &entities) {
         auto lightSources = helper::GetComponents<LightSource>(entities);
-        for (const auto& shader : helper::GetComponents<Shader>(entities)) {
+        for (const auto &shader : helper::GetComponents<Shader>(entities)) {
             shader->use();
             shader->setInt("nrLights", lightSources.size());
             camera->SetShaderParameters(*shader);

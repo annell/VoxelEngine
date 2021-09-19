@@ -18,6 +18,9 @@ namespace voxie {
         Sprite(std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
         ~Sprite();
 
+        void encode(YAML::Node &) const;
+        bool decode(const YAML::Node &);
+
         void Draw() const;
         [[nodiscard]] RenderingConfig GetRenderingConfig() const;
         [[nodiscard]] std::shared_ptr<Position2D> GetPosition() const;
@@ -32,6 +35,7 @@ namespace voxie {
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
         Entity entity;
         Texture2D texture;
+        std::string path;
     };
 
 }// namespace voxie

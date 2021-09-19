@@ -17,12 +17,12 @@ namespace voxie {
             : name(std::move(name)) {
         }
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             node["name"] = name;
         }
 
-        bool decode(const YAML::Node& node) {
-            if(!node.IsSequence() || node.size() != 1) {
+        bool decode(const YAML::Node &node) {
+            if (!node.IsSequence() || node.size() != 1) {
                 return false;
             }
             name = node[0].as<std::string>();
@@ -39,7 +39,7 @@ namespace voxie {
         glm::vec3 specular;
         float shininess;
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             node.push_back(color[0]);
             node.push_back(color[1]);
             node.push_back(color[2]);
@@ -59,8 +59,8 @@ namespace voxie {
             node.push_back(shininess);
         }
 
-        bool decode(const YAML::Node& node) {
-            if(!node.IsSequence() || node.size() != 3) {
+        bool decode(const YAML::Node &node) {
+            if (!node.IsSequence() || node.size() != 3) {
                 return false;
             }
             return true;
@@ -70,13 +70,13 @@ namespace voxie {
     struct Color {
         Color(glm::vec3 color) : color(color) {}
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             node["r"] = color[0];
             node["g"] = color[0];
             node["b"] = color[0];
         }
 
-        bool decode(const YAML::Node& node) {
+        bool decode(const YAML::Node &node) {
             color[0] = node["r"].as<float>();
             color[1] = node["g"].as<float>();
             color[2] = node["b"].as<float>();
@@ -92,16 +92,16 @@ namespace voxie {
 
     struct Attenuation {
         Attenuation(float constant, float linear, float quadratic)
-                : constant(constant), linear(linear), quadratic(quadratic) {
+            : constant(constant), linear(linear), quadratic(quadratic) {
         }
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             node["constant"] = constant;
             node["linear"] = linear;
             node["quadratic"] = quadratic;
         }
 
-        bool decode(const YAML::Node& node) {
+        bool decode(const YAML::Node &node) {
             constant = node["constant"].as<float>();
             linear = node["linear"].as<float>();
             quadratic = node["quadratic"].as<float>();
@@ -130,7 +130,7 @@ namespace voxie {
             return std::tie(pos.pos[0], pos.pos[1], pos.pos[2]) < std::tie(pos.pos[0], pos.pos[1], pos.pos[2]);
         }
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             YAML::Node posNode;
             posNode["x"] = pos[0];
             posNode["y"] = pos[1];
@@ -150,12 +150,11 @@ namespace voxie {
             node["scale"] = scaleNode;
         }
 
-        bool decode(const YAML::Node& node) {
+        bool decode(const YAML::Node &node) {
             auto pos = node["position"];
-            SetPosition({
-                pos["x"].as<float>(),
-                pos["y"].as<float>(),
-                pos["z"].as<float>()});
+            SetPosition({pos["x"].as<float>(),
+                         pos["y"].as<float>(),
+                         pos["z"].as<float>()});
 
             auto rot = node["rotation"];
             SetRotation({rot["x"].as<float>(),
@@ -164,8 +163,8 @@ namespace voxie {
 
             auto scale = node["scale"];
             SetScale({scale["x"].as<float>(),
-                         scale["y"].as<float>(),
-                         scale["z"].as<float>()});
+                      scale["y"].as<float>(),
+                      scale["z"].as<float>()});
             UpdateModel();
             return true;
         }
@@ -233,17 +232,31 @@ namespace voxie {
         Position2D(const Position2D &p)
             : Position2D(p.pos) {}
 
-        void encode(YAML::Node& node) const {
-            node.push_back(pos[0]);
-            node.push_back(pos[1]);
+        void encode(YAML::Node &node) const {
+            YAML::Node posNode;
+            posNode["x"] = pos[0];
+            posNode["y"] = pos[1];
+            node["position"] = posNode;
+
+            node["rotation"] = rotation;
+
+            YAML::Node scaleNode;
+            scaleNode["x"] = scale[0];
+            scaleNode["y"] = scale[1];
+            node["scale"] = scaleNode;
         }
 
-        bool decode(const YAML::Node& node) {
-            if(!node.IsSequence() || node.size() != 3) {
-                return false;
-            }
-            pos[0] = node[0].as<float>();
-            pos[1] = node[1].as<float>();
+        bool decode(const YAML::Node &node) {
+            auto pos = node["position"];
+            SetPosition({pos["x"].as<float>(),
+                         pos["y"].as<float>()});
+
+            SetRotation(node["rotation"].as<float>());
+
+            auto scale = node["scale"];
+            SetScale({scale["x"].as<float>(),
+                      scale["y"].as<float>()});
+            UpdateModel();
             return true;
         }
 
@@ -302,12 +315,12 @@ namespace voxie {
             : yaw(yaw), pitch(pitch) {
         }
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             node["yaw"] = yaw;
             node["pitch"] = pitch;
         }
 
-        bool decode(const YAML::Node& node) {
+        bool decode(const YAML::Node &node) {
             yaw = node["yaw"].as<float>();
             pitch = node["pitch"].as<float>();
             return true;
@@ -349,14 +362,14 @@ namespace voxie {
 namespace YAML {
     template<typename T>
     struct convert {
-        static Node encode(const T& rhs) {
+        static Node encode(const T &rhs) {
             Node node;
             rhs.encode(node);
             return node;
         }
 
-        static bool decode(const Node& node, T& rhs) {
+        static bool decode(const Node &node, T &rhs) {
             return rhs.decode(node);
         }
     };
-}
+}// namespace YAML

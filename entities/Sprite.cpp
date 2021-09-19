@@ -10,7 +10,7 @@
 
 
 namespace internal {
-    voxie::Sprite::Texture2D loadTextureFromFile(const std::string& file) {
+    voxie::Sprite::Texture2D loadTextureFromFile(const std::string &file) {
         int width, height, nrChannels;
 
         voxie::Sprite::Texture2D texture;
@@ -27,11 +27,9 @@ namespace internal {
 
         if (nrChannels == 3) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        }
-        else if (nrChannels == 4) {
+        } else if (nrChannels == 4) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-        }
-        else {
+        } else {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
             assert(!"Unsupported color format");
         }
@@ -46,9 +44,7 @@ namespace internal {
 namespace voxie {
 
     Sprite::Sprite(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : entity(Entity::MakeEntity())
-        , texture(internal::loadTextureFromFile(std::move(path)))
-        , vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())) {
+        : entity(Entity::MakeEntity()), texture(internal::loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
@@ -60,6 +56,20 @@ namespace voxie {
         helper::RemoveComponent<Position2D>(entity);
         helper::RemoveComponent<Shader>(entity);
     }
+
+    void Sprite::encode(YAML::Node &node) const {
+        node["type"] = "Sprite";
+        node["path"] = path;
+        auto name = helper::GetComponent<Name>(entity).get();
+        node["name"] = name->name;
+        node["position"] = *helper::GetComponent<Position2D>(entity).get();
+    }
+
+    bool Sprite::decode(const YAML::Node &node) {
+        GetPosition()->decode(node["position"]);
+        return true;
+    }
+
 
     void Sprite::Draw() const {
         auto shader = GetShader();

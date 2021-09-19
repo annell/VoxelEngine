@@ -10,10 +10,8 @@
 
 namespace voxie {
 
-    Chunk::Chunk(const std::string& path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
-        : entity(Entity::MakeEntity())
-        , vertexBufferArray(std::move(std::make_shared<VertexBufferArray>()))
-        , path(path) {
+    Chunk::Chunk(const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+        : entity(Entity::MakeEntity()), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
@@ -28,7 +26,7 @@ namespace voxie {
         helper::RemoveComponent<Position>(entity);
     }
 
-    void Chunk::encode(YAML::Node& node) const {
+    void Chunk::encode(YAML::Node &node) const {
         node["type"] = "Chunk";
         node["path"] = path;
         auto name = helper::GetComponent<Name>(entity).get();
@@ -36,7 +34,7 @@ namespace voxie {
         node["position"] = *helper::GetComponent<Position>(entity).get();
     }
 
-    bool Chunk::decode(const YAML::Node& node) {
+    bool Chunk::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         return true;
     }
@@ -140,7 +138,7 @@ namespace voxie {
         return vertexBufferArray;
     }
 
-    auto GetPreDrawAction(const std::shared_ptr<Shader>& shader, const std::shared_ptr<Position>& pos) {
+    auto GetPreDrawAction(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Position> &pos) {
         return [=]() {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);

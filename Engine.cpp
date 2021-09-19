@@ -17,20 +17,11 @@ namespace voxie {
         if (!InitWindow()) {
             return false;
         }
-        InitCamera();
         InitGUI();
 
-        scene.Load("config.yaml");
+        scene.Load(BASE_PATH + SCENES + "/config.yaml");
 
         return true;
-    }
-
-    void Engine::InitCamera() {
-        /*
-        auto obj = MakeCamera({"Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f)});
-        camera = obj.get();
-        voxie::helper::AddComponent(camera->GetEntity(), std::move(obj));
-         */
     }
 
     bool Engine::InitWindow() {
@@ -56,7 +47,7 @@ namespace voxie {
         glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
         glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_callback);
         glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
-        //glfwSwapInterval(0);
+        glfwSwapInterval(0);
 
         glewInit();
 

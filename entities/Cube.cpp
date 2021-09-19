@@ -6,7 +6,7 @@
 
 namespace voxie {
 
-    Cube::Cube(const Position& position, Dimensions dimensions, Material material, int materialIndex)
+    Cube::Cube(const Position &position, Dimensions dimensions, Material material, int materialIndex)
         : material(material), materialIndex(materialIndex), vertexBufferArray(std::make_shared<VertexBufferArray>()) {
         GenerateSides(position, dimensions);
     }

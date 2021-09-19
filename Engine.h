@@ -53,7 +53,6 @@ namespace voxie {
         Logging logging;
 
         bool InitWindow();
-        void InitCamera();
         void UpdateTime();
 
         void NewFrame() const;

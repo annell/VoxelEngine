@@ -33,9 +33,11 @@ namespace voxie {
                 node.push_back(*chunk.get());
             } else if (auto light = helper::GetComponent<LightSource>(entity)) {
                 node.push_back(*light.get());
+            } else if (auto sprite = helper::GetComponent<Sprite>(entity)) {
+                node.push_back(*sprite.get());
             }
         }
-        std::ofstream fout("config.yaml");
+        std::ofstream fout("resources/scenes/config.yaml");
         fout << node;
     }
 
@@ -65,6 +67,14 @@ namespace voxie {
                 auto obj = MakeLight({
                   n["name"].as<std::string>(),
                   (LightType)n["lightType"].as<int>()
+                });
+                obj->decode(n);
+                auto entity = obj->GetEntity();
+                voxie::helper::AddComponent(entity, std::move(obj));
+            } else if (n["type"].as<std::string>() == "Sprite") {
+                auto obj = MakeSprite({
+                  n["name"].as<std::string>(),
+                  n["path"].as<std::string>()
                 });
                 obj->decode(n);
                 auto entity = obj->GetEntity();

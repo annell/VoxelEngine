@@ -39,10 +39,10 @@ namespace voxie {
 
     class LightSource {
     public:
-        explicit LightSource(const LightConfig& config);
+        explicit LightSource(const LightConfig &config);
         ~LightSource();
-        void encode(YAML::Node&) const;
-        bool decode(const YAML::Node&);
+        void encode(YAML::Node &) const;
+        bool decode(const YAML::Node &);
         [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
         [[nodiscard]] std::shared_ptr<Color> GetColor() const;
         [[nodiscard]] const LightType &GetType() const;
@@ -57,6 +57,6 @@ namespace voxie {
         std::shared_ptr<Cube> cube;
     };
 
-    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera>&, const std::vector<Entity> &);
+    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &, const std::vector<Entity> &);
 
 }// namespace voxie
