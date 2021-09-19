@@ -22,28 +22,18 @@ namespace voxie {
     }
 
     void Camera::encode(YAML::Node& node) const {
-        node["type"] = "Chunk";
-        {
-            YAML::Node n;
-            auto name = helper::GetComponent<Name>(entity).get();
-            n.push_back(*name);
-            node.push_back(n);
-        }
-        {
-            YAML::Node n;
-            auto name = helper::GetComponent<Position>(entity).get();
-            n.push_back(*name);
-            node.push_back(n);
-        }
-        {
-            YAML::Node n;
-            auto name = helper::GetComponent<Direction>(entity).get();
-            n.push_back(*name);
-            node.push_back(n);
-        }
+        node["type"] = "Camera";
+        node["name"] = helper::GetComponent<Name>(entity).get()->name;
+
+        node["position"] = *helper::GetComponent<Position>(entity).get();
+        node["direction"] = *helper::GetComponent<Direction>(entity).get();
     }
 
     bool Camera::decode(const YAML::Node& node) {
+        GetPosition()->decode(node["position"]);
+        GetDirection()->decode(node["direction"]);
+
+        updateCameraVectors();
         return true;
     }
 

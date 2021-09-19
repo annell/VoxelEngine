@@ -28,7 +28,7 @@ namespace voxie {
         YAML::Node node;
         for (const auto& entity : entities) {
             if (auto camera = helper::GetComponent<Camera>(entity)) {
-                //node.push_back(*camera.get());
+                node.push_back(*camera.get());
             } else if (auto chunk = helper::GetComponent<Chunk>(entity)) {
                 node.push_back(*chunk.get());
             }
@@ -49,6 +49,14 @@ namespace voxie {
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
+            } else if (n["type"].as<std::string>() == "Camera") {
+                auto obj = MakeCamera({
+                    n["name"].as<std::string>()
+                });
+                obj->decode(n);
+                auto entity = obj->GetEntity();
+                voxie::helper::AddComponent(entity, std::move(obj));
+                Engine::GetEngine().SetCamera(entity);
             }
         }
     }

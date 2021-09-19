@@ -26,9 +26,11 @@ namespace voxie {
     }
 
     void Engine::InitCamera() {
+        /*
         auto obj = MakeCamera({"Editor Camera", glm::vec3(-3.0f, 1.0f, -3.0f)});
         camera = obj.get();
         voxie::helper::AddComponent(camera->GetEntity(), std::move(obj));
+         */
     }
 
     bool Engine::InitWindow() {

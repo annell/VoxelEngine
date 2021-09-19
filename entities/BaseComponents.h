@@ -283,16 +283,13 @@ namespace voxie {
         }
 
         void encode(YAML::Node& node) const {
-            node.push_back(yaw);
-            node.push_back(pitch);
+            node["yaw"] = yaw;
+            node["pitch"] = pitch;
         }
 
         bool decode(const YAML::Node& node) {
-            if(!node.IsSequence() || node.size() != 3) {
-                return false;
-            }
-            yaw = node[0].as<float>();
-            pitch = node[1].as<float>();
+            yaw = node["yaw"].as<float>();
+            pitch = node["pitch"].as<float>();
             return true;
         }
 
