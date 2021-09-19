@@ -10,6 +10,7 @@
 #include <BaseComponents.h>
 #include <Factory.h>
 #include <Lightsource.h>
+#include <future>
 
 namespace gui {
 

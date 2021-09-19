@@ -79,7 +79,7 @@ namespace voxie {
         }
 
         void encode(YAML::Node& node) const {
-            node = shaderCode;
+            node["shaderCode"] = shaderCode;
         }
 
         bool decode(const YAML::Node& node) {

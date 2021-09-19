@@ -17,7 +17,7 @@ namespace voxie {
         }
 
         void encode(YAML::Node& node) const {
-            node.push_back(name);
+            node["name"] = name;
         }
 
         bool decode(const YAML::Node& node) {
@@ -110,18 +110,18 @@ namespace voxie {
         }
 
         void encode(YAML::Node& node) const {
-            node.push_back(pos[0]);
-            node.push_back(pos[1]);
-            node.push_back(pos[2]);
+            node["x"] = pos[0];
+            node["y"] = pos[1];
+            node["z"] = pos[2];
         }
 
         bool decode(const YAML::Node& node) {
             if(!node.IsSequence() || node.size() != 3) {
                 return false;
             }
-            pos[0] = node[0].as<float>();
-            pos[1] = node[1].as<float>();
-            pos[2] = node[2].as<float>();
+            pos[0] = node["x"].as<float>();
+            pos[1] = node["y"].as<float>();
+            pos[2] = node["z"].as<float>();
             return true;
         }
 

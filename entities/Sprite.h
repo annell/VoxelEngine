@@ -29,6 +29,7 @@ namespace voxie {
     private:
         void Setup() const;
 
+        std::shared_ptr<VertexBufferArray> vertexBufferArray;
         Entity entity;
         Texture2D texture;
     };

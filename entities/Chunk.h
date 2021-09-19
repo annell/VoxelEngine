@@ -41,6 +41,8 @@ namespace voxie {
 
         size_t nrMaterials = 0;
         std::vector<Cube *> cubesToRender;
+        std::shared_ptr<VertexBufferArray> vertexBufferArray;
+        std::string path;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
         Entity entity;

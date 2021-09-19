@@ -11,11 +11,12 @@
 namespace voxie {
 
     Chunk::Chunk(const std::string& path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
-        : entity(Entity::MakeEntity()) {
+        : entity(Entity::MakeEntity())
+        , vertexBufferArray(std::move(std::make_shared<VertexBufferArray>()))
+        , path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
-        helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
         voxie::ModelLoader::LoadModel(path, this);
         SetupCubesForRendering();
         SetupShader();
@@ -25,33 +26,27 @@ namespace voxie {
         helper::RemoveComponent<Name>(entity);
         helper::RemoveComponent<Shader>(entity);
         helper::RemoveComponent<Position>(entity);
-        helper::RemoveComponent<VertexBufferArray>(entity);
     }
 
     void Chunk::encode(YAML::Node& node) const {
+        node["path"] = path;
         {
             YAML::Node n;
             auto name = helper::GetComponent<Name>(entity).get();
             n.push_back(*name);
-            node.push_back(n);
+            node["name"] = n;
         }
         {
             YAML::Node n;
-            auto name = helper::GetComponent<Shader>(entity).get();
-            n.push_back(*name);
-            node.push_back(n);
+            auto shader = helper::GetComponent<Shader>(entity).get();
+            n.push_back(*shader);
+            node["shader"] = n;
         }
         {
             YAML::Node n;
-            auto name = helper::GetComponent<Position>(entity).get();
-            n.push_back(*name);
-            node.push_back(n);
-        }
-        {
-            YAML::Node n;
-            auto name = helper::GetComponent<VertexBufferArray>(entity).get();
-            n.push_back(*name);
-            node.push_back(n);
+            auto position = helper::GetComponent<Position>(entity).get();
+            n.push_back(*position);
+            node["position"] = n;
         }
     }
 
@@ -155,7 +150,7 @@ namespace voxie {
     }
 
     std::shared_ptr<VertexBufferArray> Chunk::GetVertexBufferArray() const {
-        return voxie::helper::GetComponent<VertexBufferArray>(entity);
+        return vertexBufferArray;
     }
 
     auto GetPreDrawAction(const std::shared_ptr<Shader>& shader, const std::shared_ptr<Position>& pos) {

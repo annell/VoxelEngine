@@ -46,11 +46,12 @@ namespace internal {
 namespace voxie {
 
     Sprite::Sprite(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : entity(Entity::MakeEntity()), texture(internal::loadTextureFromFile(std::move(path))) {
+        : entity(Entity::MakeEntity())
+        , texture(internal::loadTextureFromFile(std::move(path)))
+        , vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
-        helper::AddComponent(entity, std::make_shared<VertexBufferArray>());
         Setup();
     }
 
@@ -58,7 +59,6 @@ namespace voxie {
         helper::RemoveComponent<Name>(entity);
         helper::RemoveComponent<Position2D>(entity);
         helper::RemoveComponent<Shader>(entity);
-        helper::RemoveComponent<VertexBufferArray>(entity);
     }
 
     void Sprite::Draw() const {
@@ -89,7 +89,7 @@ namespace voxie {
     }
 
     std::shared_ptr<VertexBufferArray> Sprite::GetVertexBufferArray() const {
-        return voxie::helper::GetComponent<VertexBufferArray>(entity);
+        return vertexBufferArray;
     }
 
     const Entity &Sprite::GetEntity() const {
