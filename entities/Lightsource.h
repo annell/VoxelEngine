@@ -26,16 +26,6 @@ namespace voxie {
         POINT = 1
     };
 
-    struct Attenuation {
-        Attenuation(float constant, float linear, float quadratic)
-            : constant(constant), linear(linear), quadratic(quadratic) {
-        }
-
-        float constant = 0;
-        float linear = 0;
-        float quadratic = 0;
-    };
-
     struct LightConfig {
         std::shared_ptr<Name> name;
         Entity entity;
@@ -51,6 +41,8 @@ namespace voxie {
     public:
         explicit LightSource(const LightConfig& config);
         ~LightSource();
+        void encode(YAML::Node&) const;
+        bool decode(const YAML::Node&);
         [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
         [[nodiscard]] std::shared_ptr<Color> GetColor() const;
         [[nodiscard]] const LightType &GetType() const;
@@ -62,6 +54,7 @@ namespace voxie {
     private:
         Entity entity;
         LightType type;
+        std::shared_ptr<Cube> cube;
     };
 
     std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera>&, const std::vector<Entity> &);

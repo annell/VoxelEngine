@@ -71,18 +71,15 @@ namespace voxie {
         Color(glm::vec3 color) : color(color) {}
 
         void encode(YAML::Node& node) const {
-            node.push_back(color[0]);
-            node.push_back(color[1]);
-            node.push_back(color[2]);
+            node["r"] = color[0];
+            node["g"] = color[0];
+            node["b"] = color[0];
         }
 
         bool decode(const YAML::Node& node) {
-            if(!node.IsSequence() || node.size() != 3) {
-                return false;
-            }
-            color[0] = node[0].as<float>();
-            color[1] = node[1].as<float>();
-            color[2] = node[2].as<float>();
+            color[0] = node["r"].as<float>();
+            color[1] = node["g"].as<float>();
+            color[2] = node["b"].as<float>();
             return true;
         }
 
@@ -91,6 +88,29 @@ namespace voxie {
         }
 
         glm::vec3 color;
+    };
+
+    struct Attenuation {
+        Attenuation(float constant, float linear, float quadratic)
+                : constant(constant), linear(linear), quadratic(quadratic) {
+        }
+
+        void encode(YAML::Node& node) const {
+            node["constant"] = constant;
+            node["linear"] = linear;
+            node["quadratic"] = quadratic;
+        }
+
+        bool decode(const YAML::Node& node) {
+            constant = node["constant"].as<float>();
+            linear = node["linear"].as<float>();
+            quadratic = node["quadratic"].as<float>();
+            return true;
+        }
+
+        float constant = 0;
+        float linear = 0;
+        float quadratic = 0;
     };
 
     struct Position {

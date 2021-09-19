@@ -10,15 +10,14 @@
 namespace voxie {
 
     LightSource::LightSource(const LightConfig& config)
-        : entity(config.entity), type(config.type) {
-        config.cube->GenerateVertexAttributes();
-        config.cube->CreateRenderBuffers();
-        config.cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
+        : entity(config.entity), type(config.type), cube(std::move(config.cube)) {
+        cube->GenerateVertexAttributes();
+        cube->CreateRenderBuffers();
+        cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
         config.position->model = glm::translate(config.position->model, config.position->pos);
         config.position->SetPosition(config.position->pos);
         helper::AddComponent(entity, config.name);
         helper::AddComponent(entity, config.position);
-        helper::AddComponent(entity, config.cube->GetVertexBufferArray());
         helper::AddComponent(entity, config.shader);
         helper::AddComponent(entity, config.color);
         if (type == LightType::POINT) {
@@ -31,10 +30,30 @@ namespace voxie {
         helper::RemoveComponent<Position>(entity);
         helper::RemoveComponent<Shader>(entity);
         helper::RemoveComponent<Color>(entity);
-        if (type == LightType::POINT) {
+        if (GetAttenuation()) {
             helper::RemoveComponent<Attenuation>(entity);
         }
-        helper::RemoveComponent<VertexBufferArray>(entity);
+    }
+
+    void LightSource::encode(YAML::Node& node) const {
+        node["type"] = "LightSource";
+        node["lightType"] = (int)GetType();
+        auto name = helper::GetComponent<Name>(entity).get();
+        node["name"] = name->name;
+        node["position"] = *helper::GetComponent<Position>(entity).get();
+        node["color"] = *helper::GetComponent<Color>(entity).get();
+        if (auto attenuation = GetAttenuation()) {
+            node["attenuation"] = *attenuation;
+        }
+    }
+
+    bool LightSource::decode(const YAML::Node& node) {
+        GetPosition()->decode(node["position"]);
+        GetColor()->decode(node["color"]);
+        if (node["attenuation"].IsDefined()) {
+            GetAttenuation()->decode(node["attenuation"]);
+        }
+        return true;
     }
 
     std::shared_ptr<Color> LightSource::GetColor() const {

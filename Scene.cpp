@@ -31,6 +31,8 @@ namespace voxie {
                 node.push_back(*camera.get());
             } else if (auto chunk = helper::GetComponent<Chunk>(entity)) {
                 node.push_back(*chunk.get());
+            } else if (auto light = helper::GetComponent<LightSource>(entity)) {
+                node.push_back(*light.get());
             }
         }
         std::ofstream fout("config.yaml");
@@ -56,7 +58,17 @@ namespace voxie {
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
-                Engine::GetEngine().SetCamera(entity);
+                if (!Engine::GetEngine().GetCamera()) {
+                    Engine::GetEngine().SetCamera(entity);
+                }
+            } else if (n["type"].as<std::string>() == "LightSource") {
+                auto obj = MakeLight({
+                  n["name"].as<std::string>(),
+                  (LightType)n["lightType"].as<int>()
+                });
+                obj->decode(n);
+                auto entity = obj->GetEntity();
+                voxie::helper::AddComponent(entity, std::move(obj));
             }
         }
     }
