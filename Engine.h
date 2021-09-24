@@ -22,7 +22,7 @@ namespace voxie {
     using OnTick = Delegate<float>;
     class Engine {
     private:
-        Engine() = default;
+        Engine();
         ~Engine();
 
     public:

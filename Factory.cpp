@@ -112,4 +112,15 @@ namespace voxie {
         return std::move(sprite);
     }
 
+    std::vector<SceneConfig> GetScenes() {
+        std::vector<SceneConfig> output;
+        for (const auto &entry : std::filesystem::directory_iterator(BASE_PATH + SCENES)) {
+            std::string path = entry.path();
+            std::string name = path;
+            internal::eraseSubStr(name, BASE_PATH + SCENES + "/");
+            output.push_back(SceneConfig{name, path});
+        }
+        return output;
+    }
+
 }// namespace voxie

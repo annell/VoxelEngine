@@ -1,0 +1,42 @@
+- type: Camera
+  name: Editor Camera
+  position:
+    position:
+      x: -5.39516973
+      y: 3.17036819
+      z: 4.22492456
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  direction:
+    yaw: -40.4000702
+    pitch: -21.5999355
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: 0
+      y: 0
+      z: 0
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.5
+    g: 0.5
+    b: 0.5
+  attenuation:
+    constant: 10
+    linear: 10
+    quadratic: 10

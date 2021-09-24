@@ -6,6 +6,10 @@
 #include <iostream>
 
 namespace voxie {
+    Engine::Engine()
+    : scene(BASE_PATH + SCENES + "/"){
+
+    }
 
     Engine::~Engine() {
         ImGui_ImplOpenGL3_Shutdown();
@@ -19,7 +23,15 @@ namespace voxie {
         }
         InitGUI();
 
-        scene.Load(BASE_PATH + SCENES + "/config.yaml");
+        scene.Load("config.yaml");
+        if (scene.GetEntities().empty()) {
+            auto camera = MakeCamera({
+                "Editor Camera"
+            });
+            auto entity = camera->GetEntity();
+            helper::AddComponent(entity, std::move(camera));
+            SetCamera(entity);
+        }
 
         return true;
     }
@@ -74,7 +86,6 @@ namespace voxie {
 
             RenderFrame();
         }
-        GetScene().Save();
 
         glfwTerminate();
     }

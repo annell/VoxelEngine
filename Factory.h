@@ -52,4 +52,11 @@ namespace voxie {
     std::vector<SpriteConfig> GetSprites();
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig);
 
+
+    struct SceneConfig {
+        std::string name;
+        std::string path;
+    };
+    std::vector<SceneConfig> GetScenes();
+
 }// namespace voxie

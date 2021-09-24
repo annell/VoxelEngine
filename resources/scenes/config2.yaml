@@ -1,0 +1,74 @@
+- type: Camera
+  name: Editor Camera
+  position:
+    position:
+      x: -5.39516973
+      y: 3.17036819
+      z: 4.22492456
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  direction:
+    yaw: -40.4000702
+    pitch: -21.5999355
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: -1.51120913
+      y: 0
+      z: -1.83276856
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.5
+    g: 0.5
+    b: 0.5
+  attenuation:
+    constant: 10
+    linear: 10
+    quadratic: 10
+- type: Chunk
+  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_sword.vox
+  name: /chr_sword.vox
+  position:
+    position:
+      x: 0
+      y: 0
+      z: 0
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+- type: Chunk
+  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/floor.vox
+  name: /floor.vox
+  position:
+    position:
+      x: -3.14036202
+      y: -0.0997312963
+      z: -2.96520209
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1

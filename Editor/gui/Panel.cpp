@@ -209,6 +209,58 @@ namespace gui {
         }
     }
 
+    void ShowTopMenu() {
+        if (ImGui::MenuItem("New")) {
+            voxie::Engine::GetEngine().GetScene().ClearScene();
+        }
+        if (ImGui::BeginMenu("Open")) {
+            for (auto &scene : voxie::GetScenes()) {
+                if (ImGui::Selectable(scene.name.c_str())) {
+                    voxie::Engine::GetEngine().GetScene().Load(scene.name);
+                }
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::MenuItem("Save", "Ctrl+S")) {
+            voxie::Engine::GetEngine().GetScene().Save();
+        }
+        if (ImGui::MenuItem("Save As..")) {
+            ImGui::OpenPopup("Save as");
+        }
+        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        if (ImGui::BeginPopupModal("Save as", NULL, ImGuiWindowFlags_MenuBar))
+        {
+            ImGui::Text("Save scene as:");
+            ImGui::Separator();
+
+            if (ImGui::Button("OK", ImVec2(120, 0))) {
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SetItemDefaultFocus();
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+        if (ImGui::MenuItem("Quit", "Alt+F4")) {
+            glfwSetWindowShouldClose(voxie::Engine::GetEngine().GetWindow()->GetWindow(), 1);
+        }
+    }
+
+    void ShowMainMenuBar() {
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                ShowTopMenu();
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
+        }
+    }
+
     auto ShowEntityList() {
         static int selected = 0;
         ImGui::Begin("Scene entities");
@@ -227,6 +279,7 @@ namespace gui {
     void ShowSceneOverview() {
         ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
         ImGuizmo::BeginFrame();
+        ShowMainMenuBar();
         auto entity = ShowEntityList();
 
         AddNewComponent();

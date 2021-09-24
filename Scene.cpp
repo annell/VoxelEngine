@@ -24,6 +24,10 @@ namespace internal {
 }
 
 namespace voxie {
+    Scene::Scene(std::string folder)
+    : folder(folder) {
+    }
+
     void Scene::Save() const {
         YAML::Node node;
         for (const auto& entity : entities) {
@@ -37,12 +41,18 @@ namespace voxie {
                 node.push_back(*sprite.get());
             }
         }
-        std::ofstream fout("resources/scenes/config.yaml");
+        std::ofstream fout(folder + sceneName);
         fout << node;
     }
+    void Scene::SaveAs(std::string name) {
+        sceneName = name;
+        Save();
+    }
 
-    void Scene::Load(std::string_view path) {
-        auto node = YAML::Load(internal::read_file(path));
+    void Scene::Load(std::string name) {
+        sceneName = name;
+        ClearScene();
+        auto node = YAML::Load(internal::read_file(folder + sceneName));
         for (const auto& n : node) {
             std::cout << n << std::endl;
             if (n["type"].as<std::string>() == "Chunk") {
@@ -92,13 +102,13 @@ namespace voxie {
     }
 
     void Scene::RemoveEntity(Entity entity) {
-        for (auto it = entities.begin(); it != entities.end(); it++) {
-            if (*it == entity) {
-                entities.erase(it);
-                break;
-            }
-        }
         entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+    }
+    void Scene::ClearScene() {
+        auto entities = GetEntities();
+        for (const auto& entity : entities) {
+            RemoveEntity(entity);
+        }
     }
 
 }// namespace voxie
