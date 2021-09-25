@@ -37,12 +37,12 @@ int main() {
     }});
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+        if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), GLFW_MOUSE_BUTTON_2) == GLFW_RELEASE)
             voxie::MouseHandler::UnlockCamera();
     }});
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
             voxie::MouseHandler::LockCamera();
     }});
 

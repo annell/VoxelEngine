@@ -12,7 +12,6 @@ namespace voxie {
 
     Chunk::Chunk(const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
         : entity(Entity::MakeEntity()), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
-        std::cout << "Adding chunk: " << entity.GetId() << std::endl;
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
@@ -22,7 +21,6 @@ namespace voxie {
     }
 
     Chunk::~Chunk() {
-        std::cout << "Killing chunk: " << entity.GetId() << std::endl;
         helper::RemoveComponent<Name>(entity);
         helper::RemoveComponent<Shader>(entity);
         helper::RemoveComponent<Position>(entity);

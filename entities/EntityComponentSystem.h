@@ -64,7 +64,7 @@ namespace voxie {
 
     template<typename T>
     void EntityComponentSystem::RemoveComponent(const Entity &handle) {
-        auto components = GetComponents<T>();
+        auto& components = GetComponents<T>();
         auto it = components.find(handle);
         if (it != components.end()) {
             components.erase(it);
