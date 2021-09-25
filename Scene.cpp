@@ -69,7 +69,7 @@ namespace voxie {
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
-                if (!Engine::GetEngine().GetCamera()) {
+                if (n["activeCamera"].as<bool>()) {
                     Engine::GetEngine().SetCamera(entity);
                 }
             } else if (n["type"].as<std::string>() == "LightSource") {

@@ -1,4 +1,5 @@
 - type: Camera
+  activeCamera: false
   name: Editor Camera
   position:
     position:
@@ -26,7 +27,7 @@
       z: -1.83276856
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -66,9 +67,28 @@
       z: -2.96520209
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
       y: 1
       z: 1
+- type: Camera
+  activeCamera: true
+  name: Camera
+  position:
+    position:
+      x: -1.33685815
+      y: 1.04387355
+      z: -1.14441085
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  direction:
+    yaw: 40.799881
+    pitch: -12.2998447
