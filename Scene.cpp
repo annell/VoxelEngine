@@ -54,7 +54,6 @@ namespace voxie {
         ClearScene();
         auto node = YAML::Load(internal::read_file(folder + sceneName));
         for (const auto& n : node) {
-            std::cout << n << std::endl;
             if (n["type"].as<std::string>() == "Chunk") {
                 auto obj = MakeModel({
                     n["name"].as<std::string>(),
@@ -103,6 +102,13 @@ namespace voxie {
 
     void Scene::RemoveEntity(Entity entity) {
         entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+        if(helper::HasComponent<Chunk>(entity)) {
+            helper::RemoveComponent<Chunk>(entity);
+        } else if (helper::HasComponent<Sprite>(entity)) {
+            helper::RemoveComponent<Sprite>(entity);
+        } else if (helper::HasComponent<LightSource>(entity)) {
+            helper::RemoveComponent<LightSource>(entity);
+        }
     }
     void Scene::ClearScene() {
         auto entities = GetEntities();

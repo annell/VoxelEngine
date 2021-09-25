@@ -3,8 +3,6 @@
 #include "Factory.h"
 #include "KeyboardHandler.h"
 #include "gui/Panel.h"
-#include <Sprite.h>
-
 
 template <typename T>
 T FilterSample(T new_sample) {

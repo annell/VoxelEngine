@@ -14,7 +14,6 @@
 namespace voxie {
     class Sprite {
     public:
-        using Texture2D = unsigned int;
         Sprite(std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
         ~Sprite();
 

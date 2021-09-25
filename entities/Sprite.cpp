@@ -3,48 +3,17 @@
 //
 
 #include "Sprite.h"
-#include "stb_image.h"
 #include <Engine.h>
-
 #include <utility>
 
-
 namespace internal {
-    voxie::Sprite::Texture2D loadTextureFromFile(const std::string &file) {
-        int width, height, nrChannels;
-
-        voxie::Sprite::Texture2D texture;
-        glGenTextures(1, &texture);
-        assert(texture && "Can't be 0");
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        unsigned char *image = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
-        assert(image && "No image found!");
-
-        if (nrChannels == 3) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        } else if (nrChannels == 4) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-        } else {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-            assert(!"Unsupported color format");
-        }
-
-        stbi_image_free(image);
-
-        return texture;
-    }
 
 }// namespace internal
 
 namespace voxie {
 
     Sprite::Sprite(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : entity(Entity::MakeEntity()), texture(internal::loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+        : entity(Entity::MakeEntity()), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
