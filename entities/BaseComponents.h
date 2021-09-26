@@ -183,15 +183,16 @@ namespace voxie {
                          rot["y"].as<float>(),
                          rot["z"].as<float>()});
 
+            auto scale = node["scale"];
+            SetScale({scale["x"].as<float>(),
+                      scale["y"].as<float>(),
+                      scale["z"].as<float>()});
+
             auto pos = node["position"];
             SetPosition({pos["x"].as<float>(),
                          pos["y"].as<float>(),
                          pos["z"].as<float>()});
 
-            auto scale = node["scale"];
-            SetScale({scale["x"].as<float>(),
-                      scale["y"].as<float>(),
-                      scale["z"].as<float>()});
             UpdateModel();
             return true;
         }

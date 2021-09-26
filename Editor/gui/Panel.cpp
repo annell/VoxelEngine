@@ -271,7 +271,7 @@ namespace gui {
         ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
         ImGuizmo::BeginFrame();
         ShowMainMenuBar();
-        ImGui::Begin("Scene entities");
+        ImGui::Begin("Scene");
         ShowSceneNameController();
         auto entity = ShowEntityList();
 

@@ -108,9 +108,11 @@ namespace voxie::ModelLoader {
                             auto iterator = materials.find(color_index);
                             if (iterator == materials.end())
                                 materials[color_index] = nrMaterials++;
-                            float size = 0.1f;
+                            float size = 1.0f;
                             auto cube = std::make_unique<Cube>(
-                                    Position{(float) y * size + chunkPos->pos[0], (float) z * size + chunkPos->pos[1], (float) x * size + chunkPos->pos[2]},// <---- They use different coordinate system, so here we compensate.
+                                    Position{(float) y * size + chunkPos->pos[0] - model->size_y * size / 2,
+                                             (float) z * size + chunkPos->pos[1] - model->size_z * size / 2,
+                                             (float) x * size + chunkPos->pos[2] - model->size_x * size / 2},// <---- They use different coordinate system, so here we compensate.
                                     Dimensions{size, size, size},
                                     Material{{0.2f, 0.8f, 0.3f},
                                              {(float) color.r / 255.0f, (float) color.g / 255.0f, (float) color.b / 255.0f},
@@ -130,33 +132,9 @@ namespace voxie::ModelLoader {
     void LoadModel(const std::string& filename, Chunk *chunk) {
         const ogt_vox_scene *scene = internal::load_vox_scene_with_groups(filename.c_str());
         if (scene) {
-            for (uint32_t layer_index = 0; layer_index < scene->num_layers; layer_index++) {
-                const ogt_vox_layer *layer = &scene->layers[layer_index];
-            }
-            for (uint32_t group_index = 0; group_index < scene->num_groups; group_index++) {
-                const ogt_vox_group *group = &scene->groups[group_index];
-                const ogt_vox_layer *group_layer = group->layer_index != UINT32_MAX ? &scene->layers[group->layer_index] : NULL;
-            }
-
-            // iterate over all instances - and print basic information about the instance and the model that it references
-            for (uint32_t instance_index = 0; instance_index < scene->num_instances; instance_index++) {
-                const ogt_vox_instance *instance = &scene->instances[instance_index];
-
-                const char *layer_name =
-                        instance->layer_index == UINT32_MAX ? "(no layer)" : scene->layers[instance->layer_index].name ? scene->layers[instance->layer_index].name
-                                                                                                                       : "";
-
-            }
-            // iterate over all models and print basic information about the model.
             for (uint32_t model_index = 0; model_index < scene->num_models; model_index++) {
-                const ogt_vox_model *model = scene->models[model_index];
-
-                uint32_t solid_voxel_count = internal::count_solid_voxels_in_model(model);
-                internal::fillHandlerWithCubes(model, scene->palette, chunk);
-                uint32_t total_voxel_count = model->size_x * model->size_y * model->size_z;
-
+                internal::fillHandlerWithCubes(scene->models[model_index], scene->palette, chunk);
             }
-
             ogt_vox_destroy_scene(scene);
         }
     }
