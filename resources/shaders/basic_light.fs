@@ -59,20 +59,23 @@ float getAttenuation(vec3 lightPos, float constant, float linear, float quadrati
     return attenuation;
 }
 
-void main()
-{
-    vec3 result = ambientLight(lights[0].lightPos, lights[0].lightColor);
+vec3 processLight(Light light) {
+    vec3 result = ambientLight(light.lightPos, light.lightColor);
+    if (light.type == 1) {
+        result *= getAttenuation(
+            light.lightPos,
+            light.constant,
+            light.linear,
+            light.quadratic
+        );
+    }
+    return result;
+}
+
+void main() {
+    vec3 result = processLight(lights[0]);
     for (int i = 1; i < nrLights; i++) {
-        vec3 light = ambientLight(lights[i].lightPos, lights[i].lightColor);
-        if (lights[i].type == 1) {
-            light *= getAttenuation(
-                lights[i].lightPos, 
-                lights[i].constant, 
-                lights[i].linear, 
-                lights[i].quadratic
-            );
-        }
-        result += light;
+        result += processLight(lights[i]);
     }
     FragColor = vec4(result, 1.0);
 }

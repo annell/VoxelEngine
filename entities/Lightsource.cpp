@@ -96,7 +96,7 @@ namespace voxie {
                 shader->setVec3("lights[" + index + "].lightColor", light->GetColor()->color);
                 shader->setVec3("lights[" + index + "].lightPos", light->GetPosition()->pos);
                 shader->setInt("lights[" + index + "].type", static_cast<int>(light->GetType()));
-                if (light->GetType() == LightType::POINT) {
+                if (light->GetAttenuation()) {
                     shader->setFloat("lights[" + index + "].constant", light->GetAttenuation()->constant);
                     shader->setFloat("lights[" + index + "].linear", light->GetAttenuation()->linear);
                     shader->setFloat("lights[" + index + "].quadratic", light->GetAttenuation()->quadratic);

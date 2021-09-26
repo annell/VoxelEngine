@@ -1,0 +1,215 @@
+- type: Camera
+  activeCamera: true
+  name: Editor Camera
+  position:
+    position:
+      x: -3.49160099
+      y: 2.01157284
+      z: -4.33817148
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  direction:
+    yaw: 44.800396
+    pitch: -10.4000988
+- type: Chunk
+  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/castle.vox
+  name: /castle.vox
+  position:
+    position:
+      x: 0
+      y: 0
+      z: 0
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: 0.451225489
+      y: 0.861719787
+      z: 0.0622426867
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.423357666
+    g: 0.423353434
+    b: 0.423353434
+  attenuation:
+    constant: 0.680000007
+    linear: 0.680000007
+    quadratic: 7.4829998
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: 0.0618508458
+      y: 0.114755109
+      z: 2.18201017
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.528236151
+    g: 0
+    b: 0.583941579
+  attenuation:
+    constant: 1
+    linear: 1
+    quadratic: 10
+- type: LightSource
+  lightType: 0
+  name: Ambient light
+  position:
+    position:
+      x: 0
+      y: 2.9355526
+      z: 0
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.250850677
+    g: 0.255474448
+    b: 0.205125466
+- type: Chunk
+  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/test.vox
+  name: "Floor\x00vox"
+  position:
+    position:
+      x: -2000
+      y: 0
+      z: 0
+    rotation:
+      x: 0
+      y: 0
+      z: 0
+    scale:
+      x: 10000
+      y: 0.0421190038
+      z: 10000
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: 4.24186993
+      y: 0.170523897
+      z: 0
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.5
+    g: 0.5
+    b: 0.5
+  attenuation:
+    constant: 0
+    linear: 1.36099994
+    quadratic: 2.04099989
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: 6.09133101
+      y: 0
+      z: 1.81430066
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.039639812
+    g: 0.104495749
+    b: 0.678832114
+  attenuation:
+    constant: 0.680000007
+    linear: 0
+    quadratic: 2.04099989
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: -1.20277643
+      y: 0
+      z: 0
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.649635077
+    g: 0
+    b: 0
+  attenuation:
+    constant: 0
+    linear: 1.36099994
+    quadratic: 5.44199991
+- type: LightSource
+  lightType: 1
+  name: Point light
+  position:
+    position:
+      x: 1.58761156
+      y: 0.162210837
+      z: -0.00921833515
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 1
+      y: 1
+      z: 1
+  color:
+    r: 0.435608357
+    g: 0.0479513966
+    b: 0.437956214
+  attenuation:
+    constant: 0
+    linear: 2.04099989
+    quadratic: 10.2040005

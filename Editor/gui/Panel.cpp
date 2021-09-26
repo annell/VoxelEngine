@@ -58,9 +58,9 @@ namespace gui {
     void ShowEntityAttenuationController(const voxie::Entity &entity) {
         ImGui::Separator();
         auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
-        ImGui::InputFloat("Quadratic", &attenuation->quadratic);
-        ImGui::InputFloat("Linear", &attenuation->linear);
-        ImGui::InputFloat("Constant", &attenuation->constant);
+        ImGui::SliderFloat("Quadratic", &attenuation->quadratic, 0.0f, 100.0f);
+        ImGui::SliderFloat("Linear", &attenuation->linear, 0.0f, 100.0f);
+        ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 100.0f);
     }
 
     void ShowEntityPositionController(const voxie::Entity &entity) {
@@ -105,6 +105,17 @@ namespace gui {
             return 1;
         };
         ImGui::InputText("name", buf, 20, 0, callback, (void *) &entity);
+    }
+
+    void ShowSceneNameController() {
+        ImGui::Separator();
+        auto& name = voxie::Engine::GetEngine().GetScene().GetSceneName();
+        char *buf = (char *) name.c_str();
+        auto callback = [](ImGuiInputTextCallbackData *data) -> int {
+          return 1;
+        };
+        ImGui::InputText("Scene Name", buf, 20, 0, callback, (void *)nullptr);
+        voxie::Engine::GetEngine().GetScene().SetFilename(std::string(buf));
     }
 
     void ShowEntityDirectionController(const voxie::Entity &entity) {
@@ -224,26 +235,6 @@ namespace gui {
         if (ImGui::MenuItem("Save", "Ctrl+S")) {
             voxie::Engine::GetEngine().GetScene().Save();
         }
-        if (ImGui::MenuItem("Save As..")) {
-            ImGui::OpenPopup("Save as");
-        }
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-        if (ImGui::BeginPopupModal("Save as", NULL, ImGuiWindowFlags_MenuBar))
-        {
-            ImGui::Text("Save scene as:");
-            ImGui::Separator();
-
-            if (ImGui::Button("OK", ImVec2(120, 0))) {
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::SetItemDefaultFocus();
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel", ImVec2(120, 0))) {
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::EndPopup();
-        }
         if (ImGui::MenuItem("Quit", "Alt+F4")) {
             glfwSetWindowShouldClose(voxie::Engine::GetEngine().GetWindow()->GetWindow(), 1);
         }
@@ -262,8 +253,8 @@ namespace gui {
     }
 
     auto ShowEntityList() {
+        ImGui::Separator();
         static int selected = 0;
-        ImGui::Begin("Scene entities");
         std::vector<const char *> items;
         auto &entities = voxie::Engine::GetEngine().GetScene().GetEntities();
 
@@ -280,6 +271,8 @@ namespace gui {
         ImGui::DockSpaceOverViewport(nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
         ImGuizmo::BeginFrame();
         ShowMainMenuBar();
+        ImGui::Begin("Scene entities");
+        ShowSceneNameController();
         auto entity = ShowEntityList();
 
         AddNewComponent();

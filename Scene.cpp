@@ -24,8 +24,12 @@ namespace internal {
 }
 
 namespace voxie {
-    Scene::Scene(std::string folder)
+    Scene::Scene(const std::string& folder)
     : folder(folder) {
+    }
+
+    void Scene::SetFilename(const std::string &name) {
+        sceneName = name;
     }
 
     void Scene::Save() const {
@@ -44,13 +48,13 @@ namespace voxie {
         std::ofstream fout(folder + sceneName);
         fout << node;
     }
-    void Scene::SaveAs(std::string name) {
-        sceneName = name;
+    void Scene::SaveAs(const std::string& name) {
+        SetFilename(name);
         Save();
     }
 
-    void Scene::Load(std::string name) {
-        sceneName = name;
+    void Scene::Load(const std::string& name) {
+        SetFilename(name);
         ClearScene();
         auto node = YAML::Load(internal::read_file(folder + sceneName));
         for (const auto& n : node) {
@@ -115,6 +119,9 @@ namespace voxie {
         for (const auto& entity : entities) {
             RemoveEntity(entity);
         }
+    }
+    const std::string& Scene::GetSceneName() const {
+        return sceneName;
     }
 
 }// namespace voxie

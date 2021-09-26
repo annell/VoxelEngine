@@ -22,6 +22,13 @@ namespace internal {
         }
     }
 
+    bool hasEnding (std::string const &fullString, std::string const &ending) {
+        if (fullString.length() >= ending.length()) {
+            return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+        } else {
+            return false;
+        }
+    }
 }// namespace internal
 
 namespace voxie {
@@ -118,7 +125,9 @@ namespace voxie {
             std::string path = entry.path();
             std::string name = path;
             internal::eraseSubStr(name, BASE_PATH + SCENES + "/");
-            output.push_back(SceneConfig{name, path});
+            if (internal::hasEnding(name, SCENEFILESENDING)) {
+                output.push_back(SceneConfig{name, path});
+            }
         }
         return output;
     }

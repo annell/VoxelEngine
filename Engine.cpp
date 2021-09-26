@@ -23,7 +23,7 @@ namespace voxie {
         }
         InitGUI();
 
-        scene.Load("config.yaml");
+        scene.Load("MainScene.voxie");
         if (scene.GetEntities().empty()) {
             auto camera = MakeCamera({
                 "Editor Camera"

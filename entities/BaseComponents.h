@@ -40,29 +40,56 @@ namespace voxie {
         float shininess;
 
         void encode(YAML::Node &node) const {
-            node.push_back(color[0]);
-            node.push_back(color[1]);
-            node.push_back(color[2]);
+            YAML::Node colorNode;
+            colorNode["r"] = color[0];
+            colorNode["g"] = color[1];
+            colorNode["b"] = color[2];
+            node["color"] = colorNode;
 
-            node.push_back(ambient[0]);
-            node.push_back(ambient[1]);
-            node.push_back(ambient[2]);
+            YAML::Node ambientNode;
+            ambientNode["x"] = ambient[0];
+            ambientNode["y"] = ambient[1];
+            ambientNode["z"] = ambient[2];
+            node["ambient"] = ambientNode;
 
-            node.push_back(diffuse[0]);
-            node.push_back(diffuse[1]);
-            node.push_back(diffuse[2]);
+            YAML::Node diffuseNode;
+            diffuseNode["x"] = diffuse[0];
+            diffuseNode["y"] = diffuse[1];
+            diffuseNode["z"] = diffuse[2];
+            node["diffuse"] = ambientNode;
 
-            node.push_back(specular[0]);
-            node.push_back(specular[1]);
-            node.push_back(specular[2]);
+            YAML::Node specularNode;
+            specularNode["x"] = specular[0];
+            specularNode["y"] = specular[1];
+            specularNode["z"] = specular[2];
+            node["specular"] = specularNode;
 
-            node.push_back(shininess);
+            node["shininess"] = shininess;
         }
 
         bool decode(const YAML::Node &node) {
-            if (!node.IsSequence() || node.size() != 3) {
-                return false;
-            }
+            auto root = node["color"];
+            color = {root["r"].as<float>(),
+                     root["g"].as<float>(),
+                     root["b"].as<float>()};
+
+            root = node["ambient"];
+            ambient = {root["x"].as<float>(),
+                     root["y"].as<float>(),
+                     root["z"].as<float>()};
+
+            root = node["diffuse"];
+            diffuse = {root["x"].as<float>(),
+                       root["y"].as<float>(),
+                       root["z"].as<float>()};
+
+            root = node["specular"];
+            diffuse = {root["x"].as<float>(),
+                       root["y"].as<float>(),
+                       root["z"].as<float>()};
+
+            shininess = node["shininess"].as<float>();
+
             return true;
         }
     };
@@ -72,8 +99,8 @@ namespace voxie {
 
         void encode(YAML::Node &node) const {
             node["r"] = color[0];
-            node["g"] = color[0];
-            node["b"] = color[0];
+            node["g"] = color[1];
+            node["b"] = color[2];
         }
 
         bool decode(const YAML::Node &node) {
@@ -151,15 +178,15 @@ namespace voxie {
         }
 
         bool decode(const YAML::Node &node) {
-            auto pos = node["position"];
-            SetPosition({pos["x"].as<float>(),
-                         pos["y"].as<float>(),
-                         pos["z"].as<float>()});
-
             auto rot = node["rotation"];
             SetRotation({rot["x"].as<float>(),
                          rot["y"].as<float>(),
                          rot["z"].as<float>()});
+
+            auto pos = node["position"];
+            SetPosition({pos["x"].as<float>(),
+                         pos["y"].as<float>(),
+                         pos["z"].as<float>()});
 
             auto scale = node["scale"];
             SetScale({scale["x"].as<float>(),
