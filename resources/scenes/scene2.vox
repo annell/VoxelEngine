@@ -1,11 +1,11 @@
 - type: Camera
-  activeCamera: false
+  activeCamera: true
   name: Editor Camera
   position:
     position:
-      x: -5.39516973
-      y: 3.17036819
-      z: 4.22492456
+      x: 1.63038981
+      y: 6.04462719
+      z: 3.94851518
     rotation:
       x: 0
       y: 0
@@ -15,8 +15,8 @@
       y: 1
       z: 1
   direction:
-    yaw: -40.4000702
-    pitch: -21.5999355
+    yaw: 26.0004425
+    pitch: -4.09994411
 - type: LightSource
   lightType: 1
   name: Point light
@@ -46,17 +46,17 @@
   name: /chr_sword.vox
   position:
     position:
-      x: 0
-      y: 0
-      z: 0
+      x: 14.7380295
+      y: 3.43794513
+      z: 9.6631155
     rotation:
-      x: 0
-      y: 0
-      z: 0
+      x: 3.1415925
+      y: -1.30565429
+      z: 3.1415925
     scale:
-      x: 1
+      x: 0.999998391
       y: 1
-      z: 1
+      z: 0.999998391
 - type: Chunk
   path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/floor.vox
   name: /floor.vox
@@ -74,7 +74,7 @@
       y: 1
       z: 1
 - type: Camera
-  activeCamera: true
+  activeCamera: false
   name: Camera
   position:
     position:
@@ -92,3 +92,19 @@
   direction:
     yaw: 40.799881
     pitch: -12.2998447
+- type: Chunk
+  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/monu10.vox
+  name: /monu10.vox
+  position:
+    position:
+      x: 9.5944891
+      y: 0
+      z: 20.4734802
+    rotation:
+      x: 2.73882365
+      y: 1.44716847
+      z: 2.67409897
+    scale:
+      x: 2.15940118
+      y: 2.15939593
+      z: 2.15940166
