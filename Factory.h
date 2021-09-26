@@ -32,7 +32,7 @@ namespace voxie {
         voxie::Position position = {0, 0, 0};
         voxie::Dimensions dimensions = {1, 1, 1};
         voxie::Color color = voxie::Color({0.5, 0.5, 0.5});
-        voxie::Attenuation atteunation = {10, 10, 10};
+        voxie::Attenuation atteunation = {1, 1, 1};
     };
 
     std::vector<LightFactoryConfig> GetLights();

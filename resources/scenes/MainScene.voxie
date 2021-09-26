@@ -3,9 +3,9 @@
   name: Editor Camera
   position:
     position:
-      x: -3.49160099
-      y: 2.01157284
-      z: -4.33817148
+      x: -2.43022704
+      y: 2.00845623
+      z: -3.5923574
     rotation:
       x: 0
       y: 0
@@ -15,8 +15,8 @@
       y: 1
       z: 1
   direction:
-    yaw: 44.800396
-    pitch: -10.4000988
+    yaw: 46.4006424
+    pitch: -13.4000454
 - type: Chunk
   path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/castle.vox
   name: /castle.vox
@@ -87,7 +87,7 @@
   position:
     position:
       x: 0
-      y: 2.9355526
+      y: 10
       z: 0
     rotation:
       x: 0
@@ -127,7 +127,7 @@
       z: 0
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -151,7 +151,7 @@
       z: 1.81430066
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -175,7 +175,7 @@
       z: 0
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -199,7 +199,7 @@
       z: -0.00921833515
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
