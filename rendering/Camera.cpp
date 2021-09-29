@@ -8,7 +8,7 @@
 namespace voxie {
 
     Camera::Camera(Entity entity, Name name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), entity(entity) {
+        : Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), entity(entity), selectedEntity(entity) {
         helper::AddComponent(entity, std::make_shared<Name>(name));
         helper::AddComponent(entity, std::make_shared<Position>(position));
         helper::AddComponent(entity, std::make_shared<Direction>(yaw, pitch));
@@ -104,6 +104,12 @@ namespace voxie {
 
     float Camera::GetFarDistance() {
         return 10000.0f;
+    }
+    void Camera::SetSelection(const Entity &selection) {
+        selectedEntity = selection;
+    }
+    const Entity &Camera::GetSelection() const {
+        return selectedEntity;
     }
 
 

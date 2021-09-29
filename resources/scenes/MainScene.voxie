@@ -3,9 +3,9 @@
   name: Editor Camera
   position:
     position:
-      x: -9.71992493
-      y: 5.70314789
-      z: 5.50565481
+      x: -9.63651276
+      y: 7.97809935
+      z: 3.6148901
     rotation:
       x: 0
       y: 0
@@ -15,8 +15,8 @@
       y: 1
       z: 1
   direction:
-    yaw: -40.5977783
-    pitch: -6.99989939
+    yaw: -35.7980461
+    pitch: -16.8996525
 - type: Chunk
   path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/castle.vox
   name: /castle.vox
@@ -27,7 +27,7 @@
       z: -2.76079559
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 0.240775466
@@ -43,7 +43,7 @@
       z: -4.32527065
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -67,7 +67,7 @@
       z: -0.479564607
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -111,7 +111,7 @@
       z: -3.29631877
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -135,7 +135,7 @@
       z: 1.81430066
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -159,7 +159,7 @@
       z: -0.432199836
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -183,7 +183,7 @@
       z: -0.00921833515
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1
@@ -207,9 +207,25 @@
       z: 2500
     rotation:
       x: 0
-      y: -0
+      y: 0
       z: 0
     scale:
       x: 1000
       y: 0.00100000005
       z: 1000
+- type: Chunk
+  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_sword.vox
+  name: /chr_sword.vox
+  position:
+    position:
+      x: -1.71249747
+      y: 7.17214108
+      z: -2.74784899
+    rotation:
+      x: 0
+      y: -0
+      z: 0
+    scale:
+      x: 0.100000001
+      y: 0.100000001
+      z: 0.100000001

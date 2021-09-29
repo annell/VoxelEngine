@@ -27,6 +27,7 @@ in vec3 Normal;
 in vec3 FragPos;
 flat in int MaterialIndex;
 
+uniform int selected;
 uniform int nrLights;
 uniform Light lights[MAXLIGHTS];
 uniform Material materials[MAXMATERIALS];
@@ -72,10 +73,29 @@ vec3 processLight(Light light) {
     return result;
 }
 
-void main() {
+vec4 processLights() {
     vec3 result = processLight(lights[0]);
     for (int i = 1; i < nrLights; i++) {
         result += processLight(lights[i]);
     }
-    FragColor = vec4(result, 1.0);
+    return vec4(result, 1);
+}
+
+void selectionRendering() {
+    vec4 colorA = processLights();
+    vec4 colorB = vec4(1, 0, 0, 0);
+    float cameraFacingPercentage = 0.8;
+    FragColor = colorA * cameraFacingPercentage + colorB * (1 - cameraFacingPercentage);
+}
+
+void rendering() {
+    FragColor = processLights();
+}
+
+void main() {
+    if (selected == 1) {
+        selectionRendering();
+    } else {
+        rendering();
+    }
 }

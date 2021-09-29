@@ -86,9 +86,12 @@ namespace voxie {
 
     std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const std::vector<Entity> &entities) {
         auto lightSources = helper::GetComponents<LightSource>(entities);
-        for (const auto &shader : helper::GetComponents<Shader>(entities)) {
+
+        for (const auto &chunk : helper::GetComponents<Chunk>(entities)) {
+            auto shader = chunk->GetShader();
             shader->use();
             shader->setInt("nrLights", lightSources.size());
+            shader->setBool("selected", chunk->GetEntity() == camera->GetSelection());
             camera->SetShaderParameters(*shader);
             int n = 0;
             for (const auto &light : lightSources) {
@@ -105,17 +108,7 @@ namespace voxie {
             }
         }
 
-        std::vector<RenderingConfig> output;
-        for (auto &light : lightSources) {
-            output.push_back({light->GetShader(),
-                              light->GetVertexBufferArray(),
-                              [model = light->GetPosition()->model, lightCubeShader = light->GetShader(), camera]() {
-                                  lightCubeShader->use();
-                                  camera->SetShaderParameters(*lightCubeShader);
-                                  lightCubeShader->setMat4("model", model);
-                              }});
-        }
-        return output;
+        return {};
     }
 
 }// namespace voxie

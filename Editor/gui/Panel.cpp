@@ -274,6 +274,7 @@ namespace gui {
         ImGui::Begin("Scene");
         ShowSceneNameController();
         auto entity = ShowEntityList();
+        voxie::Engine::GetEngine().GetCamera()->SetSelection(entity);
 
         AddNewComponent();
         ImGui::SameLine();

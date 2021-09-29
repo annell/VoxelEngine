@@ -40,11 +40,14 @@ namespace voxie {
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
         void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
         void SetShaderParameters(const Shader &shader) const;
+        void SetSelection(const Entity& selection);
+        const Entity& GetSelection() const;
 
     private:
         void updateCameraVectors();
         [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
         Entity entity;
+        Entity selectedEntity;
 
         glm::vec3 Front;
         glm::vec3 Up{};

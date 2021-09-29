@@ -59,7 +59,7 @@ namespace voxie {
         glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
         glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_callback);
         glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
-        glfwSwapInterval(0);
+        glfwSwapInterval(0.001);
 
         glewInit();
 
