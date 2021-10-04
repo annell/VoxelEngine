@@ -10,11 +10,10 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <utility>
-#include <utility>
 
+#include "VertexBufferArray.h"
 #include "freetype/freetype.h"
 #include <ft2build.h>
-#include "VertexBufferArray.h"
 
 namespace voxie {
 

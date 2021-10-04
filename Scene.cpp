@@ -14,18 +14,18 @@ namespace internal {
 
         auto out = std::string{};
         auto buf = std::string(read_size, '\0');
-        while (stream.read(& buf[0], read_size)) {
+        while (stream.read(&buf[0], read_size)) {
             out.append(buf, 0, stream.gcount());
         }
         out.append(buf, 0, stream.gcount());
         return out;
     };
 
-}
+}// namespace internal
 
 namespace voxie {
-    Scene::Scene(const std::string& folder)
-    : folder(folder) {
+    Scene::Scene(const std::string &folder)
+        : folder(folder) {
     }
 
     void Scene::SetFilename(const std::string &name) {
@@ -34,7 +34,7 @@ namespace voxie {
 
     void Scene::Save() const {
         YAML::Node node;
-        for (const auto& entity : entities) {
+        for (const auto &entity : entities) {
             if (auto camera = helper::GetComponent<Camera>(entity)) {
                 node.push_back(*camera.get());
             } else if (auto chunk = helper::GetComponent<Chunk>(entity)) {
@@ -48,28 +48,24 @@ namespace voxie {
         std::ofstream fout(folder + sceneName);
         fout << node;
     }
-    void Scene::SaveAs(const std::string& name) {
+    void Scene::SaveAs(const std::string &name) {
         SetFilename(name);
         Save();
     }
 
-    void Scene::Load(const std::string& name) {
+    void Scene::Load(const std::string &name) {
         SetFilename(name);
         ClearScene();
         auto node = YAML::Load(internal::read_file(folder + sceneName));
-        for (const auto& n : node) {
+        for (const auto &n : node) {
             if (n["type"].as<std::string>() == "Chunk") {
-                auto obj = MakeModel({
-                    n["name"].as<std::string>(),
-                    n["path"].as<std::string>()
-                });
+                auto obj = MakeModel({n["name"].as<std::string>(),
+                                      n["path"].as<std::string>()});
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
             } else if (n["type"].as<std::string>() == "Camera") {
-                auto obj = MakeCamera({
-                    n["name"].as<std::string>()
-                });
+                auto obj = MakeCamera({n["name"].as<std::string>()});
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
@@ -77,18 +73,14 @@ namespace voxie {
                     Engine::GetEngine().SetCamera(entity);
                 }
             } else if (n["type"].as<std::string>() == "LightSource") {
-                auto obj = MakeLight({
-                  n["name"].as<std::string>(),
-                  (LightType)n["lightType"].as<int>()
-                });
+                auto obj = MakeLight({n["name"].as<std::string>(),
+                                      (LightType) n["lightType"].as<int>()});
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
             } else if (n["type"].as<std::string>() == "Sprite") {
-                auto obj = MakeSprite({
-                  n["name"].as<std::string>(),
-                  n["path"].as<std::string>()
-                });
+                auto obj = MakeSprite({n["name"].as<std::string>(),
+                                       n["path"].as<std::string>()});
                 obj->decode(n);
                 auto entity = obj->GetEntity();
                 voxie::helper::AddComponent(entity, std::move(obj));
@@ -106,7 +98,7 @@ namespace voxie {
 
     void Scene::RemoveEntity(Entity entity) {
         entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
-        if(helper::HasComponent<Chunk>(entity)) {
+        if (helper::HasComponent<Chunk>(entity)) {
             helper::RemoveComponent<Chunk>(entity);
         } else if (helper::HasComponent<Sprite>(entity)) {
             helper::RemoveComponent<Sprite>(entity);
@@ -116,11 +108,11 @@ namespace voxie {
     }
     void Scene::ClearScene() {
         auto entities = GetEntities();
-        for (const auto& entity : entities) {
+        for (const auto &entity : entities) {
             RemoveEntity(entity);
         }
     }
-    const std::string& Scene::GetSceneName() const {
+    const std::string &Scene::GetSceneName() const {
         return sceneName;
     }
 

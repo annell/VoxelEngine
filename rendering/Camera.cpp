@@ -21,7 +21,7 @@ namespace voxie {
         helper::RemoveComponent<Direction>(entity);
     }
 
-    void Camera::encode(YAML::Node& node) const {
+    void Camera::encode(YAML::Node &node) const {
         node["type"] = "Camera";
         node["activeCamera"] = Engine::GetEngine().GetCamera()->GetEntity() == entity;
         node["name"] = helper::GetComponent<Name>(entity).get()->name;
@@ -30,7 +30,7 @@ namespace voxie {
         node["direction"] = *helper::GetComponent<Direction>(entity).get();
     }
 
-    bool Camera::decode(const YAML::Node& node) {
+    bool Camera::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         GetDirection()->decode(node["direction"]);
 

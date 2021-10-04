@@ -22,16 +22,16 @@ namespace internal {
         }
     }
 
-    bool hasEnding (std::string const &fullString, std::string const &ending) {
+    bool hasEnding(std::string const &fullString, std::string const &ending) {
         if (fullString.length() >= ending.length()) {
-            return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+            return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
         } else {
             return false;
         }
     }
 
-    template <typename T>
-    std::vector<T> GetFiles(const std::string& pathToDir, std::optional<std::string> fileending = {}) {
+    template<typename T>
+    std::vector<T> GetFiles(const std::string &pathToDir, std::optional<std::string> fileending = {}) {
         std::vector<T> output;
         for (const auto &entry : std::filesystem::directory_iterator(pathToDir)) {
             std::string pathToFile = entry.path();
@@ -96,7 +96,7 @@ namespace voxie {
         return std::move(obj);
     }
 
-    std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig& config) {
+    std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig &config) {
         auto camera = std::make_shared<voxie::Camera>(voxie::Entity::MakeEntity(), config.name, config.position);
         voxie::Engine::GetEngine().GetScene().AddEntity(camera->GetEntity());
         return std::move(camera);

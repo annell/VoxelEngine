@@ -4,10 +4,10 @@
 
 #include "RenderingHandler.h"
 
-#include <utility>
 #include "Core.h"
 #include "Shader.h"
 #include "VertexBufferArray.h"
+#include <utility>
 
 namespace voxie {
 

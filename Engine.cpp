@@ -7,8 +7,7 @@
 
 namespace voxie {
     Engine::Engine()
-    : scene(BASE_PATH + SCENES + "/"){
-
+        : scene(BASE_PATH + SCENES + "/") {
     }
 
     Engine::~Engine() {
@@ -25,9 +24,7 @@ namespace voxie {
 
         scene.Load("MainScene.voxie");
         if (scene.GetEntities().empty()) {
-            auto camera = MakeCamera({
-                "Editor Camera"
-            });
+            auto camera = MakeCamera({"Editor Camera"});
             auto entity = camera->GetEntity();
             helper::AddComponent(entity, std::move(camera));
             SetCamera(entity);
@@ -154,7 +151,7 @@ namespace voxie {
 
     namespace helper {
 
-        void Log(const std::string& log) {
+        void Log(const std::string &log) {
             Engine::GetEngine().GetLogger().AddLog(log.c_str());
         }
 

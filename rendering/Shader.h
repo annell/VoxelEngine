@@ -2,18 +2,18 @@
 // Created by Stefan Annell on 2021-03-21.
 //
 #pragma once
-#include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 #include "Core.h"
 
 namespace {
-    void checkCompileErrors(GLuint shader, const std::string& type) {
+    void checkCompileErrors(GLuint shader, const std::string &type) {
         GLint success;
         GLchar infoLog[1024];
         if (type != "PROGRAM") {
@@ -32,7 +32,7 @@ namespace {
             }
         }
     }
-}
+}// namespace
 
 namespace voxie {
     class Shader {
@@ -42,11 +42,11 @@ namespace voxie {
         unsigned int ID;
         // constructor generates the shader on the fly
         // ------------------------------------------------------------------------
-        explicit Shader(const std::map<ShaderDefinition , ShaderType>& shaders) {
+        explicit Shader(const std::map<ShaderDefinition, ShaderType> &shaders) {
             shaderCode = shaders;
             ID = glCreateProgram();
             std::vector<unsigned int> compiledShaders;
-            for (const auto& pair : shaders) {
+            for (const auto &pair : shaders) {
                 const auto &path = pair.first;
                 const unsigned int &type = pair.second;
                 std::string code;
@@ -78,11 +78,11 @@ namespace voxie {
             }
         }
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             node["shaderCode"] = shaderCode;
         }
 
-        bool decode(const YAML::Node& node) {
+        bool decode(const YAML::Node &node) {
             return true;
         }
 
@@ -144,7 +144,7 @@ namespace voxie {
     private:
         // utility function for checking shader compilation/linking errors.
         // ------------------------------------------------------------------------
-        std::map<ShaderDefinition , ShaderType> shaderCode;
+        std::map<ShaderDefinition, ShaderType> shaderCode;
     };
 
 }// namespace voxie

@@ -1,16 +1,16 @@
 #pragma once
 #define GL_SILENCE_DEPRECATION
 
+#include "Camera.h"
 #include "Core.h"
 #include "Delegate.h"
 #include "EntityComponentSystem.h"
+#include "Lightsource.h"
 #include "Logging.h"
 #include "MouseHandler.h"
 #include "RenderingHandler.h"
 #include "Scene.h"
 #include "Window.h"
-#include "Lightsource.h"
-#include "Camera.h"
 #include <functional>
 #include <string>
 #include <vector>
@@ -45,7 +45,7 @@ namespace voxie {
 
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
-        Camera* camera = nullptr;
+        Camera *camera = nullptr;
         std::shared_ptr<Window> window;
         EntityComponentSystem components;
         Scene scene;
@@ -96,7 +96,7 @@ namespace voxie {
         void RenderingEnd();
         void Submit(const RenderingConfig &config);
 
-        void Log(const std::string& log);
+        void Log(const std::string &log);
     }// namespace helper
 
 

@@ -13,4 +13,4 @@ namespace voxie::MouseHandler {
     void UnlockCamera();
     void LockCamera();
 
-}// namespace voxie
+}// namespace voxie::MouseHandler

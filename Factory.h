@@ -44,7 +44,7 @@ namespace voxie {
         glm::vec3 position = {0, 0, 0};
     };
 
-    std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig&);
+    std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig &);
 
     struct SpriteConfig {
         std::string name;

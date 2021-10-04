@@ -75,8 +75,8 @@ namespace voxie {
 
             root = node["ambient"];
             ambient = {root["x"].as<float>(),
-                     root["y"].as<float>(),
-                     root["z"].as<float>()};
+                       root["y"].as<float>(),
+                       root["z"].as<float>()};
 
             root = node["diffuse"];
             diffuse = {root["x"].as<float>(),

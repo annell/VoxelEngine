@@ -13,13 +13,13 @@ namespace voxie {
             ResetBuffers();
         }
 
-        void encode(YAML::Node& node) const {
+        void encode(YAML::Node &node) const {
             //node["vertexAttributes"] = vertexAttributes;
             node["nrVertex"] = nrVertex;
             node["attributes"] = attributes;
         }
 
-        bool decode(const YAML::Node& node) {
+        bool decode(const YAML::Node &node) {
             return true;
         }
 

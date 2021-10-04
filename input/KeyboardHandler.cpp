@@ -21,7 +21,7 @@ namespace voxie {
         }
     }
 
-    void KeyboardHandler::RegisterAction(const KeyAction& keyAction) {
+    void KeyboardHandler::RegisterAction(const KeyAction &keyAction) {
         auto &keys = internal::GetRegisteredKeys();
         keys.push_back(keyAction);
     }

@@ -4,7 +4,7 @@
 #include "KeyboardHandler.h"
 #include "gui/Panel.h"
 
-template <typename T>
+template<typename T>
 T FilterSample(T new_sample) {
     static T last_result = 0;
     const T smoothing = 5;
@@ -52,10 +52,10 @@ int main() {
 
         voxie::helper::RenderingBegin();
         auto sceneObjects = engine.GetScene().GetEntities();
-        for (const auto& config : GetRenderingConfigs(engine.GetCamera(), sceneObjects)) {
+        for (const auto &config : GetRenderingConfigs(engine.GetCamera(), sceneObjects)) {
             voxie::helper::Submit(config);
         }
-        for (const auto& entity : sceneObjects) {
+        for (const auto &entity : sceneObjects) {
             if (auto model = voxie::helper::GetComponent<voxie::Chunk>(entity)) {
                 voxie::helper::Submit(model->GetRenderingConfig());
             } else if (auto model = voxie::helper::GetComponent<voxie::Sprite>(entity)) {

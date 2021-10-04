@@ -19,7 +19,7 @@ namespace voxie {
 
     struct KeyboardHandler {
         static void processInput();
-        static void RegisterAction(const KeyAction&);
+        static void RegisterAction(const KeyAction &);
     };
 
 }// namespace voxie

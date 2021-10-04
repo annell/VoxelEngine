@@ -7,16 +7,16 @@
 
 namespace voxie {
 
-struct image {
-    int width = 0;
-    int height = 0;
-    int nrChannels = 0;
-    unsigned char *data = nullptr;
-};
-using Texture2D = unsigned int;
+    struct image {
+        int width = 0;
+        int height = 0;
+        int nrChannels = 0;
+        unsigned char *data = nullptr;
+    };
+    using Texture2D = unsigned int;
 
 
-image loadImageFromFile(const std::string &file);
-Texture2D loadTextureFromFile(const std::string &file);
+    image loadImageFromFile(const std::string &file);
+    Texture2D loadTextureFromFile(const std::string &file);
 
-}
+}// namespace voxie

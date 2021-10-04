@@ -10,18 +10,18 @@ namespace voxie {
 
     class Scene {
     public:
-        Scene(const std::string& folder);
-        void SetFilename(const std::string& name);
+        Scene(const std::string &folder);
+        void SetFilename(const std::string &name);
         void Save() const;
-        void SaveAs(const std::string& name);
-        void Load(const std::string& name);
+        void SaveAs(const std::string &name);
+        void Load(const std::string &name);
         using SceneEntities = std::vector<Entity>;
         void ClearScene();
         void AddEntity(Entity);
         void RemoveEntity(Entity);
         const SceneEntities &GetEntities();
 
-        const std::string& GetSceneName() const;
+        const std::string &GetSceneName() const;
 
     private:
         SceneEntities entities;

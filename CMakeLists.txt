@@ -91,4 +91,4 @@ include_directories(. entities utility input rendering core external/imgui exter
 if (APPLE)
     target_link_libraries(VoxieEditor "-framework OpenGL")
     target_link_libraries(VoxieEditor "-framework GLUT")
-endif()
+endif ()

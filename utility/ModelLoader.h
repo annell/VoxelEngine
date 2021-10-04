@@ -5,8 +5,8 @@
 #include "Chunk.h"
 
 #include "Cube.h"
-#include <map>
 #include <cstdio>
+#include <map>
 #include <string>
 
 namespace voxie::ModelLoader {
@@ -129,7 +129,7 @@ namespace voxie::ModelLoader {
 
     }// namespace internal
 
-    void LoadModel(const std::string& filename, Chunk *chunk) {
+    void LoadModel(const std::string &filename, Chunk *chunk) {
         const ogt_vox_scene *scene = internal::load_vox_scene_with_groups(filename.c_str());
         if (scene) {
             for (uint32_t model_index = 0; model_index < scene->num_models; model_index++) {

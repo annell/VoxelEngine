@@ -14,7 +14,7 @@
 
 namespace gui {
 
-    void ShowSimpleOverlay(const std::string& text, bool *p_open) {
+    void ShowSimpleOverlay(const std::string &text, bool *p_open) {
         const float PAD = 10.0f;
         static int corner = 1;
         ImGuiIO &io = ImGui::GetIO();
@@ -109,12 +109,12 @@ namespace gui {
 
     void ShowSceneNameController() {
         ImGui::Separator();
-        auto& name = voxie::Engine::GetEngine().GetScene().GetSceneName();
+        auto &name = voxie::Engine::GetEngine().GetScene().GetSceneName();
         char *buf = (char *) name.c_str();
         auto callback = [](ImGuiInputTextCallbackData *data) -> int {
-          return 1;
+            return 1;
         };
-        ImGui::InputText("Scene Name", buf, 20, 0, callback, (void *)nullptr);
+        ImGui::InputText("Scene Name", buf, 20, 0, callback, (void *) nullptr);
         voxie::Engine::GetEngine().GetScene().SetFilename(std::string(buf));
     }
 
@@ -241,10 +241,8 @@ namespace gui {
     }
 
     void ShowMainMenuBar() {
-        if (ImGui::BeginMainMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
                 ShowTopMenu();
                 ImGui::EndMenu();
             }
