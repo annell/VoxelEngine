@@ -17,6 +17,7 @@ namespace voxie {
     const std::string SPRITES = "/sprites";
     const std::string SCENES = "/scenes";
     const std::string SCENEFILESENDING = ".voxie";
+    const std::string MODELFILESENDING = ".vox";
 
     struct ModelConfig {
         std::string name;

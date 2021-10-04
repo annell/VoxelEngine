@@ -29,19 +29,26 @@ namespace internal {
             return false;
         }
     }
+
+    template <typename T>
+    std::vector<T> GetFiles(const std::string& pathToDir, std::optional<std::string> fileending = {}) {
+        std::vector<T> output;
+        for (const auto &entry : std::filesystem::directory_iterator(pathToDir)) {
+            std::string pathToFile = entry.path();
+            std::string name = pathToFile;
+            internal::eraseSubStr(name, pathToDir + "/");
+            if (fileending.has_value() ? internal::hasEnding(name, fileending.value()) : true) {
+                output.push_back(T{name, pathToFile});
+            }
+        }
+        return output;
+    }
 }// namespace internal
 
 namespace voxie {
 
     std::vector<ModelConfig> GetModels() {
-        std::vector<ModelConfig> output;
-        for (const auto &entry : std::filesystem::directory_iterator(BASE_PATH + MODELS)) {
-            std::string path = entry.path();
-            std::string name = path;
-            internal::eraseSubStr(name, BASE_PATH + MODELS);
-            output.push_back(ModelConfig{name, path});
-        }
-        return output;
+        return internal::GetFiles<ModelConfig>(BASE_PATH + MODELS, {MODELFILESENDING});
     }
 
     std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig config) {
@@ -96,14 +103,7 @@ namespace voxie {
     }
 
     std::vector<SpriteConfig> GetSprites() {
-        std::vector<SpriteConfig> output;
-        for (const auto &entry : std::filesystem::directory_iterator(BASE_PATH + SPRITES)) {
-            std::string path = entry.path();
-            std::string name = path;
-            internal::eraseSubStr(name, BASE_PATH + SPRITES);
-            output.push_back(SpriteConfig{name, path});
-        }
-        return output;
+        return internal::GetFiles<SpriteConfig>(BASE_PATH + SPRITES);
     }
 
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig config) {
@@ -120,16 +120,7 @@ namespace voxie {
     }
 
     std::vector<SceneConfig> GetScenes() {
-        std::vector<SceneConfig> output;
-        for (const auto &entry : std::filesystem::directory_iterator(BASE_PATH + SCENES)) {
-            std::string path = entry.path();
-            std::string name = path;
-            internal::eraseSubStr(name, BASE_PATH + SCENES + "/");
-            if (internal::hasEnding(name, SCENEFILESENDING)) {
-                output.push_back(SceneConfig{name, path});
-            }
-        }
-        return output;
+        return internal::GetFiles<SceneConfig>(BASE_PATH + SCENES, {SCENEFILESENDING});
     }
 
 }// namespace voxie

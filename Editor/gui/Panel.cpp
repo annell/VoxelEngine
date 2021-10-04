@@ -232,10 +232,10 @@ namespace gui {
             }
             ImGui::EndMenu();
         }
-        if (ImGui::MenuItem("Save", "Ctrl+S")) {
+        if (ImGui::MenuItem("Save")) {
             voxie::Engine::GetEngine().GetScene().Save();
         }
-        if (ImGui::MenuItem("Quit", "Alt+F4")) {
+        if (ImGui::MenuItem("Quit")) {
             glfwSetWindowShouldClose(voxie::Engine::GetEngine().GetWindow()->GetWindow(), 1);
         }
     }
