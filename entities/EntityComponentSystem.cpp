@@ -10,10 +10,6 @@ namespace voxie {
         : id(id) {
     }
 
-    const Entity::Identity &Entity::GetId() const {
-        return id;
-    }
-
     auto Entity::as_tie() const {
         return std::tie(id);
     }

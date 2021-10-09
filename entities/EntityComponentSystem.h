@@ -15,7 +15,6 @@ namespace voxie {
         explicit Entity(Identity);
 
         static Entity MakeEntity();
-        [[nodiscard]] const Identity &GetId() const;
 
         bool operator<(const Entity &rhs) const;
 

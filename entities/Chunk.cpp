@@ -55,10 +55,10 @@ namespace voxie {
 
     void Chunk::SetupShader() {
         auto shader = GetShader();
-        auto vertexBufferArray = GetVertexBufferArray();
+        auto vba = GetVertexBufferArray();
         shader->use();
         for (auto cube : cubesToRender) {
-            vertexBufferArray->nrVertex += cube->GetNrVertex();
+            vba->nrVertex += cube->GetNrVertex();
             auto &material = cube->GetMaterial();
             std::string index = std::to_string(cube->GetMaterialIndex());
             shader->setVec3("materials[" + index + "].ambient", material.ambient);
@@ -66,13 +66,13 @@ namespace voxie {
             shader->setVec3("materials[" + index + "].specular", material.specular);
             shader->setFloat("materials[" + index + "].shininess", material.shininess);
             const auto &cubesVertexAttributes = cube->GetVertexAttributes();
-            vertexBufferArray->vertexAttributes.insert(vertexBufferArray->vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
+            vba->vertexAttributes.insert(vba->vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
         }
 
-        vertexBufferArray->CreateBuffers();
-        vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) nullptr);
-        vertexBufferArray->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
-        vertexBufferArray->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
+        vba->CreateBuffers();
+        vba->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) nullptr);
+        vba->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
+        vba->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
         shader->setMat4("model", GetPosition()->model);
     }
 
