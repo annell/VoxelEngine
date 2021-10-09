@@ -84,7 +84,7 @@ namespace voxie {
         return entity;
     }
 
-    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const std::vector<Entity> &entities) {
+    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const Scene::SceneEntities &entities) {
         auto lightSources = helper::GetComponents<LightSource>(entities);
 
         for (const auto &chunk : helper::GetComponents<Chunk>(entities)) {

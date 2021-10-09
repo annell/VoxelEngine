@@ -254,7 +254,7 @@ namespace gui {
         ImGui::Separator();
         static int selected = 0;
         std::vector<const char *> items;
-        auto &entities = voxie::Engine::GetEngine().GetScene().GetEntities();
+        auto entities = voxie::Engine::GetEngine().GetScene().GetEntities();
 
         for (auto &entity : entities) {
             auto name = voxie::helper::GetComponent<voxie::Name>(entity);
@@ -262,7 +262,17 @@ namespace gui {
         }
         ImGui::ListBox("", &selected, &items[0], entities.size());
 
-        return selected >= entities.size() ? entities.back() : entities.at(selected);
+        if (selected >= entities.size()) {
+            return entities.back();
+        }
+        int i = 0;
+        for (auto & entity : entities) {
+            if (i == selected) {
+                return entity;
+            }
+            i++;
+        }
+        return entities.back();
     }
 
     void ShowSceneOverview() {

@@ -25,6 +25,7 @@ namespace voxie {
 
         Entity::Identity id;
     };
+    static const Entity NullEntity(0);
 
     class EntityComponentSystem {
     public:

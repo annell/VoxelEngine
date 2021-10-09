@@ -6,6 +6,7 @@
 
 #include "Chunk.h"
 #include <RenderingHandler.h>
+#include <Scene.h>
 #include <glew.h>
 #include <glfw3.h>
 #include <glm.hpp>
@@ -57,6 +58,6 @@ namespace voxie {
         std::shared_ptr<Cube> cube;
     };
 
-    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &, const std::vector<Entity> &);
+    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &, const Scene::SceneEntities &);
 
 }// namespace voxie

@@ -67,7 +67,7 @@ namespace voxie {
         }
 
         template<typename T>
-        std::vector<std::shared_ptr<T>> GetComponents(std::vector<Entity> entities) {
+        std::vector<std::shared_ptr<T>> GetComponents(Scene::SceneEntities entities) {
             std::vector<std::shared_ptr<T>> components;
             for (auto &entity : entities) {
                 if (auto component = GetComponent<T>(entity)) {

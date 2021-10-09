@@ -34,7 +34,7 @@ namespace voxie {
 
     void Scene::Save() const {
         YAML::Node node;
-        for (const auto &entity : entities) {
+        for (const auto &entity : GetEntities()) {
             if (auto camera = helper::GetComponent<Camera>(entity)) {
                 node.push_back(*camera.get());
             } else if (auto chunk = helper::GetComponent<Chunk>(entity)) {
@@ -89,15 +89,23 @@ namespace voxie {
     }
 
     void Scene::AddEntity(Entity entity) {
-        entities.push_back(entity);
+        auto node = std::make_unique<SceneNode>(entity);
+        if (root) {
+            root.get()->AddChild(std::move(node));
+        } else {
+            root = std::move(node);
+        }
     }
 
-    const Scene::SceneEntities &Scene::GetEntities() {
-        return entities;
+    Scene::SceneEntities Scene::GetEntities() const {
+        if (root) {
+            return root->GetChildEntities();
+        }
+        return {};
     }
 
     void Scene::RemoveEntity(Entity entity) {
-        entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+        root->RemoveChild(entity);
         if (helper::HasComponent<Chunk>(entity)) {
             helper::RemoveComponent<Chunk>(entity);
         } else if (helper::HasComponent<Sprite>(entity)) {
@@ -107,8 +115,7 @@ namespace voxie {
         }
     }
     void Scene::ClearScene() {
-        auto entities = GetEntities();
-        for (const auto &entity : entities) {
+        for (const auto &entity : GetEntities()) {
             RemoveEntity(entity);
         }
     }
