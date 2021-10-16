@@ -89,9 +89,10 @@ namespace voxie {
     }
 
     void Scene::AddEntity(Entity entity) {
-        auto node = std::make_unique<SceneNode>(entity);
-        if (root) {
-            root.get()->AddChild(std::move(node));
+        auto rootNode = GetRoot();
+        auto node = std::make_unique<SceneNode>(entity, rootNode);
+        if (rootNode) {
+            rootNode->AddChild(std::move(node));
         } else {
             root = std::move(node);
         }
@@ -105,22 +106,38 @@ namespace voxie {
     }
 
     void Scene::RemoveEntity(Entity entity) {
-        root->RemoveChild(entity);
-        if (helper::HasComponent<Chunk>(entity)) {
-            helper::RemoveComponent<Chunk>(entity);
-        } else if (helper::HasComponent<Sprite>(entity)) {
-            helper::RemoveComponent<Sprite>(entity);
-        } else if (helper::HasComponent<LightSource>(entity)) {
-            helper::RemoveComponent<LightSource>(entity);
+        if (root) {
+            root->RemoveChild(entity);
+            if (helper::HasComponent<Chunk>(entity)) {
+                helper::RemoveComponent<Chunk>(entity);
+            } else if (helper::HasComponent<Sprite>(entity)) {
+                helper::RemoveComponent<Sprite>(entity);
+            } else if (helper::HasComponent<LightSource>(entity)) {
+                helper::RemoveComponent<LightSource>(entity);
+            }
         }
     }
     void Scene::ClearScene() {
         for (const auto &entity : GetEntities()) {
             RemoveEntity(entity);
         }
+        if (root) {
+            RemoveEntity(root->GetNode());
+            root.reset();
+        }
     }
     const std::string &Scene::GetSceneName() const {
         return sceneName;
+    }
+
+    SceneNode *Scene::GetRoot() const {
+        return root.get();
+    }
+    SceneNode *Scene::FindNode(const Entity & entity) {
+        if (root) {
+            return root->Find(entity);
+        }
+        return nullptr;
     }
 
 }// namespace voxie

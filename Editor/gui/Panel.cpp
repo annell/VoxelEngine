@@ -1,6 +1,4 @@
 //
-// Created by Stefan Annell on 2021-05-15.
-//
 
 
 #include "Panel.h"
@@ -250,29 +248,81 @@ namespace gui {
         }
     }
 
+    bool DisplayNode(voxie::SceneNode* root, voxie::Entity& selected, int flags) {
+        #define IMGUI_PAYLOAD_TYPE_SCENENODE "_SCENENODE"
+        static voxie::SceneNode* draggedNode = nullptr;
+        auto rootNode = root->GetNode();
+        auto name = voxie::helper::GetComponent<voxie::Name>(rootNode);
+        bool isSelected = rootNode == selected;
+        if (isSelected) {
+            flags |= ImGuiTreeNodeFlags_Selected;
+        }
+        bool open = ImGui::TreeNodeEx(name->name.c_str(), flags);
+        if (ImGui::IsItemClicked()) {
+            selected = rootNode;
+        }
+        if (ImGui::BeginDragDropSource()) {
+            ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE, NULL, 0);
+            draggedNode = root;
+            ImGui::Text(name->name.c_str());
+            ImGui::EndDragDropSource();
+        }
+
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE)) {
+                draggedNode->Move(root);
+                draggedNode = nullptr;
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+        ImGui::TableNextColumn();
+        return open;
+    }
+
+    void DisplayTreeView(voxie::SceneNode* root, voxie::Entity& selected) {
+        if (!root) {
+            return;
+        }
+        bool isFolder = root->GetNumChildren() > 0;
+        if (isFolder) {
+            if (DisplayNode(root, selected, ImGuiTreeNodeFlags_SpanFullWidth)) {
+                for (const auto& node : root->GetChildNodes()) {
+                    DisplayTreeView(node.get(), selected);
+                }
+                ImGui::TreePop();
+            }
+        } else {
+            DisplayNode(root, selected, ImGuiTreeNodeFlags_Leaf  | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
+            for (const auto& node : root->GetChildNodes()) {
+                DisplayTreeView(node.get(), selected);
+            }
+        }
+    }
+
+    void ShowTreeView(voxie::Entity& selected) {
+        static ImGuiTableFlags flags = ImGuiTableFlags_Resizable
+                                       | ImGuiTableFlags_NoBordersInBody;
+
+        if (ImGui::BeginTable("Entities", 1, flags)) {
+            ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+
+            DisplayTreeView(voxie::Engine::GetEngine().GetScene().GetRoot(), selected);
+            ImGui::EndTable();
+        }
+    }
+
     auto ShowEntityList() {
         ImGui::Separator();
-        static int selected = 0;
         std::vector<const char *> items;
         auto entities = voxie::Engine::GetEngine().GetScene().GetEntities();
+        static auto selected = entities.front();
 
-        for (auto &entity : entities) {
-            auto name = voxie::helper::GetComponent<voxie::Name>(entity);
-            items.push_back(name->name.c_str());
-        }
-        ImGui::ListBox("", &selected, &items[0], entities.size());
+        ShowTreeView(selected);
 
-        if (selected >= entities.size()) {
-            return entities.back();
-        }
-        int i = 0;
-        for (auto & entity : entities) {
-            if (i == selected) {
-                return entity;
-            }
-            i++;
-        }
-        return entities.back();
+        return selected;
     }
 
     void ShowSceneOverview() {

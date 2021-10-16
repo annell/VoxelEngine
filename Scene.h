@@ -5,12 +5,20 @@
 #pragma once
 #include <EntityComponentSystem.h>
 #include <list>
+#include <iostream>
 
 namespace voxie {
     class SceneNode {
     public:
-        SceneNode(Entity node)
-        : node(node) {
+        SceneNode(Entity node, SceneNode* parent)
+        : node(std::move(node))
+        , parent(parent) {
+
+        }
+
+
+        ~SceneNode() {
+
         }
 
         const Entity& GetNode() const {
@@ -21,30 +29,66 @@ namespace voxie {
             children.push_back(std::move(child));
         }
 
-        void RemoveChild(const Entity& childEntity) {
-            auto entityPredicate = [&] (std::unique_ptr<SceneNode>& child) {
-                return child->GetNode() == childEntity;
-            };
-            auto new_end = std::remove_if(children.begin(), children.end(), entityPredicate);
-            children.erase(new_end, children.end());
+        std::unique_ptr<SceneNode>&& RemoveChild(const Entity& childEntity) {
+            for (auto it = children.begin(); it != children.end(); it++) {
+                if (it->get()->GetNode() == childEntity) {
+                    auto out = std::move(*it);
+                    children.erase(it);
+                    return std::move(out);
+                }
+            }
+            return {};
         }
 
-        void TransferChild(Entity childEntity, SceneNode& target) {
-            /*
-            if (auto childNode = RemoveChild(childEntity)) {
-                target.AddChild(std::move(childNode));
+        void Move(SceneNode* root) {
+            parent->MoveChild(this, root);
+            parent = root;
+        }
+
+        void MoveChild(SceneNode* child, SceneNode* target) {
+            auto childEntity = child->GetNode();
+            for (auto it = children.begin(); it != children.end(); it++) {
+                if (it->get()->GetNode() == childEntity) {
+                    auto childPtr = std::move(*it);
+                    children.erase(it);
+                    target->AddChild(std::move(childPtr));
+                    break;
+                }
             }
-            */
+        }
+
+        const std::list<std::unique_ptr<SceneNode>>& GetChildNodes() const {
+            return children;
+        }
+
+        size_t GetNumChildren() const {
+            return children.size();
         }
 
         std::list<Entity> GetChildEntities() const {
             std::list<Entity> entities = { GetNode() };
-            for (auto& child : children) {
-                entities.merge(child->GetChildEntities());
+            for (auto& child : GetChildNodes()) {
+                if (child) {
+                    entities.merge(child->GetChildEntities());
+                }
             }
             return entities;
         }
+
+        SceneNode* Find(const Entity& entity) {
+            if (entity == node) {
+                return this;
+            }
+            for (const auto& child : children) {
+                if (auto childNode = child->Find(entity)) {
+                    return childNode;
+                }
+            }
+            return nullptr;
+        }
+
     private:
+        SceneNode* parent = nullptr;
         Entity node;
         std::list<std::unique_ptr<SceneNode>> children;
     };
@@ -61,8 +105,10 @@ namespace voxie {
         void AddEntity(Entity);
         void RemoveEntity(Entity);
         SceneEntities GetEntities() const;
+        SceneNode* FindNode(const Entity&);
 
         const std::string &GetSceneName() const;
+        SceneNode* GetRoot() const;
 
     private:
         std::unique_ptr<SceneNode> root;
