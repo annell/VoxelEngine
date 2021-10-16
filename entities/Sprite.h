@@ -14,7 +14,7 @@
 namespace voxie {
     class Sprite {
     public:
-        Sprite(std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
+        Sprite(const Entity&, std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
         ~Sprite();
 
         void encode(YAML::Node &) const;

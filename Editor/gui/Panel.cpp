@@ -171,6 +171,7 @@ namespace gui {
                     if (ImGui::Selectable(light.name.c_str())) {
                         auto obj = voxie::MakeLight(light);
                         auto entity = obj->GetEntity();
+                        voxie::Engine::GetEngine().GetScene().AddEntity(entity);
                         voxie::helper::AddComponent(entity, std::move(obj));
                     }
                 }
@@ -183,6 +184,7 @@ namespace gui {
                     if (ImGui::Selectable(model.name.c_str())) {
                         auto obj = voxie::MakeModel(model);
                         auto entity = obj->GetEntity();
+                        voxie::Engine::GetEngine().GetScene().AddEntity(entity);
                         voxie::helper::AddComponent(entity, std::move(obj));
                     }
                 }
@@ -194,6 +196,7 @@ namespace gui {
                     if (ImGui::Selectable(sprite.name.c_str())) {
                         auto obj = voxie::MakeSprite(sprite);
                         auto entity = obj->GetEntity();
+                        voxie::Engine::GetEngine().GetScene().AddEntity(entity);
                         voxie::helper::AddComponent(entity, std::move(obj));
                     }
                 }
@@ -204,6 +207,7 @@ namespace gui {
                 if (ImGui::Selectable("Camera")) {
                     auto camera = voxie::MakeCamera({"Camera"});
                     auto entity = camera->GetEntity();
+                    voxie::Engine::GetEngine().GetScene().AddEntity(entity);
                     voxie::helper::AddComponent(entity, std::move(camera));
                 }
                 ImGui::EndMenu();
@@ -270,7 +274,7 @@ namespace gui {
 
         if (ImGui::BeginDragDropTarget()) {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE)) {
-                draggedNode->Move(root);
+                draggedNode->MoveTo(root);
                 draggedNode = nullptr;
             }
             ImGui::EndDragDropTarget();

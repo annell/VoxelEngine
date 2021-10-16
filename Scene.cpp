@@ -24,8 +24,143 @@ namespace internal {
 }// namespace internal
 
 namespace voxie {
+
+    SceneNode::SceneNode(Entity node, SceneNode* parent)
+    : node(std::move(node))
+    , parent(parent) {
+
+    }
+
+    void SceneNode::encode(YAML::Node &root) const {
+        YAML::Node node;
+        if (parent) {
+            node["parent"] = parent->GetNode().GetId();
+        }
+        auto entity = GetNode();
+        if (auto camera = helper::GetComponent<Camera>(entity)) {
+            node["node"] = *camera.get();
+        } else if (auto chunk = helper::GetComponent<Chunk>(entity)) {
+            node["node"] = *chunk.get();
+        } else if (auto light = helper::GetComponent<LightSource>(entity)) {
+            node["node"] = *light.get();
+        } else if (auto sprite = helper::GetComponent<Sprite>(entity)) {
+            node["node"] = *sprite.get();
+        }
+        root.push_back(node);
+
+        for (auto & child : children) {
+            child->encode(root);
+        }
+    }
+
+    bool SceneNode::decode(const YAML::Node &n) {
+        auto nodeEntity = Entity(n["id"].as<int>());
+        if (n["type"].as<std::string>() == "Chunk") {
+            auto obj = MakeModel({n["name"].as<std::string>(),
+                                  n["path"].as<std::string>(),
+                                          nodeEntity});
+            obj->decode(n);
+            auto entity = obj->GetEntity();
+            voxie::helper::AddComponent(entity, std::move(obj));
+        } else if (n["type"].as<std::string>() == "Camera") {
+            auto obj = MakeCamera({n["name"].as<std::string>(),
+                                    nodeEntity});
+            obj->decode(n);
+            auto entity = obj->GetEntity();
+            voxie::helper::AddComponent(entity, std::move(obj));
+            if (n["activeCamera"].as<bool>()) {
+                Engine::GetEngine().SetCamera(entity);
+            }
+        } else if (n["type"].as<std::string>() == "LightSource") {
+            auto obj = MakeLight({n["name"].as<std::string>(),
+                                  (LightType) n["lightType"].as<int>(),
+                                 nodeEntity});
+            obj->decode(n);
+            auto entity = obj->GetEntity();
+            voxie::helper::AddComponent(entity, std::move(obj));
+        } else if (n["type"].as<std::string>() == "Sprite") {
+            auto obj = MakeSprite({n["name"].as<std::string>(),
+                                   n["path"].as<std::string>(),
+                                   nodeEntity});
+            obj->decode(n);
+            auto entity = obj->GetEntity();
+            voxie::helper::AddComponent(entity, std::move(obj));
+        }
+        return true;
+    }
+
+    const Entity& SceneNode::GetNode() const {
+        return node;
+    }
+
+    void SceneNode::AddChild(std::unique_ptr<SceneNode>&& child) {
+        children.push_back(std::move(child));
+    }
+
+    std::unique_ptr<SceneNode>&& SceneNode::RemoveChild(const Entity& childEntity) {
+        for (auto it = children.begin(); it != children.end(); it++) {
+            if (it->get()->GetNode() == childEntity) {
+                auto out = std::move(*it);
+                children.erase(it);
+                return std::move(out);
+            }
+        }
+        return {};
+    }
+
+    void SceneNode::MoveTo(SceneNode* target) {
+        parent->MoveChild(this, target);
+        parent = target;
+    }
+
+    void SceneNode::MoveChild(SceneNode* child, SceneNode* target) {
+        auto childEntity = child->GetNode();
+        for (auto it = children.begin(); it != children.end(); it++) {
+            if (it->get()->GetNode() == childEntity) {
+                auto childPtr = std::move(*it);
+                children.erase(it);
+                target->AddChild(std::move(childPtr));
+                break;
+            }
+        }
+    }
+
+    const std::list<std::unique_ptr<SceneNode>>& SceneNode::GetChildNodes() const {
+        return children;
+    }
+
+    size_t SceneNode::GetNumChildren() const {
+        return children.size();
+    }
+
+    std::list<Entity> SceneNode::GetChildEntities() const {
+        std::list<Entity> entities = { GetNode() };
+        for (auto& child : GetChildNodes()) {
+            if (child) {
+                entities.merge(child->GetChildEntities());
+            }
+        }
+        return entities;
+    }
+
+    SceneNode* SceneNode::GetParent() const {
+        return parent;
+    }
+
+    SceneNode* SceneNode::Find(const Entity& entity) {
+        if (entity == node) {
+            return this;
+        }
+        for (const auto& child : children) {
+            if (auto childNode = child->Find(entity)) {
+                return childNode;
+            }
+        }
+        return nullptr;
+    }
+
     Scene::Scene(const std::string &folder)
-        : folder(folder) {
+            : folder(folder) {
     }
 
     void Scene::SetFilename(const std::string &name) {
@@ -34,17 +169,7 @@ namespace voxie {
 
     void Scene::Save() const {
         YAML::Node node;
-        for (const auto &entity : GetEntities()) {
-            if (auto camera = helper::GetComponent<Camera>(entity)) {
-                node.push_back(*camera.get());
-            } else if (auto chunk = helper::GetComponent<Chunk>(entity)) {
-                node.push_back(*chunk.get());
-            } else if (auto light = helper::GetComponent<LightSource>(entity)) {
-                node.push_back(*light.get());
-            } else if (auto sprite = helper::GetComponent<Sprite>(entity)) {
-                node.push_back(*sprite.get());
-            }
-        }
+        root->encode(node);
         std::ofstream fout(folder + sceneName);
         fout << node;
     }
@@ -56,46 +181,31 @@ namespace voxie {
     void Scene::Load(const std::string &name) {
         SetFilename(name);
         ClearScene();
-        auto node = YAML::Load(internal::read_file(folder + sceneName));
-        for (const auto &n : node) {
-            if (n["type"].as<std::string>() == "Chunk") {
-                auto obj = MakeModel({n["name"].as<std::string>(),
-                                      n["path"].as<std::string>()});
-                obj->decode(n);
-                auto entity = obj->GetEntity();
-                voxie::helper::AddComponent(entity, std::move(obj));
-            } else if (n["type"].as<std::string>() == "Camera") {
-                auto obj = MakeCamera({n["name"].as<std::string>()});
-                obj->decode(n);
-                auto entity = obj->GetEntity();
-                voxie::helper::AddComponent(entity, std::move(obj));
-                if (n["activeCamera"].as<bool>()) {
-                    Engine::GetEngine().SetCamera(entity);
+        auto nodes = YAML::Load(internal::read_file(folder + sceneName));
+        for (const auto &node : nodes) {
+            auto entity = Entity(node["node"]["id"].as<int>());
+            SceneNode* parent = nullptr;
+            if (node["parent"].IsDefined()) {
+                auto parentEntity = Entity(node["parent"].as<int>());
+                if (root) {
+                    parent = root->Find(parentEntity);
                 }
-            } else if (n["type"].as<std::string>() == "LightSource") {
-                auto obj = MakeLight({n["name"].as<std::string>(),
-                                      (LightType) n["lightType"].as<int>()});
-                obj->decode(n);
-                auto entity = obj->GetEntity();
-                voxie::helper::AddComponent(entity, std::move(obj));
-            } else if (n["type"].as<std::string>() == "Sprite") {
-                auto obj = MakeSprite({n["name"].as<std::string>(),
-                                       n["path"].as<std::string>()});
-                obj->decode(n);
-                auto entity = obj->GetEntity();
-                voxie::helper::AddComponent(entity, std::move(obj));
             }
+            auto newNode = AddEntity(entity, parent);
+            newNode->decode(node["node"]);
         }
     }
 
-    void Scene::AddEntity(Entity entity) {
-        auto rootNode = GetRoot();
+    SceneNode* Scene::AddEntity(Entity entity, SceneNode* parent) {
+        auto rootNode = parent ? parent : GetRoot();
         auto node = std::make_unique<SceneNode>(entity, rootNode);
+        auto nodePtr = node.get();
         if (rootNode) {
             rootNode->AddChild(std::move(node));
         } else {
             root = std::move(node);
         }
+        return nodePtr;
     }
 
     Scene::SceneEntities Scene::GetEntities() const {

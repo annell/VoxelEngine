@@ -23,6 +23,7 @@ namespace voxie {
 
     void Camera::encode(YAML::Node &node) const {
         node["type"] = "Camera";
+        node["id"] = GetEntity().GetId();
         node["activeCamera"] = Engine::GetEngine().GetCamera()->GetEntity() == entity;
         node["name"] = helper::GetComponent<Name>(entity).get()->name;
 

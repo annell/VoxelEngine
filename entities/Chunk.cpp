@@ -10,8 +10,8 @@
 
 namespace voxie {
 
-    Chunk::Chunk(const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
-        : entity(Entity::MakeEntity()), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+    Chunk::Chunk(const Entity& entity, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+        : entity(entity), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
@@ -28,6 +28,7 @@ namespace voxie {
 
     void Chunk::encode(YAML::Node &node) const {
         node["type"] = "Chunk";
+        node["id"] = GetEntity().GetId();
         node["path"] = path;
         auto name = helper::GetComponent<Name>(entity).get();
         node["name"] = name->name;

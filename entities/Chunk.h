@@ -18,7 +18,7 @@ namespace voxie {
 
     class Chunk {
     public:
-        Chunk(const std::string &path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
+        Chunk(const Entity&, const std::string &path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
         ~Chunk();
 
         void encode(YAML::Node &) const;

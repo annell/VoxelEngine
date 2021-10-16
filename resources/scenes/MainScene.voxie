@@ -1,231 +1,82 @@
-- type: Camera
-  activeCamera: true
-  name: Editor Camera
-  position:
+- node:
+    type: Camera
+    id: 1
+    activeCamera: true
+    name: Editor Camera
     position:
-      x: -9.63651276
-      y: 7.97809935
-      z: 3.6148901
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  direction:
-    yaw: -35.7980461
-    pitch: -16.8996525
-- type: Chunk
-  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/castle.vox
-  name: /castle.vox
-  position:
+      position:
+        x: -27.2443962
+        y: 10.3813248
+        z: -29.7695808
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    direction:
+      yaw: 397.196777
+      pitch: -7.09980869
+- parent: 1
+  node:
+    type: Chunk
+    id: 2
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/floor.vox
+    name: floor.vox
     position:
-      x: 0.901368916
-      y: 5.10486984
-      z: -2.76079559
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 0.240775466
-      y: 0.240778118
-      z: 0.240775466
-- type: LightSource
-  lightType: 1
-  name: Point light
-  position:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+- parent: 1
+  node:
+    type: LightSource
+    id: 5
+    lightType: 0
+    name: Ambient light
     position:
-      x: -2.0040493
-      y: 7.00850344
-      z: -4.32527065
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.423357666
-    g: 0.423353434
-    b: 0.423353434
-  attenuation:
-    constant: 0.680000007
-    linear: 0.680000007
-    quadratic: 7.4829998
-- type: LightSource
-  lightType: 1
-  name: Point light
-  position:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    color:
+      r: 0.5
+      g: 0.5
+      b: 0.5
+- parent: 5
+  node:
+    type: Chunk
+    id: 4
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
+    name: chr_knight.vox
     position:
-      x: 0.0618508458
-      y: 4.72370768
-      z: -0.479564607
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.528236151
-    g: 0
-    b: 0.583941579
-  attenuation:
-    constant: 1
-    linear: 1
-    quadratic: 10
-- type: LightSource
-  lightType: 0
-  name: Ambient light
-  position:
-    position:
-      x: 0
-      y: 10
-      z: 0
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.250850677
-    g: 0.255474448
-    b: 0.205125466
-- type: LightSource
-  lightType: 1
-  name: Point light
-  position:
-    position:
-      x: -2.65327597
-      y: 2.97238708
-      z: -3.29631877
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.5
-    g: 0.5
-    b: 0.5
-  attenuation:
-    constant: 0
-    linear: 1.36099994
-    quadratic: 2.04099989
-- type: LightSource
-  lightType: 1
-  name: Point light
-  position:
-    position:
-      x: 0.116239905
-      y: 3.1303184
-      z: 1.81430066
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.039639812
-    g: 0.104495749
-    b: 0.678832114
-  attenuation:
-    constant: 0.680000007
-    linear: 0
-    quadratic: 2.04099989
-- type: LightSource
-  lightType: 1
-  name: Point light
-  position:
-    position:
-      x: -1.20277643
-      y: 3.0098381
-      z: -0.432199836
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.649635077
-    g: 0
-    b: 0
-  attenuation:
-    constant: 0
-    linear: 1.36099994
-    quadratic: 5.44199991
-- type: LightSource
-  lightType: 1
-  name: Point light
-  position:
-    position:
-      x: 1.58761156
-      y: 2.6995213
-      z: -0.00921833515
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1
-      y: 1
-      z: 1
-  color:
-    r: 0.435608357
-    g: 0.0479513966
-    b: 0.437956214
-  attenuation:
-    constant: 0
-    linear: 2.04099989
-    quadratic: 10.2040005
-- type: Chunk
-  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/test.vox
-  name: "Floor\x00vox"
-  position:
-    position:
-      x: 100
-      y: 2.50461817
-      z: 2500
-    rotation:
-      x: 0
-      y: 0
-      z: 0
-    scale:
-      x: 1000
-      y: 0.00100000005
-      z: 1000
-- type: Chunk
-  path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_sword.vox
-  name: /chr_sword.vox
-  position:
-    position:
-      x: -1.71249747
-      y: 7.17214108
-      z: -2.74784899
-    rotation:
-      x: 0
-      y: -0
-      z: 0
-    scale:
-      x: 0.100000001
-      y: 0.100000001
-      z: 0.100000001
+      position:
+        x: 0
+        y: 12.0352259
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1

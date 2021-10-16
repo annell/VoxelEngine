@@ -12,8 +12,8 @@ namespace internal {
 
 namespace voxie {
 
-    Sprite::Sprite(std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : entity(Entity::MakeEntity()), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+    Sprite::Sprite(const Entity& entity, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
+        : entity(entity), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
         helper::AddComponent(entity, std::move(shader));
@@ -28,6 +28,7 @@ namespace voxie {
 
     void Sprite::encode(YAML::Node &node) const {
         node["type"] = "Sprite";
+        node["id"] = GetEntity().GetId();
         node["path"] = path;
         auto name = helper::GetComponent<Name>(entity).get();
         node["name"] = name->name;

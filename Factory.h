@@ -22,6 +22,7 @@ namespace voxie {
     struct ModelConfig {
         std::string name;
         std::string path;
+        Entity entity = Entity(0);
     };
 
     std::vector<ModelConfig> GetModels();
@@ -30,6 +31,7 @@ namespace voxie {
     struct LightFactoryConfig {
         std::string name;
         voxie::LightType type;
+        Entity entity = Entity(0);
         voxie::Position position = {0, 0, 0};
         voxie::Dimensions dimensions = {1, 1, 1};
         voxie::Color color = voxie::Color({0.5, 0.5, 0.5});
@@ -41,6 +43,7 @@ namespace voxie {
 
     struct CameraFactoryConfig {
         std::string name;
+        Entity entity = Entity(0);
         glm::vec3 position = {0, 0, 0};
     };
 
@@ -49,6 +52,7 @@ namespace voxie {
     struct SpriteConfig {
         std::string name;
         std::string path;
+        Entity entity = Entity(0);
     };
 
     std::vector<SpriteConfig> GetSprites();
@@ -58,6 +62,7 @@ namespace voxie {
     struct SceneConfig {
         std::string name;
         std::string path;
+        Entity entity = Entity(0);
     };
     std::vector<SceneConfig> GetScenes();
 

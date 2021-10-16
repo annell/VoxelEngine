@@ -26,5 +26,8 @@ namespace voxie {
         static int id = 0;
         return Entity(++id);
     }
+    Entity::Identity Entity::GetId() const {
+        return id;
+    }
 
 }// namespace voxie

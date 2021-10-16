@@ -53,6 +53,7 @@ namespace voxie {
 
     std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig config) {
         auto model = std::make_shared<voxie::Chunk>(
+                config.entity.GetId() ? config.entity : Entity::MakeEntity(),
                 config.path,
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
@@ -60,7 +61,6 @@ namespace voxie {
                                 std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
                                 std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)}),
                 std::make_shared<voxie::Position>(0, 0, 0));
-        voxie::Engine::GetEngine().GetScene().AddEntity(model->GetEntity());
         return std::move(model);
     }
 
@@ -69,6 +69,7 @@ namespace voxie {
         return {{
                         "Point light",
                         LightType::POINT,
+                        Entity(0),
                         {0, 0, 0},
                         {0.1, 0.1, 0.1},
                 },
@@ -83,7 +84,7 @@ namespace voxie {
         auto obj = std::make_shared<voxie::LightSource>(
                 voxie::LightConfig{
                         std::make_shared<voxie::Name>(config.name),
-                        voxie::Entity::MakeEntity(),
+                        config.entity.GetId() ? config.entity : Entity::MakeEntity(),
                         std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
                                 std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
                                 std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)}),
@@ -92,13 +93,14 @@ namespace voxie {
                         std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, config.dimensions),
                         std::make_shared<voxie::Color>(config.color),
                         std::make_shared<voxie::Attenuation>(config.atteunation)});
-        voxie::Engine::GetEngine().GetScene().AddEntity(obj->GetEntity());
         return std::move(obj);
     }
 
     std::shared_ptr<voxie::Camera> MakeCamera(const CameraFactoryConfig &config) {
-        auto camera = std::make_shared<voxie::Camera>(voxie::Entity::MakeEntity(), config.name, config.position);
-        voxie::Engine::GetEngine().GetScene().AddEntity(camera->GetEntity());
+        auto camera = std::make_shared<voxie::Camera>(
+                config.entity.GetId() ? config.entity : Entity::MakeEntity(),
+                config.name,
+                config.position);
         return std::move(camera);
     }
 
@@ -108,6 +110,7 @@ namespace voxie {
 
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig config) {
         auto sprite = std::make_shared<voxie::Sprite>(
+                config.entity.GetId() ? config.entity : Entity::MakeEntity(),
                 config.path,
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
@@ -115,7 +118,6 @@ namespace voxie {
                                 std::make_pair(BASE_PATH + SHADERS + "/sprite.vs", GL_VERTEX_SHADER),
                                 std::make_pair(BASE_PATH + SHADERS + "/sprite.fs", GL_FRAGMENT_SHADER)}),
                 std::make_shared<voxie::Position2D>(0, 0));
-        voxie::Engine::GetEngine().GetScene().AddEntity(sprite->GetEntity());
         return std::move(sprite);
     }
 

@@ -37,6 +37,7 @@ namespace voxie {
 
     void LightSource::encode(YAML::Node &node) const {
         node["type"] = "LightSource";
+        node["id"] = GetEntity().GetId();
         node["lightType"] = (int) GetType();
         auto name = helper::GetComponent<Name>(entity).get();
         node["name"] = name->name;

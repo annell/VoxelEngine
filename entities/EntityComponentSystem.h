@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "BaseComponents.h"
 #include <algorithm>
 #include <map>
 #include <string>
@@ -15,6 +16,8 @@ namespace voxie {
         explicit Entity(Identity);
 
         static Entity MakeEntity();
+
+        Entity::Identity GetId() const;
 
         bool operator<(const Entity &rhs) const;
 
