@@ -97,8 +97,10 @@ std::unique_ptr<Node>&&Node::RemoveChild(const Entity& childEntity) {
 }
 
 void Node::MoveTo(Node * target) {
-    parent->MoveChild(this, target);
-    parent = target;
+    if (!Find(target->GetNode())) {
+        parent->MoveChild(this, target);
+        parent = target;
+    }
 }
 
 void Node::MoveChild(Node * child, Node * target) {
