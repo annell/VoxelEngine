@@ -7,12 +7,13 @@
 #include "BaseComponents.h"
 #include "Core.h"
 #include "EntityComponentSystem.h"
+#include <Node.h>
 #include <RenderingHandler.h>
 #include <Shader.h>
 #include <memory>
 
 namespace voxie {
-    class Sprite {
+    class Sprite : public NodeWrapper {
     public:
         Sprite(const Entity&, std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
         ~Sprite();
@@ -26,7 +27,7 @@ namespace voxie {
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
-        [[nodiscard]] const Entity &GetEntity() const;
+        [[nodiscard]] const Entity &GetEntity() const override;
 
     private:
         void Setup() const;

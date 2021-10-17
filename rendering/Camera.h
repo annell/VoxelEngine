@@ -8,6 +8,7 @@
 #include "Core.h"
 #include "Shader.h"
 #include <EntityComponentSystem.h>
+#include <Node.h>
 
 namespace voxie {
 
@@ -24,7 +25,7 @@ namespace voxie {
     const float SENSITIVITY = 0.1f;
     const float ZOOM = 45.0f;
 
-    class Camera {
+    class Camera : public NodeWrapper {
     public:
         Camera(Entity entity, Name name, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
         ~Camera();
@@ -35,7 +36,7 @@ namespace voxie {
         [[nodiscard]] glm::mat4 GetViewMatrix() const;
         [[nodiscard]] static float GetFarDistance();
         [[nodiscard]] glm::mat4 GetProjectionMatrix() const;
-        [[nodiscard]] const Entity &GetEntity() const;
+        [[nodiscard]] const Entity &GetEntity() const override;
         [[nodiscard]] std::shared_ptr<Direction> GetDirection() const;
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
         void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);

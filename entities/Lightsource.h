@@ -38,7 +38,7 @@ namespace voxie {
         std::shared_ptr<Attenuation> attenuation;
     };
 
-    class LightSource {
+    class LightSource : public NodeWrapper {
     public:
         explicit LightSource(const LightConfig &config);
         ~LightSource();
@@ -48,7 +48,7 @@ namespace voxie {
         [[nodiscard]] std::shared_ptr<Color> GetColor() const;
         [[nodiscard]] const LightType &GetType() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
-        [[nodiscard]] const Entity &GetEntity() const;
+        [[nodiscard]] const Entity &GetEntity() const override;
         [[nodiscard]] std::shared_ptr<Attenuation> GetAttenuation() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 

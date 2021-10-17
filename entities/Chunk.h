@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Core.h"
+#include <Node.h>
 #include <RenderingHandler.h>
 #include <map>
 #include <memory>
@@ -16,7 +17,7 @@
 
 namespace voxie {
 
-    class Chunk {
+    class Chunk : public NodeWrapper {
     public:
         Chunk(const Entity&, const std::string &path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
         ~Chunk();
@@ -32,7 +33,7 @@ namespace voxie {
         [[nodiscard]] RenderingConfig GetRenderingConfig() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
-        [[nodiscard]] const Entity &GetEntity() const;
+        [[nodiscard]] const Entity &GetEntity() const override;
 
     private:
         void SetupCubesForRendering();

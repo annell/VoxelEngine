@@ -86,9 +86,9 @@ namespace voxie {
     }
 
     std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const Scene::SceneEntities &entities) {
-        auto lightSources = helper::GetComponents<LightSource>(entities);
+        auto lightSources = helper::GetSceneNodes<LightSource>(entities);
 
-        for (const auto &chunk : helper::GetComponents<Chunk>(entities)) {
+        for (const auto &chunk : helper::GetSceneNodes<Chunk>(entities)) {
             auto shader = chunk->GetShader();
             shader->use();
             shader->setInt("nrLights", lightSources.size());

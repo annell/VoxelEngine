@@ -72,7 +72,7 @@ namespace voxie {
         if (it != components.end()) {
             components.erase(it);
         } else {
-            assert(false && "No component to remove!");
+            //assert(false && "No component to remove!");
         }
     }
 

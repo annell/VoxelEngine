@@ -65,7 +65,7 @@ namespace voxie {
     }
 
     std::shared_ptr<Camera> Engine::GetCamera() {
-        return camera ? helper::GetComponent<Camera>(camera->GetEntity()) : nullptr;
+        return camera ? helper::GetSceneNode<Camera>(camera->GetEntity()) : nullptr;
     }
 
     std::shared_ptr<Window> Engine::GetWindow() const {
@@ -146,7 +146,7 @@ namespace voxie {
     }
 
     void Engine::SetCamera(const Entity &entity) {
-        camera = helper::GetComponent<Camera>(entity).get();
+        camera = helper::GetSceneNode<Camera>(entity).get();
     }
 
     namespace helper {

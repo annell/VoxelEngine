@@ -62,19 +62,23 @@ namespace voxie {
 
     namespace helper {
         template<typename T>
+        std::shared_ptr<T> GetSceneNode(const Entity &handle) {
+            return std::dynamic_pointer_cast<T>(Engine::GetEngine().GetScene().FindNode(handle));
+        }
+        template<typename T>
         std::shared_ptr<T> GetComponent(const Entity &handle) {
             return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
         }
 
         template<typename T>
-        std::vector<std::shared_ptr<T>> GetComponents(Scene::SceneEntities entities) {
-            std::vector<std::shared_ptr<T>> components;
+        std::vector<std::shared_ptr<T>> GetSceneNodes(Scene::SceneEntities entities) {
+            std::vector<std::shared_ptr<T>> nodes;
             for (auto &entity : entities) {
-                if (auto component = GetComponent<T>(entity)) {
-                    components.push_back(component);
+                if (auto node = GetSceneNode<T>(entity)) {
+                    nodes.push_back(node);
                 }
             }
-            return components;
+            return nodes;
         }
 
         template<typename T>

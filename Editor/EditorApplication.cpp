@@ -56,9 +56,9 @@ int main() {
             voxie::helper::Submit(config);
         }
         for (const auto &entity : sceneObjects) {
-            if (auto model = voxie::helper::GetComponent<voxie::Chunk>(entity)) {
+            if (auto model = voxie::helper::GetSceneNode<voxie::Chunk>(entity)) {
                 voxie::helper::Submit(model->GetRenderingConfig());
-            } else if (auto model = voxie::helper::GetComponent<voxie::Sprite>(entity)) {
+            } else if (auto model = voxie::helper::GetSceneNode<voxie::Sprite>(entity)) {
                 voxie::helper::Submit(model->GetRenderingConfig());
             }
         }

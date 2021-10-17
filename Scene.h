@@ -3,36 +3,13 @@
 //
 
 #pragma once
+#include "Node.h"
 #include <BaseComponents.h>
 #include <EntityComponentSystem.h>
 #include <iostream>
 #include <list>
 
 namespace voxie {
-    class SceneNode {
-    public:
-        SceneNode(Entity node, SceneNode* parent);
-
-        void encode(YAML::Node &) const;
-        bool decode(const YAML::Node &);
-
-        const Entity& GetNode() const;
-        void AddChild(std::unique_ptr<SceneNode>&& child);
-        std::unique_ptr<SceneNode>&& RemoveChild(const Entity& childEntity);
-        void MoveTo(SceneNode* target);
-        SceneNode* Find(const Entity& entity);
-
-        const std::list<std::unique_ptr<SceneNode>>& GetChildNodes() const;
-        size_t GetNumChildren() const;
-        std::list<Entity> GetChildEntities() const;
-        SceneNode* GetParent() const;
-    private:
-        void MoveChild(SceneNode* child, SceneNode* target);
-
-        SceneNode* parent = nullptr;
-        Entity node;
-        std::list<std::unique_ptr<SceneNode>> children;
-    };
 
     class Scene {
     public:
@@ -43,16 +20,27 @@ namespace voxie {
         void Load(const std::string &name);
         using SceneEntities = std::list<Entity>;
         void ClearScene();
-        SceneNode* AddEntity(Entity, SceneNode* parent = nullptr);
+        Node * AddEntity(Entity, Node * parent = nullptr);
+
+        template <typename T>
+        void AddNode(std::shared_ptr<T> nodeWrapper, Node * parent) {
+            auto rootNode = parent ? parent : GetRoot();
+            auto node = std::make_unique<Node>(std::dynamic_pointer_cast<NodeWrapper>(std::move(nodeWrapper)), rootNode);
+            if (rootNode) {
+                rootNode->AddChild(std::move(node));
+            } else {
+                root = std::move(node);
+            }
+        }
         void RemoveEntity(Entity);
         SceneEntities GetEntities() const;
-        SceneNode* FindNode(const Entity&);
+        std::shared_ptr<NodeWrapper> FindNode(const Entity&);
 
         const std::string &GetSceneName() const;
-        SceneNode* GetRoot() const;
+        Node * GetRoot() const;
 
     private:
-        std::unique_ptr<SceneNode> root;
+        std::unique_ptr<Node> root;
         std::string folder;
         std::string sceneName;
     };

@@ -84,7 +84,7 @@ add_executable(VoxieEditor
         Scene.h
         Factory.h
         Factory.cpp
-        )
+        Node.cpp Node.h)
 
 include_directories(. entities utility input rendering core external/imgui external/ImGuizmo external/stb)
 

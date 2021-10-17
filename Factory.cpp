@@ -33,12 +33,13 @@ namespace internal {
     template<typename T>
     std::vector<T> GetFiles(const std::string &pathToDir, std::optional<std::string> fileending = {}) {
         std::vector<T> output;
+        voxie::Entity entity = voxie::Entity::MakeEntity();
         for (const auto &entry : std::filesystem::directory_iterator(pathToDir)) {
             std::string pathToFile = entry.path();
             std::string name = pathToFile;
             internal::eraseSubStr(name, pathToDir + "/");
             if (fileending.has_value() ? internal::hasEnding(name, fileending.value()) : true) {
-                output.push_back(T{name, pathToFile});
+                output.push_back(T{name, pathToFile, entity});
             }
         }
         return output;
@@ -66,17 +67,18 @@ namespace voxie {
 
 
     std::vector<LightFactoryConfig> GetLights() {
+        auto entity = Entity::MakeEntity();
         return {{
                         "Point light",
                         LightType::POINT,
-                        Entity(0),
+                        entity,
                         {0, 0, 0},
                         {0.1, 0.1, 0.1},
                 },
                 {
                         "Ambient light",
                         LightType::AMBIENT,
-
+                        entity
                 }};
     }
 
