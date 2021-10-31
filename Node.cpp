@@ -36,6 +36,8 @@ void Node::encode(YAML::Node &root) const {
         node["node"] = *light.get();
     } else if (auto sprite = helper::GetSceneNode<Sprite>(entity)) {
         node["node"] = *sprite.get();
+    } else if (auto sprite = helper::GetSceneNode<TransformNode>(entity)) {
+        node["node"] = *sprite.get();
     }
     root.push_back(node);
 
@@ -71,6 +73,11 @@ bool Node::decode(const YAML::Node &n) {
         auto obj = MakeSprite({n["name"].as<std::string>(),
                                n["path"].as<std::string>(),
                                nodeEntity});
+        obj->decode(n);
+        nodePtr = std::move(obj);
+    } else if (n["type"].as<std::string>() == "TransformNode") {
+        auto obj = MakeTransformNode({n["name"].as<std::string>(),
+                                       nodeEntity});
         obj->decode(n);
         nodePtr = std::move(obj);
     }

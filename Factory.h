@@ -4,6 +4,7 @@
 #pragma once
 
 #include <Chunk.h>
+#include <TransformNode.h>
 #include <Lightsource.h>
 #include <Sprite.h>
 #include <string>
@@ -58,6 +59,12 @@ namespace voxie {
     std::vector<SpriteConfig> GetSprites();
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig);
 
+    struct TransformNodeConfig {
+        std::string name;
+        Entity entity = NullEntity;
+    };
+
+    std::shared_ptr<voxie::TransformNode> MakeTransformNode(TransformNodeConfig);
 
     struct SceneConfig {
         std::string name;

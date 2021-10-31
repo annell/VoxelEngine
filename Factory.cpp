@@ -123,6 +123,14 @@ namespace voxie {
         return std::move(sprite);
     }
 
+    std::shared_ptr<voxie::TransformNode> MakeTransformNode(TransformNodeConfig config) {
+        auto sprite = std::make_shared<voxie::TransformNode>(
+                config.entity.GetId() ? config.entity : Entity::MakeEntity(),
+                std::make_shared<voxie::Name>(config.name),
+                std::make_shared<voxie::Position>(0, 0, 0));
+        return std::move(sprite);
+    }
+
     std::vector<SceneConfig> GetScenes() {
         return internal::GetFiles<SceneConfig>(BASE_PATH + SCENES, {SCENEFILESENDING});
     }

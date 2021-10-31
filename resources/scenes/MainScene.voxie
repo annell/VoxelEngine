@@ -1,13 +1,31 @@
 - node:
+    type: TransformNode
+    id: 1312
+    name: "World\x00orm Node"
+    position:
+      position:
+        x: -1.01659584
+        y: 5.80093479
+        z: 2.79003119
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+- parent: 1312
+  node:
     type: Camera
     id: 1
     activeCamera: true
     name: Editor Camera
     position:
       position:
-        x: -9.72400761
-        y: 5.14137077
-        z: -6.47349024
+        x: -9.84449196
+        y: 6.33549356
+        z: -15.3155289
       rotation:
         x: 0
         y: 0
@@ -17,9 +35,32 @@
         y: 1
         z: 1
     direction:
-      yaw: 380.095306
-      pitch: -12.5997782
-- parent: 1
+      yaw: 411.995514
+      pitch: -12.9997835
+- parent: 1312
+  node:
+    type: LightSource
+    id: 8244
+    lightType: 0
+    name: Ambient light
+    position:
+      position:
+        x: 0
+        y: 5.33908463
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    color:
+      r: 0.5
+      g: 0.5
+      b: 0.5
+- parent: 1312
   node:
     type: Chunk
     id: 2
@@ -38,45 +79,22 @@
         x: 1
         y: 1
         z: 1
-- parent: 1
-  node:
-    type: LightSource
-    id: 5
-    lightType: 0
-    name: Ambient light
-    position:
-      position:
-        x: 0
-        y: 0
-        z: 0
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    color:
-      r: 0.5
-      g: 0.5
-      b: 0.5
-- parent: 5
+- parent: 1312
   node:
     type: Chunk
-    id: 4
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
-    name: chr_knight.vox
+    id: 3871
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/teapot.vox
+    name: teapot.vox
     position:
       position:
-        x: 0
-        y: 3.637748
-        z: 0
+        x: -0.116211571
+        y: 1.95434523
+        z: 0.782227516
       rotation:
         x: 0
         y: -0
         z: 0
       scale:
-        x: 0.350000024
-        y: 0.350000024
-        z: 0.350000024
+        x: 0.063699998
+        y: 0.063699998
+        z: 0.063699998

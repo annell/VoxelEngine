@@ -200,6 +200,13 @@ namespace gui {
                 }
                 ImGui::EndMenu();
             }
+
+            if (ImGui::BeginMenu("Transform Node")) {
+                if (ImGui::Selectable("Transform Node")) {
+                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Entity::MakeEntity()}), nullptr);
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndPopup();
         }
     }
@@ -213,6 +220,10 @@ namespace gui {
     void ShowTopMenu() {
         if (ImGui::MenuItem("New")) {
             voxie::Engine::GetEngine().GetScene().ClearScene();
+            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Entity::MakeEntity()}), nullptr);
+            auto camera = voxie::Entity::MakeEntity();
+            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Editor Camera", camera}), nullptr);
+            voxie::Engine::GetEngine().SetCamera(camera);
         }
         if (ImGui::BeginMenu("Open")) {
             for (auto &scene : voxie::GetScenes()) {

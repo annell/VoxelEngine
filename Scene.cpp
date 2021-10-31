@@ -84,23 +84,10 @@ namespace voxie {
     void Scene::RemoveEntity(Entity entity) {
         if (root) {
             root->RemoveChild(entity);
-            if (helper::HasComponent<Chunk>(entity)) {
-                helper::RemoveComponent<Chunk>(entity);
-            } else if (helper::HasComponent<Sprite>(entity)) {
-                helper::RemoveComponent<Sprite>(entity);
-            } else if (helper::HasComponent<LightSource>(entity)) {
-                helper::RemoveComponent<LightSource>(entity);
-            }
         }
     }
     void Scene::ClearScene() {
-        for (const auto &entity : GetEntities()) {
-            RemoveEntity(entity);
-        }
-        if (root) {
-            RemoveEntity(root->GetNode());
-            root.reset();
-        }
+        root.reset(nullptr);
     }
     const std::string &Scene::GetSceneName() const {
         return sceneName;
