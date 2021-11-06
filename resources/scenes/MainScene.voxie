@@ -4,12 +4,12 @@
     name: "World\x00orm Node"
     position:
       position:
-        x: -1.01659584
-        y: 5.80093479
-        z: 2.79003119
+        x: 0
+        y: 0
+        z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -23,9 +23,9 @@
     name: Editor Camera
     position:
       position:
-        x: -9.84449196
-        y: 6.33549356
-        z: -15.3155289
+        x: -34.6314392
+        y: 16.6236038
+        z: -37.5797958
       rotation:
         x: 0
         y: 0
@@ -35,8 +35,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 411.995514
-      pitch: -12.9997835
+      yaw: 400.997406
+      pitch: -13.1998024
 - parent: 1312
   node:
     type: LightSource
@@ -45,12 +45,12 @@
     name: Ambient light
     position:
       position:
-        x: 0
-        y: 5.33908463
-        z: 0
+        x: -4.20409775
+        y: 20.5406017
+        z: -9.64328861
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
         x: 1
@@ -92,7 +92,7 @@
         z: 0.782227516
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 0.063699998

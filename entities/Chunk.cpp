@@ -139,12 +139,12 @@ namespace voxie {
         return vertexBufferArray;
     }
 
-    auto GetPreDrawAction(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Position> &pos) {
+    auto GetPreDrawAction(const std::shared_ptr<Shader> &shader, const glm::mat4 &model) {
         return [=]() {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);
             shader->use();
-            shader->setMat4("model", pos->model);
+            shader->setMat4("model", model);
         };
     }
 
@@ -155,10 +155,13 @@ namespace voxie {
     }
 
     RenderingConfig Chunk::GetRenderingConfig() const {
+        auto pos = Engine::GetEngine().GetScene().GetRoot()->Find(GetEntity())->GetRelativePosition();
+        auto p0 = GetPosition();
+        auto model = p0->GetModel(pos, p0->scale, p0->rotation);
         return {
                 GetShader(),
                 GetVertexBufferArray(),
-                GetPreDrawAction(GetShader(), GetPosition()),
+                GetPreDrawAction(GetShader(), model),
                 GetPostDrawAction(),
                 [&]() {
                     glBindVertexArray(GetVertexBufferArray()->VAO);

@@ -46,7 +46,7 @@ namespace voxie {
 
     private:
         void updateCameraVectors();
-        [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
+        [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
         Entity entity;
         Entity selectedEntity;
 

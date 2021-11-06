@@ -12,12 +12,16 @@ namespace voxie {
 struct NodeWrapper {
     virtual ~NodeWrapper() {}
     virtual const Entity& GetEntity() const = 0;
+    virtual std::shared_ptr<Position> GetPosition() const {
+        return std::shared_ptr<Position>();
+    }
 };
 
 class Node {
 public:
     Node(Entity node, Node * parent);
     Node(std::shared_ptr<NodeWrapper>, Node * parent);
+    ~Node();
 
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
@@ -34,6 +38,8 @@ public:
     size_t GetNumChildren() const;
     std::list<Entity> GetChildEntities() const;
     Node * GetParent() const;
+    glm::vec3 GetRelativePosition();
+
 private:
     void MoveChild(Node * child, Node * target);
 

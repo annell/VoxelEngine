@@ -233,10 +233,16 @@ namespace voxie {
             rotation = glm::eulerAngles(rotationQuat);
         }
 
-        void UpdateModel() {
+        glm::mat4 GetModel(const glm::vec3& pos, const glm::vec3& scale, const glm::vec3& rotation) {
+            auto model = glm::mat4(1.0f);
             model = glm::translate(glm::mat4(1.0f), pos);
             model = glm::scale(model, scale);
-            model *= glm::toMat4(rotationQuat);
+            model *= glm::toMat4(glm::quat(glm::radians(rotation)));
+            return model;
+        }
+
+        void UpdateModel() {
+            model = GetModel(pos, scale, rotation);
         }
 
         glm::mat4 model{};

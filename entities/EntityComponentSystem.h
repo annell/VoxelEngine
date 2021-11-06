@@ -5,7 +5,7 @@
 #pragma once
 #include "BaseComponents.h"
 #include <algorithm>
-#include <map>
+#include <vector>
 #include <string>
 
 namespace voxie {
@@ -45,34 +45,46 @@ namespace voxie {
     };
 
     template<typename T>
-    std::map<Entity, std::shared_ptr<T>> &GetComponents() {
-        static std::map<Entity, std::shared_ptr<T>> entities;
-        return entities;
+    struct Component {
+        Entity entity;
+        std::shared_ptr<T> component;
+
+        bool operator==(const Component<T>& rhs) {
+            return this->entity == rhs.entity;
+        }
+    };
+
+    template<typename T>
+    std::vector<Component<T>> &GetComponents() {
+        static std::vector<Component<T>> components;
+        return components;
     }
 
     template<typename T>
     std::shared_ptr<T> EntityComponentSystem::GetComponent(const Entity &handle) {
         auto &components = GetComponents<T>();
-        auto it = components.find(handle);
-        if (it != components.end()) {
-            return it->second;
+        for (auto it = components.begin(); it != components.end(); it++) {
+            if (it->entity == handle) {
+                return it->component;
+            }
         }
         return nullptr;
     }
 
     template<typename T>
     void EntityComponentSystem::AddComponent(const Entity &handle, std::shared_ptr<T> component) {
-        GetComponents<T>()[handle] = component;
+        auto &components = GetComponents<T>();
+        components.push_back({handle, std::move(component)});
     }
 
     template<typename T>
     void EntityComponentSystem::RemoveComponent(const Entity &handle) {
         auto &components = GetComponents<T>();
-        auto it = components.find(handle);
-        if (it != components.end()) {
-            components.erase(it);
-        } else {
-            //assert(false && "No component to remove!");
+        for (auto it = components.begin(); it != components.end(); it++) {
+            if (it->entity == handle) {
+                components.erase(it);
+                return;
+            }
         }
     }
 

@@ -17,9 +17,9 @@ public:
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    const Entity& GetEntity() const;
+    const Entity& GetEntity() const override;
 
-    [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
+    [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
     [[nodiscard]] std::shared_ptr<Name> GetName() const;
 private:
     Entity entity;

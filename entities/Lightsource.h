@@ -44,7 +44,7 @@ namespace voxie {
         ~LightSource();
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
-        [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
+        [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
         [[nodiscard]] std::shared_ptr<Color> GetColor() const;
         [[nodiscard]] const LightType &GetType() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;

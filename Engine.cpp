@@ -7,13 +7,17 @@
 
 namespace voxie {
     Engine::Engine()
-        : scene(BASE_PATH + SCENES + "/") {
+        : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/"))
+        , components(std::make_unique<EntityComponentSystem>()){
+
     }
 
     Engine::~Engine() {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+        scene.reset();
+        components.reset();
     }
 
     bool Engine::Init() {
@@ -22,8 +26,8 @@ namespace voxie {
         }
         InitGUI();
 
-        scene.Load("MainScene.voxie");
-        if (scene.GetEntities().empty()) {
+        scene->Load("MainScene.voxie");
+        if (scene->GetEntities().empty()) {
             auto camera = MakeCamera({"Editor Camera"});
             auto entity = camera->GetEntity();
             helper::AddComponent(entity, std::move(camera));
@@ -56,7 +60,7 @@ namespace voxie {
         glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
         glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_callback);
         glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
-        glfwSwapInterval(0.001);
+        glfwSwapInterval(1);
 
         glewInit();
 
@@ -120,7 +124,7 @@ namespace voxie {
     }
 
     EntityComponentSystem &Engine::GetComponents() {
-        return components;
+        return *components.get();
     }
 
     RenderingHandler &Engine::GetRenderingHandler() {
@@ -132,7 +136,7 @@ namespace voxie {
     }
 
     Scene &Engine::GetScene() {
-        return scene;
+        return *scene.get();
     }
 
     void Engine::InitGUI() const {

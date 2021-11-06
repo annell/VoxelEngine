@@ -29,6 +29,10 @@ namespace voxie {
             : folder(folder) {
     }
 
+    Scene::~Scene() {
+        root.reset();
+    }
+
     void Scene::SetFilename(const std::string &name) {
         sceneName = name;
     }
@@ -66,11 +70,7 @@ namespace voxie {
         auto rootNode = parent ? parent : GetRoot();
         auto node = std::make_unique<Node>(entity, rootNode);
         auto nodePtr = node.get();
-        if (rootNode) {
-            rootNode->AddChild(std::move(node));
-        } else {
-            root = std::move(node);
-        }
+        AddNodeImplementation(std::move(node), rootNode);
         return nodePtr;
     }
 

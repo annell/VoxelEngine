@@ -36,7 +36,7 @@ namespace voxie {
     }
 
     bool Sprite::decode(const YAML::Node &node) {
-        GetPosition()->decode(node["position"]);
+        GetPosition2D()->decode(node["position"]);
         return true;
     }
 
@@ -44,7 +44,7 @@ namespace voxie {
     void Sprite::Draw() const {
         auto shader = GetShader();
         shader->use();
-        shader->setMat4("model", GetPosition()->model);
+        shader->setMat4("model", GetPosition2D()->model);
 
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(GetVertexBufferArray()->VAO);
@@ -60,7 +60,7 @@ namespace voxie {
                 [&]() { Draw(); }};
     }
 
-    std::shared_ptr<Position2D> Sprite::GetPosition() const {
+    std::shared_ptr<Position2D> Sprite::GetPosition2D() const {
         return voxie::helper::GetComponent<Position2D>(entity);
     }
 
@@ -78,7 +78,7 @@ namespace voxie {
 
     void Sprite::Setup() const {
         auto vertexBufferArray = GetVertexBufferArray();
-        auto pos = GetPosition();
+        auto pos = GetPosition2D();
         pos->UpdateModel();
         vertexBufferArray->vertexAttributes = {
                 //  Position   Texcoords

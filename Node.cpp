@@ -22,6 +22,10 @@ Node::Node(std::shared_ptr<NodeWrapper> nodeWrapper, Node * parent)
 
 }
 
+Node::~Node() {
+
+}
+
 void Node::encode(YAML::Node &root) const {
     YAML::Node node;
     if (parent) {
@@ -164,6 +168,13 @@ Node* Node::Find(const Entity& entity) {
 }
 std::shared_ptr<NodeWrapper> Node::GetNodePtr() const {
     return nodePtr;
+}
+
+glm::vec3 Node::GetRelativePosition() {
+    if (!parent) {
+        return GetNodePtr()->GetPosition()->pos;
+    }
+    return parent->GetRelativePosition() + GetNodePtr()->GetPosition()->pos;
 }
 
 }

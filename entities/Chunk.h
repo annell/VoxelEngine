@@ -29,7 +29,7 @@ namespace voxie {
         void AddCube(ChunkPosition, std::unique_ptr<Cube> &&);
         [[nodiscard]] size_t NrVertex() const;
 
-        [[nodiscard]] std::shared_ptr<Position> GetPosition() const;
+        [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
         [[nodiscard]] RenderingConfig GetRenderingConfig() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
