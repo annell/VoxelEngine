@@ -267,7 +267,7 @@ namespace gui {
         if (ImGui::BeginDragDropSource()) {
             ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE, NULL, 0);
             draggedNode = root;
-            ImGui::Text(name->name.c_str());
+            ImGui::Text("%s", name->name.c_str());
             ImGui::EndDragDropSource();
         }
 

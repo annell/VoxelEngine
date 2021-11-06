@@ -96,7 +96,7 @@ void Node::AddChild(std::unique_ptr<Node>&& child) {
     children.push_back(std::move(child));
 }
 
-std::unique_ptr<Node>&&Node::RemoveChild(const Entity& childEntity) {
+std::unique_ptr<Node> Node::RemoveChild(const Entity& childEntity) {
     for (auto it = children.begin(); it != children.end(); it++) {
         if (it->get()->GetNode() == childEntity) {
             auto out = std::move(*it);

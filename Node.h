@@ -29,7 +29,7 @@ public:
     const Entity& GetNode() const;
     std::shared_ptr<NodeWrapper> GetNodePtr() const;
     void AddChild(std::unique_ptr<Node>&& child);
-    std::unique_ptr<Node>&& RemoveChild(const Entity& childEntity);
+    std::unique_ptr<Node> RemoveChild(const Entity& childEntity);
     void MoveTo(Node * target);
     Node* Find(const Entity& entity);
     std::shared_ptr<NodeWrapper> FindNode(const Entity& entity);

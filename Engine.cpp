@@ -156,7 +156,7 @@ namespace voxie {
     namespace helper {
 
         void Log(const std::string &log) {
-            Engine::GetEngine().GetLogger().AddLog(log.c_str());
+            Engine::GetEngine().GetLogger().AddLog("%s", log.c_str());
         }
 
         void RenderingBegin() {
