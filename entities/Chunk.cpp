@@ -155,9 +155,9 @@ namespace voxie {
     }
 
     RenderingConfig Chunk::GetRenderingConfig() const {
-        auto pos = Engine::GetEngine().GetScene().GetRoot()->Find(GetEntity())->GetRelativePosition();
+        auto obj = Engine::GetEngine().GetScene().GetRoot()->Find(GetEntity());
         auto p0 = GetPosition();
-        auto model = p0->GetModel(pos, p0->scale, p0->rotation);
+        auto model = p0->GetModel(obj->GetRelativePosition(), p0->scale, obj->GetRelativeRotation());
         return {
                 GetShader(),
                 GetVertexBufferArray(),

@@ -39,6 +39,7 @@ public:
     std::list<Entity> GetChildEntities() const;
     Node * GetParent() const;
     glm::vec3 GetRelativePosition();
+    glm::vec3 GetRelativeRotation();
 
 private:
     void MoveChild(Node * child, Node * target);

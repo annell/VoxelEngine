@@ -177,4 +177,11 @@ glm::vec3 Node::GetRelativePosition() {
     return parent->GetRelativePosition() + GetNodePtr()->GetPosition()->pos;
 }
 
+glm::vec3 Node::GetRelativeRotation() {
+    if (!parent) {
+        return GetNodePtr()->GetPosition()->rotation;
+    }
+    return parent->GetRelativeRotation() + GetNodePtr()->GetPosition()->rotation;
+}
+
 }

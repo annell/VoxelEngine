@@ -237,7 +237,7 @@ namespace voxie {
             auto model = glm::mat4(1.0f);
             model = glm::translate(glm::mat4(1.0f), pos);
             model = glm::scale(model, scale);
-            model *= glm::toMat4(glm::quat(glm::radians(rotation)));
+            model *= glm::toMat4(glm::quat((rotation)));
             return model;
         }
 
