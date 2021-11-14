@@ -23,8 +23,8 @@ namespace voxie {
 
     void Camera::encode(YAML::Node &node) const {
         node["type"] = "Camera";
-        node["id"] = GetEntity().GetId();
-        node["activeCamera"] = Engine::GetEngine().GetCamera()->GetEntity() == handle;
+        node["id"] = GetHandle().GetId();
+        node["activeCamera"] = Engine::GetEngine().GetCamera()->GetHandle() == handle;
         node["name"] = helper::GetComponent<Name>(handle).get()->name;
 
         node["position"] = *helper::GetComponent<Position>(handle).get();
@@ -108,7 +108,7 @@ namespace voxie {
     const Handle &Camera::GetSelection() const {
         return selectedEntity;
     }
-    const Handle &Camera::GetEntity() const {
+    const Handle &Camera::GetHandle() const {
         return handle;
     }
 

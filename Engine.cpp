@@ -30,7 +30,7 @@ namespace voxie {
         scene->Load("MainScene.voxie");
         if (scene->GetEntities().empty()) {
             auto camera = MakeCamera({"Editor Camera"});
-            auto entity = camera->GetEntity();
+            auto entity = camera->GetHandle();
             GetScene().AddNode(camera, nullptr);
             SetCamera(entity);
         }

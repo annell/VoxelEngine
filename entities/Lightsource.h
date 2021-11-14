@@ -29,7 +29,7 @@ namespace voxie {
 
     struct LightConfig {
         std::shared_ptr<Name> name;
-        Handle entity;
+        Handle handle;
         std::shared_ptr<Shader> shader;
         std::shared_ptr<Position> position;
         LightType type;
@@ -48,12 +48,12 @@ namespace voxie {
         [[nodiscard]] std::shared_ptr<Color> GetColor() const;
         [[nodiscard]] const LightType &GetType() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
-        [[nodiscard]] const Handle &GetEntity() const override;
+        [[nodiscard]] const Handle &GetHandle() const override;
         [[nodiscard]] std::shared_ptr<Attenuation> GetAttenuation() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
-        Handle entity;
+        Handle handle;
         LightType type;
         std::shared_ptr<Cube> cube;
     };

@@ -27,13 +27,13 @@ namespace voxie {
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
-        [[nodiscard]] const Handle &GetEntity() const override;
+        [[nodiscard]] const Handle &GetHandle() const override;
 
     private:
         void Setup() const;
 
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
-        Handle entity;
+        Handle handle;
         Texture2D texture;
         std::string path;
     };

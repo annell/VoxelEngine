@@ -12,27 +12,27 @@ namespace internal {
 
 namespace voxie {
 
-    Sprite::Sprite(const Handle & entity, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : entity(entity), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
-        helper::AddComponent(entity, std::move(name));
-        helper::AddComponent(entity, std::move(position));
-        helper::AddComponent(entity, std::move(shader));
+    Sprite::Sprite(const Handle &handle, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
+        : handle(handle), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+        helper::AddComponent(handle, std::move(name));
+        helper::AddComponent(handle, std::move(position));
+        helper::AddComponent(handle, std::move(shader));
         Setup();
     }
 
     Sprite::~Sprite() {
-        helper::RemoveComponent<Name>(entity);
-        helper::RemoveComponent<Position2D>(entity);
-        helper::RemoveComponent<Shader>(entity);
+        helper::RemoveComponent<Name>(handle);
+        helper::RemoveComponent<Position2D>(handle);
+        helper::RemoveComponent<Shader>(handle);
     }
 
     void Sprite::encode(YAML::Node &node) const {
         node["type"] = "Sprite";
-        node["id"] = GetEntity().GetId();
+        node["id"] = GetHandle().GetId();
         node["path"] = path;
-        auto name = helper::GetComponent<Name>(entity).get();
+        auto name = helper::GetComponent<Name>(handle).get();
         node["name"] = name->name;
-        node["position"] = *helper::GetComponent<Position2D>(entity).get();
+        node["position"] = *helper::GetComponent<Position2D>(handle).get();
     }
 
     bool Sprite::decode(const YAML::Node &node) {
@@ -61,19 +61,19 @@ namespace voxie {
     }
 
     std::shared_ptr<Position2D> Sprite::GetPosition2D() const {
-        return voxie::helper::GetComponent<Position2D>(entity);
+        return voxie::helper::GetComponent<Position2D>(handle);
     }
 
     std::shared_ptr<Shader> Sprite::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(entity);
+        return voxie::helper::GetComponent<Shader>(handle);
     }
 
     std::shared_ptr<VertexBufferArray> Sprite::GetVertexBufferArray() const {
         return vertexBufferArray;
     }
 
-    const Handle &Sprite::GetEntity() const {
-        return entity;
+    const Handle &Sprite::GetHandle() const {
+        return handle;
     }
 
     void Sprite::Setup() const {

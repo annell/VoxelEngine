@@ -16,7 +16,7 @@ Node::Node(Handle node, Node * parent)
 }
 
 Node::Node(std::shared_ptr<NodeWrapper> nodeWrapper, Node * parent)
-    : handle(nodeWrapper->GetEntity())
+    : handle(nodeWrapper->GetHandle())
     , nodePtr(nodeWrapper)
     , parent(parent) {
 
@@ -62,7 +62,7 @@ bool Node::decode(const YAML::Node &n) {
         auto obj = MakeCamera({n["name"].as<std::string>(),
                                nodeEntity});
         obj->decode(n);
-        auto entity = obj->GetEntity();
+        auto entity = obj->GetHandle();
         nodePtr = std::move(obj);
         if (n["activeCamera"].as<bool>()) {
             Engine::GetEngine().SetCamera(entity);

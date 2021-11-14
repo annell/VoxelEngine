@@ -14,7 +14,7 @@ TransformNode::TransformNode(const voxie::Handle & entity, std::shared_ptr<Name>
 }
 void TransformNode::encode(YAML::Node& node) const {
     node["type"] = "TransformNode";
-    node["id"] = GetEntity().GetId();
+    node["id"] = GetHandle().GetId();
     auto name = helper::GetComponent<Name>(entity).get();
     node["name"] = name->name;
     node["position"] = *helper::GetComponent<Position>(entity).get();
@@ -33,7 +33,7 @@ std::shared_ptr<Name> TransformNode::GetName() const {
     return voxie::helper::GetComponent<Name>(entity);
 }
 
-const Handle &TransformNode::GetEntity() const {
+const Handle &TransformNode::GetHandle() const {
     return entity;
 }
 

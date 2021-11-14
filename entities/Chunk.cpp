@@ -10,29 +10,29 @@
 
 namespace voxie {
 
-    Chunk::Chunk(const Handle & entity, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
-        : entity(entity), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
-        helper::AddComponent(entity, std::move(name));
-        helper::AddComponent(entity, std::move(position));
-        helper::AddComponent(entity, std::move(shader));
+    Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
+        : handle(handle), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+        helper::AddComponent(handle, std::move(name));
+        helper::AddComponent(handle, std::move(position));
+        helper::AddComponent(handle, std::move(shader));
         voxie::ModelLoader::LoadModel(path, this);
         SetupCubesForRendering();
         SetupShader();
     }
 
     Chunk::~Chunk() {
-        helper::RemoveComponent<Name>(entity);
-        helper::RemoveComponent<Shader>(entity);
-        helper::RemoveComponent<Position>(entity);
+        helper::RemoveComponent<Name>(handle);
+        helper::RemoveComponent<Shader>(handle);
+        helper::RemoveComponent<Position>(handle);
     }
 
     void Chunk::encode(YAML::Node &node) const {
         node["type"] = "Chunk";
-        node["id"] = GetEntity().GetId();
+        node["id"] = GetHandle().GetId();
         node["path"] = path;
-        auto name = helper::GetComponent<Name>(entity).get();
+        auto name = helper::GetComponent<Name>(handle).get();
         node["name"] = name->name;
-        node["position"] = *helper::GetComponent<Position>(entity).get();
+        node["position"] = *helper::GetComponent<Position>(handle).get();
     }
 
     bool Chunk::decode(const YAML::Node &node) {
@@ -128,11 +128,11 @@ namespace voxie {
     }
 
     std::shared_ptr<Position> Chunk::GetPosition() const {
-        return voxie::helper::GetComponent<Position>(entity);
+        return voxie::helper::GetComponent<Position>(handle);
     }
 
     std::shared_ptr<Shader> Chunk::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(entity);
+        return voxie::helper::GetComponent<Shader>(handle);
     }
 
     std::shared_ptr<VertexBufferArray> Chunk::GetVertexBufferArray() const {
@@ -155,7 +155,7 @@ namespace voxie {
     }
 
     RenderingConfig Chunk::GetRenderingConfig() const {
-        auto obj = Engine::GetEngine().GetScene().GetRoot()->Find(GetEntity());
+        auto obj = Engine::GetEngine().GetScene().GetRoot()->Find(GetHandle());
         auto p0 = GetPosition();
         auto model = p0->GetModel(obj->GetRelativePosition(), p0->scale, obj->GetRelativeRotation());
         return {
@@ -169,8 +169,8 @@ namespace voxie {
                 }};
     }
 
-    const Handle &Chunk::GetEntity() const {
-        return entity;
+    const Handle &Chunk::GetHandle() const {
+        return handle;
     }
 
 }// namespace voxie

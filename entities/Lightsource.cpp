@@ -10,39 +10,39 @@
 namespace voxie {
 
     LightSource::LightSource(const LightConfig &config)
-        : entity(config.entity), type(config.type), cube(std::move(config.cube)) {
+        : handle(config.handle), type(config.type), cube(std::move(config.cube)) {
         cube->GenerateVertexAttributes();
         cube->CreateRenderBuffers();
         cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
         config.position->model = glm::translate(config.position->model, config.position->pos);
         config.position->SetPosition(config.position->pos);
-        helper::AddComponent(entity, config.name);
-        helper::AddComponent(entity, config.position);
-        helper::AddComponent(entity, config.shader);
-        helper::AddComponent(entity, config.color);
+        helper::AddComponent(handle, config.name);
+        helper::AddComponent(handle, config.position);
+        helper::AddComponent(handle, config.shader);
+        helper::AddComponent(handle, config.color);
         if (type == LightType::POINT) {
-            helper::AddComponent(entity, config.attenuation);
+            helper::AddComponent(handle, config.attenuation);
         }
     }
 
     LightSource::~LightSource() {
-        helper::RemoveComponent<Name>(entity);
-        helper::RemoveComponent<Position>(entity);
-        helper::RemoveComponent<Shader>(entity);
-        helper::RemoveComponent<Color>(entity);
+        helper::RemoveComponent<Name>(handle);
+        helper::RemoveComponent<Position>(handle);
+        helper::RemoveComponent<Shader>(handle);
+        helper::RemoveComponent<Color>(handle);
         if (GetAttenuation()) {
-            helper::RemoveComponent<Attenuation>(entity);
+            helper::RemoveComponent<Attenuation>(handle);
         }
     }
 
     void LightSource::encode(YAML::Node &node) const {
         node["type"] = "LightSource";
-        node["id"] = GetEntity().GetId();
+        node["id"] = GetHandle().GetId();
         node["lightType"] = (int) GetType();
-        auto name = helper::GetComponent<Name>(entity).get();
+        auto name = helper::GetComponent<Name>(handle).get();
         node["name"] = name->name;
-        node["position"] = *helper::GetComponent<Position>(entity).get();
-        node["color"] = *helper::GetComponent<Color>(entity).get();
+        node["position"] = *helper::GetComponent<Position>(handle).get();
+        node["color"] = *helper::GetComponent<Color>(handle).get();
         if (auto attenuation = GetAttenuation()) {
             node["attenuation"] = *attenuation;
         }
@@ -58,15 +58,15 @@ namespace voxie {
     }
 
     std::shared_ptr<Color> LightSource::GetColor() const {
-        return voxie::helper::GetComponent<Color>(entity);
+        return voxie::helper::GetComponent<Color>(handle);
     }
 
     std::shared_ptr<Position> LightSource::GetPosition() const {
-        return voxie::helper::GetComponent<Position>(entity);
+        return voxie::helper::GetComponent<Position>(handle);
     }
 
     std::shared_ptr<Shader> LightSource::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(entity);
+        return voxie::helper::GetComponent<Shader>(handle);
     }
 
     const LightType &LightSource::GetType() const {
@@ -74,15 +74,15 @@ namespace voxie {
     }
 
     std::shared_ptr<Attenuation> LightSource::GetAttenuation() const {
-        return voxie::helper::GetComponent<Attenuation>(entity);
+        return voxie::helper::GetComponent<Attenuation>(handle);
     }
 
     std::shared_ptr<VertexBufferArray> LightSource::GetVertexBufferArray() const {
-        return voxie::helper::GetComponent<VertexBufferArray>(entity);
+        return voxie::helper::GetComponent<VertexBufferArray>(handle);
     }
 
-    const Handle &LightSource::GetEntity() const {
-        return entity;
+    const Handle &LightSource::GetHandle() const {
+        return handle;
     }
 
     std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const Scene::SceneEntities &entities) {
@@ -92,7 +92,7 @@ namespace voxie {
             auto shader = chunk->GetShader();
             shader->use();
             shader->setInt("nrLights", lightSources.size());
-            shader->setBool("selected", chunk->GetEntity() == camera->GetSelection());
+            shader->setBool("selected", chunk->GetHandle() == camera->GetSelection());
             camera->SetShaderParameters(*shader);
             int n = 0;
             for (const auto &light : lightSources) {

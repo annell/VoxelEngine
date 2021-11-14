@@ -11,7 +11,7 @@ namespace voxie {
 
 struct NodeWrapper {
     virtual ~NodeWrapper() {}
-    virtual const Handle & GetEntity() const = 0;
+    virtual const Handle &GetHandle() const = 0;
     virtual std::shared_ptr<Position> GetPosition() const {
         return std::shared_ptr<Position>();
     }
