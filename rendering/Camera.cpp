@@ -7,28 +7,28 @@
 
 namespace voxie {
 
-    Camera::Camera(Entity entity, Name name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), entity(entity), selectedEntity(entity) {
-        helper::AddComponent(entity, std::make_shared<Name>(name));
-        helper::AddComponent(entity, std::make_shared<Position>(position));
-        helper::AddComponent(entity, std::make_shared<Direction>(yaw, pitch));
+    Camera::Camera(Handle handle, Name name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
+        : Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), handle(handle), selectedEntity(handle) {
+        helper::AddComponent(handle, std::make_shared<Name>(name));
+        helper::AddComponent(handle, std::make_shared<Position>(position));
+        helper::AddComponent(handle, std::make_shared<Direction>(yaw, pitch));
         updateCameraVectors();
     }
 
     Camera::~Camera() {
-        helper::RemoveComponent<Name>(entity);
-        helper::RemoveComponent<Position>(entity);
-        helper::RemoveComponent<Direction>(entity);
+        helper::RemoveComponent<Name>(handle);
+        helper::RemoveComponent<Position>(handle);
+        helper::RemoveComponent<Direction>(handle);
     }
 
     void Camera::encode(YAML::Node &node) const {
         node["type"] = "Camera";
         node["id"] = GetEntity().GetId();
-        node["activeCamera"] = Engine::GetEngine().GetCamera()->GetEntity() == entity;
-        node["name"] = helper::GetComponent<Name>(entity).get()->name;
+        node["activeCamera"] = Engine::GetEngine().GetCamera()->GetEntity() == handle;
+        node["name"] = helper::GetComponent<Name>(handle).get()->name;
 
-        node["position"] = *helper::GetComponent<Position>(entity).get();
-        node["direction"] = *helper::GetComponent<Direction>(entity).get();
+        node["position"] = *helper::GetComponent<Position>(handle).get();
+        node["direction"] = *helper::GetComponent<Direction>(handle).get();
     }
 
     bool Camera::decode(const YAML::Node &node) {
@@ -91,26 +91,25 @@ namespace voxie {
         Up = glm::normalize(glm::cross(Right, Front));
     }
 
-    const Entity &Camera::GetEntity() const {
-        return entity;
-    }
-
     std::shared_ptr<Position> Camera::GetPosition() const {
-        return helper::GetComponent<Position>(entity);
+        return helper::GetComponent<Position>(handle);
     }
 
     std::shared_ptr<Direction> Camera::GetDirection() const {
-        return helper::GetComponent<Direction>(entity);
+        return helper::GetComponent<Direction>(handle);
     }
 
     float Camera::GetFarDistance() {
         return 10000.0f;
     }
-    void Camera::SetSelection(const Entity &selection) {
+    void Camera::SetSelection(const Handle &selection) {
         selectedEntity = selection;
     }
-    const Entity &Camera::GetSelection() const {
+    const Handle &Camera::GetSelection() const {
         return selectedEntity;
+    }
+    const Handle &Camera::GetEntity() const {
+        return handle;
     }
 
 

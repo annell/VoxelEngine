@@ -53,10 +53,10 @@ namespace voxie {
         ClearScene();
         auto nodes = YAML::Load(internal::read_file(folder + sceneName));
         for (const auto &node : nodes) {
-            auto entity = Entity(node["node"]["id"].as<int>());
+            auto entity = Handle(node["node"]["id"].as<int>());
             Node * parent = nullptr;
             if (node["parent"].IsDefined()) {
-                auto parentEntity = Entity(node["parent"].as<int>());
+                auto parentEntity = Handle(node["parent"].as<int>());
                 if (root) {
                     parent = root->Find(parentEntity);
                 }
@@ -66,7 +66,7 @@ namespace voxie {
         }
     }
 
-    Node * Scene::AddEntity(Entity entity, Node * parent) {
+    Node * Scene::AddEntity(Handle entity, Node * parent) {
         auto rootNode = parent ? parent : GetRoot();
         auto node = std::make_unique<Node>(entity, rootNode);
         auto nodePtr = node.get();
@@ -81,7 +81,7 @@ namespace voxie {
         return {};
     }
 
-    void Scene::RemoveEntity(Entity entity) {
+    void Scene::RemoveEntity(Handle entity) {
         if (root) {
             root->RemoveChild(entity);
         }
@@ -96,7 +96,7 @@ namespace voxie {
     Node *Scene::GetRoot() const {
         return root.get();
     }
-    std::shared_ptr<NodeWrapper> Scene::FindNode(const Entity & entity) {
+    std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle & entity) {
         if (root) {
             return root->FindNode(entity);
         }

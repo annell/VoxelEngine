@@ -11,7 +11,7 @@ namespace voxie {
 
 struct NodeWrapper {
     virtual ~NodeWrapper() {}
-    virtual const Entity& GetEntity() const = 0;
+    virtual const Handle & GetEntity() const = 0;
     virtual std::shared_ptr<Position> GetPosition() const {
         return std::shared_ptr<Position>();
     }
@@ -19,24 +19,24 @@ struct NodeWrapper {
 
 class Node {
 public:
-    Node(Entity node, Node * parent);
+    Node(Handle, Node * parent);
     Node(std::shared_ptr<NodeWrapper>, Node * parent);
     ~Node();
 
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    const Entity& GetNode() const;
+    const Handle &GetHandle() const;
     std::shared_ptr<NodeWrapper> GetNodePtr() const;
     void AddChild(std::unique_ptr<Node>&& child);
-    std::unique_ptr<Node> RemoveChild(const Entity& childEntity);
+    std::unique_ptr<Node> RemoveChild(const Handle & childEntity);
     void MoveTo(Node * target);
-    Node* Find(const Entity& entity);
-    std::shared_ptr<NodeWrapper> FindNode(const Entity& entity);
+    Node* Find(const Handle &handle);
+    std::shared_ptr<NodeWrapper> FindNode(const Handle &handle);
 
     const std::list<std::unique_ptr<Node>>& GetChildNodes() const;
     size_t GetNumChildren() const;
-    std::list<Entity> GetChildEntities() const;
+    std::list<Handle> GetChildEntities() const;
     Node * GetParent() const;
     glm::vec3 GetRelativePosition();
     glm::vec3 GetRelativeRotation();
@@ -45,7 +45,7 @@ private:
     void MoveChild(Node * child, Node * target);
 
     Node * parent = nullptr;
-    Entity node;
+    Handle handle;
     std::shared_ptr<NodeWrapper> nodePtr;
     std::list<std::unique_ptr<Node>> children;
 };

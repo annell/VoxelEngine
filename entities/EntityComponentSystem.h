@@ -10,47 +10,47 @@
 
 namespace voxie {
 
-    class Entity {
+    class Handle {
     public:
         using Identity = int;
-        explicit Entity(Identity);
+        explicit Handle(Identity);
 
-        static Entity MakeEntity();
+        static Handle MakeEntity();
 
-        Entity::Identity GetId() const;
+        Handle::Identity GetId() const;
 
-        bool operator<(const Entity &rhs) const;
+        bool operator<(const Handle &rhs) const;
 
-        bool operator==(const Entity &rhs) const;
+        bool operator==(const Handle &rhs) const;
 
     private:
         [[nodiscard]] auto as_tie() const;
 
-        Entity::Identity id;
+        Handle::Identity id;
     };
-    static const Entity NullEntity(0);
+    static const Handle NullEntity(0);
 
     class EntityComponentSystem {
     public:
         template<typename T>
-        std::shared_ptr<T> GetComponent(const Entity &handle);
+        std::shared_ptr<T> GetComponent(const Handle &handle);
 
         template<typename T>
-        void AddComponent(const Entity &handle, std::shared_ptr<T> component);
+        void AddComponent(const Handle &handle, std::shared_ptr<T> component);
 
         template<typename T>
-        void RemoveComponent(const Entity &handle);
+        void RemoveComponent(const Handle &handle);
 
     private:
     };
 
     template<typename T>
     struct Component {
-        Entity entity;
+        Handle handle;
         std::shared_ptr<T> component;
 
         bool operator==(const Component<T>& rhs) {
-            return this->entity == rhs.entity;
+            return this->handle == rhs.handle;
         }
     };
 
@@ -61,10 +61,10 @@ namespace voxie {
     }
 
     template<typename T>
-    std::shared_ptr<T> EntityComponentSystem::GetComponent(const Entity &handle) {
+    std::shared_ptr<T> EntityComponentSystem::GetComponent(const Handle &handle) {
         auto &components = GetComponents<T>();
         for (auto it = components.begin(); it != components.end(); it++) {
-            if (it->entity == handle) {
+            if (it->handle == handle) {
                 return it->component;
             }
         }
@@ -72,16 +72,16 @@ namespace voxie {
     }
 
     template<typename T>
-    void EntityComponentSystem::AddComponent(const Entity &handle, std::shared_ptr<T> component) {
+    void EntityComponentSystem::AddComponent(const Handle &handle, std::shared_ptr<T> component) {
         auto &components = GetComponents<T>();
         components.push_back({handle, std::move(component)});
     }
 
     template<typename T>
-    void EntityComponentSystem::RemoveComponent(const Entity &handle) {
+    void EntityComponentSystem::RemoveComponent(const Handle &handle) {
         auto &components = GetComponents<T>();
         for (auto it = components.begin(); it != components.end(); it++) {
-            if (it->entity == handle) {
+            if (it->handle == handle) {
                 components.erase(it);
                 return;
             }

@@ -6,27 +6,27 @@
 
 namespace voxie {
 
-    Entity::Entity(Entity::Identity id)
+    Handle::Handle(Handle::Identity id)
         : id(id) {
     }
 
-    auto Entity::as_tie() const {
+    auto Handle::as_tie() const {
         return std::tie(id);
     }
 
-    bool Entity::operator<(const Entity &rhs) const {
+    bool Handle::operator<(const Handle &rhs) const {
         return as_tie() < rhs.as_tie();
     }
 
-    bool Entity::operator==(const Entity &rhs) const {
+    bool Handle::operator==(const Handle &rhs) const {
         return as_tie() == rhs.as_tie();
     }
 
-    Entity Entity::MakeEntity() {
+    Handle Handle::MakeEntity() {
         static int id = 0;
-        return Entity(++id);
+        return Handle(++id);
     }
-    Entity::Identity Entity::GetId() const {
+    Handle::Identity Handle::GetId() const {
         return id;
     }
 

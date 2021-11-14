@@ -19,7 +19,7 @@ namespace voxie {
 
     class Chunk : public NodeWrapper {
     public:
-        Chunk(const Entity&, const std::string &path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
+        Chunk(const Handle &, const std::string &path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
         ~Chunk();
 
         void encode(YAML::Node &) const;
@@ -33,7 +33,7 @@ namespace voxie {
         [[nodiscard]] RenderingConfig GetRenderingConfig() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
-        [[nodiscard]] const Entity &GetEntity() const override;
+        [[nodiscard]] const Handle &GetEntity() const override;
 
     private:
         void SetupCubesForRendering();
@@ -46,7 +46,7 @@ namespace voxie {
         std::string path;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-        Entity entity;
+        Handle entity;
     };
 
 }// namespace voxie

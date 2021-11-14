@@ -45,7 +45,7 @@ namespace gui {
         ImGui::End();
     }
 
-    void ShowEntityColorController(const voxie::Entity &entity) {
+    void ShowEntityColorController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto color = voxie::helper::GetComponent<voxie::Color>(entity);
         float updatedColor[3] = {color->color[0], color->color[1], color->color[2]};
@@ -53,7 +53,7 @@ namespace gui {
         color->SetColor(updatedColor[0], updatedColor[1], updatedColor[2]);
     }
 
-    void ShowEntityAttenuationController(const voxie::Entity &entity) {
+    void ShowEntityAttenuationController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
         ImGui::SliderFloat("Quadratic", &attenuation->quadratic, 0.0f, 100.0f);
@@ -61,7 +61,7 @@ namespace gui {
         ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 100.0f);
     }
 
-    void ShowEntityPositionController(const voxie::Entity &entity) {
+    void ShowEntityPositionController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
         float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
@@ -76,7 +76,7 @@ namespace gui {
         pos->UpdateModel();
     }
 
-    void ShowEntityPosition2DController(const voxie::Entity &entity) {
+    void ShowEntityPosition2DController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto pos = voxie::helper::GetComponent<voxie::Position2D>(entity);
         float translation[2] = {pos->pos.x, pos->pos.y};
@@ -91,12 +91,12 @@ namespace gui {
         pos->UpdateModel();
     }
 
-    void ShowEntityNameController(const voxie::Entity &entity) {
+    void ShowEntityNameController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto name = voxie::helper::GetComponent<voxie::Name>(entity);
         char *buf = (char *) name->name.c_str();
         auto callback = [](ImGuiInputTextCallbackData *data) -> int {
-            auto *entity = (voxie::Entity *) data->UserData;
+            auto *entity = (voxie::Handle *) data->UserData;
             auto name = voxie::helper::GetComponent<std::string>(*entity);
             name->resize(data->BufSize);
             *name = std::string(data->Buf);
@@ -116,19 +116,19 @@ namespace gui {
         voxie::Engine::GetEngine().GetScene().SetFilename(std::string(buf));
     }
 
-    void ShowEntityDirectionController(const voxie::Entity &entity) {
+    void ShowEntityDirectionController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto direction = voxie::helper::GetComponent<voxie::Direction>(entity);
         ImGui::InputFloat("Yaw", &direction->yaw);
         ImGui::InputFloat("Pitch", &direction->pitch);
     }
 
-    void ShowCameraSelectorController(const voxie::Entity &entity) {
+    void ShowCameraSelectorController(const voxie::Handle &entity) {
         if (ImGui::Button("Set as camera"))
             voxie::Engine::GetEngine().SetCamera(entity);
     }
 
-    void ShowGuizmo(const voxie::Entity &entity) {
+    void ShowGuizmo(const voxie::Handle &entity) {
         ImGui::Separator();
         static auto mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
         static auto mCurrentGizmoMode = ImGuizmo::WORLD;
@@ -150,14 +150,15 @@ namespace gui {
         ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList(ImGui::GetMainViewport()));
         ImGuizmo::SetRect(0, 0, voxie::Engine::GetEngine().GetWindow()->GetWidth(), voxie::Engine::GetEngine().GetWindow()->GetHeight());
 
-        auto camera = voxie::Engine::GetEngine().GetCamera();
-        auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
-        auto mModel = pos->model;
-        const auto view = camera->GetViewMatrix();
-        const auto proj = camera->GetProjectionMatrix();
+        if (auto camera = voxie::Engine::GetEngine().GetCamera()) {
+            auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
+            auto mModel = pos->model;
+            const auto view = camera->GetViewMatrix();
+            const auto proj = camera->GetProjectionMatrix();
 
-        if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
-            pos->SetModel(mModel);
+            if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
+                pos->SetModel(mModel);
+            }
         }
     }
 
@@ -196,14 +197,14 @@ namespace gui {
 
             if (ImGui::BeginMenu("Camera")) {
                 if (ImGui::Selectable("Camera")) {
-                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Camera", voxie::Entity::MakeEntity()}), nullptr);
+                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Camera", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 ImGui::EndMenu();
             }
 
             if (ImGui::BeginMenu("Transform Node")) {
                 if (ImGui::Selectable("Transform Node")) {
-                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Entity::MakeEntity()}), nullptr);
+                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 ImGui::EndMenu();
             }
@@ -211,7 +212,7 @@ namespace gui {
         }
     }
 
-    void RemoveComponent(const voxie::Entity &entity) {
+    void RemoveComponent(const voxie::Handle &entity) {
         if (ImGui::Button("Remove")) {
             voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
         }
@@ -220,8 +221,8 @@ namespace gui {
     void ShowTopMenu() {
         if (ImGui::MenuItem("New")) {
             voxie::Engine::GetEngine().GetScene().ClearScene();
-            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Entity::MakeEntity()}), nullptr);
-            auto camera = voxie::Entity::MakeEntity();
+            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
+            auto camera = voxie::Handle::MakeEntity();
             voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Editor Camera", camera}), nullptr);
             voxie::Engine::GetEngine().SetCamera(camera);
         }
@@ -251,10 +252,10 @@ namespace gui {
         }
     }
 
-    bool DisplayNode(voxie::Node * root, voxie::Entity& selected, int flags) {
+    bool DisplayNode(voxie::Node * root, voxie::Handle & selected, int flags) {
         #define IMGUI_PAYLOAD_TYPE_SCENENODE "_SCENENODE"
         static voxie::Node * draggedNode = nullptr;
-        auto rootNode = root->GetNode();
+        auto rootNode = root->GetHandle();
         auto name = voxie::helper::GetComponent<voxie::Name>(rootNode);
         bool isSelected = rootNode == selected;
         if (isSelected) {
@@ -283,7 +284,7 @@ namespace gui {
         return open;
     }
 
-    void DisplayTreeView(voxie::Node * root, voxie::Entity& selected) {
+    void DisplayTreeView(voxie::Node * root, voxie::Handle & selected) {
         if (!root) {
             return;
         }
@@ -303,7 +304,7 @@ namespace gui {
         }
     }
 
-    void ShowTreeView(voxie::Entity& selected) {
+    void ShowTreeView(voxie::Handle & selected) {
         static ImGuiTableFlags flags = ImGuiTableFlags_Resizable
                                        | ImGuiTableFlags_NoBordersInBody;
 
@@ -335,7 +336,8 @@ namespace gui {
         ImGui::Begin("Scene");
         ShowSceneNameController();
         auto entity = ShowEntityList();
-        voxie::Engine::GetEngine().GetCamera()->SetSelection(entity);
+        if (auto camera = voxie::Engine::GetEngine().GetCamera())
+            camera->SetSelection(entity);
 
         AddNewComponent();
         ImGui::SameLine();

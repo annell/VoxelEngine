@@ -7,7 +7,7 @@
 
 namespace voxie {
 
-TransformNode::TransformNode(const voxie::Entity & entity, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
+TransformNode::TransformNode(const voxie::Handle & entity, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
     : entity(entity) {
     helper::AddComponent(entity, std::move(name));
     helper::AddComponent(entity, std::move(position));
@@ -33,7 +33,7 @@ std::shared_ptr<Name> TransformNode::GetName() const {
     return voxie::helper::GetComponent<Name>(entity);
 }
 
-const Entity &TransformNode::GetEntity() const {
+const Handle &TransformNode::GetEntity() const {
     return entity;
 }
 

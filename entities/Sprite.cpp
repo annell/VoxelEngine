@@ -12,7 +12,7 @@ namespace internal {
 
 namespace voxie {
 
-    Sprite::Sprite(const Entity& entity, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
+    Sprite::Sprite(const Handle & entity, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
         : entity(entity), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(entity, std::move(name));
         helper::AddComponent(entity, std::move(position));
@@ -72,7 +72,7 @@ namespace voxie {
         return vertexBufferArray;
     }
 
-    const Entity &Sprite::GetEntity() const {
+    const Handle &Sprite::GetEntity() const {
         return entity;
     }
 

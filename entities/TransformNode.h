@@ -12,17 +12,17 @@ namespace voxie {
 
 class TransformNode : public NodeWrapper {
 public:
-    TransformNode(const Entity&, std::shared_ptr<Name>, std::shared_ptr<Position>);
+    TransformNode(const Handle &, std::shared_ptr<Name>, std::shared_ptr<Position>);
 
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    const Entity& GetEntity() const override;
+    const Handle & GetEntity() const override;
 
     [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
     [[nodiscard]] std::shared_ptr<Name> GetName() const;
 private:
-    Entity entity;
+    Handle entity;
 };
 
 }

@@ -29,7 +29,7 @@ namespace voxie {
         static Engine &GetEngine();
         bool Init();
         std::shared_ptr<Camera> GetCamera();
-        void SetCamera(const Entity &);
+        void SetCamera(const Handle &);
         [[nodiscard]] std::shared_ptr<Window> GetWindow() const;
         void StartLoop();
         [[nodiscard]] float GetDeltaTime() const;
@@ -45,7 +45,7 @@ namespace voxie {
 
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
-        Camera *camera = nullptr;
+        Handle camera;
         std::shared_ptr<Window> window;
         std::unique_ptr<EntityComponentSystem> components;
         std::unique_ptr<Scene> scene;
@@ -62,11 +62,11 @@ namespace voxie {
 
     namespace helper {
         template<typename T>
-        std::shared_ptr<T> GetSceneNode(const Entity &handle) {
+        std::shared_ptr<T> GetSceneNode(const Handle &handle) {
             return std::dynamic_pointer_cast<T>(Engine::GetEngine().GetScene().FindNode(handle));
         }
         template<typename T>
-        std::shared_ptr<T> GetComponent(const Entity &handle) {
+        std::shared_ptr<T> GetComponent(const Handle &handle) {
             return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
         }
 
@@ -82,17 +82,17 @@ namespace voxie {
         }
 
         template<typename T>
-        bool HasComponent(const Entity &handle) {
+        bool HasComponent(const Handle &handle) {
             return Engine::GetEngine().GetComponents().GetComponent<T>(handle) != nullptr;
         }
 
         template<typename T>
-        void AddComponent(const Entity &handle, std::shared_ptr<T> component) {
+        void AddComponent(const Handle &handle, std::shared_ptr<T> component) {
             return Engine::GetEngine().GetComponents().AddComponent<T>(handle, component);
         }
 
         template<typename T>
-        void RemoveComponent(const Entity &handle) {
+        void RemoveComponent(const Handle &handle) {
             return Engine::GetEngine().GetComponents().RemoveComponent<T>(handle);
         }
 

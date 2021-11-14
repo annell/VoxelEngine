@@ -81,7 +81,7 @@ namespace voxie {
         return voxie::helper::GetComponent<VertexBufferArray>(entity);
     }
 
-    const Entity &LightSource::GetEntity() const {
+    const Handle &LightSource::GetEntity() const {
         return entity;
     }
 

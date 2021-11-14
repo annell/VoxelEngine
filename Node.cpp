@@ -8,15 +8,15 @@
 #include <Sprite.h>
 namespace voxie {
 
-Node::Node(Entity node, Node * parent)
-    : node(std::move(node))
+Node::Node(Handle node, Node * parent)
+    : handle(std::move(node))
     , nodePtr({})
     , parent(parent) {
 
 }
 
 Node::Node(std::shared_ptr<NodeWrapper> nodeWrapper, Node * parent)
-    : node(nodeWrapper->GetEntity())
+    : handle(nodeWrapper->GetEntity())
     , nodePtr(nodeWrapper)
     , parent(parent) {
 
@@ -29,18 +29,18 @@ Node::~Node() {
 void Node::encode(YAML::Node &root) const {
     YAML::Node node;
     if (parent) {
-        node["parent"] = parent->GetNode().GetId();
+        node["parent"] = parent->GetHandle().GetId();
     }
-    auto entity = GetNode();
-    if (auto camera = helper::GetSceneNode<Camera>(entity)) {
+    auto handle = GetHandle();
+    if (auto camera = helper::GetSceneNode<Camera>(handle)) {
         node["node"] = *camera.get();
-    } else if (auto chunk = helper::GetSceneNode<Chunk>(entity)) {
+    } else if (auto chunk = helper::GetSceneNode<Chunk>(handle)) {
         node["node"] = *chunk.get();
-    } else if (auto light = helper::GetSceneNode<LightSource>(entity)) {
+    } else if (auto light = helper::GetSceneNode<LightSource>(handle)) {
         node["node"] = *light.get();
-    } else if (auto sprite = helper::GetSceneNode<Sprite>(entity)) {
+    } else if (auto sprite = helper::GetSceneNode<Sprite>(handle)) {
         node["node"] = *sprite.get();
-    } else if (auto sprite = helper::GetSceneNode<TransformNode>(entity)) {
+    } else if (auto sprite = helper::GetSceneNode<TransformNode>(handle)) {
         node["node"] = *sprite.get();
     }
     root.push_back(node);
@@ -51,7 +51,7 @@ void Node::encode(YAML::Node &root) const {
 }
 
 bool Node::decode(const YAML::Node &n) {
-    auto nodeEntity = Entity(n["id"].as<int>());
+    auto nodeEntity = Handle(n["id"].as<int>());
     if (n["type"].as<std::string>() == "Chunk") {
         auto obj = MakeModel({n["name"].as<std::string>(),
                               n["path"].as<std::string>(),
@@ -88,17 +88,17 @@ bool Node::decode(const YAML::Node &n) {
     return true;
 }
 
-const Entity&Node::GetNode() const {
-    return node;
+const Handle &Node::GetHandle() const {
+    return handle;
 }
 
 void Node::AddChild(std::unique_ptr<Node>&& child) {
     children.push_back(std::move(child));
 }
 
-std::unique_ptr<Node> Node::RemoveChild(const Entity& childEntity) {
+std::unique_ptr<Node> Node::RemoveChild(const Handle & childEntity) {
     for (auto it = children.begin(); it != children.end(); it++) {
-        if (it->get()->GetNode() == childEntity) {
+        if (it->get()->GetHandle() == childEntity) {
             auto out = std::move(*it);
             children.erase(it);
             return std::move(out);
@@ -108,16 +108,16 @@ std::unique_ptr<Node> Node::RemoveChild(const Entity& childEntity) {
 }
 
 void Node::MoveTo(Node * target) {
-    if (!Find(target->GetNode())) {
+    if (!Find(target->GetHandle())) {
         parent->MoveChild(this, target);
         parent = target;
     }
 }
 
 void Node::MoveChild(Node * child, Node * target) {
-    auto childEntity = child->GetNode();
+    auto childEntity = child->GetHandle();
     for (auto it = children.begin(); it != children.end(); it++) {
-        if (it->get()->GetNode() == childEntity) {
+        if (it->get()->GetHandle() == childEntity) {
             auto childPtr = std::move(*it);
             children.erase(it);
             target->AddChild(std::move(childPtr));
@@ -134,8 +134,8 @@ size_t Node::GetNumChildren() const {
     return children.size();
 }
 
-std::list<Entity> Node::GetChildEntities() const {
-    std::list<Entity> entities = { GetNode() };
+std::list<Handle> Node::GetChildEntities() const {
+    std::list<Handle> entities = {GetHandle() };
     for (auto& child : GetChildNodes()) {
         if (child) {
             entities.merge(child->GetChildEntities());
@@ -148,19 +148,19 @@ Node *Node::GetParent() const {
     return parent;
 }
 
-std::shared_ptr<NodeWrapper> Node::FindNode(const Entity& entity) {
-    if (auto node = Find(entity)) {
+std::shared_ptr<NodeWrapper> Node::FindNode(const Handle &handle) {
+    if (auto node = Find(handle)) {
         return node->GetNodePtr();
     }
     return nullptr;
 }
 
-Node* Node::Find(const Entity& entity) {
-    if (entity == node) {
+Node* Node::Find(const Handle &handle) {
+    if (this->handle == handle) {
         return this;
     }
     for (const auto& child : children) {
-        if (auto childNode = child->Find(entity)) {
+        if (auto childNode = child->Find(handle)) {
             return childNode;
         }
     }

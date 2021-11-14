@@ -8,7 +8,8 @@
 namespace voxie {
     Engine::Engine()
         : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/"))
-        , components(std::make_unique<EntityComponentSystem>()){
+        , components(std::make_unique<EntityComponentSystem>())
+        , camera(NullEntity) {
 
     }
 
@@ -30,7 +31,7 @@ namespace voxie {
         if (scene->GetEntities().empty()) {
             auto camera = MakeCamera({"Editor Camera"});
             auto entity = camera->GetEntity();
-            helper::AddComponent(entity, std::move(camera));
+            GetScene().AddNode(camera, nullptr);
             SetCamera(entity);
         }
 
@@ -69,7 +70,7 @@ namespace voxie {
     }
 
     std::shared_ptr<Camera> Engine::GetCamera() {
-        return camera ? helper::GetSceneNode<Camera>(camera->GetEntity()) : nullptr;
+        return helper::GetSceneNode<Camera>(camera);
     }
 
     std::shared_ptr<Window> Engine::GetWindow() const {
@@ -149,8 +150,8 @@ namespace voxie {
         ImGui::StyleColorsDark();
     }
 
-    void Engine::SetCamera(const Entity &entity) {
-        camera = helper::GetSceneNode<Camera>(entity).get();
+    void Engine::SetCamera(const Handle &entity) {
+        camera = entity;
     }
 
     namespace helper {

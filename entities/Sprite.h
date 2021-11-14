@@ -15,7 +15,7 @@
 namespace voxie {
     class Sprite : public NodeWrapper {
     public:
-        Sprite(const Entity&, std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
+        Sprite(const Handle &, std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);
         ~Sprite();
 
         void encode(YAML::Node &) const;
@@ -27,13 +27,13 @@ namespace voxie {
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
-        [[nodiscard]] const Entity &GetEntity() const override;
+        [[nodiscard]] const Handle &GetEntity() const override;
 
     private:
         void Setup() const;
 
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
-        Entity entity;
+        Handle entity;
         Texture2D texture;
         std::string path;
     };

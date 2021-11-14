@@ -19,9 +19,9 @@ namespace voxie {
         void Save() const;
         void SaveAs(const std::string &name);
         void Load(const std::string &name);
-        using SceneEntities = std::list<Entity>;
+        using SceneEntities = std::list<Handle>;
         void ClearScene();
-        Node * AddEntity(Entity, Node * parent = nullptr);
+        Node * AddEntity(Handle, Node * parent = nullptr);
 
         template <typename T>
         void AddNode(std::shared_ptr<T> nodeWrapper, Node * parent) {
@@ -29,9 +29,9 @@ namespace voxie {
             auto node = std::make_unique<Node>(std::dynamic_pointer_cast<NodeWrapper>(std::move(nodeWrapper)), rootNode);
             AddNodeImplementation(std::move(node), rootNode);
         }
-        void RemoveEntity(Entity);
+        void RemoveEntity(Handle);
         SceneEntities GetEntities() const;
-        std::shared_ptr<NodeWrapper> FindNode(const Entity&);
+        std::shared_ptr<NodeWrapper> FindNode(const Handle &);
 
         const std::string &GetSceneName() const;
         Node * GetRoot() const;

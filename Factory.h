@@ -23,7 +23,7 @@ namespace voxie {
     struct ModelConfig {
         std::string name;
         std::string path;
-        Entity entity = NullEntity;
+        Handle entity = NullEntity;
     };
 
     std::vector<ModelConfig> GetModels();
@@ -32,7 +32,7 @@ namespace voxie {
     struct LightFactoryConfig {
         std::string name;
         voxie::LightType type;
-        Entity entity = NullEntity;
+        Handle entity = NullEntity;
         voxie::Position position = {0, 0, 0};
         voxie::Dimensions dimensions = {1, 1, 1};
         voxie::Color color = voxie::Color({0.5, 0.5, 0.5});
@@ -44,7 +44,7 @@ namespace voxie {
 
     struct CameraFactoryConfig {
         std::string name;
-        Entity entity = NullEntity;
+        Handle entity = NullEntity;
         glm::vec3 position = {0, 0, 0};
     };
 
@@ -53,7 +53,7 @@ namespace voxie {
     struct SpriteConfig {
         std::string name;
         std::string path;
-        Entity entity = NullEntity;
+        Handle entity = NullEntity;
     };
 
     std::vector<SpriteConfig> GetSprites();
@@ -61,7 +61,7 @@ namespace voxie {
 
     struct TransformNodeConfig {
         std::string name;
-        Entity entity = NullEntity;
+        Handle entity = NullEntity;
     };
 
     std::shared_ptr<voxie::TransformNode> MakeTransformNode(TransformNodeConfig);
@@ -69,7 +69,7 @@ namespace voxie {
     struct SceneConfig {
         std::string name;
         std::string path;
-        Entity entity = NullEntity;
+        Handle entity = NullEntity;
     };
     std::vector<SceneConfig> GetScenes();
 
