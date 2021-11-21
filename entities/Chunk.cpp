@@ -139,7 +139,7 @@ namespace voxie {
         return vertexBufferArray;
     }
 
-    auto GetPreDrawAction(const std::shared_ptr<Shader> &shader, const glm::mat4 &model) {
+    auto Chunk::GetPreDrawAction(const std::shared_ptr<Shader> &shader, const glm::mat4 &model) const {
         return [=]() {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);
@@ -148,7 +148,7 @@ namespace voxie {
         };
     }
 
-    auto GetPostDrawAction() {
+    auto Chunk::GetPostDrawAction() const {
         return []() {
             glDisable(GL_CULL_FACE);
         };

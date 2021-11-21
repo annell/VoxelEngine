@@ -23,9 +23,9 @@
     name: Editor Camera
     position:
       position:
-        x: -34.6314392
-        y: 16.6236038
-        z: -37.5797958
+        x: -8.90719414
+        y: 7.74661589
+        z: 13.6296988
       rotation:
         x: 0
         y: 0
@@ -35,8 +35,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 400.997406
-      pitch: -13.1998024
+      yaw: 288.196655
+      pitch: -12.599803
 - parent: 1312
   node:
     type: LightSource
@@ -50,7 +50,7 @@
         z: -9.64328861
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -73,12 +73,12 @@
         z: 0
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
-        x: 1
-        y: 1
-        z: 1
+        x: 0.313076019
+        y: 0.313076019
+        z: 0.313076019
 - parent: 1312
   node:
     type: Chunk

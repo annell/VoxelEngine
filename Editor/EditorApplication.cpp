@@ -62,6 +62,11 @@ int main() {
                 voxie::helper::Submit(model->GetRenderingConfig());
             }
         }
+
+        if (auto skybox = engine.GetScene().GetSkybox()) {
+            voxie::helper::Submit(skybox->GetRenderingConfig());
+        }
+
         voxie::helper::RenderingEnd();
     });
     engine.StartLoop();

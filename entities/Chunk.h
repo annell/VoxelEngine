@@ -39,6 +39,8 @@ namespace voxie {
         void SetupCubesForRendering();
         void SetupShader();
         void FaceCulling() const;
+        auto GetPostDrawAction() const;
+        auto GetPreDrawAction(const std::shared_ptr<Shader> &shader, const glm::mat4 &model) const;
 
         size_t nrMaterials = 0;
         std::vector<Cube *> cubesToRender;

@@ -65,10 +65,14 @@ namespace voxie {
                 vertexBufferArray->vertexAttributes.push_back(side.triangle1.vertex[index]);
                 index++;
             }
-            for (float ii : side.normal) {
-                vertexBufferArray->vertexAttributes.push_back(ii);
+            if (useNormals) {
+                for (float ii : side.normal) {
+                    vertexBufferArray->vertexAttributes.push_back(ii);
+                }
             }
-            vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
+            if (useMaterials) {
+                vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
+            }
         }
         index = 0;
         for (int i = 0; i < 3; i++) {
@@ -76,10 +80,14 @@ namespace voxie {
                 vertexBufferArray->vertexAttributes.push_back(side.triangle2.vertex[index]);
                 index++;
             }
-            for (float ii : side.normal) {
-                vertexBufferArray->vertexAttributes.push_back(ii);
+            if (useNormals) {
+                for (float ii : side.normal) {
+                    vertexBufferArray->vertexAttributes.push_back(ii);
+                }
             }
-            vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
+            if (useMaterials) {
+                vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
+            }
         }
     }
 
@@ -161,6 +169,12 @@ namespace voxie {
                 p.pos[0] + (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
                 p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] + (d.depth) / 2,
                 p.pos[0] - (d.width) / 2, p.pos[1] + (d.height) / 2, p.pos[2] - (d.depth) / 2};
+    }
+    void Cube::DisableNormals() {
+        useNormals = false;
+    }
+    void Cube::DisableMaterials() {
+        useMaterials = false;
     }
 
 }// namespace voxie

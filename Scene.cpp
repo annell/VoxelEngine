@@ -26,7 +26,7 @@ namespace internal {
 namespace voxie {
 
     Scene::Scene(const std::string &folder)
-            : folder(folder) {
+        : folder(folder), skybox(nullptr) {
     }
 
     Scene::~Scene() {
@@ -49,12 +49,16 @@ namespace voxie {
     }
 
     void Scene::Load(const std::string &name) {
+        skybox = std::make_unique<Skybox>(Handle::MakeEntity(), std::make_shared<voxie::Shader>(
+                std::map<std::string, unsigned int>{
+                        std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", GL_FRAGMENT_SHADER)}));
         SetFilename(name);
         ClearScene();
         auto nodes = YAML::Load(internal::read_file(folder + sceneName));
         for (const auto &node : nodes) {
             auto entity = Handle(node["node"]["id"].as<int>());
-            Node * parent = nullptr;
+            Node *parent = nullptr;
             if (node["parent"].IsDefined()) {
                 auto parentEntity = Handle(node["parent"].as<int>());
                 if (root) {
@@ -66,7 +70,7 @@ namespace voxie {
         }
     }
 
-    Node * Scene::AddEntity(Handle entity, Node * parent) {
+    Node *Scene::AddEntity(Handle entity, Node *parent) {
         auto rootNode = parent ? parent : GetRoot();
         auto node = std::make_unique<Node>(entity, rootNode);
         auto nodePtr = node.get();
@@ -96,11 +100,14 @@ namespace voxie {
     Node *Scene::GetRoot() const {
         return root.get();
     }
-    std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle & entity) {
+    std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle &entity) {
         if (root) {
             return root->FindNode(entity);
         }
         return nullptr;
+    }
+    Skybox* Scene::GetSkybox() const {
+        return skybox.get();
     }
 
 }// namespace voxie

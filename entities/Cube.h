@@ -47,6 +47,9 @@ namespace voxie {
 
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
+        void DisableNormals();
+        void DisableMaterials();
+
     private:
         void GenerateVertexAttributes(const Side &side);
         void GenerateSides(Position p, Dimensions d);
@@ -55,6 +58,8 @@ namespace voxie {
         int materialIndex;
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
         Side sides[6];
+        bool useNormals = true;
+        bool useMaterials = true;
     };
 
 }// namespace voxie

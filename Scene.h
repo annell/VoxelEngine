@@ -6,6 +6,7 @@
 #include "Node.h"
 #include <BaseComponents.h>
 #include <EntityComponentSystem.h>
+#include <Skybox.h>
 #include <iostream>
 #include <list>
 
@@ -35,9 +36,9 @@ namespace voxie {
 
         const std::string &GetSceneName() const;
         Node * GetRoot() const;
+        Skybox* GetSkybox() const;
 
     private:
-
         void AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode) {
             if (rootNode) {
                 rootNode->AddChild(std::move(node));
@@ -49,6 +50,7 @@ namespace voxie {
         std::unique_ptr<Node> root;
         std::string folder;
         std::string sceneName;
+        std::unique_ptr<Skybox> skybox;
     };
 
 }// namespace voxie

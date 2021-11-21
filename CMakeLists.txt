@@ -84,7 +84,7 @@ add_executable(VoxieEditor
         Scene.h
         Factory.h
         Factory.cpp
-        Node.cpp Node.h entities/TransformNode.cpp entities/TransformNode.h)
+        Node.cpp Node.h entities/TransformNode.cpp entities/TransformNode.h entities/Skybox.cpp entities/Skybox.h)
 
 include_directories(. entities utility input rendering core external/imgui external/ImGuizmo external/stb)
 
