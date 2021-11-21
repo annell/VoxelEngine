@@ -56,9 +56,9 @@ namespace gui {
     void ShowEntityAttenuationController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
-        ImGui::SliderFloat("Quadratic", &attenuation->quadratic, 0.0f, 100.0f);
-        ImGui::SliderFloat("Linear", &attenuation->linear, 0.0f, 100.0f);
-        ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 100.0f);
+        ImGui::SliderFloat("Quadratic", &attenuation->quadratic, 0.0f, 5.0f);
+        ImGui::SliderFloat("Linear", &attenuation->linear, 0.0f, 5.0f);
+        ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 5.0f);
     }
 
     void ShowEntityPositionController(const voxie::Handle &entity) {

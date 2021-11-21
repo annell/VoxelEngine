@@ -59,8 +59,8 @@ namespace voxie {
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
                         std::map<std::string, unsigned int>{
-                                std::make_pair(BASE_PATH + SHADERS + "/basic_light.vs", GL_VERTEX_SHADER),
-                                std::make_pair(BASE_PATH + SHADERS + "/basic_light.fs", GL_FRAGMENT_SHADER)}),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", GL_VERTEX_SHADER),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}),
                 std::make_shared<voxie::Position>(0, 0, 0));
         return std::move(model);
     }
@@ -88,8 +88,8 @@ namespace voxie {
                         std::make_shared<voxie::Name>(config.name),
                         config.entity.GetId() ? config.entity : Handle::MakeEntity(),
                         std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{
-                                std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.vs", GL_VERTEX_SHADER),
-                                std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light_cube.fs", GL_FRAGMENT_SHADER)}),
+                                std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light.vs", GL_VERTEX_SHADER),
+                                std::make_pair(voxie::BASE_PATH + voxie::SHADERS + "/light.fs", GL_FRAGMENT_SHADER)}),
                         std::make_shared<voxie::Position>(config.position),
                         config.type,
                         std::make_shared<voxie::Cube>(voxie::Position{0, 0, 0}, config.dimensions),

@@ -9,11 +9,11 @@
         z: 0
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
         x: 1
-        y: 1
+        y: 1.85967743
         z: 1
 - parent: 1312
   node:
@@ -23,9 +23,9 @@
     name: Editor Camera
     position:
       position:
-        x: -8.90719414
-        y: 7.74661589
-        z: 13.6296988
+        x: 6.99688387
+        y: 2.76611233
+        z: 15.72155
       rotation:
         x: 0
         y: 0
@@ -35,8 +35,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 288.196655
-      pitch: -12.599803
+      yaw: 244.096054
+      pitch: -1.09976673
 - parent: 1312
   node:
     type: LightSource
@@ -68,33 +68,152 @@
     name: floor.vox
     position:
       position:
-        x: 0
-        y: 0
-        z: 0
+        x: -0.191405833
+        y: -0.0095385313
+        z: -0.049804233
       rotation:
         x: 0
         y: -0
         z: 0
       scale:
-        x: 0.313076019
-        y: 0.313076019
-        z: 0.313076019
+        x: 0.0813997611
+        y: 0.0813997611
+        z: 0.0813997611
 - parent: 1312
   node:
     type: Chunk
-    id: 3871
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/teapot.vox
-    name: teapot.vox
+    id: 659
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/castle.vox
+    name: castle.vox
     position:
       position:
-        x: -0.116211571
-        y: 1.95434523
-        z: 0.782227516
+        x: -3.78894879e-06
+        y: 3.9025681
+        z: 1.33966097e-07
+      rotation:
+        x: -6.46910564e-07
+        y: -1.54127538
+        z: 1.06578362e-07
+      scale:
+        x: 0.35999915
+        y: 0.360000014
+        z: 0.35999915
+- parent: 1312
+  node:
+    type: Chunk
+    id: 994
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
+    name: "chr_knight\x00\x00ox"
+    position:
+      position:
+        x: 5.7598772
+        y: 2.06520057
+        z: 3.60984254
+      rotation:
+        x: 3.1415925
+        y: 1.48246622
+        z: 3.1415925
+      scale:
+        x: 0.189999998
+        y: 0.189999998
+        z: 0.189999998
+- parent: 1312
+  node:
+    type: LightSource
+    id: 1362
+    lightType: 1
+    name: Point light
+    position:
+      position:
+        x: 2.77092147
+        y: 0.184938446
+        z: 3.26535034
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
-        x: 0.063699998
-        y: 0.063699998
-        z: 0.063699998
+        x: 1
+        y: 2.28009486
+        z: 1
+    color:
+      r: 0.32432431
+      g: 0
+      b: 0.314671993
+    attenuation:
+      constant: 0.633000016
+      linear: 1.26600003
+      quadratic: 0.633000016
+- parent: 1312
+  node:
+    type: LightSource
+    id: 1488
+    lightType: 1
+    name: Point light
+    position:
+      position:
+        x: 6.43633366
+        y: 0.295289457
+        z: 3.82763481
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    color:
+      r: 0.35162577
+      g: 0.010266657
+      b: 0.513333321
+    attenuation:
+      constant: 0.323000014
+      linear: 0.644999981
+      quadratic: 1.61300004
+- parent: 1312
+  node:
+    type: LightSource
+    id: 1768
+    lightType: 1
+    name: Point light
+    position:
+      position:
+        x: -1.87092686
+        y: 1.47699571
+        z: 3.42206717
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    color:
+      r: 1
+      g: 0.336666644
+      b: 0.336666644
+    attenuation:
+      constant: 0.323000014
+      linear: 0.644999981
+      quadratic: 1
+- parent: 1312
+  node:
+    type: Chunk
+    id: 2551
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
+    name: "chr_knight 2\x00x"
+    position:
+      position:
+        x: 2.4807899
+        y: 0.827063918
+        z: 6.32866573
+      rotation:
+        x: 3.1415925
+        y: 0.817960382
+        z: 3.1415925
+      scale:
+        x: 0.0794999674
+        y: 0.0795000121
+        z: 0.0794999674
