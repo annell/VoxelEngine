@@ -1,5 +1,5 @@
-#include "Camera.h"
 #include "Engine.h"
+#include "Camera.h"
 #include "Factory.h"
 #include "KeyboardHandler.h"
 #include "gui/Panel.h"
@@ -48,7 +48,7 @@ int main() {
 
     engine.onTick.Bind([&](float deltaTime) {
         gui::ShowSceneOverview();
-        gui::ShowSimpleOverlay("Time per frame: " + std::to_string(FilterSample(deltaTime)));
+        //gui::ShowSimpleOverlay("Time per frame: " + std::to_string(FilterSample(deltaTime)));
 
         voxie::helper::RenderingBegin();
         auto sceneObjects = engine.GetScene().GetEntities();

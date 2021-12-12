@@ -1,94 +1,24 @@
 cmake_minimum_required(VERSION 3.17)
 project(Voxie)
+# You can tweak some common (for all subprojects) stuff here. For example:
 
+set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+set(CMAKE_DISABLE_SOURCE_CHANGES  ON)
 set(CMAKE_CXX_STANDARD 17)
 
-# Address sanitizer
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
-
-# Add header file
-set(GLEW_H /usr/local/Cellar/glew/2.2.0_1/include/GL)
-set(GLFW_H /usr/local/Cellar/glfw/3.3.3/include/GLFW)
-set(GLM_H /usr/local/Cellar/glm/0.9.9.8/include/GLM)
-set(YAMLCPP_H /usr/local/Cellar/yaml-cpp/0.6.3_1/include)
-set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
-set(SOIL_H /opt/local/include/SOIL)
-include_directories(
-        ${GLEW_H}
-        ${GLFW_H}
-        ${GLM_H}
-        ${YAMLCPP_H}
-        ${FT_FREETYPE_H}
-        ${SOIL_H}
-)
-
-# Add target link
-set(GLEW_LINK /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib)
-set(GLFW_LINK /usr/local/Cellar/glfw/3.3.3/lib/libglfw.3.dylib)
-set(SOIL_LINK /opt/local/lib/libSOIL.dylib)
-set(YAMLCPP_LINK /usr/local/Cellar/yaml-cpp/0.6.3_1/lib/libyaml-cpp.0.6.3.dylib)
-set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
-link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${YAMLCPP_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
-
-# Execute compilation command
-set(SOURCE_FILES Editor/EditorApplication.cpp)
-add_executable(VoxieEditor
-        Core.h
-        Editor/EditorApplication.cpp
-        Engine.cpp
-        Engine.h
-        rendering/Shader.h
-        rendering/Camera.h
-        rendering/VertexBufferArray.h
-        rendering/RenderingHandler.cpp
-        rendering/RenderingHandler.h
-        rendering/Window.h
-        rendering/Camera.cpp
-        external/vox/ogt_vox.h
-        external/imgui/imgui.cpp
-        external/imgui/imgui.h
-        external/imgui/imgui_draw.cpp
-        external/imgui/imgui_demo.cpp
-        external/imgui/imgui_tables.cpp
-        external/imgui/imgui_widgets.cpp
-        external/imgui/imgui_impl_glfw.cpp
-        external/imgui/imgui_impl_glfw.h
-        external/imgui/imgui_impl_opengl3.cpp
-        external/imgui/imgui_impl_opengl3.h
-        external/ImGuizmo/ImGuizmo.cpp
-        external/ImGuizmo/ImGuizmo.h
-        external/stb/stb_image.h
-        utility/ModelLoader.h
-        utility/TextHandler.h
-        utility/Delegate.h
-        utility/Logging.h
-        utility/LoadTexture.cpp
-        utility/LoadTexture.h
-        input/MouseHandler.cpp
-        input/MouseHandler.h
-        input/KeyboardHandler.cpp
-        input/KeyboardHandler.h
-        entities/Cube.h
-        entities/Lightsource.cpp
-        entities/Chunk.cpp
-        entities/Chunk.h
-        entities/EntityComponentSystem.cpp
-        entities/EntityComponentSystem.h
-        entities/BaseComponents.h
-        entities/Cube.cpp
-        entities/Sprite.cpp
-        entities/Sprite.h
-        Editor/gui/Panel.cpp
-        Editor/gui/Panel.h
-        Scene.cpp
-        Scene.h
-        Factory.h
-        Factory.cpp
-        Node.cpp Node.h entities/TransformNode.cpp entities/TransformNode.h entities/Skybox.cpp entities/Skybox.h)
-
-include_directories(. entities utility input rendering core external/imgui external/ImGuizmo external/stb)
-
-if (APPLE)
-    target_link_libraries(VoxieEditor "-framework OpenGL")
-    target_link_libraries(VoxieEditor "-framework GLUT")
+if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+    message(SEND_ERROR "In-source builds are not allowed.")
 endif ()
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_COLOR_MAKEFILE   ON)
+
+# Remove 'lib' prefix for shared libraries on Windows
+if (WIN32)
+    set(CMAKE_SHARED_LIBRARY_PREFIX "")
+endif ()
+
+# When done tweaking common stuff, configure the components (subprojects).
+# NOTE: The order matters! The most independent ones should go first.
+add_subdirectory(components/Engine) # B is a static library (depends on Boost)
+add_subdirectory(components/Editor) # C is a shared library (depends on B and external XXX)
