@@ -2,7 +2,7 @@
 // Created by Stefan Annell on 2021-09-25.
 //
 #include "LoadTexture.h"
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 #include <stb_image.h>
 
 namespace voxie {

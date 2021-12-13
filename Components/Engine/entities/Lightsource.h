@@ -8,7 +8,7 @@
 #include <RenderingHandler.h>
 #include <Scene.h>
 #include <glew.h>
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 #include <glm.hpp>
 #include <vector>
 

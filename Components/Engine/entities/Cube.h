@@ -5,7 +5,7 @@
 #pragma once
 
 #include <glew.h>
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 #include <vector>
 
 #include "BaseComponents.h"

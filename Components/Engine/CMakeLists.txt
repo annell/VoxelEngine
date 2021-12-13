@@ -2,15 +2,18 @@ cmake_minimum_required(VERSION 3.17)
 project(Engine)
 
 # Add header file
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
+set(GLFW_DYN_LIB ${GLFW_INCLUDE_DIRS}/../lib/libglfw.3.dylib)
+
 set(GLEW_H /usr/local/Cellar/glew/2.2.0_1/include/GL)
-set(GLFW_H /usr/local/Cellar/glfw/3.3.3/include/GLFW)
 set(GLM_H /usr/local/Cellar/glm/0.9.9.8/include/GLM)
 set(YAMLCPP_H /usr/local/Cellar/yaml-cpp/0.6.3_1/include)
 set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
 set(SOIL_H /opt/local/include/SOIL)
 set(${PROJECT_NAME}_INCLUDE_LIBS
         ${GLEW_H}
-        ${GLFW_H}
+        ${GLFW_INCLUDE_DIRS}
         ${GLM_H}
         ${YAMLCPP_H}
         ${FT_FREETYPE_H}
@@ -24,11 +27,10 @@ include_directories(
 
 # Add target link
 set(GLEW_LINK /usr/local/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib)
-set(GLFW_LINK /usr/local/Cellar/glfw/3.3.3/lib/libglfw.3.dylib)
 set(SOIL_LINK /opt/local/lib/libSOIL.dylib)
 set(YAMLCPP_LINK /usr/local/Cellar/yaml-cpp/0.6.3_1/lib/libyaml-cpp.0.6.3.dylib)
 set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
-link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_LINK} ${YAMLCPP_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
+link_libraries(${OPENGL} ${GLEW_LINK} ${GLFW_DYN_LIB} ${YAMLCPP_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
 
 # Execute compilation command
 file(GLOB CPP_FILES
