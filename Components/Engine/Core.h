@@ -4,7 +4,7 @@
 #pragma once
 
 #define GL_SILENCE_DEPRECATION
-#include <glew.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
