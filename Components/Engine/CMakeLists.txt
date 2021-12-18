@@ -33,7 +33,6 @@ set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/utility
         ${PROJECT_SOURCE_DIR}/input
         ${PROJECT_SOURCE_DIR}/rendering
-        ${PROJECT_SOURCE_DIR}/core
         ${PROJECT_SOURCE_DIR}/external/imgui
         ${PROJECT_SOURCE_DIR}/external/ImGuizmo
         ${PROJECT_SOURCE_DIR}/external/stb
@@ -102,3 +101,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         )
 
 include_directories(${Engine_INCLUDE_DIRS})
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+install(DIRECTORY ${Engine_INCLUDE_DIRS} DESTINATION include/Voxie)
