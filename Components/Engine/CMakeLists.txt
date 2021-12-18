@@ -3,33 +3,14 @@ project(Engine)
 
 # Add header file
 find_package(PkgConfig REQUIRED)
-pkg_search_module(GLFW REQUIRED glfw3)
-set(GLFW_DYN_LIB ${GLFW_INCLUDE_DIRS}/../lib/libglfw.3.dylib)
-
 pkg_search_module(GLEW REQUIRED GLEW)
 set(GLEW_DYN_LIB ${GLEW_INCLUDE_DIRS}/../lib/libGLEW.2.2.dylib)
 
-pkg_search_module(GLM REQUIRED glm)
-
 set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
 set(SOIL_H /opt/local/include/SOIL)
-set(${PROJECT_NAME}_INCLUDE_LIBS
-        ${GLEW_INCLUDE_DIRS}
-        ${GLFW_INCLUDE_DIRS}
-        ${GLM_INCLUDE_DIRS}
-        ${FT_FREETYPE_H}
-        ${SOIL_H}
-        CACHE INTERNAL "${PROJECT_NAME}: Include Libs" FORCE)
 
-message(STATUS "INCLUDE_DIRS=${Engine_INCLUDE_LIBS}")
-include_directories(
-    ${Engine_INCLUDE_LIBS}
-)
-
-# Add target link
 set(SOIL_LINK /opt/local/lib/libSOIL.dylib)
 set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
-link_libraries(${OPENGL} ${GLEW_DYN_LIB} ${GLFW_DYN_LIB} ${FREETYPE_LINK} ${SOIL_LINK})
 
 # Execute compilation command
 file(GLOB CPP_FILES
@@ -64,19 +45,59 @@ ExternalProject_Add(yaml-cpp
         GIT_REPOSITORY git@github.com:jbeder/yaml-cpp.git
         GIT_TAG yaml-cpp-0.7.0
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        LOG_DOWNLOAD ON
+        LOG_INSTALL ON
         )
 
-add_library(${PROJECT_NAME} STATIC ${CPP_FILES})
+ExternalProject_Add(glfw3
+        GIT_REPOSITORY git@github.com:glfw/glfw.git
+        GIT_TAG 3.3.6
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        LOG_DOWNLOAD ON
+        LOG_INSTALL ON
+        )
 
-add_dependencies(${PROJECT_NAME} yaml-cpp)
+ExternalProject_Add(glm
+        GIT_REPOSITORY git@github.com:g-truc/glm.git
+        GIT_TAG 0.9.9.8
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/glm ${EXTERNAL_INSTALL_LOCATION}/include/glm
+        LOG_DOWNLOAD ON
+        LOG_INSTALL ON
+        )
+
+add_library(${PROJECT_NAME} STATIC
+        ${CPP_FILES}
+        )
+
+add_dependencies(${PROJECT_NAME}
+        yaml-cpp
+        glfw3
+        glm
+        )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${EXTERNAL_INSTALL_LOCATION}/include
+        ${GLEW_INCLUDE_DIRS}
+        ${FT_FREETYPE_H}
+        ${SOIL_H}
         )
+
+if(APPLE)
+    set(OSX_GLFW_DEP
+    "-framework OpenGL"
+    "-framework Cocoa"
+    "-framework IOKit")
+endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
-        "-framework OpenGL"
+        ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
+        ${GLEW_DYN_LIB}
+        ${FREETYPE_LINK}
+        ${SOIL_LINK}
+        ${OSX_GLFW_DEP}
         "-framework GLUT"
         )
 
