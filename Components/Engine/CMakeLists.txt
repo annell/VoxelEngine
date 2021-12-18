@@ -11,14 +11,12 @@ set(GLEW_DYN_LIB ${GLEW_INCLUDE_DIRS}/../lib/libGLEW.2.2.dylib)
 
 pkg_search_module(GLM REQUIRED glm)
 
-set(YAMLCPP_H /usr/local/Cellar/yaml-cpp/0.6.3_1/include)
 set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
 set(SOIL_H /opt/local/include/SOIL)
 set(${PROJECT_NAME}_INCLUDE_LIBS
         ${GLEW_INCLUDE_DIRS}
         ${GLFW_INCLUDE_DIRS}
         ${GLM_INCLUDE_DIRS}
-        ${YAMLCPP_H}
         ${FT_FREETYPE_H}
         ${SOIL_H}
         CACHE INTERNAL "${PROJECT_NAME}: Include Libs" FORCE)
@@ -30,9 +28,8 @@ include_directories(
 
 # Add target link
 set(SOIL_LINK /opt/local/lib/libSOIL.dylib)
-set(YAMLCPP_LINK /usr/local/Cellar/yaml-cpp/0.6.3_1/lib/libyaml-cpp.0.6.3.dylib)
 set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
-link_libraries(${OPENGL} ${GLEW_DYN_LIB} ${GLFW_DYN_LIB} ${YAMLCPP_LINK} ${FREETYPE_LINK} ${SOIL_LINK})
+link_libraries(${OPENGL} ${GLEW_DYN_LIB} ${GLFW_DYN_LIB} ${FREETYPE_LINK} ${SOIL_LINK})
 
 # Execute compilation command
 file(GLOB CPP_FILES
@@ -62,11 +59,25 @@ set(${PROJECT_NAME}_INCLUDE_DIRS
         CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 
-add_library(${PROJECT_NAME} SHARED ${CPP_FILES})
+include(ExternalProject)
+ExternalProject_Add(yaml-cpp
+        GIT_REPOSITORY git@github.com:jbeder/yaml-cpp.git
+        GIT_TAG yaml-cpp-0.7.0
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        )
+
+add_library(${PROJECT_NAME} STATIC ${CPP_FILES})
+
+add_dependencies(${PROJECT_NAME} yaml-cpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${EXTERNAL_INSTALL_LOCATION}/include
+        )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
+        "-framework OpenGL"
+        "-framework GLUT"
+        )
 
 include_directories(${Engine_INCLUDE_DIRS})
-
-if (APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
-    target_link_libraries(${PROJECT_NAME} "-framework GLUT")
-endif ()
