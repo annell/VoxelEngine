@@ -103,7 +103,7 @@ if(APPLE)
     "-framework IOKit")
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${PROJECT_NAME} PUBLIC
         ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
         ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
         ${GLEW_DYN_LIB}
