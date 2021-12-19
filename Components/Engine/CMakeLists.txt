@@ -90,11 +90,12 @@ add_dependencies(${PROJECT_NAME}
         glm
         )
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-        ${EXTERNAL_INSTALL_LOCATION}/include
-        ${GLEW_INCLUDE_DIRS}
-        ${FT_FREETYPE_H}
-        ${SOIL_H}
+target_include_directories(${PROJECT_NAME}
+        PUBLIC ${Engine_INCLUDE_DIRS}
+        PUBLIC ${GLEW_INCLUDE_DIRS}
+        PRIVATE ${EXTERNAL_INSTALL_LOCATION}/include
+        PRIVATE ${FT_FREETYPE_H}
+        PRIVATE ${SOIL_H}
         )
 
 if(APPLE)
@@ -104,14 +105,14 @@ if(APPLE)
     "-framework IOKit")
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC
-        ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
-        ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
-        ${GLEW_DYN_LIB}
-        ${FREETYPE_LINK}
-        ${SOIL_LINK}
-        ${OSX_GLFW_DEP}
-        "-framework GLUT"
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
+        PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
+        PRIVATE ${GLEW_DYN_LIB}
+        PRIVATE ${FREETYPE_LINK}
+        PRIVATE ${SOIL_LINK}
+        PRIVATE ${OSX_GLFW_DEP}
+        PRIVATE "-framework GLUT"
         )
 
 include_directories(${Engine_INCLUDE_DIRS})
