@@ -11,7 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include "external/vox/ogt_vox.h"
+#include "ogt_vox.h"
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include "imgui.h"

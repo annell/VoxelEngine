@@ -49,6 +49,7 @@ set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/external/imgui
         ${PROJECT_SOURCE_DIR}/external/ImGuizmo
         ${PROJECT_SOURCE_DIR}/external/stb
+        ${PROJECT_SOURCE_DIR}/external/vox
         CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 
