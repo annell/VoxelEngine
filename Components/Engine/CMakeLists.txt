@@ -27,6 +27,19 @@ file(GLOB CPP_FILES
         utility/*.cpp
         )
 
+file(GLOB H_FILES
+        *.h
+        entities/*.h
+        external/imgui/*.h
+        external/ImGuizmo/*.h
+        external/rapidjson/*.h
+        external/stb/*.h
+        external/vox/*.h
+        input/*.h
+        rendering/*.h
+        utility/*.h
+        )
+
 set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/.
         ${PROJECT_SOURCE_DIR}/entities
@@ -103,4 +116,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 include_directories(${Engine_INCLUDE_DIRS})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-install(DIRECTORY ${Engine_INCLUDE_DIRS} DESTINATION include/Voxie)
+install(FILES ${Engine_INSTALl_FILES} DESTINATION include/Voxie)
