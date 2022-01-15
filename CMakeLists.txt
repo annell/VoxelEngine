@@ -20,7 +20,10 @@ endif ()
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_COLOR_MAKEFILE   ON)
 
-set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
+set(EXTERNAL_INSTALL_LOCATION
+        ${CMAKE_BINARY_DIR}/external
+        CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE
+        )
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
 
 add_subdirectory(components/Engine)

@@ -8,10 +8,7 @@
 
 namespace voxie {
     Engine::Engine()
-        : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/"))
-        , components(std::make_unique<EntityComponentSystem>())
-        , camera(NullEntity) {
-
+        : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/")), components(std::make_unique<EntityComponentSystem>()), camera(NullEntity) {
     }
 
     Engine::~Engine() {
@@ -86,7 +83,25 @@ namespace voxie {
 
             KeyboardHandler::processInput();
             MouseHandler::processInput();
+            voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
+            auto sceneObjects = GetScene().GetEntities();
+            for (const auto &config : GetRenderingConfigs(GetCamera(), sceneObjects)) {
+                voxie::helper::Submit(config);
+            }
+            for (const auto &entity : sceneObjects) {
+                if (auto model = voxie::helper::GetSceneNode<voxie::Chunk>(entity)) {
+                    voxie::helper::Submit(model->GetRenderingConfig());
+                } else if (auto model = voxie::helper::GetSceneNode<voxie::Sprite>(entity)) {
+                    voxie::helper::Submit(model->GetRenderingConfig());
+                }
+            }
+
+            if (auto skybox = GetScene().GetSkybox()) {
+                voxie::helper::Submit(skybox->GetRenderingConfig());
+            }
+
+            voxie::helper::RenderingEnd();
 
             RenderFrame();
         }
