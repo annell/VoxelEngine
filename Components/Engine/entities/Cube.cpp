@@ -2,6 +2,8 @@
 // Created by Stefan Annell on 2021-05-18.
 //
 #include "Cube.h"
+#include "VertexBufferArray.h"
+#include "Position.h"
 
 
 namespace voxie {
@@ -30,7 +32,7 @@ namespace voxie {
         return vertexBufferArray->vertexAttributes;
     }
 
-    void Cube::SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void *ptr) {
+    void Cube::SetVertexAttrib(unsigned int size, int type, bool normalized, int stride, const void *ptr) {
         vertexBufferArray->SetVertexAttrib(size, type, normalized, stride, ptr);
     }
 

@@ -1,7 +1,4 @@
-#include "Engine.h"
-#include "Camera.h"
-#include "Factory.h"
-#include "KeyboardHandler.h"
+#include "Core.h"
 #include "gui/Panel.h"
 
 template<typename T>
@@ -17,34 +14,28 @@ int main() {
     engine.Init();
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
-            engine.GetCamera()->ProcessKeyboard(voxie::FORWARD, engine.GetDeltaTime());
-    }});
+        engine.GetCamera()->ProcessKeyboard(voxie::FORWARD, engine.GetDeltaTime());
+    }, voxie::Key::KEY_W});
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-            engine.GetCamera()->ProcessKeyboard(voxie::BACKWARD, engine.GetDeltaTime());
-    }});
+        engine.GetCamera()->ProcessKeyboard(voxie::BACKWARD, engine.GetDeltaTime());
+    }, voxie::Key::KEY_S});
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-            engine.GetCamera()->ProcessKeyboard(voxie::LEFT, engine.GetDeltaTime());
-    }});
+        engine.GetCamera()->ProcessKeyboard(voxie::LEFT, engine.GetDeltaTime());
+    }, voxie::Key::KEY_A});
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetKey(engine.GetWindow()->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-            engine.GetCamera()->ProcessKeyboard(voxie::RIGHT, engine.GetDeltaTime());
-    }});
+        engine.GetCamera()->ProcessKeyboard(voxie::RIGHT, engine.GetDeltaTime());
+    }, voxie::Key::KEY_D});
 
-    voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), GLFW_MOUSE_BUTTON_2) == GLFW_RELEASE)
-            voxie::MouseHandler::UnlockCamera();
-    }});
+    voxie::MouseHandler::RegisterAction({[&engine]() {
+        voxie::MouseHandler::UnlockCamera();
+    }, voxie::MouseButton::BUTTON_2, voxie::ActionType::RELEASE});
 
-    voxie::KeyboardHandler::RegisterAction({[&engine]() {
-        if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
-            voxie::MouseHandler::LockCamera();
-    }});
+    voxie::MouseHandler::RegisterAction({[&engine]() {
+        voxie::MouseHandler::LockCamera();
+    }, voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
 
     engine.onTick.Bind([&](float deltaTime) {
         gui::ShowSceneOverview();

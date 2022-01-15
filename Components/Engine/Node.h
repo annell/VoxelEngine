@@ -3,11 +3,13 @@
 //
 
 #pragma once
-#include "BaseComponents.h"
-#include "Core.h"
-#include <EntityComponentSystem.h>
+
+#include "EntityComponentSystem.h"
+#include <yaml-cpp/yaml.h>
+#include <glm/glm.hpp>
 
 namespace voxie {
+class Position;
 
 struct NodeWrapper {
     virtual ~NodeWrapper() {}

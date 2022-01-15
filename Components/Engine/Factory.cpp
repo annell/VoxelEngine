@@ -10,6 +10,11 @@
 #include "Engine.h"
 #include <Sprite.h>
 #include <filesystem>
+#include "Shader.h"
+
+#define GL_SILENCE_DEPRECATION
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace internal {
 

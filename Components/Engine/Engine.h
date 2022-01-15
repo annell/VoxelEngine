@@ -1,23 +1,15 @@
 #pragma once
-#define GL_SILENCE_DEPRECATION
 
-#include "Camera.h"
-#include "Core.h"
-#include "Delegate.h"
-#include "EntityComponentSystem.h"
-#include "Lightsource.h"
-#include "Logging.h"
-#include "MouseHandler.h"
 #include "RenderingHandler.h"
 #include "Scene.h"
-#include "Window.h"
-#include <functional>
-#include <string>
-#include <vector>
+#include "Delegate.h"
+#include "Logging.h"
 
 class GLFWwindow;
 
 namespace voxie {
+    class Camera;
+    class Window;
 
     using OnTick = Delegate<float>;
     class Engine {

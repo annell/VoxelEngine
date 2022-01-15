@@ -3,8 +3,10 @@
 //
 
 #include "MouseHandler.h"
-#include "Camera.h"
-#include "Engine.h"
+#include "Core.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace voxie {
     namespace internal {
@@ -13,6 +15,12 @@ namespace voxie {
         double lastY = 0;
         bool firstMouse = true;
         bool mouseLock = false;
+
+        MouseHandler::RegistredKeys &GetRegisteredMouseKeys() {
+            static MouseHandler::RegistredKeys registeredKeys;
+
+            return registeredKeys;
+        }
 
     }// namespace internal
 
@@ -54,6 +62,20 @@ namespace voxie {
             internal::firstMouse = true;
         }
         internal::mouseLock = true;
+    }
+
+    void MouseHandler::processInput() {
+        auto& engine = Engine::GetEngine();
+        for (auto &key : internal::GetRegisteredMouseKeys()) {
+            if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), key.key) == key.type) {
+                key.action();
+            }
+        }
+    }
+
+    void MouseHandler::RegisterAction(const MouseAction &keyAction) {
+        auto &keys = internal::GetRegisteredMouseKeys();
+        keys.push_back(keyAction);
     }
 
 }// namespace voxie

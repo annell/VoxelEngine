@@ -4,13 +4,15 @@
 
 #pragma once
 
-#include "BaseComponents.h"
-#include "Core.h"
-#include "Shader.h"
 #include <EntityComponentSystem.h>
 #include <Node.h>
+#include "Name.h"
+#include <glm/glm.hpp>
 
 namespace voxie {
+    class Direction;
+    class Shader;
+    class Position;
 
     enum Camera_Movement {
         FORWARD,
@@ -39,7 +41,7 @@ namespace voxie {
         [[nodiscard]] const Handle &GetHandle() const override;
         [[nodiscard]] std::shared_ptr<Direction> GetDirection() const;
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
-        void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+        void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void SetShaderParameters(const Shader &shader) const;
         void SetSelection(const Handle &selection);
         const Handle &GetSelection() const;

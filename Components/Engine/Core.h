@@ -3,9 +3,7 @@
 //
 #pragma once
 
-#define GL_SILENCE_DEPRECATION
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+// External
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -16,4 +14,34 @@
 #include <imgui_impl_opengl3.h>
 #include "imgui.h"
 #include "ImGuizmo.h"
+
+// STL
+#include <functional>
+#include <string>
+#include <vector>
+#include <tuple>
+#include <map>
+
+// Internal
+#include "Engine.h"
+#include "Factory.h"
+
+#include "Delegate.h"
+#include "EntityComponentSystem.h"
 #include "LoadTexture.h"
+
+#include "BaseComponents.h"
+#include "Shader.h"
+#include "VertexBufferArray.h"
+
+#include "Factory.h"
+
+#include "Scene.h"
+#include "Window.h"
+#include "Camera.h"
+#include "InputDefinitions.h"
+#include "KeyboardHandler.h"
+#include "MouseHandler.h"
+#include "RenderingHandler.h"
+#include "Logging.h"
+

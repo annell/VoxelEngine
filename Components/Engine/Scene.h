@@ -3,14 +3,14 @@
 //
 
 #pragma once
-#include "Node.h"
-#include <BaseComponents.h>
-#include <EntityComponentSystem.h>
-#include <Skybox.h>
 #include <iostream>
 #include <list>
+#include <EntityComponentSystem.h>
 
 namespace voxie {
+    class Skybox;
+    class Node;
+    class NodeWrapper;
 
     class Scene {
     public:
@@ -39,13 +39,7 @@ namespace voxie {
         Skybox* GetSkybox() const;
 
     private:
-        void AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode) {
-            if (rootNode) {
-                rootNode->AddChild(std::move(node));
-            } else {
-                root = std::move(node);
-            }
-        }
+        void AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode);
 
         std::unique_ptr<Node> root;
         std::string folder;

@@ -6,18 +6,18 @@
 
 #include <functional>
 #include <vector>
+#include "InputDefinitions.h"
 
 namespace voxie {
-
-    using Action = std::function<void()>;
-
     struct KeyAction {
+        using Action = std::function<void()>;
         Action action;
+        Key key = KEY_UNKNOWN;
+        bool press = true;
     };
 
-    using RegistredKeys = std::vector<KeyAction>;
-
     struct KeyboardHandler {
+        using RegistredKeys = std::vector<KeyAction>;
         static void processInput();
         static void RegisterAction(const KeyAction &);
     };

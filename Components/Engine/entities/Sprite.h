@@ -4,15 +4,18 @@
 
 #pragma once
 
-#include "BaseComponents.h"
-#include "Core.h"
 #include "EntityComponentSystem.h"
 #include <Node.h>
 #include <RenderingHandler.h>
-#include <Shader.h>
 #include <memory>
+#include "LoadTexture.h"
 
 namespace voxie {
+    class Position2D;
+    class Shader;
+    class Name;
+    class VertexBufferArray;
+
     class Sprite : public NodeWrapper {
     public:
         Sprite(const Handle &, std::string path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position2D>);

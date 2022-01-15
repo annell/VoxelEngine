@@ -3,13 +3,18 @@
 //
 #pragma once
 
-#include <Chunk.h>
 #include <TransformNode.h>
 #include <Lightsource.h>
 #include <Sprite.h>
 #include <string>
+#include <filesystem>
+
+#include "Cube.h"
+#include "BaseComponents.h"
 
 namespace voxie {
+
+    class Chunk;
 
     const std::string BASE_PATH = std::filesystem::current_path().string() + std::string("/resources");
     const std::string SHADERS = "/shaders";
@@ -27,7 +32,7 @@ namespace voxie {
     };
 
     std::vector<ModelConfig> GetModels();
-    std::shared_ptr<voxie::Chunk> MakeModel(ModelConfig);
+    std::shared_ptr<Chunk> MakeModel(ModelConfig);
 
     struct LightFactoryConfig {
         std::string name;

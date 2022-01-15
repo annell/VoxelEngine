@@ -1,9 +1,10 @@
 #include "Engine.h"
-#include "Camera.h"
-#include "Factory.h"
-#include "KeyboardHandler.h"
-#include "MouseHandler.h"
+#include "Core.h"
 #include <iostream>
+
+#define GL_SILENCE_DEPRECATION
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace voxie {
     Engine::Engine()
@@ -84,6 +85,7 @@ namespace voxie {
             NewFrame();
 
             KeyboardHandler::processInput();
+            MouseHandler::processInput();
             onTick.Broadcast(GetDeltaTime());
 
             RenderFrame();

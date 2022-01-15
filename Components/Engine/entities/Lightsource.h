@@ -7,19 +7,16 @@
 #include "Chunk.h"
 #include <RenderingHandler.h>
 #include <Scene.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <vector>
 
 namespace voxie {
-    class Shader;
-    class Camera;
-}// namespace voxie
-
-namespace voxie {
     class Cube;
     class Handle;
+    class Color;
+    class Attenuation;
+    class Shader;
+    class Camera;
 
 
     enum class LightType {

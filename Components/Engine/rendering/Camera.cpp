@@ -2,8 +2,10 @@
 // Created by Stefan Annell on 2021-05-22.
 //
 #include "Camera.h"
-#include <Engine.h>
+#include "Core.h"
+
 #include <memory>
+
 
 namespace voxie {
 
@@ -64,7 +66,7 @@ namespace voxie {
             Position += Right * velocity;
     }
 
-    void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
+    void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
         xoffset *= MouseSensitivity;
         yoffset *= MouseSensitivity;
 

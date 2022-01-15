@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include "Core.h"
 #include "EntityComponentSystem.h"
 #include <Node.h>
 
 namespace voxie {
+    class Position;
+    class Name;
 
 class TransformNode : public NodeWrapper {
 public:

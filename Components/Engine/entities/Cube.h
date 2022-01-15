@@ -4,15 +4,19 @@
 
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <vector>
-
-#include "BaseComponents.h"
-#include "Shader.h"
-#include "VertexBufferArray.h"
+#include "Material.h"
 
 namespace voxie {
+
+    class VertexBufferArray;
+    class Position;
+
+    struct Dimensions {
+        float width;
+        float height;
+        float depth;
+    };
 
     class Cube {
     public:
@@ -38,7 +42,7 @@ namespace voxie {
         void GenerateVertexAttributes();
         void CreateRenderBuffers();
         const std::vector<float> &GetVertexAttributes();
-        void SetVertexAttrib(GLuint size, GLenum type, GLboolean normalized, GLsizei stride, const void *ptr);
+        void SetVertexAttrib(unsigned int size, int type, bool normalized, int stride, const void *ptr);
         void SetRenderSide(Face face, bool render);
         [[nodiscard]] const Material &GetMaterial() const;
         [[nodiscard]] const int &GetMaterialIndex() const;

@@ -4,13 +4,31 @@
 
 #pragma once
 
-class GLFWwindow;
-namespace voxie::MouseHandler {
+#include <functional>
+#include <vector>
+#include "InputDefinitions.h"
 
-    void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-    void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-    void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
-    void UnlockCamera();
-    void LockCamera();
+class GLFWwindow;
+namespace voxie {
+
+    struct MouseAction {
+        using Action = std::function<void()>;
+        Action action;
+        MouseButton key;
+        ActionType type;
+    };
+
+    struct MouseHandler {
+        using RegistredKeys = std::vector<MouseAction>;
+
+        static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+        static void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+        static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+        static void UnlockCamera();
+        static void LockCamera();
+
+        static void processInput();
+        static void RegisterAction(const MouseAction &);
+    };
 
 }// namespace voxie::MouseHandler

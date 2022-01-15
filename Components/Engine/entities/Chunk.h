@@ -4,18 +4,29 @@
 
 #pragma once
 
-#include "Core.h"
-#include <Node.h>
-#include <RenderingHandler.h>
 #include <map>
 #include <memory>
 #include <vector>
 
-#include "Cube.h"
+#include "RenderingHandler.h"
 #include "EntityComponentSystem.h"
-#include "Shader.h"
+#include "Node.h"
 
 namespace voxie {
+    class Cube;
+    class Shader;
+    class Name;
+    class VertexBufferArray;
+
+    struct ChunkPosition {
+        int x;
+        int y;
+        int z;
+
+        bool operator<(const ChunkPosition &pos) const {
+            return std::tie(x, y, z) < std::tie(pos.x, pos.y, pos.z);
+        }
+    };
 
     class Chunk : public NodeWrapper {
     public:

@@ -5,6 +5,10 @@
 #include "Sprite.h"
 #include <Engine.h>
 #include <utility>
+#include <GL/glew.h>
+#include "VertexBufferArray.h"
+#include "Shader.h"
+#include "BaseComponents.h"
 
 namespace internal {
 

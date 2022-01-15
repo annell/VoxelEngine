@@ -3,9 +3,11 @@
 //
 
 #include "Node.h"
+#include "Core.h"
 #include "Engine.h"
 #include "Factory.h"
 #include <Sprite.h>
+
 namespace voxie {
 
 Node::Node(Handle node, Node * parent)

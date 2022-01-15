@@ -9,6 +9,9 @@
 #include "RenderingHandler.h"
 
 namespace voxie {
+    class Shader;
+    class VertexBufferArray;
+    class Camera;
 
     class Skybox {
     public:

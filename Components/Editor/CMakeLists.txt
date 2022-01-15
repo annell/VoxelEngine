@@ -14,7 +14,5 @@ add_dependencies(${PROJECT_NAME} Engine)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Engine)
 target_include_directories(${PROJECT_NAME} PUBLIC
-        ${PROJECT_BINARY_DIR}
         ${Engine_INCLUDE_DIRS}
-        ${Engine_INCLUDE_LIBS}
 )

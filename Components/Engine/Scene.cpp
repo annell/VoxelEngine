@@ -3,8 +3,15 @@
 //
 
 #include "Scene.h"
-#include "Engine.h"
 #include "Factory.h"
+#include <fstream>
+#include <Skybox.h>
+#include "Node.h"
+#include "Shader.h"
+
+#define GL_SILENCE_DEPRECATION
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace internal {
     auto read_file(std::string_view path) -> std::string {
@@ -76,6 +83,14 @@ namespace voxie {
         auto nodePtr = node.get();
         AddNodeImplementation(std::move(node), rootNode);
         return nodePtr;
+    }
+
+    void Scene::AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode) {
+        if (rootNode) {
+            rootNode->AddChild(std::move(node));
+        } else {
+            root = std::move(node);
+        }
     }
 
     Scene::SceneEntities Scene::GetEntities() const {

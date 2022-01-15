@@ -1,11 +1,16 @@
 //
 // Created by Stefan Annell on 2021-04-10.
 //
+#include "Core.h"
 #include "Lightsource.h"
 #include "Camera.h"
-#include "Core.h"
 #include "Cube.h"
 #include <Engine.h>
+#include "Shader.h"
+
+#define GL_SILENCE_DEPRECATION
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace voxie {
 

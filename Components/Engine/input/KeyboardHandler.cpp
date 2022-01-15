@@ -3,12 +3,14 @@
 //
 
 #include "KeyboardHandler.h"
+#include "Core.h"
+#include <GLFW/glfw3.h>
 
 namespace voxie {
 
     namespace internal {
-        RegistredKeys &GetRegisteredKeys() {
-            static RegistredKeys registeredKeys;
+        KeyboardHandler::RegistredKeys &GetRegisteredKeys() {
+            static KeyboardHandler::RegistredKeys registeredKeys;
 
             return registeredKeys;
         }
@@ -16,8 +18,11 @@ namespace voxie {
     }// namespace internal
 
     void KeyboardHandler::processInput() {
+        auto& engine = Engine::GetEngine();
         for (auto &key : internal::GetRegisteredKeys()) {
-            key.action();
+            if (glfwGetKey(engine.GetWindow()->GetWindow(), key.key) == GLFW_PRESS) {
+                key.action();
+            }
         }
     }
 

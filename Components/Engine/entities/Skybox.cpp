@@ -6,6 +6,11 @@
 #include <Engine.h>
 #include <Factory.h>
 #include <stb_image_aug.h>
+#include "VertexBufferArray.h"
+#include "Shader.h"
+#include "Camera.h"
+
+#include <GL/glew.h>
 
 namespace internal {
     // loads a cubemap texture from 6 individual texture faces

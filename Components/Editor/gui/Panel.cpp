@@ -1,12 +1,8 @@
 //
 
-
 #include "Panel.h"
-#include "Camera.h"
 #include "Core.h"
-#include "Engine.h"
-#include <BaseComponents.h>
-#include <Factory.h>
+#include <GLFW/glfw3.h>
 
 namespace gui {
 
