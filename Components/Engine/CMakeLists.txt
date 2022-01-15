@@ -118,4 +118,8 @@ target_link_libraries(${PROJECT_NAME}
 include_directories(${Engine_INCLUDE_DIRS})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-install(FILES ${H_FILES} DESTINATION include/Voxie)
+install(DIRECTORY ${Engine_INCLUDE_DIRS}
+        DESTINATION include/Voxie
+        FILES_MATCHING
+        PATTERN "*.h"
+        )
