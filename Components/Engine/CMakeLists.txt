@@ -4,13 +4,13 @@ project(Engine)
 # Add header file
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GLEW REQUIRED GLEW)
-set(GLEW_DYN_LIB ${GLEW_INCLUDE_DIRS}/../lib/libGLEW.2.2.dylib)
+set(GLEW_DYN_LIB ${GLEW_INCLUDE_DIRS}/../lib/libGLEW.a)
 
 set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
 set(SOIL_H /opt/local/include/SOIL)
 
-set(SOIL_LINK /opt/local/lib/libSOIL.dylib)
-set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.6.dylib)
+set(SOIL_LINK /opt/local/lib/libSOIL.a)
+set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.a)
 
 # Execute compilation command
 file(GLOB CPP_FILES
@@ -102,7 +102,8 @@ if(APPLE)
     set(OSX_GLFW_DEP
     "-framework OpenGL"
     "-framework Cocoa"
-    "-framework IOKit")
+    "-framework IOKit"
+    "-framework GLUT")
 endif()
 
 target_link_libraries(${PROJECT_NAME}
@@ -112,7 +113,6 @@ target_link_libraries(${PROJECT_NAME}
         PRIVATE ${FREETYPE_LINK}
         PRIVATE ${SOIL_LINK}
         PRIVATE ${OSX_GLFW_DEP}
-        PRIVATE "-framework GLUT"
         )
 
 include_directories(${Engine_INCLUDE_DIRS})
