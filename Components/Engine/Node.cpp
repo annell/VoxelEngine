@@ -90,8 +90,9 @@ bool Node::decode(const YAML::Node &n) {
         obj->decode(n);
         nodePtr = std::move(obj);
     } else if (n["type"].as<std::string>() == "CubeEntity") {
-        auto obj = MakeTransformNode({n["name"].as<std::string>(),
-                                      nodeEntity});
+        auto obj = MakePrimitive({n["name"].as<std::string>(),
+                                    BasePrimitives::Cube,
+                                    nodeEntity});
         obj->decode(n);
         nodePtr = std::move(obj);
     }

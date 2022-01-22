@@ -56,7 +56,7 @@ namespace voxie {
         cube.DisableNormals();
         cube.GenerateVertexAttributes();
         cube.CreateRenderBuffers();
-        cube.GetVertexBufferArray()->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) nullptr);
+        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) nullptr);
 
         cubemapTexture = internal::loadCubemap({
             BASE_PATH + SPRITES + "/skybox/right.jpg",

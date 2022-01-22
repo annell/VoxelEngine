@@ -5,6 +5,7 @@
 #define GL_SILENCE_DEPRECATION
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "CubeEntity.h"
 
 namespace voxie {
     Engine::Engine()
@@ -93,6 +94,8 @@ namespace voxie {
                 if (auto model = voxie::helper::GetSceneNode<voxie::Chunk>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
                 } else if (auto model = voxie::helper::GetSceneNode<voxie::Sprite>(entity)) {
+                    voxie::helper::Submit(model->GetRenderingConfig());
+                } else if (auto model = voxie::helper::GetSceneNode<voxie::CubeEntity>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
                 }
             }

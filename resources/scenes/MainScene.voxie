@@ -6,10 +6,10 @@
       position:
         x: 0
         y: 0
-        z: 0
+        z: -0.00406378508
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
         x: 1
@@ -23,9 +23,9 @@
     name: Editor Camera
     position:
       position:
-        x: 6.99688387
-        y: 2.76611233
-        z: 15.72155
+        x: 5.93717003
+        y: 2.81979775
+        z: 19.3451786
       rotation:
         x: 0
         y: 0
@@ -60,25 +60,6 @@
       r: 0.5
       g: 0.5
       b: 0.5
-- parent: 1312
-  node:
-    type: Chunk
-    id: 2
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/floor.vox
-    name: floor.vox
-    position:
-      position:
-        x: -0.191405833
-        y: -0.0095385313
-        z: -0.049804233
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 0.0813997611
-        y: 0.0813997611
-        z: 0.0813997611
 - parent: 1312
   node:
     type: Chunk
@@ -217,3 +198,21 @@
         x: 0.0794999674
         y: 0.0795000121
         z: 0.0794999674
+- parent: 1312
+  node:
+    type: CubeEntity
+    id: 201
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 5.96046448e-08
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1000
+        y: 0.00117000006
+        z: 1000

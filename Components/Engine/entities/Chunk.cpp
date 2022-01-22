@@ -151,13 +151,10 @@ namespace voxie {
     }
 
     RenderingConfig Chunk::GetRenderingConfig() const {
-        auto obj = Engine::GetEngine().GetScene().GetRoot()->Find(GetHandle());
-        auto p0 = GetPosition();
-        auto model = p0->GetModel(obj->GetRelativePosition(), p0->scale, obj->GetRelativeRotation());
         return {
                 GetShader(),
                 GetVertexBufferArray(),
-                GetPreDrawAction(GetShader(), model),
+                GetPreDrawAction(GetShader(), GetPosition()->model),
                 GetPostDrawAction(),
                 [&]() {
                     glBindVertexArray(GetVertexBufferArray()->VAO);

@@ -23,6 +23,7 @@ CubeEntity::~CubeEntity() {
     helper::RemoveComponent<Name>(handle);
     helper::RemoveComponent<Shader>(handle);
     helper::RemoveComponent<Position>(handle);
+    helper::RemoveComponent<Material>(handle);
 }
 
 void CubeEntity::encode(YAML::Node & node) const {
@@ -39,11 +40,11 @@ bool CubeEntity::decode(const YAML::Node & node) {
 }
 
 void CubeEntity::Init() {
+    cube.GenerateVertexAttributes();
     cube.CreateRenderBuffers();
     cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) nullptr);
     cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
     cube.SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
-    cube.GenerateVertexAttributes();
 
     auto shader = GetShader();
     shader->use();
@@ -74,9 +75,10 @@ RenderingConfig CubeEntity::GetRenderingConfig() const {
             GetShader(),
             GetVertexBufferArray(),
             [&] () {
+              auto position = GetPosition();
               auto shader = GetShader();
               shader->use();
-              shader->setMat4("model", GetPosition()->model);
+              shader->setMat4("model", position->model);
             },
             [] () {},
             [&]() {
