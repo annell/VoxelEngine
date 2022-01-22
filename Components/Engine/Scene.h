@@ -22,6 +22,7 @@ namespace voxie {
         void Load(const std::string &name);
         using SceneEntities = std::list<Handle>;
         void ClearScene();
+        Node * AddEntity(std::shared_ptr<NodeWrapper>, Node * parent = nullptr);
         Node * AddEntity(Handle, Node * parent = nullptr);
 
         template <typename T>

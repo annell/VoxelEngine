@@ -82,15 +82,6 @@ namespace voxie {
         shader->setMat4("model", GetPosition()->model);
     }
 
-    void Chunk::Draw() const {
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_FRONT);
-        GetShader()->use();
-        glBindVertexArray(GetVertexBufferArray()->VAO);
-        glDrawArrays(GL_TRIANGLES, 0, NrVertex());
-        glDisable(GL_CULL_FACE);
-    }
-
     void Chunk::AddCube(ChunkPosition position, std::unique_ptr<Cube> &&cube) {
         cubesMap[position] = std::move(cube);
     }

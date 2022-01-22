@@ -3,12 +3,12 @@
 //
 
 #include "Sprite.h"
-#include <Engine.h>
-#include <utility>
-#include <GL/glew.h>
-#include "VertexBufferArray.h"
 #include "Shader.h"
-#include "BaseComponents.h"
+#include "VertexBufferArray.h"
+#include "components/BaseComponents.h"
+#include <Engine.h>
+#include <GL/glew.h>
+#include <utility>
 
 namespace internal {
 

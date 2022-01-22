@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include "components/Material.h"
 #include <vector>
-#include "Material.h"
 
 namespace voxie {
 

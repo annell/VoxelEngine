@@ -97,9 +97,8 @@ namespace voxie {
                 }
             }
 
-            if (auto skybox = GetScene().GetSkybox()) {
-                voxie::helper::Submit(skybox->GetRenderingConfig());
-            }
+            auto skybox = GetScene().GetSkybox();
+            voxie::helper::Submit(skybox->GetRenderingConfig());
 
             voxie::helper::RenderingEnd();
 

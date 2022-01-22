@@ -7,15 +7,22 @@
 #include "Cube.h"
 #include "EntityComponentSystem.h"
 #include "RenderingHandler.h"
+#include "Node.h"
 
 namespace voxie {
     class Shader;
     class VertexBufferArray;
     class Camera;
 
-    class Skybox {
+    class Skybox : public NodeWrapper {
     public:
         Skybox(const Handle &, std::shared_ptr<Shader>);
+
+        void encode(YAML::Node &) const;
+        bool decode(const YAML::Node &);
+
+        [[nodiscard]] const Handle &GetHandle() const override;
+
         [[nodiscard]] RenderingConfig GetRenderingConfig() const;
         [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
         [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;

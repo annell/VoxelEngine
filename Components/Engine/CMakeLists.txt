@@ -16,6 +16,7 @@ set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.a)
 file(GLOB CPP_FILES
         *.cpp
         entities/*.cpp
+        components/*.cpp
         external/imgui/*.cpp
         external/ImGuizmo/*.cpp
         external/rapidjson/*.cpp
@@ -30,6 +31,7 @@ file(GLOB CPP_FILES
 file(GLOB H_FILES
         *.h
         entities/*.h
+        components/*.h
         external/imgui/*.h
         external/ImGuizmo/*.h
         external/rapidjson/*.h
@@ -43,6 +45,7 @@ file(GLOB H_FILES
 set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/.
         ${PROJECT_SOURCE_DIR}/entities
+        ${PROJECT_SOURCE_DIR}/components
         ${PROJECT_SOURCE_DIR}/utility
         ${PROJECT_SOURCE_DIR}/input
         ${PROJECT_SOURCE_DIR}/rendering

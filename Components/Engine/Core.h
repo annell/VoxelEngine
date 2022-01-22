@@ -30,9 +30,9 @@
 #include "EntityComponentSystem.h"
 #include "LoadTexture.h"
 
-#include "BaseComponents.h"
 #include "Shader.h"
 #include "VertexBufferArray.h"
+#include "BaseComponents.h"
 
 #include "Factory.h"
 

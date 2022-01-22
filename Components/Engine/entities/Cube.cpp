@@ -3,7 +3,7 @@
 //
 #include "Cube.h"
 #include "VertexBufferArray.h"
-#include "Position.h"
+#include "components/Position.h"
 
 
 namespace voxie {

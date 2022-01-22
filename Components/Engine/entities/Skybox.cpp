@@ -3,12 +3,8 @@
 //
 
 #include "Skybox.h"
-#include <Engine.h>
-#include <Factory.h>
+#include "Core.h"
 #include <stb_image_aug.h>
-#include "VertexBufferArray.h"
-#include "Shader.h"
-#include "Camera.h"
 
 #include <GL/glew.h>
 
@@ -76,6 +72,18 @@ namespace voxie {
         shader->setInt("skybox", 0);
     }
 
+    void Skybox::encode(YAML::Node &node) const {
+        // Havent yet implemented this...
+    }
+
+    bool Skybox::decode(const YAML::Node &node) {
+        // Havent yet implemented this...
+        return true;
+    }
+
+    const Handle &Skybox::GetHandle() const {
+        return handle;
+    }
 
     auto Skybox::GetPreDrawAction(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Camera> &camera) const {
         return [=]() {

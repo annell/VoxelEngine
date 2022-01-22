@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "components/Name.h"
 #include <EntityComponentSystem.h>
 #include <Node.h>
-#include "Name.h"
 #include <glm/glm.hpp>
 
 namespace voxie {
