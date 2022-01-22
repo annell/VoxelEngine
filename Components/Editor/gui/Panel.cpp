@@ -2,6 +2,7 @@
 
 #include "Panel.h"
 #include "Core.h"
+#include "CubeEntity.h"
 #include <GLFW/glfw3.h>
 
 namespace gui {
@@ -177,6 +178,17 @@ namespace gui {
                         voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeModel(model), nullptr);
                     }
                 }
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Base primitives")) {
+                    for (const auto& primitive : voxie::GetBasePrimitives()) {
+                        if (primitive == voxie::BasePrimitives::Cube) {
+                            if (ImGui::Selectable("Cube")) {
+                                voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube}), nullptr);
+                            }
+                        }
+                    }
                 ImGui::EndMenu();
             }
 

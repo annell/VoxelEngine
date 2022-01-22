@@ -4,6 +4,7 @@
 
 #include "Node.h"
 #include "Core.h"
+#include "CubeEntity.h"
 #include "Engine.h"
 #include "Factory.h"
 #include <Sprite.h>
@@ -43,6 +44,8 @@ void Node::encode(YAML::Node &root) const {
     } else if (auto sprite = helper::GetSceneNode<Sprite>(handle)) {
         node["node"] = *sprite.get();
     } else if (auto sprite = helper::GetSceneNode<TransformNode>(handle)) {
+        node["node"] = *sprite.get();
+    } else if (auto sprite = helper::GetSceneNode<CubeEntity>(handle)) {
         node["node"] = *sprite.get();
     }
     root.push_back(node);
@@ -84,6 +87,11 @@ bool Node::decode(const YAML::Node &n) {
     } else if (n["type"].as<std::string>() == "TransformNode") {
         auto obj = MakeTransformNode({n["name"].as<std::string>(),
                                        nodeEntity});
+        obj->decode(n);
+        nodePtr = std::move(obj);
+    } else if (n["type"].as<std::string>() == "CubeEntity") {
+        auto obj = MakeTransformNode({n["name"].as<std::string>(),
+                                      nodeEntity});
         obj->decode(n);
         nodePtr = std::move(obj);
     }

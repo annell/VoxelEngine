@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Chunk.h"
+#include "CubeEntity.h"
 #include "Core.h"
 #include "Engine.h"
 #include <Sprite.h>
@@ -70,6 +71,29 @@ namespace voxie {
         return std::move(model);
     }
 
+    std::vector<BasePrimitives> GetBasePrimitives() {
+        return {BasePrimitives::Cube};
+    }
+
+    std::shared_ptr<voxie::CubeEntity> MakePrimitive(PrimitivesConfig config) {
+        auto model = std::make_shared<voxie::CubeEntity>(
+                config.entity.GetId() ? config.entity : Handle::MakeEntity(),
+                std::make_shared<voxie::Name>(config.name),
+                std::make_shared<voxie::Shader>(
+                        std::map<std::string, unsigned int>{
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", GL_VERTEX_SHADER),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}
+                ),
+                std::make_shared<voxie::Position>(0, 0, 0),
+                std::make_shared<voxie::Material>(Material{
+                        {0.2f, 0.8f, 0.3f},
+                        {0.5, 0.5, 0.5},
+                        {1.0f, 0.5f, 0.31f},
+                        {0.5f, 0.5f, 0.5f},
+                        32.0f}
+                ));
+        return std::move(model);
+    }
 
     std::vector<LightFactoryConfig> GetLights() {
         auto entity = Handle::MakeEntity();

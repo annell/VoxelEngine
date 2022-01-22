@@ -15,6 +15,7 @@
 namespace voxie {
 
     class Chunk;
+    class CubeEntity;
 
     const std::string BASE_PATH = std::filesystem::current_path().string() + std::string("/resources");
     const std::string SHADERS = "/shaders";
@@ -33,6 +34,20 @@ namespace voxie {
 
     std::vector<ModelConfig> GetModels();
     std::shared_ptr<Chunk> MakeModel(ModelConfig);
+
+    enum class BasePrimitives {
+        Cube,
+        Unknown,
+    };
+
+    struct PrimitivesConfig {
+        std::string name;
+        BasePrimitives primitive = BasePrimitives::Unknown;
+        Handle entity = NullEntity;
+    };
+
+    std::vector<BasePrimitives> GetBasePrimitives();
+    std::shared_ptr<CubeEntity> MakePrimitive(PrimitivesConfig);
 
     struct LightFactoryConfig {
         std::string name;

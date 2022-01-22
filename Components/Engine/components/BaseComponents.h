@@ -11,6 +11,7 @@
 #include "Position2D.h"
 #include "Direction.h"
 #include "Skybox.h"
+#include "Cube.h"
 
 namespace YAML {
     template<typename T>
