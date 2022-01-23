@@ -97,6 +97,10 @@ namespace voxie {
         return helper::GetComponent<Position>(handle);
     }
 
+    std::shared_ptr<Name> Camera::GetName() const {
+        return helper::GetComponent<Name>(handle);
+    }
+
     std::shared_ptr<Direction> Camera::GetDirection() const {
         return helper::GetComponent<Direction>(handle);
     }

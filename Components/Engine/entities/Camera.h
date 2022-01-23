@@ -40,6 +40,7 @@ namespace voxie {
         [[nodiscard]] glm::mat4 GetProjectionMatrix() const;
         [[nodiscard]] const Handle &GetHandle() const override;
         [[nodiscard]] std::shared_ptr<Direction> GetDirection() const;
+        [[nodiscard]] std::shared_ptr<Name> GetName() const;
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void SetShaderParameters(const Shader &shader) const;
