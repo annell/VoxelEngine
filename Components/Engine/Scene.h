@@ -24,6 +24,8 @@ namespace voxie {
         void ClearScene();
         Node * AddEntity(std::shared_ptr<NodeWrapper>, Node * parent = nullptr);
         Node * AddEntity(Handle, Node * parent = nullptr);
+        void DisableEntity(const Handle&);
+        void EnableEntity(const Handle&);
 
         template <typename T>
         void AddNode(std::shared_ptr<T> nodeWrapper, Node * parent) {

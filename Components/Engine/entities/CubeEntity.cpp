@@ -10,7 +10,7 @@
 namespace voxie {
 
 CubeEntity::CubeEntity(const voxie::Handle& handle, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position, std::shared_ptr<Material> material)
-    : handle(handle), cube(*(position.get()), Dimensions{1, 1, 1}, *material.get(), 0) {
+    : handle(handle) {
     helper::AddComponent(handle, std::move(name));
     helper::AddComponent(handle, std::move(position));
     helper::AddComponent(handle, std::move(shader));
@@ -32,10 +32,13 @@ void CubeEntity::encode(YAML::Node & node) const {
     auto name = helper::GetComponent<Name>(handle).get();
     node["name"] = name->name;
     node["position"] = *helper::GetComponent<Position>(handle).get();
+    node["material"] = *helper::GetComponent<Material>(handle).get();
 }
 
 bool CubeEntity::decode(const YAML::Node & node) {
     GetPosition()->decode(node["position"]);
+    GetMaterial()->decode(node["material"]);
+    RefreshMaterial();
     return true;
 }
 
@@ -48,14 +51,8 @@ void CubeEntity::Init() {
 
     auto shader = GetShader();
     shader->use();
-
-    auto &material = cube.GetMaterial();
-    std::string index = std::to_string(cube.GetMaterialIndex());
-    shader->setVec3("materials[" + index + "].ambient", material.ambient);
-    shader->setVec3("materials[" + index + "].diffuse", material.diffuse);
-    shader->setVec3("materials[" + index + "].specular", material.specular);
-    shader->setFloat("materials[" + index + "].shininess", material.shininess);
     shader->setMat4("model", GetPosition()->model);
+    RefreshMaterial();
 }
 
 std::shared_ptr<Position> CubeEntity::GetPosition() const {
@@ -64,6 +61,22 @@ std::shared_ptr<Position> CubeEntity::GetPosition() const {
 
 std::shared_ptr<Shader> CubeEntity::GetShader() const {
     return voxie::helper::GetComponent<Shader>(handle);
+}
+
+std::shared_ptr<Material> CubeEntity::GetMaterial() const {
+    return voxie::helper::GetComponent<Material>(handle);
+}
+
+void CubeEntity::RefreshMaterial() const {
+    auto shader = GetShader();
+    shader->use();
+
+    auto material = GetMaterial();
+    std::string index = "0";
+    shader->setVec3("materials[" + index + "].ambient", material->ambient);
+    shader->setVec3("materials[" + index + "].diffuse", material->diffuse);
+    shader->setVec3("materials[" + index + "].specular", material->specular);
+    shader->setFloat("materials[" + index + "].shininess", material->shininess);
 }
 
 std::shared_ptr<VertexBufferArray> CubeEntity::GetVertexBufferArray() const {
@@ -84,7 +97,9 @@ RenderingConfig CubeEntity::GetRenderingConfig() const {
             [&]() {
               glBindVertexArray(GetVertexBufferArray()->VAO);
               glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
-            }};
+            },
+            IsEnabled()
+    };
 }
 
 const Handle &CubeEntity::GetHandle() const {

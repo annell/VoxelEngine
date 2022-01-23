@@ -56,6 +56,33 @@ namespace gui {
         ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 5.0f);
     }
 
+    void ShowEntityMaterialController(const voxie::Handle &entity) {
+        ImGui::Separator();
+        auto material = voxie::helper::GetComponent<voxie::Material>(entity);
+
+
+
+        ImGui::Separator();
+        float color[3] = {material->color[0], material->color[1], material->color[2]};
+        float ambient[3] = {material->ambient[0], material->ambient[1], material->ambient[2]};
+        float diffuse[3] = {material->diffuse[0], material->diffuse[1], material->diffuse[2]};
+        float specular[3] = {material->specular[0], material->specular[1], material->specular[2]};
+        ImGui::SliderFloat3("Color", color, 0.0f, 1.0f);
+        ImGui::ColorPicker3("Ambient", ambient);
+        ImGui::SliderFloat3("Diffuse", diffuse, 0.0f, 1.0f);
+        ImGui::SliderFloat3("Specular", specular, 0.0f, 1.0f);
+        ImGui::SliderFloat("Shininess", &material->shininess, 0.0f, 100.0f);
+
+        material->color = {color[0], color[1], color[2]};
+        material->ambient = {ambient[0], ambient[1], ambient[2]};
+        material->diffuse = {diffuse[0], diffuse[1], diffuse[2]};
+        material->specular = {specular[0], specular[1], specular[2]};
+
+        if (auto obj = voxie::helper::GetSceneNode<voxie::CubeEntity>(entity)) {
+            obj->RefreshMaterial();
+        }
+    }
+
     void ShowEntityPositionController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
@@ -372,6 +399,10 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::Attenuation>(entity)) {
             ShowEntityAttenuationController(entity);
+        }
+
+        if (voxie::helper::HasComponent<voxie::Material>(entity)) {
+            ShowEntityMaterialController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::Camera>(entity)) {

@@ -56,7 +56,7 @@ void Node::encode(YAML::Node &root) const {
 }
 
 bool Node::decode(const YAML::Node &n) {
-    auto nodeEntity = Handle(n["id"].as<int>());
+    auto nodeEntity = Handle(n["id"].as<u_int64_t>());
     if (n["type"].as<std::string>() == "Chunk") {
         auto obj = MakeModel({n["name"].as<std::string>(),
                               n["path"].as<std::string>(),
@@ -92,6 +92,7 @@ bool Node::decode(const YAML::Node &n) {
     } else if (n["type"].as<std::string>() == "CubeEntity") {
         auto obj = MakePrimitive({n["name"].as<std::string>(),
                                     BasePrimitives::Cube,
+                                    {},
                                     nodeEntity});
         obj->decode(n);
         nodePtr = std::move(obj);

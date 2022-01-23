@@ -25,6 +25,8 @@ namespace voxie {
     }
 
     void RenderingHandler::Submit(const RenderingConfig &config) {
-        renderingQueue.push_back(config);
+        if (config.IsEnabled) {
+            renderingQueue.push_back(config);
+        }
     }
 }// namespace voxie

@@ -24,7 +24,7 @@ void Material::encode(YAML::Node &node) const {
     diffuseNode["x"] = diffuse[0];
     diffuseNode["y"] = diffuse[1];
     diffuseNode["z"] = diffuse[2];
-    node["diffuse"] = ambientNode;
+    node["diffuse"] = diffuseNode;
 
     YAML::Node specularNode;
     specularNode["x"] = specular[0];

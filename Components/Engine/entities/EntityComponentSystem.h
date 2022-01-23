@@ -11,7 +11,7 @@ namespace voxie {
 
     class Handle {
     public:
-        using Identity = int;
+        using Identity = u_int64_t;
         explicit Handle(Identity);
 
         static Handle MakeEntity();

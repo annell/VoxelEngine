@@ -43,6 +43,12 @@ namespace voxie {
     struct PrimitivesConfig {
         std::string name;
         BasePrimitives primitive = BasePrimitives::Unknown;
+        Material material = {
+                {0.2f, 0.8f, 0.3f},
+                {0.5, 0.5, 0.5},
+                {1.0f, 0.5f, 0.31f},
+                {0.5f, 0.5f, 0.5f},
+                32.0f};
         Handle entity = NullEntity;
     };
 

@@ -33,6 +33,7 @@
 #include "Shader.h"
 #include "VertexBufferArray.h"
 #include "BaseComponents.h"
+#include "CubeEntity.h"
 
 #include "Factory.h"
 

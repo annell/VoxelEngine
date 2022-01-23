@@ -17,6 +17,12 @@ struct NodeWrapper {
     virtual std::shared_ptr<Position> GetPosition() const {
         return std::shared_ptr<Position>();
     }
+
+    bool IsEnabled() const { return enabled; }
+    void Enable() { enabled = true; }
+    void Disable() { enabled = false; }
+protected:
+    bool enabled = true;
 };
 
 class Node {

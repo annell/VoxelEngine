@@ -60,10 +60,10 @@ namespace voxie {
         ClearScene();
         auto nodes = YAML::Load(internal::read_file(folder + sceneName));
         for (const auto &node : nodes) {
-            auto entity = Handle(node["node"]["id"].as<int>());
+            auto entity = Handle(node["node"]["id"].as<Handle::Identity>());
             Node *parent = nullptr;
             if (node["parent"].IsDefined()) {
-                auto parentEntity = Handle(node["parent"].as<int>());
+                auto parentEntity = Handle(node["parent"].as<Handle::Identity>());
                 if (root) {
                     parent = root->Find(parentEntity);
                 }
@@ -132,6 +132,18 @@ namespace voxie {
     }
     Skybox* Scene::GetSkybox() const {
         return skybox.get();
+    }
+
+    void Scene::DisableEntity(const Handle& handle) {
+        if (auto node = FindNode(handle)) {
+            node->Disable();
+        }
+    }
+
+    void Scene::EnableEntity(const Handle& handle) {
+        if (auto node = FindNode(handle)) {
+            node->Enable();
+        }
     }
 
 }// namespace voxie

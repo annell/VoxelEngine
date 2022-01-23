@@ -3,6 +3,7 @@
 //
 
 #include "EntityComponentSystem.h"
+#include <random>
 
 namespace voxie {
 
@@ -23,8 +24,11 @@ namespace voxie {
     }
 
     Handle Handle::MakeEntity() {
-        static int id = 0;
-        return Handle(++id);
+        static std::random_device rd;
+        static std::mt19937_64 e2(rd());
+        static std::uniform_int_distribution<long long int> dist(std::llround(std::pow(2,61)), std::llround(std::pow(2,62)));
+
+        return Handle(dist(e2));
     }
     Handle::Identity Handle::GetId() const {
         return id;

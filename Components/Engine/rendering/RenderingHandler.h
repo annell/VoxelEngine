@@ -24,6 +24,7 @@ namespace voxie {
         PreDrawAction preDraw = []() {};
         PostDrawAction postDraw = []() {};
         DrawAction draw = []() {};
+        bool IsEnabled = true;
     };
 
     class RenderingHandler {

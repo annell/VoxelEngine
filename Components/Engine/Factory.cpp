@@ -85,13 +85,7 @@ namespace voxie {
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}
                 ),
                 std::make_shared<voxie::Position>(0, 0, 0),
-                std::make_shared<voxie::Material>(Material{
-                        {0.2f, 0.8f, 0.3f},
-                        {0.5, 0.5, 0.5},
-                        {1.0f, 0.5f, 0.31f},
-                        {0.5f, 0.5f, 0.5f},
-                        32.0f}
-                ));
+                std::make_shared<voxie::Material>(config.material));
         return std::move(model);
     }
 

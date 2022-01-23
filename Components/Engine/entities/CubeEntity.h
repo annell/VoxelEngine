@@ -32,6 +32,8 @@ public:
     [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
     [[nodiscard]] RenderingConfig GetRenderingConfig() const;
     [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
+    [[nodiscard]] std::shared_ptr<Material> GetMaterial() const;
+    [[nodiscard]] void RefreshMaterial() const;
     [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
     [[nodiscard]] const Handle &GetHandle() const override;
 
