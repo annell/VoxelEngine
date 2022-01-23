@@ -6,8 +6,10 @@
 #include <TransformNode.h>
 #include <Lightsource.h>
 #include <Sprite.h>
+#include "Text.h"
 #include <string>
 #include <filesystem>
+#include <memory>
 
 #include "Cube.h"
 #include "BaseComponents.h"
@@ -84,6 +86,15 @@ namespace voxie {
 
     std::vector<SpriteConfig> GetSprites();
     std::shared_ptr<voxie::Sprite> MakeSprite(SpriteConfig);
+
+    struct TextConfig {
+        std::string name;
+        std::string text;
+        voxie::Color color = voxie::Color({0.5, 0.5, 0.5});
+        Handle entity = NullEntity;
+    };
+
+    std::shared_ptr<voxie::Text> MakeText(TextConfig);
 
     struct TransformNodeConfig {
         std::string name;

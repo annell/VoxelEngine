@@ -8,6 +8,7 @@
 #include "Engine.h"
 #include "Factory.h"
 #include <Sprite.h>
+#include <Text.h>
 
 namespace voxie {
 
@@ -46,6 +47,8 @@ void Node::encode(YAML::Node &root) const {
     } else if (auto sprite = helper::GetSceneNode<TransformNode>(handle)) {
         node["node"] = *sprite.get();
     } else if (auto sprite = helper::GetSceneNode<CubeEntity>(handle)) {
+        node["node"] = *sprite.get();
+    } else if (auto sprite = helper::GetSceneNode<Text>(handle)) {
         node["node"] = *sprite.get();
     }
     root.push_back(node);
@@ -96,6 +99,14 @@ bool Node::decode(const YAML::Node &n) {
                                     nodeEntity});
         obj->decode(n);
         nodePtr = std::move(obj);
+    } else if (n["type"].as<std::string>() == "Text") {
+        auto obj = MakeText({n["name"].as<std::string>(),
+                               "",
+                               {{1, 1, 1}},
+                               nodeEntity});
+        obj->decode(n);
+        nodePtr = std::move(obj);
+        return true;
     }
     return true;
 }

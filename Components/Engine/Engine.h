@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Delegate.h"
 #include "Logging.h"
+#include "TextHandler.h"
 
 class GLFWwindow;
 
@@ -43,6 +44,7 @@ namespace voxie {
         std::unique_ptr<Scene> scene;
         RenderingHandler renderingHandler;
         Logging logging;
+        std::unique_ptr<TextHandler> textHandler;
 
         bool InitWindow();
         void UpdateTime();

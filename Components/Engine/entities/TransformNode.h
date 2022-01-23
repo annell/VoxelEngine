@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "EntityComponentSystem.h"
+#include "Handle.h"
 #include <Node.h>
 
 namespace voxie {

@@ -12,6 +12,7 @@
 #include "Direction.h"
 #include "Skybox.h"
 #include "Cube.h"
+#include "VisibleText.h"
 
 namespace YAML {
     template<typename T>

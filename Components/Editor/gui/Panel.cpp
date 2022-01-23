@@ -4,6 +4,49 @@
 #include "Core.h"
 #include "CubeEntity.h"
 #include <GLFW/glfw3.h>
+namespace internal {
+
+struct InputTextCallback_UserData
+{
+    std::string*            Str;
+    ImGuiInputTextCallback  ChainCallback;
+    void*                   ChainCallbackUserData;
+};
+
+static int InputTextCallback(ImGuiInputTextCallbackData* data)
+{
+    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+    {
+        // Resize string callback
+        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+        std::string* str = user_data->Str;
+        IM_ASSERT(data->Buf == str->c_str());
+        str->resize(data->BufTextLen);
+        data->Buf = (char*)str->c_str();
+    }
+    else if (user_data->ChainCallback)
+    {
+        // Forward to user callback, if any
+        data->UserData = user_data->ChainCallbackUserData;
+        return user_data->ChainCallback(data);
+    }
+    return 0;
+}
+
+bool InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void* user_data = NULL)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+
+    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return ImGui::InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+}
+
+}
 
 namespace gui {
 
@@ -104,9 +147,9 @@ namespace gui {
         float translation[2] = {pos->pos.x, pos->pos.y};
         float rotation = pos->rotation;
         float scale[2] = {pos->scale.x, pos->scale.y};
-        ImGui::InputFloat2("Position", translation);
-        ImGui::InputFloat2("Scale", scale);
-        ImGui::InputFloat("Rotation", &rotation);
+        ImGui::SliderFloat2("Position", translation, -1000, 1000);
+        ImGui::SliderFloat2("Scale", scale, 0, 10);
+        ImGui::SliderFloat("Rotation", &rotation, 0, 90);
         pos->SetRotation(rotation);
         pos->SetScale({scale[0], scale[1]});
         pos->SetPosition({translation[0], translation[1]});
@@ -116,15 +159,13 @@ namespace gui {
     void ShowEntityNameController(const voxie::Handle &entity) {
         ImGui::Separator();
         auto name = voxie::helper::GetComponent<voxie::Name>(entity);
-        char *buf = (char *) name->name.c_str();
-        auto callback = [](ImGuiInputTextCallbackData *data) -> int {
-            auto *entity = (voxie::Handle *) data->UserData;
-            auto name = voxie::helper::GetComponent<std::string>(*entity);
-            name->resize(data->BufSize);
-            *name = std::string(data->Buf);
-            return 1;
-        };
-        ImGui::InputText("name", buf, 20, 0, callback, (void *) &entity);
+        internal::InputText("name", &name->name);
+    }
+
+    void ShowEntityVisibleTextController(const voxie::Handle &entity) {
+        ImGui::Separator();
+        auto name = voxie::helper::GetComponent<voxie::VisibleText>(entity);
+        internal::InputText("text", &name->text);
     }
 
     void ShowSceneNameController() {
@@ -215,6 +256,9 @@ namespace gui {
                                 voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube}), nullptr);
                             }
                         }
+                    }
+                    if (ImGui::Selectable("Text")) {
+                        voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeText({"Text", "Text"}), nullptr);
                     }
                 ImGui::EndMenu();
             }
@@ -378,6 +422,10 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::Name>(entity)) {
             ShowEntityNameController(entity);
+        }
+
+        if (voxie::helper::HasComponent<voxie::VisibleText>(entity)) {
+            ShowEntityVisibleTextController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::Position>(entity)) {

@@ -6,11 +6,11 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(GLEW REQUIRED GLEW)
 set(GLEW_DYN_LIB ${GLEW_INCLUDE_DIRS}/../lib/libGLEW.a)
 
-set(FT_FREETYPE_H /usr/local/Cellar/freetype/2.10.2/include/freetype2)
+find_package(Freetype REQUIRED)
+
 set(SOIL_H /opt/local/include/SOIL)
 
 set(SOIL_LINK /opt/local/lib/libSOIL.a)
-set(FREETYPE_LINK /usr/local/Cellar/freetype/2.10.2/lib/libfreetype.a)
 
 # Execute compilation command
 file(GLOB CPP_FILES
@@ -97,7 +97,7 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC ${Engine_INCLUDE_DIRS}
         PUBLIC ${GLEW_INCLUDE_DIRS}
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/include
-        PRIVATE ${FT_FREETYPE_H}
+        PRIVATE ${FREETYPE_INCLUDE_DIRS}
         PRIVATE ${SOIL_H}
         )
 
@@ -113,7 +113,7 @@ target_link_libraries(${PROJECT_NAME}
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
         PRIVATE ${GLEW_DYN_LIB}
-        PRIVATE ${FREETYPE_LINK}
+        PRIVATE ${FREETYPE_LIBRARIES}
         PRIVATE ${SOIL_LINK}
         PRIVATE ${OSX_GLFW_DEP}
         )

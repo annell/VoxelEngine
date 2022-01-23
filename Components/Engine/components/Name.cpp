@@ -3,7 +3,6 @@
 //
 
 #include "Name.h"
-
 #include <yaml-cpp/yaml.h>
 
 namespace voxie {

@@ -34,6 +34,7 @@
 #include "VertexBufferArray.h"
 #include "BaseComponents.h"
 #include "CubeEntity.h"
+#include "Text.h"
 
 #include "Factory.h"
 

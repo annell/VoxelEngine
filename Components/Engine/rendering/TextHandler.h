@@ -1,12 +1,12 @@
 #include <map>
 #include <string>
-
-#include "Shader.h"
 #include <utility>
 
-#include "VertexBufferArray.h"
+#include <glm/glm.hpp>
 
 namespace voxie {
+    class Shader;
+    class VertexBufferArray;
     class TextHandler {
     public:
         TextHandler(int screenWidth, int screenHeight, std::string font, std::shared_ptr<Shader>);

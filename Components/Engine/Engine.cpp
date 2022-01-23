@@ -6,10 +6,17 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "CubeEntity.h"
+#include "Text.h"
 
 namespace voxie {
+    const unsigned int SCR_WIDTH = 1024;
+    const unsigned int SCR_HEIGHT = 768;
+
     Engine::Engine()
-        : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/")), components(std::make_unique<EntityComponentSystem>()), camera(NullEntity) {
+        : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/"))
+        , components(std::make_unique<EntityComponentSystem>())
+        , camera(NullEntity)
+        , textHandler(nullptr) {
     }
 
     Engine::~Engine() {
@@ -47,8 +54,6 @@ namespace voxie {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-        const unsigned int SCR_WIDTH = 1024;
-        const unsigned int SCR_HEIGHT = 768;
         window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", nullptr, nullptr), SCR_WIDTH,
                                           SCR_HEIGHT);
         if (window == nullptr) {
@@ -65,6 +70,12 @@ namespace voxie {
         glewInit();
 
         glEnable(GL_DEPTH_TEST);
+
+        textHandler = std::make_unique<TextHandler>(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", std::make_shared<voxie::Shader>(
+                        std::map<std::string, unsigned int>{
+                                std::make_pair(BASE_PATH + SHADERS + "/text.vs", GL_VERTEX_SHADER),
+                                std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)}));
+        textHandler->Init();
         return true;
     }
 
@@ -90,6 +101,7 @@ namespace voxie {
             for (const auto &config : GetRenderingConfigs(GetCamera(), sceneObjects)) {
                 voxie::helper::Submit(config);
             }
+            std::vector<std::shared_ptr<voxie::Text>> texts;
             for (const auto &entity : sceneObjects) {
                 if (auto model = voxie::helper::GetSceneNode<voxie::Chunk>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
@@ -97,6 +109,8 @@ namespace voxie {
                     voxie::helper::Submit(model->GetRenderingConfig());
                 } else if (auto model = voxie::helper::GetSceneNode<voxie::CubeEntity>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
+                } else if (auto model = voxie::helper::GetSceneNode<voxie::Text>(entity)) {
+                    texts.push_back(model);
                 }
             }
 
@@ -105,6 +119,10 @@ namespace voxie {
 
             voxie::helper::RenderingEnd();
 
+            for (auto model : texts) {
+                auto pos = model->GetPosition2D();
+                textHandler->RenderText(model->GetVisibleText()->text, pos->pos.x, pos->pos.y, 1, model->GetColor()->color);
+            }
             RenderFrame();
         }
 

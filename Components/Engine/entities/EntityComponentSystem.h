@@ -6,27 +6,10 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include "Handle.h"
 
 namespace voxie {
 
-    class Handle {
-    public:
-        using Identity = u_int64_t;
-        explicit Handle(Identity);
-
-        static Handle MakeEntity();
-
-        Handle::Identity GetId() const;
-
-        bool operator<(const Handle &rhs) const;
-
-        bool operator==(const Handle &rhs) const;
-
-    private:
-        [[nodiscard]] auto as_tie() const;
-
-        Handle::Identity id;
-    };
     static const Handle NullEntity(0);
 
     class EntityComponentSystem {

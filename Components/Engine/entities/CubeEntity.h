@@ -33,7 +33,7 @@ public:
     [[nodiscard]] RenderingConfig GetRenderingConfig() const;
     [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
     [[nodiscard]] std::shared_ptr<Material> GetMaterial() const;
-    [[nodiscard]] void RefreshMaterial() const;
+    void RefreshMaterial() const;
     [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
     [[nodiscard]] const Handle &GetHandle() const override;
 
