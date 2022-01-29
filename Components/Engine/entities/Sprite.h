@@ -26,8 +26,8 @@ namespace voxie {
 
         void Draw() const;
         RenderingConfig GetRenderingConfig() const;
-        COMPONENT_FUNCTION(Position2D);
-        COMPONENT_FUNCTION(Shader);
+        COMPONENT_ADD_FUNCTION(Position2D);
+        COMPONENT_ADD_FUNCTION(Shader);
 
         std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 

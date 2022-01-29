@@ -35,9 +35,9 @@ namespace voxie {
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
 
-        COMPONENT_FUNCTION(Direction);
-        COMPONENT_FUNCTION(Name);
-        COMPONENT_FUNCTION(Position);
+        COMPONENT_ADD_FUNCTION(Direction);
+        COMPONENT_ADD_FUNCTION(Name);
+        COMPONENT_ADD_FUNCTION(Position);
 
         glm::mat4 GetViewMatrix() const;
         static float GetFarDistance();

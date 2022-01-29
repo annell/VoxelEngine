@@ -10,7 +10,7 @@
 
 #include "Engine.h"
 
-#define COMPONENT_FUNCTION(TYPE) \
+#define COMPONENT_ADD_FUNCTION(TYPE) \
 std::shared_ptr<TYPE> Get##TYPE() const { \
     return voxie::helper::GetComponent<TYPE>(GetHandle()); \
 }

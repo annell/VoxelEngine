@@ -39,10 +39,10 @@ namespace voxie {
         void AddCube(ChunkPosition, std::unique_ptr<Cube> &&);
         size_t NrVertex() const;
 
-        COMPONENT_FUNCTION(Position);
-        COMPONENT_FUNCTION(Name);
-        COMPONENT_FUNCTION(Shader);
-        COMPONENT_FUNCTION(VertexBufferArray);
+        COMPONENT_ADD_FUNCTION(Position);
+        COMPONENT_ADD_FUNCTION(Name);
+        COMPONENT_ADD_FUNCTION(Shader);
+        COMPONENT_ADD_FUNCTION(VertexBufferArray);
 
         RenderingConfig GetRenderingConfig() const;
 

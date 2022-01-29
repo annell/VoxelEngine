@@ -18,8 +18,8 @@ public:
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    COMPONENT_FUNCTION(Position);
-    COMPONENT_FUNCTION(Name);
+    COMPONENT_ADD_FUNCTION(Position);
+    COMPONENT_ADD_FUNCTION(Name);
 };
 
 }

@@ -41,11 +41,11 @@ namespace voxie {
         ~LightSource();
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
-        COMPONENT_FUNCTION(Position);
-        COMPONENT_FUNCTION(Color);
-        COMPONENT_FUNCTION(Shader);
-        COMPONENT_FUNCTION(Attenuation);
-        COMPONENT_FUNCTION(VertexBufferArray);
+        COMPONENT_ADD_FUNCTION(Position);
+        COMPONENT_ADD_FUNCTION(Color);
+        COMPONENT_ADD_FUNCTION(Shader);
+        COMPONENT_ADD_FUNCTION(Attenuation);
+        COMPONENT_ADD_FUNCTION(VertexBufferArray);
 
         const LightType &GetType() const;
 
