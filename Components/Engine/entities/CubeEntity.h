@@ -32,7 +32,7 @@ public:
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    RenderingConfig GetRenderingConfig() const;
+    RenderingConfig GetRenderingConfig() const override;
     void RefreshMaterial() const;
 
 private:

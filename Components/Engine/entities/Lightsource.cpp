@@ -16,14 +16,13 @@
 namespace voxie {
 
     LightSource::LightSource(const LightConfig &config)
-        : NodeWrapper(config.handle), type(config.type), cube(std::move(config.cube)) {
-        cube->GenerateVertexAttributes();
-        cube->CreateRenderBuffers();
-        cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
+        : NodeWrapper(config.handle), type(config.type) {
         config.position->model = glm::translate(config.position->model, config.position->pos);
         config.position->SetPosition(config.position->pos);
+        config.position->onUpdate.Bind([] () { Engine::GetEngine().GetScene().UpdateLights(); });
+        config.color->onUpdate.Bind([] () { Engine::GetEngine().GetScene().UpdateLights(); });
+
         COMPONENT_REGISTER(Position, config.position);
-        COMPONENT_REGISTER(Shader, config.shader);
         COMPONENT_REGISTER(Name, config.name);
         COMPONENT_REGISTER(Color, config.color);
         if (type == LightType::POINT) {
@@ -63,52 +62,7 @@ namespace voxie {
         return type;
     }
 
-    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const Scene::SceneEntities &entities) {
-        auto lightSources = helper::GetSceneNodes<LightSource>(entities);
-
-        for (const auto &chunk : helper::GetSceneNodes<Chunk>(entities)) {
-            auto shader = chunk->GetShader();
-            shader->use();
-            shader->setInt("nrLights", lightSources.size());
-            shader->setBool("selected", chunk->GetHandle() == camera->GetSelection());
-            camera->SetShaderParameters(*shader);
-            int n = 0;
-            for (const auto &light : lightSources) {
-                std::string index = std::to_string(n);
-                shader->setVec3("lights[" + index + "].lightColor", light->GetColor()->color);
-                shader->setVec3("lights[" + index + "].lightPos", light->GetPosition()->pos);
-                shader->setInt("lights[" + index + "].type", static_cast<int>(light->GetType()));
-                if (light->GetAttenuation()) {
-                    shader->setFloat("lights[" + index + "].constant", light->GetAttenuation()->constant);
-                    shader->setFloat("lights[" + index + "].linear", light->GetAttenuation()->linear);
-                    shader->setFloat("lights[" + index + "].quadratic", light->GetAttenuation()->quadratic);
-                }
-                n++;
-            }
-        }
-
-        for (const auto &cube : helper::GetSceneNodes<CubeEntity>(entities)) {
-            auto shader = cube->GetShader();
-            shader->use();
-            shader->setInt("nrLights", lightSources.size());
-            shader->setBool("selected", cube->GetHandle() == camera->GetSelection());
-            camera->SetShaderParameters(*shader);
-            int n = 0;
-            for (const auto &light : lightSources) {
-                std::string index = std::to_string(n);
-                shader->setVec3("lights[" + index + "].lightColor", light->GetColor()->color);
-                shader->setVec3("lights[" + index + "].lightPos", light->GetPosition()->pos);
-                shader->setInt("lights[" + index + "].type", static_cast<int>(light->GetType()));
-                if (light->GetAttenuation()) {
-                    shader->setFloat("lights[" + index + "].constant", light->GetAttenuation()->constant);
-                    shader->setFloat("lights[" + index + "].linear", light->GetAttenuation()->linear);
-                    shader->setFloat("lights[" + index + "].quadratic", light->GetAttenuation()->quadratic);
-                }
-                n++;
-            }
-        }
-
-        return {};
+    void LightSource::OnPositionUpdate(const Position&) {
     }
 
 }// namespace voxie

@@ -30,6 +30,7 @@ struct NodeWrapper {
         }
     }
     const Handle &GetHandle() const { return handle; }
+    virtual RenderingConfig GetRenderingConfig() const { return {}; }
 
     bool IsEnabled() const { return enabled; }
     void Enable() { enabled = true; }

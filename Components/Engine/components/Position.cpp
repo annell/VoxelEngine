@@ -97,6 +97,7 @@ void Position::SetModel(const glm::mat4 &model) {
     glm::vec4 perspective;
     glm::decompose(model, scale, rotationQuat, pos, skew, perspective);
     rotation = glm::eulerAngles(rotationQuat);
+    onUpdate.Broadcast();
 }
 
 glm::mat4 Position::GetModel(const glm::vec3& pos, const glm::vec3& scale, const glm::vec3& rotation) {

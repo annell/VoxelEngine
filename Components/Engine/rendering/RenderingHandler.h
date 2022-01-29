@@ -25,6 +25,16 @@ namespace voxie {
         PostDrawAction postDraw = []() {};
         DrawAction draw = []() {};
         bool IsEnabled = true;
+
+        void PreDraw() const {
+            preDraw();
+        }
+        void Draw() const {
+            draw();
+        }
+        void PostDraw() const {
+            postDraw();
+        }
     };
 
     class RenderingHandler {

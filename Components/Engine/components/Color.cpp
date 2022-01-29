@@ -26,6 +26,7 @@ namespace voxie {
 
     void Color::SetColor(float r, float g, float b) {
         color = {r, g, b};
+        onUpdate.Broadcast();
     }
 
 }

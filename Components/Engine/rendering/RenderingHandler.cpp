@@ -16,10 +16,10 @@ namespace voxie {
 
     void RenderingHandler::End() {
         for (auto &config : renderingQueue) {
-            config.preDraw();
+            config.PreDraw();
             config.shader->use();
-            config.draw();
-            config.postDraw();
+            config.Draw();
+            config.PostDraw();
         }
         renderingQueue.clear();
     }

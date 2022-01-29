@@ -17,6 +17,7 @@ namespace voxie {
     class Attenuation;
     class Shader;
     class Camera;
+    class Position;
 
 
     enum class LightType {
@@ -27,10 +28,8 @@ namespace voxie {
     struct LightConfig {
         std::shared_ptr<Name> name;
         Handle handle;
-        std::shared_ptr<Shader> shader;
         std::shared_ptr<Position> position;
         LightType type;
-        std::shared_ptr<Cube> cube;
         std::shared_ptr<Color> color;
         std::shared_ptr<Attenuation> attenuation;
     };
@@ -43,17 +42,14 @@ namespace voxie {
         bool decode(const YAML::Node &);
         COMPONENT_ADD_FUNCTION(Position);
         COMPONENT_ADD_FUNCTION(Color);
-        COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(Attenuation);
         COMPONENT_ADD_FUNCTION(VertexBufferArray);
 
         const LightType &GetType() const;
 
     private:
+
+        void OnPositionUpdate(const Position& position);
         LightType type;
-        std::shared_ptr<Cube> cube;
     };
-
-    std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &, const Scene::SceneEntities &);
-
 }// namespace voxie

@@ -22,7 +22,7 @@ namespace voxie {
         bool decode(const YAML::Node &);
         COMPONENT_ADD_FUNCTION(Shader);
 
-        RenderingConfig GetRenderingConfig() const;
+        RenderingConfig GetRenderingConfig() const override;
         std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:

@@ -74,6 +74,7 @@ namespace voxie {
     }
 
     void Camera::SetShaderParameters(const Shader &shader) const {
+        shader.use();
         shader.setVec3("viewPos", GetPosition()->pos);
         shader.setMat4("projection", GetProjectionMatrix());
         shader.setMat4("view", GetViewMatrix());

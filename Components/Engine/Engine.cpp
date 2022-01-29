@@ -111,19 +111,16 @@ namespace voxie {
             MouseHandler::processInput();
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
-            auto sceneObjects = GetScene().GetEntities();
-            for (const auto &config : GetRenderingConfigs(GetCamera(), sceneObjects)) {
-                voxie::helper::Submit(config);
-            }
+
             std::vector<std::shared_ptr<voxie::Text>> texts;
-            for (const auto &entity : sceneObjects) {
-                if (auto model = voxie::helper::GetSceneNode<voxie::Chunk>(entity)) {
+            for (const auto &entity : GetScene().GetNodesForRendering()) {
+                if (auto model = std::dynamic_pointer_cast<voxie::Chunk>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
-                } else if (auto model = voxie::helper::GetSceneNode<voxie::Sprite>(entity)) {
+                } else if (auto model = std::dynamic_pointer_cast<voxie::Sprite>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
-                } else if (auto model = voxie::helper::GetSceneNode<voxie::CubeEntity>(entity)) {
+                } else if (auto model = std::dynamic_pointer_cast<voxie::CubeEntity>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
-                } else if (auto model = voxie::helper::GetSceneNode<voxie::Text>(entity)) {
+                } else if (auto model = std::dynamic_pointer_cast<voxie::Text>(entity)) {
                     texts.push_back(model);
                 }
             }

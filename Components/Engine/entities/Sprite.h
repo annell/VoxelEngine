@@ -25,7 +25,7 @@ namespace voxie {
         bool decode(const YAML::Node &);
 
         void Draw() const;
-        RenderingConfig GetRenderingConfig() const;
+        RenderingConfig GetRenderingConfig() const override;
         COMPONENT_ADD_FUNCTION(Position2D);
         COMPONENT_ADD_FUNCTION(Shader);
 

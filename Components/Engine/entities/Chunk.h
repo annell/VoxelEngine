@@ -44,7 +44,7 @@ namespace voxie {
         COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(VertexBufferArray);
 
-        RenderingConfig GetRenderingConfig() const;
+        RenderingConfig GetRenderingConfig() const override;
 
     private:
         void SetupCubesForRendering();

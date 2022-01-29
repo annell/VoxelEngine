@@ -76,6 +76,7 @@ namespace voxie {
         std::map<std::string, unsigned int>{
                 std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", GL_VERTEX_SHADER),
                 std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", GL_FRAGMENT_SHADER)}));
+        UpdateLights();
     }
 
     Node *Scene::AddEntity(std::shared_ptr<NodeWrapper> nodeWrapper, Node *parent) {
@@ -111,6 +112,28 @@ namespace voxie {
         return keys;
     }
 
+    Scene::SceneNodes Scene::GetNodesForRendering() const {
+        auto lightSources = helper::GetSceneNodes<LightSource>(GetEntities());
+        auto camera = Engine::GetEngine().GetCamera();
+
+        Scene::SceneNodes nodesForRendering;
+        for (const auto& node : nodes) {
+            auto nodePtr = node.second->GetNodePtr();
+            if (std::dynamic_pointer_cast<Chunk>(nodePtr) ||
+                std::dynamic_pointer_cast<voxie::Sprite>(nodePtr) ||
+                std::dynamic_pointer_cast<voxie::CubeEntity>(nodePtr) ||
+                std::dynamic_pointer_cast<voxie::Text>(nodePtr)) {
+                if (IsAffectedByLight(nodePtr)) {
+                    auto shader = helper::GetComponent<Shader>(nodePtr->GetHandle());
+                    camera->SetShaderParameters(*shader);
+                    shader->setBool("selected", nodePtr->GetHandle() == camera->GetSelection());
+                }
+                nodesForRendering.push_back(nodePtr);
+            }
+        }
+        return nodesForRendering;
+    }
+
     void Scene::RemoveEntity(Handle handle) {
         nodes.erase(handle);
         if (root) {
@@ -127,6 +150,7 @@ namespace voxie {
     Node *Scene::GetRoot() const {
         return root.get();
     }
+
     std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle &entity) {
         auto it = nodes.find(entity);
         if (it != nodes.end()) {
@@ -134,6 +158,7 @@ namespace voxie {
         }
         return nullptr;
     }
+
     Skybox* Scene::GetSkybox() const {
         return skybox.get();
     }
@@ -147,6 +172,40 @@ namespace voxie {
     void Scene::EnableEntity(const Handle& handle) {
         if (auto node = FindNode(handle)) {
             node->Enable();
+        }
+    }
+
+    bool Scene::IsAffectedByLight(std::shared_ptr<NodeWrapper> node) const {
+        return std::dynamic_pointer_cast<Chunk>(node) ||
+               std::dynamic_pointer_cast<CubeEntity>(node);
+    }
+
+    void Scene::UpdateLightSources(std::shared_ptr<Shader> shader, const std::vector<std::shared_ptr<LightSource>>& lightSources) const {
+        shader->use();
+        shader->setInt("nrLights", lightSources.size());
+        int n = 0;
+
+        for (const auto &light : lightSources) {
+            std::string index = std::to_string(n);
+            shader->setVec3("lights[" + index + "].lightColor", light->GetColor()->color);
+            shader->setVec3("lights[" + index + "].lightPos", light->GetPosition()->pos);
+            shader->setInt("lights[" + index + "].type", static_cast<int>(light->GetType()));
+            if (light->GetAttenuation()) {
+                shader->setFloat("lights[" + index + "].constant", light->GetAttenuation()->constant);
+                shader->setFloat("lights[" + index + "].linear", light->GetAttenuation()->linear);
+                shader->setFloat("lights[" + index + "].quadratic", light->GetAttenuation()->quadratic);
+            }
+            n++;
+        }
+    }
+
+    void Scene::UpdateLights() const {
+        auto lightSources = helper::GetSceneNodes<LightSource>(GetEntities());
+
+        for (const auto& node : GetNodesForRendering()) {
+            if (IsAffectedByLight(node)) {
+                UpdateLightSources(helper::GetComponent<Shader>(node->GetHandle()), lightSources);
+            }
         }
     }
 

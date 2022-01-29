@@ -6,6 +6,7 @@
 #include <yaml-cpp/yaml.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include "Delegate.h"
 
 namespace voxie {
 
@@ -34,6 +35,9 @@ struct Position {
     glm::vec3 rotation;
     glm::vec3 scale;
     glm::quat rotationQuat;
+
+    using OnUpdate = Delegate<>;
+    OnUpdate onUpdate;
 };
 
 }

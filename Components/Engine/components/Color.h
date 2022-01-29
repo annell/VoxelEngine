@@ -5,6 +5,7 @@
 #pragma once
 #include <yaml-cpp/yaml.h>
 #include <glm/glm.hpp>
+#include "Delegate.h"
 
 namespace voxie {
 
@@ -17,5 +18,8 @@ struct Color {
     void SetColor(float r, float g, float b);
 
     glm::vec3 color;
+
+    using OnUpdate = Delegate<>;
+    OnUpdate onUpdate;
 };
 }
