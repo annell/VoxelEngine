@@ -36,7 +36,7 @@ namespace voxie {
         helper::RemoveComponent<Position>(handle);
         helper::RemoveComponent<Shader>(handle);
         helper::RemoveComponent<Color>(handle);
-        if (type == LightType::POINT) {
+        if (helper::HasComponent<Attenuation>(handle)) {
             helper::RemoveComponent<Attenuation>(handle);
         }
     }

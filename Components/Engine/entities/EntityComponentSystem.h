@@ -84,6 +84,11 @@ namespace voxie {
             return GetComponentArray<T>()->Get(handle);
         }
 
+        template<typename T>
+        bool Has(const Handle& handle) {
+            return Get<T>(handle) != nullptr;
+        }
+
 
     private:
         template<typename T>

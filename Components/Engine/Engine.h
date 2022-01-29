@@ -76,7 +76,7 @@ namespace voxie {
 
         template<typename T>
         bool HasComponent(const Handle &handle) {
-            return GetComponent<T>(handle) != nullptr;
+            return Engine::GetEngine().GetECSManager().Has<T>(handle);
         }
 
         template<typename T>
