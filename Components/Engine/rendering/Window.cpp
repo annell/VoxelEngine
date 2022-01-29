@@ -21,5 +21,12 @@ namespace voxie {
     unsigned int Window::GetHeight() const {
         return height;
     }
+    void Window::SetTitle(const std::string & titleIn) {
+        title = titleIn;
+        glfwSetWindowTitle(GetWindow(), title.c_str());
+    }
+    void Window::CloseWindow() const {
+        glfwSetWindowShouldClose(GetWindow(), 1);
+    }
 
 }// namespace voxie

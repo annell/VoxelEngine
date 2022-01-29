@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <EntityComponentSystem.h>
+#include <unordered_map>
 
 namespace voxie {
     class Skybox;
@@ -48,6 +49,7 @@ namespace voxie {
         std::string folder;
         std::string sceneName;
         std::unique_ptr<Skybox> skybox;
+        std::unordered_map<Handle, Node*> nodes;
     };
 
 }// namespace voxie

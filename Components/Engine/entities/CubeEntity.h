@@ -29,13 +29,13 @@ public:
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
-    [[nodiscard]] RenderingConfig GetRenderingConfig() const;
-    [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
-    [[nodiscard]] std::shared_ptr<Material> GetMaterial() const;
+    std::shared_ptr<Position> GetPosition() const override;
+    RenderingConfig GetRenderingConfig() const;
+    std::shared_ptr<Shader> GetShader() const;
+    std::shared_ptr<Material> GetMaterial() const;
     void RefreshMaterial() const;
-    [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
-    [[nodiscard]] const Handle &GetHandle() const override;
+    std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+    const Handle &GetHandle() const override;
 
 private:
     void Init();

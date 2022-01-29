@@ -52,4 +52,8 @@ namespace voxie {
     std::shared_ptr<Color> Text::GetColor() const {
         return voxie::helper::GetComponent<Color>(handle);
     }
+
+    std::shared_ptr<Name> Text::GetName() const {
+        return voxie::helper::GetComponent<Name>(handle);
+    }
 }

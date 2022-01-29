@@ -20,8 +20,8 @@ public:
 
     const Handle &GetHandle() const override;
 
-    [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
-    [[nodiscard]] std::shared_ptr<Name> GetName() const;
+    std::shared_ptr<Position> GetPosition() const override;
+    std::shared_ptr<Name> GetName() const;
 private:
     Handle entity;
 };

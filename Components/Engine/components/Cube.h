@@ -45,12 +45,12 @@ namespace voxie {
         const std::vector<float> &GetVertexAttributes();
         void SetVertexAttrib(unsigned int size, int type, bool normalized, int stride, const void *ptr);
         void SetRenderSide(Face face, bool render);
-        [[nodiscard]] const Material &GetMaterial() const;
-        [[nodiscard]] const int &GetMaterialIndex() const;
-        [[nodiscard]] size_t GetNrVertex() const;
-        [[nodiscard]] bool ShouldRender() const;
+        const Material &GetMaterial() const;
+        const int &GetMaterialIndex() const;
+        size_t GetNrVertex() const;
+        bool ShouldRender() const;
 
-        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
         void DisableNormals();
         void DisableMaterials();

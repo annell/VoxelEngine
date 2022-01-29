@@ -37,13 +37,13 @@ namespace voxie {
         bool decode(const YAML::Node &);
 
         void AddCube(ChunkPosition, std::unique_ptr<Cube> &&);
-        [[nodiscard]] size_t NrVertex() const;
+        size_t NrVertex() const;
 
-        [[nodiscard]] std::shared_ptr<Position> GetPosition() const override;
-        [[nodiscard]] RenderingConfig GetRenderingConfig() const;
-        [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
-        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
-        [[nodiscard]] const Handle &GetHandle() const override;
+        std::shared_ptr<Position> GetPosition() const override;
+        RenderingConfig GetRenderingConfig() const;
+        std::shared_ptr<Shader> GetShader() const;
+        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        const Handle &GetHandle() const override;
 
     private:
         void SetupCubesForRendering();

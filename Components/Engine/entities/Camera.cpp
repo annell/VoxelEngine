@@ -27,10 +27,10 @@ namespace voxie {
         node["type"] = "Camera";
         node["id"] = GetHandle().GetId();
         node["activeCamera"] = Engine::GetEngine().GetCamera()->GetHandle() == handle;
-        node["name"] = helper::GetComponent<Name>(handle).get()->name;
+        node["name"] = helper::GetComponent<Name>(handle)->name;
 
-        node["position"] = *helper::GetComponent<Position>(handle).get();
-        node["direction"] = *helper::GetComponent<Direction>(handle).get();
+        node["position"] = *helper::GetComponent<Position>(handle);
+        node["direction"] = *helper::GetComponent<Direction>(handle);
     }
 
     bool Camera::decode(const YAML::Node &node) {

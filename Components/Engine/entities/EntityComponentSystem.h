@@ -5,6 +5,7 @@
 #pragma once
 #include <algorithm>
 #include <vector>
+#include <unordered_map>
 #include <string>
 #include "Handle.h"
 
@@ -15,40 +16,36 @@ namespace voxie {
     class EntityComponentSystem {
     public:
         template<typename T>
-        std::shared_ptr<T> GetComponent(const Handle &handle);
+        static std::shared_ptr<T> GetComponent(const Handle &handle);
 
         template<typename T>
-        void AddComponent(const Handle &handle, std::shared_ptr<T> component);
+        static void AddComponent(const Handle &handle, std::shared_ptr<T> component);
 
         template<typename T>
-        void RemoveComponent(const Handle &handle);
+        static void RemoveComponent(Handle handle);
 
     private:
+        EntityComponentSystem() {}
     };
 
     template<typename T>
     struct Component {
         Handle handle;
         std::shared_ptr<T> component;
-
-        bool operator==(const Component<T>& rhs) {
-            return this->handle == rhs.handle;
-        }
     };
 
     template<typename T>
-    std::vector<Component<T>> &GetComponents() {
-        static std::vector<Component<T>> components;
+    std::unordered_map<Handle, Component<T>> &GetComponents() {
+        static std::unordered_map<Handle, Component<T>> components;
         return components;
     }
 
     template<typename T>
     std::shared_ptr<T> EntityComponentSystem::GetComponent(const Handle &handle) {
         auto &components = GetComponents<T>();
-        for (auto it = components.begin(); it != components.end(); it++) {
-            if (it->handle == handle) {
-                return it->component;
-            }
+        auto it = components.find(handle);
+        if (it != components.end()) {
+            return it->second.component;
         }
         return nullptr;
     }
@@ -56,17 +53,15 @@ namespace voxie {
     template<typename T>
     void EntityComponentSystem::AddComponent(const Handle &handle, std::shared_ptr<T> component) {
         auto &components = GetComponents<T>();
-        components.push_back({handle, std::move(component)});
+        components.insert({handle, { handle, std::move(component) }});
     }
 
     template<typename T>
-    void EntityComponentSystem::RemoveComponent(const Handle &handle) {
+    void EntityComponentSystem::RemoveComponent(Handle handle) {
         auto &components = GetComponents<T>();
-        for (auto it = components.begin(); it != components.end(); it++) {
-            if (it->handle == handle) {
-                components.erase(it);
-                return;
-            }
+        auto it = components.find(handle);
+        if (it != components.end()) {
+            components.erase(it);
         }
     }
 

@@ -5,6 +5,7 @@
 int main() {
     auto &engine = voxie::Engine::GetEngine();
     engine.Init();
+    engine.GetWindow()->SetTitle("Voxie Editor");
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
         engine.GetCamera()->ProcessKeyboard(voxie::FORWARD, engine.GetDeltaTime());
@@ -21,6 +22,10 @@ int main() {
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
         engine.GetCamera()->ProcessKeyboard(voxie::RIGHT, engine.GetDeltaTime());
     }, voxie::Key::KEY_D});
+
+    voxie::KeyboardHandler::RegisterAction({[&engine]() {
+        engine.GetWindow()->CloseWindow();
+    }, voxie::Key::KEY_ESCAPE});
 
     voxie::MouseHandler::RegisterAction({[&engine]() {
         voxie::MouseHandler::UnlockCamera();

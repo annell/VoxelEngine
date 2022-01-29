@@ -21,11 +21,11 @@ namespace voxie {
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
 
-        [[nodiscard]] const Handle &GetHandle() const override;
+        const Handle &GetHandle() const override;
 
-        [[nodiscard]] RenderingConfig GetRenderingConfig() const;
-        [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
-        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        RenderingConfig GetRenderingConfig() const;
+        std::shared_ptr<Shader> GetShader() const;
+        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
         void Init();

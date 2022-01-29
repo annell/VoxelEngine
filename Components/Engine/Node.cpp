@@ -27,7 +27,6 @@ Node::Node(std::shared_ptr<NodeWrapper> nodeWrapper, Node * parent)
 }
 
 Node::~Node() {
-
 }
 
 void Node::encode(YAML::Node &root) const {

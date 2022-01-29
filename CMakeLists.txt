@@ -3,7 +3,7 @@ project(Voxie)
 # You can tweak some common (for all subprojects) stuff here. For example:
 
 # Address sanitizer
-option(USE_ASAN "Run the project with ASAN" OFF)
+option(USE_ASAN "Run the project with ASAN" ON)
 if(USE_ASAN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 endif()

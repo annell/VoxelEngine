@@ -14,7 +14,6 @@ namespace voxie {
 
     Engine::Engine()
         : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/"))
-        , components(std::make_unique<EntityComponentSystem>())
         , camera(NullEntity)
         , textHandler(nullptr) {
     }
@@ -23,8 +22,6 @@ namespace voxie {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
-        scene.reset();
-        components.reset();
     }
 
     bool Engine::Init() {
@@ -159,10 +156,6 @@ namespace voxie {
     Engine &Engine::GetEngine() {
         static Engine engine;
         return engine;
-    }
-
-    EntityComponentSystem &Engine::GetComponents() {
-        return *components.get();
     }
 
     RenderingHandler &Engine::GetRenderingHandler() {

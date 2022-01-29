@@ -23,10 +23,9 @@ namespace voxie {
         bool Init();
         std::shared_ptr<Camera> GetCamera();
         void SetCamera(const Handle &);
-        [[nodiscard]] std::shared_ptr<Window> GetWindow() const;
+        std::shared_ptr<Window> GetWindow() const;
         void StartLoop();
-        [[nodiscard]] float GetDeltaTime() const;
-        EntityComponentSystem &GetComponents();
+        float GetDeltaTime() const;
         RenderingHandler &GetRenderingHandler();
         Scene &GetScene();
         Logging &GetLogger();
@@ -61,7 +60,7 @@ namespace voxie {
         }
         template<typename T>
         std::shared_ptr<T> GetComponent(const Handle &handle) {
-            return Engine::GetEngine().GetComponents().GetComponent<T>(handle);
+            return EntityComponentSystem::GetComponent<T>(handle);
         }
 
         template<typename T>
@@ -77,17 +76,17 @@ namespace voxie {
 
         template<typename T>
         bool HasComponent(const Handle &handle) {
-            return Engine::GetEngine().GetComponents().GetComponent<T>(handle) != nullptr;
+            return EntityComponentSystem::GetComponent<T>(handle) != nullptr;
         }
 
         template<typename T>
         void AddComponent(const Handle &handle, std::shared_ptr<T> component) {
-            return Engine::GetEngine().GetComponents().AddComponent<T>(handle, component);
+            return EntityComponentSystem::AddComponent<T>(handle, component);
         }
 
         template<typename T>
         void RemoveComponent(const Handle &handle) {
-            return Engine::GetEngine().GetComponents().RemoveComponent<T>(handle);
+            return EntityComponentSystem::RemoveComponent<T>(handle);
         }
 
         void RenderingBegin();

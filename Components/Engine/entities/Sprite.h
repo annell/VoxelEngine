@@ -25,12 +25,12 @@ namespace voxie {
         bool decode(const YAML::Node &);
 
         void Draw() const;
-        [[nodiscard]] RenderingConfig GetRenderingConfig() const;
-        [[nodiscard]] std::shared_ptr<Position2D> GetPosition2D() const;
-        [[nodiscard]] std::shared_ptr<Shader> GetShader() const;
-        [[nodiscard]] std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        RenderingConfig GetRenderingConfig() const;
+        std::shared_ptr<Position2D> GetPosition2D() const;
+        std::shared_ptr<Shader> GetShader() const;
+        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
-        [[nodiscard]] const Handle &GetHandle() const override;
+        const Handle &GetHandle() const override;
 
     private:
         void Setup() const;

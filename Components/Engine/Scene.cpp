@@ -37,7 +37,6 @@ namespace voxie {
     }
 
     Scene::~Scene() {
-        root.reset();
     }
 
     void Scene::SetFilename(const std::string &name) {
@@ -95,6 +94,7 @@ namespace voxie {
     }
 
     void Scene::AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode) {
+        nodes[node->GetHandle()] = node.get();
         if (rootNode) {
             rootNode->AddChild(std::move(node));
         } else {
@@ -103,15 +103,17 @@ namespace voxie {
     }
 
     Scene::SceneEntities Scene::GetEntities() const {
-        if (root) {
-            return root->GetChildEntities();
+        SceneEntities keys;
+        for (const auto& node : nodes) {
+            keys.push_back(node.first);
         }
-        return {};
+        return keys;
     }
 
-    void Scene::RemoveEntity(Handle entity) {
+    void Scene::RemoveEntity(Handle handle) {
+        nodes.erase(handle);
         if (root) {
-            root->RemoveChild(entity);
+            root->RemoveChild(handle);
         }
     }
     void Scene::ClearScene() {
@@ -125,8 +127,9 @@ namespace voxie {
         return root.get();
     }
     std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle &entity) {
-        if (root) {
-            return root->FindNode(entity);
+        auto it = nodes.find(entity);
+        if (it != nodes.end()) {
+            return it->second->GetNodePtr();
         }
         return nullptr;
     }
