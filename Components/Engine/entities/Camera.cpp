@@ -10,7 +10,7 @@
 namespace voxie {
 
     Camera::Camera(Handle handle, Name name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), handle(handle), selectedEntity(handle) {
+        : NodeWrapper(handle), Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), selectedEntity(handle) {
         helper::AddComponent(handle, std::make_shared<Name>(name));
         helper::AddComponent(handle, std::make_shared<Position>(position));
         helper::AddComponent(handle, std::make_shared<Direction>(yaw, pitch));
@@ -93,18 +93,6 @@ namespace voxie {
         Up = glm::normalize(glm::cross(Right, Front));
     }
 
-    std::shared_ptr<Position> Camera::GetPosition() const {
-        return helper::GetComponent<Position>(handle);
-    }
-
-    std::shared_ptr<Name> Camera::GetName() const {
-        return helper::GetComponent<Name>(handle);
-    }
-
-    std::shared_ptr<Direction> Camera::GetDirection() const {
-        return helper::GetComponent<Direction>(handle);
-    }
-
     float Camera::GetFarDistance() {
         return 10000.0f;
     }
@@ -114,9 +102,5 @@ namespace voxie {
     const Handle &Camera::GetSelection() const {
         return selectedEntity;
     }
-    const Handle &Camera::GetHandle() const {
-        return handle;
-    }
-
 
 }// namespace voxie

@@ -20,11 +20,9 @@ namespace voxie {
 
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
-
-        const Handle &GetHandle() const override;
+        COMPONENTFUNCTION(Shader);
 
         RenderingConfig GetRenderingConfig() const;
-        std::shared_ptr<Shader> GetShader() const;
         std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
@@ -34,7 +32,6 @@ namespace voxie {
 
         unsigned int cubemapTexture = 0;
         Cube cube;
-        Handle handle;
     };
 
 }// namespace voxie

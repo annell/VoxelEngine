@@ -7,34 +7,22 @@
 
 namespace voxie {
 
-TransformNode::TransformNode(const voxie::Handle & entity, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
-    : entity(entity) {
-    helper::AddComponent(entity, std::move(name));
-    helper::AddComponent(entity, std::move(position));
+TransformNode::TransformNode(const voxie::Handle & handle, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
+    : NodeWrapper(handle) {
+    helper::AddComponent(handle, std::move(name));
+    helper::AddComponent(handle, std::move(position));
 }
 void TransformNode::encode(YAML::Node& node) const {
     node["type"] = "TransformNode";
     node["id"] = GetHandle().GetId();
-    auto name = helper::GetComponent<Name>(entity).get();
+    auto name = helper::GetComponent<Name>(handle).get();
     node["name"] = name->name;
-    node["position"] = *helper::GetComponent<Position>(entity).get();
+    node["position"] = *helper::GetComponent<Position>(handle).get();
 }
 
     bool TransformNode::decode(const YAML::Node& node) {
     GetPosition()->decode(node["position"]);
     return true;
-}
-
-std::shared_ptr<Position> TransformNode::GetPosition() const {
-    return voxie::helper::GetComponent<Position>(entity);
-}
-
-std::shared_ptr<Name> TransformNode::GetName() const {
-    return voxie::helper::GetComponent<Name>(entity);
-}
-
-const Handle &TransformNode::GetHandle() const {
-    return entity;
 }
 
 }

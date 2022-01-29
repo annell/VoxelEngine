@@ -26,17 +26,15 @@ namespace voxie {
 
         void Draw() const;
         RenderingConfig GetRenderingConfig() const;
-        std::shared_ptr<Position2D> GetPosition2D() const;
-        std::shared_ptr<Shader> GetShader() const;
-        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
+        COMPONENTFUNCTION(Position2D);
+        COMPONENTFUNCTION(Shader);
 
-        const Handle &GetHandle() const override;
+        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
         void Setup() const;
 
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
-        Handle handle;
         Texture2D texture;
         std::string path;
     };

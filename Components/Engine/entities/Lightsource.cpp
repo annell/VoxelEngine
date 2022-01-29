@@ -16,7 +16,7 @@
 namespace voxie {
 
     LightSource::LightSource(const LightConfig &config)
-        : handle(config.handle), type(config.type), cube(std::move(config.cube)) {
+        : NodeWrapper(config.handle), type(config.type), cube(std::move(config.cube)) {
         cube->GenerateVertexAttributes();
         cube->CreateRenderBuffers();
         cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
@@ -63,32 +63,8 @@ namespace voxie {
         return true;
     }
 
-    std::shared_ptr<Color> LightSource::GetColor() const {
-        return voxie::helper::GetComponent<Color>(handle);
-    }
-
-    std::shared_ptr<Position> LightSource::GetPosition() const {
-        return voxie::helper::GetComponent<Position>(handle);
-    }
-
-    std::shared_ptr<Shader> LightSource::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(handle);
-    }
-
     const LightType &LightSource::GetType() const {
         return type;
-    }
-
-    std::shared_ptr<Attenuation> LightSource::GetAttenuation() const {
-        return voxie::helper::GetComponent<Attenuation>(handle);
-    }
-
-    std::shared_ptr<VertexBufferArray> LightSource::GetVertexBufferArray() const {
-        return voxie::helper::GetComponent<VertexBufferArray>(handle);
-    }
-
-    const Handle &LightSource::GetHandle() const {
-        return handle;
     }
 
     std::vector<RenderingConfig> GetRenderingConfigs(const std::shared_ptr<Camera> &camera, const Scene::SceneEntities &entities) {

@@ -17,7 +17,7 @@ namespace internal {
 namespace voxie {
 
     Sprite::Sprite(const Handle &handle, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
-        : handle(handle), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+        : NodeWrapper(handle), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(handle, std::move(name));
         helper::AddComponent(handle, std::move(position));
         helper::AddComponent(handle, std::move(shader));
@@ -64,20 +64,8 @@ namespace voxie {
                 [&]() { Draw(); }};
     }
 
-    std::shared_ptr<Position2D> Sprite::GetPosition2D() const {
-        return voxie::helper::GetComponent<Position2D>(handle);
-    }
-
-    std::shared_ptr<Shader> Sprite::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(handle);
-    }
-
     std::shared_ptr<VertexBufferArray> Sprite::GetVertexBufferArray() const {
         return vertexBufferArray;
-    }
-
-    const Handle &Sprite::GetHandle() const {
-        return handle;
     }
 
     void Sprite::Setup() const {

@@ -41,16 +41,15 @@ namespace voxie {
         ~LightSource();
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
-        std::shared_ptr<Position> GetPosition() const override;
-        std::shared_ptr<Color> GetColor() const;
+        COMPONENTFUNCTION(Position);
+        COMPONENTFUNCTION(Color);
+        COMPONENTFUNCTION(Shader);
+        COMPONENTFUNCTION(Attenuation);
+        COMPONENTFUNCTION(VertexBufferArray);
+
         const LightType &GetType() const;
-        std::shared_ptr<Shader> GetShader() const;
-        const Handle &GetHandle() const override;
-        std::shared_ptr<Attenuation> GetAttenuation() const;
-        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
 
     private:
-        Handle handle;
         LightType type;
         std::shared_ptr<Cube> cube;
     };

@@ -192,18 +192,4 @@ std::shared_ptr<NodeWrapper> Node::GetNodePtr() const {
     return nodePtr;
 }
 
-glm::vec3 Node::GetRelativePosition() {
-    if (!parent) {
-        return GetNodePtr()->GetPosition()->pos;
-    }
-    return parent->GetRelativePosition() + GetNodePtr()->GetPosition()->pos;
-}
-
-glm::vec3 Node::GetRelativeRotation() {
-    if (!parent) {
-        return GetNodePtr()->GetPosition()->rotation;
-    }
-    return parent->GetRelativeRotation() + GetNodePtr()->GetPosition()->rotation;
-}
-
 }

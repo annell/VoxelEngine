@@ -46,7 +46,7 @@ namespace internal {
 
 namespace voxie {
     Skybox::Skybox(const Handle &handle, std::shared_ptr<Shader> shader)
-        : handle(handle), cube({0, 0, 0}, {1, 1, 1}) {
+        : NodeWrapper(handle), cube({0, 0, 0}, {1, 1, 1}) {
         helper::AddComponent(handle, std::move(shader));
         Init();
     }
@@ -81,10 +81,6 @@ namespace voxie {
         return true;
     }
 
-    const Handle &Skybox::GetHandle() const {
-        return handle;
-    }
-
     auto Skybox::GetPreDrawAction(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Camera> &camera) const {
         return [=]() {
             glDepthFunc(GL_LEQUAL);
@@ -114,10 +110,6 @@ namespace voxie {
                     glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
                     glBindVertexArray(0);
                 }};
-    }
-
-    std::shared_ptr<Shader> Skybox::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(handle);
     }
 
     std::shared_ptr<VertexBufferArray> Skybox::GetVertexBufferArray() const {

@@ -62,11 +62,9 @@ namespace voxie {
         void RegisterComponent() {
             const char* typeName = typeid(T).name();
 
-            assert(componentTypes.find(typeName) == componentTypes.end() && "Registering component type more than once.");
+            assert(componentArrays.find(typeName) == componentArrays.end() && "Registering component type more than once.");
 
-            componentTypes.insert({typeName, nextComponentType});
             componentArrays.insert({typeName, std::make_shared<ECSContainer<T>>()});
-            ++nextComponentType;
         }
 
         template<typename T>
@@ -95,15 +93,12 @@ namespace voxie {
         std::shared_ptr<ECSContainer<T>> GetComponentArray() {
             std::string typeName = typeid(T).name();
 
-            assert(componentTypes.find(typeName) != componentTypes.end() && "Component not registered before use.");
-
-            return std::static_pointer_cast<ECSContainer<T>>(componentArrays[typeName]);
+            auto it = componentArrays.find(typeName);
+            assert(it != componentArrays.end() && "Component not registered before use.");
+            return std::static_pointer_cast<ECSContainer<T>>(it->second);
         }
 
-        std::unordered_map<std::string, ComponentType> componentTypes;
         std::unordered_map<std::string, std::shared_ptr<ECSContainerInterface>> componentArrays;
-
-        ComponentType nextComponentType = 0;
     };
 
 }// namespace voxie

@@ -39,11 +39,12 @@ namespace voxie {
         void AddCube(ChunkPosition, std::unique_ptr<Cube> &&);
         size_t NrVertex() const;
 
-        std::shared_ptr<Position> GetPosition() const override;
+        COMPONENTFUNCTION(Position);
+        COMPONENTFUNCTION(Name);
+        COMPONENTFUNCTION(Shader);
+        COMPONENTFUNCTION(VertexBufferArray);
+
         RenderingConfig GetRenderingConfig() const;
-        std::shared_ptr<Shader> GetShader() const;
-        std::shared_ptr<VertexBufferArray> GetVertexBufferArray() const;
-        const Handle &GetHandle() const override;
 
     private:
         void SetupCubesForRendering();
@@ -58,7 +59,6 @@ namespace voxie {
         std::string path;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-        Handle handle;
     };
 
 }// namespace voxie

@@ -18,12 +18,8 @@ public:
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    const Handle &GetHandle() const override;
-
-    std::shared_ptr<Position> GetPosition() const override;
-    std::shared_ptr<Name> GetName() const;
-private:
-    Handle entity;
+    COMPONENTFUNCTION(Position);
+    COMPONENTFUNCTION(Name);
 };
 
 }

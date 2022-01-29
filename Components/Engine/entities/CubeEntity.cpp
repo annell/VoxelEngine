@@ -10,7 +10,7 @@
 namespace voxie {
 
 CubeEntity::CubeEntity(const voxie::Handle& handle, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position, std::shared_ptr<Material> material)
-    : handle(handle) {
+    : NodeWrapper(handle) {
     helper::AddComponent(handle, std::move(name));
     helper::AddComponent(handle, std::move(position));
     helper::AddComponent(handle, std::move(shader));
@@ -55,18 +55,6 @@ void CubeEntity::Init() {
     RefreshMaterial();
 }
 
-std::shared_ptr<Position> CubeEntity::GetPosition() const {
-    return voxie::helper::GetComponent<Position>(handle);
-}
-
-std::shared_ptr<Shader> CubeEntity::GetShader() const {
-    return voxie::helper::GetComponent<Shader>(handle);
-}
-
-std::shared_ptr<Material> CubeEntity::GetMaterial() const {
-    return voxie::helper::GetComponent<Material>(handle);
-}
-
 void CubeEntity::RefreshMaterial() const {
     auto shader = GetShader();
     shader->use();
@@ -79,14 +67,10 @@ void CubeEntity::RefreshMaterial() const {
     shader->setFloat("materials[" + index + "].shininess", material->shininess);
 }
 
-std::shared_ptr<VertexBufferArray> CubeEntity::GetVertexBufferArray() const {
-    return cube.GetVertexBufferArray();
-}
-
 RenderingConfig CubeEntity::GetRenderingConfig() const {
     return {
             GetShader(),
-            GetVertexBufferArray(),
+            cube.GetVertexBufferArray(),
             [&] () {
               auto position = GetPosition();
               auto shader = GetShader();
@@ -95,15 +79,11 @@ RenderingConfig CubeEntity::GetRenderingConfig() const {
             },
             [] () {},
             [&]() {
-              glBindVertexArray(GetVertexBufferArray()->VAO);
-              glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
+              glBindVertexArray(cube.GetVertexBufferArray()->VAO);
+              glDrawArrays(GL_TRIANGLES, 0, cube.GetVertexBufferArray()->nrVertex);
             },
             IsEnabled()
     };
-}
-
-const Handle &CubeEntity::GetHandle() const {
-    return handle;
 }
 
 }

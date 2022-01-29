@@ -16,7 +16,7 @@
 namespace voxie {
 
     Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
-        : handle(handle), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+        : NodeWrapper(handle), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
         helper::AddComponent(handle, std::move(name));
         helper::AddComponent(handle, std::move(position));
         helper::AddComponent(handle, std::move(shader));
@@ -123,18 +123,6 @@ namespace voxie {
         }
     }
 
-    std::shared_ptr<Position> Chunk::GetPosition() const {
-        return voxie::helper::GetComponent<Position>(handle);
-    }
-
-    std::shared_ptr<Shader> Chunk::GetShader() const {
-        return voxie::helper::GetComponent<Shader>(handle);
-    }
-
-    std::shared_ptr<VertexBufferArray> Chunk::GetVertexBufferArray() const {
-        return vertexBufferArray;
-    }
-
     auto Chunk::GetPreDrawAction(const std::shared_ptr<Shader> &shader, const glm::mat4 &model) const {
         return [=]() {
             glEnable(GL_CULL_FACE);
@@ -160,10 +148,6 @@ namespace voxie {
                     glBindVertexArray(GetVertexBufferArray()->VAO);
                     glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
                 }};
-    }
-
-    const Handle &Chunk::GetHandle() const {
-        return handle;
     }
 
 }// namespace voxie

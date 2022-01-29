@@ -8,21 +8,27 @@
 #include <yaml-cpp/yaml.h>
 #include <glm/glm.hpp>
 
+#include "Engine.h"
+
+#define COMPONENTFUNCTION(TYPE) \
+std::shared_ptr<TYPE> Get##TYPE() const { \
+    return voxie::helper::GetComponent<TYPE>(GetHandle()); \
+}
+
 namespace voxie {
 class Position;
 
 struct NodeWrapper {
+    NodeWrapper(Handle handle) : handle(handle) { }
     virtual ~NodeWrapper() {}
-    virtual const Handle &GetHandle() const = 0;
-    virtual std::shared_ptr<Position> GetPosition() const {
-        return std::shared_ptr<Position>();
-    }
+    const Handle &GetHandle() const { return handle; }
 
     bool IsEnabled() const { return enabled; }
     void Enable() { enabled = true; }
     void Disable() { enabled = false; }
 protected:
     bool enabled = true;
+    Handle handle;
 };
 
 class Node {
@@ -46,8 +52,6 @@ public:
     size_t GetNumChildren() const;
     std::list<Handle> GetChildEntities() const;
     Node * GetParent() const;
-    glm::vec3 GetRelativePosition();
-    glm::vec3 GetRelativeRotation();
 
 private:
     void MoveChild(Node * child, Node * target);

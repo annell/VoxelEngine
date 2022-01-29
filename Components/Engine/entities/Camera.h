@@ -35,12 +35,13 @@ namespace voxie {
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
 
+        COMPONENTFUNCTION(Direction);
+        COMPONENTFUNCTION(Name);
+        COMPONENTFUNCTION(Position);
+
         glm::mat4 GetViewMatrix() const;
         static float GetFarDistance();
         glm::mat4 GetProjectionMatrix() const;
-        const Handle &GetHandle() const override;
-        std::shared_ptr<Direction> GetDirection() const;
-        std::shared_ptr<Name> GetName() const;
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         void SetShaderParameters(const Shader &shader) const;
@@ -49,8 +50,6 @@ namespace voxie {
 
     private:
         void updateCameraVectors();
-        std::shared_ptr<Position> GetPosition() const override;
-        Handle handle;
         Handle selectedEntity;
 
         glm::vec3 Front;
