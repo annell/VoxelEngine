@@ -19,12 +19,29 @@ namespace voxie {
     }
 
     Engine::~Engine() {
+        glfwTerminate();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+        scene.reset();
+    }
+
+    void Engine::RegisterComponents() {
+        ecsManager.RegisterComponent<Name>();
+        ecsManager.RegisterComponent<Material>();
+        ecsManager.RegisterComponent<Color>();
+        ecsManager.RegisterComponent<Attenuation>();
+        ecsManager.RegisterComponent<Position>();
+        ecsManager.RegisterComponent<Position2D>();
+        ecsManager.RegisterComponent<Direction>();
+        ecsManager.RegisterComponent<Skybox>();
+        ecsManager.RegisterComponent<Cube>();
+        ecsManager.RegisterComponent<VisibleText>();
+        ecsManager.RegisterComponent<Shader>();
     }
 
     bool Engine::Init() {
+        RegisterComponents();
         if (!InitWindow()) {
             return false;
         }
@@ -122,8 +139,6 @@ namespace voxie {
             }
             RenderFrame();
         }
-
-        glfwTerminate();
     }
 
     void Engine::RenderFrame() const {
@@ -182,6 +197,9 @@ namespace voxie {
 
     void Engine::SetCamera(const Handle &entity) {
         camera = entity;
+    }
+    ECSManager &Engine::GetECSManager() {
+        return ecsManager;
     }
 
     namespace helper {

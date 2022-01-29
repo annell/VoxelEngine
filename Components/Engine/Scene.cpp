@@ -37,6 +37,7 @@ namespace voxie {
     }
 
     Scene::~Scene() {
+        ClearScene();
     }
 
     void Scene::SetFilename(const std::string &name) {
@@ -117,7 +118,7 @@ namespace voxie {
         }
     }
     void Scene::ClearScene() {
-        root.reset(nullptr);
+        root.reset();
     }
     const std::string &Scene::GetSceneName() const {
         return sceneName;

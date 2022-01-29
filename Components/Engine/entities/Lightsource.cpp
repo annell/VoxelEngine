@@ -36,7 +36,9 @@ namespace voxie {
         helper::RemoveComponent<Position>(handle);
         helper::RemoveComponent<Shader>(handle);
         helper::RemoveComponent<Color>(handle);
-        helper::RemoveComponent<Attenuation>(handle);
+        if (type == LightType::POINT) {
+            helper::RemoveComponent<Attenuation>(handle);
+        }
     }
 
     void LightSource::encode(YAML::Node &node) const {

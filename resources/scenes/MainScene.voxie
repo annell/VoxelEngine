@@ -9,7 +9,7 @@
         z: -0.00406378508
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -23,9 +23,9 @@
     name: Editor Camera
     position:
       position:
-        x: 5.93717003
-        y: 2.81979775
-        z: 19.3451786
+        x: 8.87147141
+        y: 2.94392872
+        z: 17.7191315
       rotation:
         x: 0
         y: 0
@@ -35,8 +35,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 244.096054
-      pitch: -1.09976673
+      yaw: 238.295959
+      pitch: -0.999765277
 - parent: 1312
   node:
     type: LightSource
@@ -201,18 +201,36 @@
 - parent: 1312
   node:
     type: CubeEntity
-    id: 201
+    id: 4329160489113576905
     name: Cube
     position:
       position:
         x: 0
-        y: 5.96046448e-08
+        y: 0
         z: 0
       rotation:
         x: 0
         y: -0
         z: 0
       scale:
-        x: 1000
-        y: 0.00117000006
-        z: 1000
+        x: 58.8260689
+        y: 0.00100000005
+        z: 51.408596
+    material:
+      color:
+        r: 0.200000003
+        g: 0.800000012
+        b: 0.300000012
+      ambient:
+        x: 0.777027011
+        y: 0.777019203
+        z: 0.777019203
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32

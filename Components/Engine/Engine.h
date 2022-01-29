@@ -29,38 +29,33 @@ namespace voxie {
         RenderingHandler &GetRenderingHandler();
         Scene &GetScene();
         Logging &GetLogger();
+        ECSManager &GetECSManager();
 
         OnTick onTick;
 
     private:
         void InitGUI() const;
+        void RegisterComponents();
+        bool InitWindow();
+        void UpdateTime();
+        void NewFrame() const;
+        void RenderFrame() const;
 
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
         Handle camera;
         std::shared_ptr<Window> window;
-        std::unique_ptr<EntityComponentSystem> components;
         std::unique_ptr<Scene> scene;
         RenderingHandler renderingHandler;
         Logging logging;
         std::unique_ptr<TextHandler> textHandler;
-
-        bool InitWindow();
-        void UpdateTime();
-
-        void NewFrame() const;
-
-        void RenderFrame() const;
+        ECSManager ecsManager;
     };
 
     namespace helper {
         template<typename T>
         std::shared_ptr<T> GetSceneNode(const Handle &handle) {
             return std::dynamic_pointer_cast<T>(Engine::GetEngine().GetScene().FindNode(handle));
-        }
-        template<typename T>
-        std::shared_ptr<T> GetComponent(const Handle &handle) {
-            return EntityComponentSystem::GetComponent<T>(handle);
         }
 
         template<typename T>
@@ -75,18 +70,23 @@ namespace voxie {
         }
 
         template<typename T>
+        std::shared_ptr<T> GetComponent(const Handle &handle) {
+            return Engine::GetEngine().GetECSManager().Get<T>(handle);
+        }
+
+        template<typename T>
         bool HasComponent(const Handle &handle) {
-            return EntityComponentSystem::GetComponent<T>(handle) != nullptr;
+            return GetComponent<T>(handle) != nullptr;
         }
 
         template<typename T>
         void AddComponent(const Handle &handle, std::shared_ptr<T> component) {
-            return EntityComponentSystem::AddComponent<T>(handle, component);
+            return Engine::GetEngine().GetECSManager().Add<T>(handle, std::move(component));
         }
 
         template<typename T>
         void RemoveComponent(const Handle &handle) {
-            return EntityComponentSystem::RemoveComponent<T>(handle);
+            return Engine::GetEngine().GetECSManager().Remove<T>(handle);
         }
 
         void RenderingBegin();

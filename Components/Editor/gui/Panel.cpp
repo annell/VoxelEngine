@@ -453,9 +453,9 @@ namespace gui {
             ShowEntityMaterialController(entity);
         }
 
-        if (voxie::helper::HasComponent<voxie::Camera>(entity)) {
-            ShowCameraSelectorController(entity);
-        }
+        //if (voxie::helper::HasComponent<voxie::Camera>(entity)) {
+            //ShowCameraSelectorController(entity);
+        //}
 
         ImGui::End();
     }
