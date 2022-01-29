@@ -47,7 +47,7 @@ namespace internal {
 namespace voxie {
     Skybox::Skybox(const Handle &handle, std::shared_ptr<Shader> shader)
         : NodeWrapper(handle), cube({0, 0, 0}, {1, 1, 1}) {
-        helper::AddComponent(handle, std::move(shader));
+        COMPONENT_REGISTER(Shader, shader);
         Init();
     }
 

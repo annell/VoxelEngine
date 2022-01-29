@@ -17,18 +17,15 @@ namespace voxie {
 
     Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
         : NodeWrapper(handle), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
-        helper::AddComponent(handle, std::move(name));
-        helper::AddComponent(handle, std::move(position));
-        helper::AddComponent(handle, std::move(shader));
+        COMPONENT_REGISTER(Position, position);
+        COMPONENT_REGISTER(Shader, shader);
+        COMPONENT_REGISTER(Name, name);
         voxie::ModelLoader::LoadModel(path, this);
         SetupCubesForRendering();
         SetupShader();
     }
 
     Chunk::~Chunk() {
-        helper::RemoveComponent<Name>(handle);
-        helper::RemoveComponent<Shader>(handle);
-        helper::RemoveComponent<Position>(handle);
     }
 
     void Chunk::encode(YAML::Node &node) const {

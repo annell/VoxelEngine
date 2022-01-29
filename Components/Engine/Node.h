@@ -10,17 +10,25 @@
 
 #include "Engine.h"
 
-#define COMPONENTFUNCTION(TYPE) \
+#define COMPONENT_FUNCTION(TYPE) \
 std::shared_ptr<TYPE> Get##TYPE() const { \
     return voxie::helper::GetComponent<TYPE>(GetHandle()); \
 }
+
+#define COMPONENT_REGISTER(TYPE, COMPONENT) \
+helper::AddComponent(GetHandle(), std::move(COMPONENT));     \
+componentsToRemove.push_back([&] () { helper::RemoveComponent<TYPE>(GetHandle()); } );
 
 namespace voxie {
 class Position;
 
 struct NodeWrapper {
     NodeWrapper(Handle handle) : handle(handle) { }
-    virtual ~NodeWrapper() {}
+    virtual ~NodeWrapper() {
+        for (const auto& component : componentsToRemove) {
+            component();
+        }
+    }
     const Handle &GetHandle() const { return handle; }
 
     bool IsEnabled() const { return enabled; }
@@ -29,6 +37,7 @@ struct NodeWrapper {
 protected:
     bool enabled = true;
     Handle handle;
+    std::vector<std::function<void()>> componentsToRemove;
 };
 
 class Node {

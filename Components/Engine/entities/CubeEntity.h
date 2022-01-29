@@ -25,9 +25,9 @@ public:
     CubeEntity(const Handle &, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>, std::shared_ptr<Material>);
     ~CubeEntity();
 
-    COMPONENTFUNCTION(Shader);
-    COMPONENTFUNCTION(Material);
-    COMPONENTFUNCTION(Position);
+    COMPONENT_FUNCTION(Shader);
+    COMPONENT_FUNCTION(Material);
+    COMPONENT_FUNCTION(Position);
 
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);

@@ -22,20 +22,16 @@ namespace voxie {
         cube->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) 0);
         config.position->model = glm::translate(config.position->model, config.position->pos);
         config.position->SetPosition(config.position->pos);
-        helper::AddComponent(handle, config.name);
-        helper::AddComponent(handle, config.position);
-        helper::AddComponent(handle, config.shader);
-        helper::AddComponent(handle, config.color);
+        COMPONENT_REGISTER(Position, config.position);
+        COMPONENT_REGISTER(Shader, config.shader);
+        COMPONENT_REGISTER(Name, config.name);
+        COMPONENT_REGISTER(Color, config.color);
         if (type == LightType::POINT) {
             helper::AddComponent(handle, config.attenuation);
         }
     }
 
     LightSource::~LightSource() {
-        helper::RemoveComponent<Name>(handle);
-        helper::RemoveComponent<Position>(handle);
-        helper::RemoveComponent<Shader>(handle);
-        helper::RemoveComponent<Color>(handle);
         if (helper::HasComponent<Attenuation>(handle)) {
             helper::RemoveComponent<Attenuation>(handle);
         }

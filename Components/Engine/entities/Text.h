@@ -22,9 +22,9 @@ public:
     void encode(YAML::Node &) const;
     bool decode(const YAML::Node &);
 
-    COMPONENTFUNCTION(Position2D);
-    COMPONENTFUNCTION(Color);
-    COMPONENTFUNCTION(VisibleText);
-    COMPONENTFUNCTION(Name);
+    COMPONENT_FUNCTION(Position2D);
+    COMPONENT_FUNCTION(Color);
+    COMPONENT_FUNCTION(VisibleText);
+    COMPONENT_FUNCTION(Name);
 };
 }

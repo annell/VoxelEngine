@@ -11,19 +11,16 @@ namespace voxie {
 
 CubeEntity::CubeEntity(const voxie::Handle& handle, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position, std::shared_ptr<Material> material)
     : NodeWrapper(handle) {
-    helper::AddComponent(handle, std::move(name));
-    helper::AddComponent(handle, std::move(position));
-    helper::AddComponent(handle, std::move(shader));
-    helper::AddComponent(handle, std::move(material));
+
+    COMPONENT_REGISTER(Material, material);
+    COMPONENT_REGISTER(Position, position);
+    COMPONENT_REGISTER(Shader, shader);
+    COMPONENT_REGISTER(Name, name);
 
     Init();
 }
 
 CubeEntity::~CubeEntity() {
-    helper::RemoveComponent<Name>(handle);
-    helper::RemoveComponent<Shader>(handle);
-    helper::RemoveComponent<Position>(handle);
-    helper::RemoveComponent<Material>(handle);
 }
 
 void CubeEntity::encode(YAML::Node & node) const {

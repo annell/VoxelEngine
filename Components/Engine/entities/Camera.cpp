@@ -11,16 +11,13 @@ namespace voxie {
 
     Camera::Camera(Handle handle, Name name, glm::vec3 position, glm::vec3 up, float yaw, float pitch)
         : NodeWrapper(handle), Front(glm::vec3(0.0f, 0.0f, 0.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM), WorldUp(up), selectedEntity(handle) {
-        helper::AddComponent(handle, std::make_shared<Name>(name));
-        helper::AddComponent(handle, std::make_shared<Position>(position));
-        helper::AddComponent(handle, std::make_shared<Direction>(yaw, pitch));
+        COMPONENT_REGISTER(Position, std::make_shared<Position>(position));
+        COMPONENT_REGISTER(Direction, std::make_shared<Direction>(yaw, pitch));
+        COMPONENT_REGISTER(Name, std::make_shared<Name>(name));
         updateCameraVectors();
     }
 
     Camera::~Camera() {
-        helper::RemoveComponent<Name>(handle);
-        helper::RemoveComponent<Position>(handle);
-        helper::RemoveComponent<Direction>(handle);
     }
 
     void Camera::encode(YAML::Node &node) const {

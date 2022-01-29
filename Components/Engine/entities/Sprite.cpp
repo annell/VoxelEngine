@@ -18,16 +18,13 @@ namespace voxie {
 
     Sprite::Sprite(const Handle &handle, std::string path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position2D> position)
         : NodeWrapper(handle), texture(loadTextureFromFile(std::move(path))), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
-        helper::AddComponent(handle, std::move(name));
-        helper::AddComponent(handle, std::move(position));
-        helper::AddComponent(handle, std::move(shader));
+        COMPONENT_REGISTER(Position2D, position);
+        COMPONENT_REGISTER(Shader, shader);
+        COMPONENT_REGISTER(Name, name);
         Setup();
     }
 
     Sprite::~Sprite() {
-        helper::RemoveComponent<Name>(handle);
-        helper::RemoveComponent<Position2D>(handle);
-        helper::RemoveComponent<Shader>(handle);
     }
 
     void Sprite::encode(YAML::Node &node) const {

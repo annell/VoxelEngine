@@ -9,9 +9,10 @@ namespace voxie {
 
 TransformNode::TransformNode(const voxie::Handle & handle, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
     : NodeWrapper(handle) {
-    helper::AddComponent(handle, std::move(name));
-    helper::AddComponent(handle, std::move(position));
+    COMPONENT_REGISTER(Position, position);
+    COMPONENT_REGISTER(Name, name);
 }
+
 void TransformNode::encode(YAML::Node& node) const {
     node["type"] = "TransformNode";
     node["id"] = GetHandle().GetId();
