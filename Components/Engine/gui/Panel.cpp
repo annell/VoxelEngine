@@ -326,6 +326,38 @@ namespace gui {
                 ShowTopMenu();
                 ImGui::EndMenu();
             }
+
+            auto *gameMode = voxie::Engine::GetEngine().GetGameMode();
+
+            bool started = gameMode->IsStarted();
+            float spacing = 10;
+            static bool pressedPlay = false;
+            if (started) {
+                if (ImGui::SmallButton("Pause")) {
+                    gameMode->Stop();
+                }
+                ImGui::SameLine(0, spacing);
+
+            } else {
+                if (!pressedPlay) {
+                    if (ImGui::SmallButton("Play")) {
+                        gameMode->Start();
+                        pressedPlay = true;
+                    }
+                    ImGui::SameLine(0, spacing);
+                } else {
+                    if (ImGui::SmallButton("Resume")) {
+                        gameMode->Resume();
+                    }
+                    ImGui::SameLine(0, spacing);
+                }
+            }
+            if (ImGui::SmallButton("Stop")) {
+                gameMode->Reset();
+                pressedPlay = false;
+            }
+
+
             ImGui::EndMainMenuBar();
         }
     }
@@ -460,40 +492,5 @@ namespace gui {
 
         ImGui::End();
     }
-
-    void ShowPlayPauseControls() {
-        ImGui::Begin("Play Pause");
-        auto *gameMode = voxie::Engine::GetEngine().GetGameMode();
-
-        bool started = gameMode->IsStarted();
-        float spacing = 30;
-        static bool pressedPlay = false;
-        if (started) {
-            if (ImGui::Button("Pause")) {
-                gameMode->Stop();
-            }
-            ImGui::SameLine(0, spacing);
-
-        } else {
-            if (!pressedPlay) {
-                if (ImGui::Button("Play")) {
-                    gameMode->Start();
-                    pressedPlay = true;
-                }
-                ImGui::SameLine(0, spacing);
-            } else {
-                if (ImGui::Button("Resume")) {
-                    gameMode->Resume();
-                }
-                ImGui::SameLine(0, spacing);
-            }
-        }
-        if (ImGui::Button("Stop")) {
-            gameMode->Reset();
-            pressedPlay = false;
-        }
-        ImGui::End();
-    }
-
 
 }// namespace gui

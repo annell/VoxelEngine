@@ -15,7 +15,6 @@ public:
     void Initialize() override;
     void OnTick(float deltaTime) override;
 private:
-    bool hideUI = false;
 };
 
 }

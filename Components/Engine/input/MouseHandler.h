@@ -27,6 +27,9 @@ namespace voxie {
         static void UnlockCamera();
         static void LockCamera();
 
+        static void MovementLock();
+        static void MovementUnlock();
+
         static void processInput();
         static void RegisterAction(const MouseAction &);
     };
