@@ -352,9 +352,11 @@ namespace gui {
                     ImGui::SameLine(0, spacing);
                 }
             }
-            if (ImGui::SmallButton("Stop")) {
-                gameMode->Reset();
-                pressedPlay = false;
+            if (pressedPlay) {
+                if (ImGui::SmallButton("Stop")) {
+                    gameMode->Reset();
+                    pressedPlay = false;
+                }
             }
 
 
