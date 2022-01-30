@@ -27,7 +27,8 @@ namespace voxie {
 
     template<typename... Values>
     int Delegate<Values...>::Bind(Delegate::Function function) {
-        callbacks[id++] = function;
+        id++;
+        callbacks[id] = function;
         return id;
     }
 

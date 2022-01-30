@@ -11,6 +11,7 @@ class GLFWwindow;
 namespace voxie {
     class Camera;
     class Window;
+    class GameMode;
 
     using OnTick = Delegate<float>;
     class Engine {
@@ -21,6 +22,7 @@ namespace voxie {
     public:
         static Engine &GetEngine();
         bool Init();
+        void LoadGameMode(std::unique_ptr<GameMode>);
         std::shared_ptr<Camera> GetCamera();
         void SetCamera(const Handle &);
         std::shared_ptr<Window> GetWindow() const;
@@ -30,6 +32,7 @@ namespace voxie {
         Scene &GetScene();
         Logging &GetLogger();
         ECSManager &GetECSManager();
+        GameMode *GetGameMode();
 
         OnTick onTick;
 
@@ -46,6 +49,7 @@ namespace voxie {
         Handle camera;
         std::shared_ptr<Window> window;
         std::unique_ptr<Scene> scene;
+        std::unique_ptr<GameMode> gameMode;
         RenderingHandler renderingHandler;
         Logging logging;
         std::unique_ptr<TextHandler> textHandler;

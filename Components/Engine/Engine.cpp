@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include "CubeEntity.h"
 #include "Text.h"
+#include "GameMode.h"
 
 namespace voxie {
     const unsigned int SCR_WIDTH = 1024;
@@ -15,6 +16,7 @@ namespace voxie {
     Engine::Engine()
         : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/"))
         , camera(NullEntity)
+        , gameMode(nullptr)
         , textHandler(nullptr) {
     }
 
@@ -46,15 +48,6 @@ namespace voxie {
             return false;
         }
         InitGUI();
-
-        scene->Load("MainScene.voxie");
-        if (scene->GetEntities().empty()) {
-            auto camera = MakeCamera({"Editor Camera"});
-            auto entity = camera->GetHandle();
-            GetScene().AddNode(camera, nullptr);
-            SetCamera(entity);
-        }
-
         return true;
     }
 
@@ -91,6 +84,11 @@ namespace voxie {
                                 std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)}));
         textHandler->Init();
         return true;
+    }
+
+    void Engine::LoadGameMode(std::unique_ptr<GameMode> gameModeIn) {
+        gameMode = std::move(gameModeIn);
+        gameMode->Reset();
     }
 
     std::shared_ptr<Camera> Engine::GetCamera() {
@@ -197,6 +195,10 @@ namespace voxie {
     }
     ECSManager &Engine::GetECSManager() {
         return ecsManager;
+    }
+
+    GameMode *Engine::GetGameMode() {
+        return gameMode.get();
     }
 
     namespace helper {

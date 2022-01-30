@@ -3,11 +3,9 @@ project(Editor C CXX)
 
 add_executable(${PROJECT_NAME}
         EditorApplication.cpp
-        gui/Panel.cpp
         )
 
 include_directories(
-        gui
 )
 
 add_dependencies(${PROJECT_NAME} Engine)

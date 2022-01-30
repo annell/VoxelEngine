@@ -9,5 +9,6 @@ namespace gui {
 
     void ShowSceneOverview();
     void ShowSimpleOverlay(const std::string &text, bool *p_open = nullptr);
+    void ShowPlayPauseControls();
 
 }// namespace gui

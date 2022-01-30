@@ -119,16 +119,18 @@ namespace voxie {
         Scene::SceneNodes nodesForRendering;
         for (const auto& node : nodes) {
             auto nodePtr = node.second->GetNodePtr();
-            if (std::dynamic_pointer_cast<Chunk>(nodePtr) ||
-                std::dynamic_pointer_cast<voxie::Sprite>(nodePtr) ||
-                std::dynamic_pointer_cast<voxie::CubeEntity>(nodePtr) ||
-                std::dynamic_pointer_cast<voxie::Text>(nodePtr)) {
-                if (IsAffectedByLight(nodePtr)) {
-                    auto shader = helper::GetComponent<Shader>(nodePtr->GetHandle());
-                    camera->SetShaderParameters(*shader);
-                    shader->setBool("selected", nodePtr->GetHandle() == camera->GetSelection());
+            if (nodePtr->IsEnabled()) {
+                if (std::dynamic_pointer_cast<Chunk>(nodePtr) ||
+                    std::dynamic_pointer_cast<voxie::Sprite>(nodePtr) ||
+                    std::dynamic_pointer_cast<voxie::CubeEntity>(nodePtr) ||
+                    std::dynamic_pointer_cast<voxie::Text>(nodePtr)) {
+                    if (IsAffectedByLight(nodePtr)) {
+                        auto shader = helper::GetComponent<Shader>(nodePtr->GetHandle());
+                        camera->SetShaderParameters(*shader);
+                        shader->setBool("selected", nodePtr->GetHandle() == camera->GetSelection());
+                    }
+                    nodesForRendering.push_back(nodePtr);
                 }
-                nodesForRendering.push_back(nodePtr);
             }
         }
         return nodesForRendering;
@@ -142,6 +144,7 @@ namespace voxie {
     }
     void Scene::ClearScene() {
         root.reset();
+        nodes.clear();
     }
     const std::string &Scene::GetSceneName() const {
         return sceneName;

@@ -26,6 +26,7 @@ file(GLOB CPP_FILES
         rendering/*.cpp
         ../../resources/*.cpp
         utility/*.cpp
+        gui/*.cpp
         )
 
 file(GLOB H_FILES
@@ -40,6 +41,7 @@ file(GLOB H_FILES
         input/*.h
         rendering/*.h
         utility/*.h
+        gui/*.h
         )
 
 set(${PROJECT_NAME}_INCLUDE_DIRS

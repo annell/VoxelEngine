@@ -4,6 +4,7 @@
 #include "Core.h"
 #include "CubeEntity.h"
 #include <GLFW/glfw3.h>
+#include <GameMode.h>
 namespace internal {
 
 struct InputTextCallback_UserData
@@ -453,10 +454,44 @@ namespace gui {
             ShowEntityMaterialController(entity);
         }
 
-        //if (voxie::helper::HasComponent<voxie::Camera>(entity)) {
-            //ShowCameraSelectorController(entity);
-        //}
+        if (voxie::helper::HasComponent<voxie::Direction>(entity)) {
+            ShowCameraSelectorController(entity);
+        }
 
+        ImGui::End();
+    }
+
+    void ShowPlayPauseControls() {
+        ImGui::Begin("Play Pause");
+        auto *gameMode = voxie::Engine::GetEngine().GetGameMode();
+
+        bool started = gameMode->IsStarted();
+        float spacing = 30;
+        static bool pressedPlay = false;
+        if (started) {
+            if (ImGui::Button("Pause")) {
+                gameMode->Stop();
+            }
+            ImGui::SameLine(0, spacing);
+
+        } else {
+            if (!pressedPlay) {
+                if (ImGui::Button("Play")) {
+                    gameMode->Start();
+                    pressedPlay = true;
+                }
+                ImGui::SameLine(0, spacing);
+            } else {
+                if (ImGui::Button("Resume")) {
+                    gameMode->Resume();
+                }
+                ImGui::SameLine(0, spacing);
+            }
+        }
+        if (ImGui::Button("Stop")) {
+            gameMode->Reset();
+            pressedPlay = false;
+        }
         ImGui::End();
     }
 
