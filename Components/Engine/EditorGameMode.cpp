@@ -86,10 +86,6 @@ void EditorGameMode::Initialize() {
     auto& engine = voxie::Engine::GetEngine();
     auto& scene = engine.GetScene();
 
-    voxie::KeyboardHandler::RegisterAction({[&]() {
-        MouseHandler::MovementUnlock();
-    }, voxie::Key::KEY_LEFT_CONTROL});
-
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
       engine.GetWindow()->CloseWindow();
     }, voxie::Key::KEY_ESCAPE});
@@ -104,6 +100,7 @@ void EditorGameMode::Initialize() {
           voxie::MouseHandler::MovementLock();
       } else {
           voxie::MouseHandler::LockCamera();
+          MouseHandler::MovementUnlock();
       }
     }, voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
 }
