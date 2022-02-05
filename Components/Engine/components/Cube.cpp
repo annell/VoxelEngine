@@ -65,36 +65,25 @@ namespace voxie {
     }
 
     void Cube::GenerateVertexAttributes(const Side &side) {
-        int index = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                vertexBufferArray->vertexAttributes.push_back(side.triangle1.vertex[index]);
-                index++;
-            }
-            if (useNormals) {
-                for (float ii : side.normal) {
-                    vertexBufferArray->vertexAttributes.push_back(ii);
-                }
-            }
-            if (useMaterials) {
-                vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
-            }
-        }
-        index = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                vertexBufferArray->vertexAttributes.push_back(side.triangle2.vertex[index]);
-                index++;
-            }
-            if (useNormals) {
-                for (float ii : side.normal) {
-                    vertexBufferArray->vertexAttributes.push_back(ii);
-                }
-            }
-            if (useMaterials) {
-                vertexBufferArray->vertexAttributes.push_back(side.materialIndex);
-            }
-        }
+        const auto addAttributes = [useNormals = useNormals, useMaterials = useMaterials] (const Triangle& triangle, const float normals[3], float materialIndex, std::vector<float>& vertexAttributes) {
+          int index = 0;
+          for (int i = 0; i < 3; i++) {
+              for (int j = 0; j < 3; j++) {
+                  vertexAttributes.push_back(triangle.vertex[index]);
+                  index++;
+              }
+              if (useNormals) {
+                  for (int j = 0; j < 3; j++) {
+                      vertexAttributes.push_back(normals[j]);
+                  }
+              }
+              if (useMaterials) {
+                  vertexAttributes.push_back(materialIndex);
+              }
+          }
+        };
+        addAttributes(side.triangle1, side.normal, side.materialIndex, vertexBufferArray->vertexAttributes);
+        addAttributes(side.triangle2, side.normal, side.materialIndex, vertexBufferArray->vertexAttributes);
     }
 
     void Cube::GenerateSides(Position p, Dimensions d) {

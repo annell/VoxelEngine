@@ -8,12 +8,6 @@
 namespace voxie {
 
 void Material::encode(YAML::Node &node) const {
-    YAML::Node colorNode;
-    colorNode["r"] = color[0];
-    colorNode["g"] = color[1];
-    colorNode["b"] = color[2];
-    node["color"] = colorNode;
-
     YAML::Node ambientNode;
     ambientNode["x"] = ambient[0];
     ambientNode["y"] = ambient[1];
@@ -36,12 +30,7 @@ void Material::encode(YAML::Node &node) const {
 }
 
 bool Material::decode(const YAML::Node &node) {
-    auto root = node["color"];
-    color = {root["r"].as<float>(),
-             root["g"].as<float>(),
-             root["b"].as<float>()};
-
-    root = node["ambient"];
+    auto root = node["ambient"];
     ambient = {root["x"].as<float>(),
                root["y"].as<float>(),
                root["z"].as<float>()};
