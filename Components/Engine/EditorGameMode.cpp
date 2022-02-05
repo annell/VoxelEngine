@@ -87,8 +87,8 @@ void EditorGameMode::Initialize() {
     auto& scene = engine.GetScene();
 
     voxie::KeyboardHandler::RegisterAction({[&]() {
-        MouseHandler::MovementLock();
-    }, voxie::Key::KEY_LEFT_SHIFT});
+        MouseHandler::MovementUnlock();
+    }, voxie::Key::KEY_LEFT_CONTROL});
 
     voxie::KeyboardHandler::RegisterAction({[&engine]() {
       engine.GetWindow()->CloseWindow();
@@ -96,10 +96,15 @@ void EditorGameMode::Initialize() {
 
     voxie::MouseHandler::RegisterAction({[]() {
       voxie::MouseHandler::UnlockCamera();
+      voxie::MouseHandler::MovementUnlock();
     }, voxie::MouseButton::BUTTON_2, voxie::ActionType::RELEASE});
 
     voxie::MouseHandler::RegisterAction({[]() {
-      voxie::MouseHandler::LockCamera();
+      if (voxie::KeyboardHandler::IsKeyState(Key::KEY_LEFT_SHIFT, voxie::ActionType::PRESS)) {
+          voxie::MouseHandler::MovementLock();
+      } else {
+          voxie::MouseHandler::LockCamera();
+      }
     }, voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
 }
 

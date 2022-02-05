@@ -20,6 +20,7 @@ namespace voxie {
         using RegistredKeys = std::vector<KeyAction>;
         static void processInput();
         static void RegisterAction(const KeyAction &);
+        static bool IsKeyState(const Key& key, const ActionType& actionType);
     };
 
 }// namespace voxie

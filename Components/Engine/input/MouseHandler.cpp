@@ -68,7 +68,6 @@ namespace voxie {
     void MouseHandler::UnlockCamera() {
         glfwSetInputMode(Engine::GetEngine().GetWindow()->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         internal::mouseLock = false;
-        MovementUnlock();
     }
 
     void MouseHandler::LockCamera() {
@@ -80,7 +79,6 @@ namespace voxie {
     }
 
     void MouseHandler::MovementUnlock() {
-        glfwSetInputMode(Engine::GetEngine().GetWindow()->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         internal::movementLock = false;
     }
 
