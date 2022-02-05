@@ -74,6 +74,7 @@ void StyleColorsDark(ImGuiStyle* dst)
     style->TabBorderSize = 1.0f;
     style->TabRounding = 0.0f;
     style->WindowRounding = 4.0f;
+
 }
 
     EditorGameMode::EditorGameMode()

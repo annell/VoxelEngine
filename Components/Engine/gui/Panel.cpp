@@ -51,123 +51,101 @@ bool InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = 
 
 namespace gui {
 
-    void ShowSimpleOverlay(const std::string &text, bool *p_open) {
-        const float PAD = 10.0f;
-        static int corner = 1;
-        ImGuiIO &io = ImGui::GetIO();
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-        if (corner != -1) {
-            const ImGuiViewport *viewport = ImGui::GetMainViewport();
-            ImVec2 work_pos = viewport->WorkPos;// Use work area to avoid menu-bar/task-bar, if any!
-            ImVec2 work_size = viewport->WorkSize;
-            ImVec2 window_pos, window_pos_pivot;
-            window_pos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
-            window_pos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
-            window_pos_pivot.x = (corner & 1) ? 1.0f : 0.0f;
-            window_pos_pivot.y = (corner & 2) ? 1.0f : 0.0f;
-            ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-            window_flags |= ImGuiWindowFlags_NoMove;
-        }
-        ImGui::SetNextWindowBgAlpha(0.35f);// Transparent background
-        if (ImGui::Begin("Example: Simple overlay", p_open, window_flags)) {
-            ImGui::Text("%s", text.c_str());
-            if (ImGui::BeginPopupContextWindow()) {
-                if (ImGui::MenuItem("Custom", nullptr, corner == -1)) corner = -1;
-                if (ImGui::MenuItem("Top-left", nullptr, corner == 0)) corner = 0;
-                if (ImGui::MenuItem("Top-right", nullptr, corner == 1)) corner = 1;
-                if (ImGui::MenuItem("Bottom-left", nullptr, corner == 2)) corner = 2;
-                if (ImGui::MenuItem("Bottom-right", nullptr, corner == 3)) corner = 3;
-                if (p_open && ImGui::MenuItem("Close")) *p_open = false;
-                ImGui::EndPopup();
-            }
-        }
-        ImGui::End();
-    }
-
     void ShowEntityColorController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto color = voxie::helper::GetComponent<voxie::Color>(entity);
-        float updatedColor[3] = {color->color[0], color->color[1], color->color[2]};
-        ImGui::ColorPicker3("Color", updatedColor);
-        color->SetColor(updatedColor[0], updatedColor[1], updatedColor[2]);
+        if (ImGui::CollapsingHeader("Color")) {
+            auto color = voxie::helper::GetComponent<voxie::Color>(entity);
+            float updatedColor[3] = {color->color[0], color->color[1], color->color[2]};
+            ImGui::ColorEdit3("Color", updatedColor);
+            color->SetColor(updatedColor[0], updatedColor[1], updatedColor[2]);
+        }
     }
 
     void ShowEntityAttenuationController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
-        ImGui::SliderFloat("Quadratic", &attenuation->quadratic, 0.0f, 5.0f);
-        ImGui::SliderFloat("Linear", &attenuation->linear, 0.0f, 5.0f);
-        ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 5.0f);
-    }
-
-    void ShowEntityMaterialController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto material = voxie::helper::GetComponent<voxie::Material>(entity);
-
-
-
-        ImGui::Separator();
-        float ambient[3] = {material->ambient[0], material->ambient[1], material->ambient[2]};
-        float diffuse[3] = {material->diffuse[0], material->diffuse[1], material->diffuse[2]};
-        float specular[3] = {material->specular[0], material->specular[1], material->specular[2]};
-        ImGui::ColorPicker3("Ambient", ambient);
-        ImGui::ColorPicker3("Diffuse", diffuse);
-        ImGui::ColorPicker3("Specular", specular);
-        ImGui::SliderFloat("Shininess", &material->shininess, 0.0f, 100.0f);
-
-        material->ambient = {ambient[0], ambient[1], ambient[2]};
-        material->diffuse = {diffuse[0], diffuse[1], diffuse[2]};
-        material->specular = {specular[0], specular[1], specular[2]};
-
-        if (auto obj = voxie::helper::GetSceneNode<voxie::CubeEntity>(entity)) {
-            obj->RefreshMaterial();
+        if (ImGui::CollapsingHeader("Attenuation")) {
+            auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
+            ImGui::SliderFloat("Quadratic", &attenuation->quadratic, 0.0f, 5.0f);
+            ImGui::SliderFloat("Linear", &attenuation->linear, 0.0f, 5.0f);
+            ImGui::SliderFloat("Constant", &attenuation->constant, 0.0f, 5.0f);
         }
     }
 
+    void ShowEntityMaterialController(const voxie::Handle &entity) {
+        if (ImGui::CollapsingHeader("Material")) {
+            ImGui::Separator();
+            auto material = voxie::helper::GetComponent<voxie::Material>(entity);
+
+
+            ImGui::Separator();
+            float ambient[3] = {material->ambient[0], material->ambient[1], material->ambient[2]};
+            float diffuse[3] = {material->diffuse[0], material->diffuse[1], material->diffuse[2]};
+            float specular[3] = {material->specular[0], material->specular[1], material->specular[2]};
+            ImGui::ColorEdit3("Ambient", ambient);
+            ImGui::ColorEdit3("Diffuse", diffuse);
+            ImGui::ColorEdit3("Specular", specular);
+            ImGui::SliderFloat("Shininess", &material->shininess, 0.0f, 100.0f);
+
+            material->ambient = {ambient[0], ambient[1], ambient[2]};
+            material->diffuse = {diffuse[0], diffuse[1], diffuse[2]};
+            material->specular = {specular[0], specular[1], specular[2]};
+
+            if (auto obj = voxie::helper::GetSceneNode<voxie::CubeEntity>(entity)) {
+                obj->RefreshMaterial();
+            }
+        }
+    }
+
+    void ShowGuizmo(const voxie::Handle &entity);
+
     void ShowEntityPositionController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
-        float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
-        float rotation[3] = {pos->rotation.x, pos->rotation.y, pos->rotation.z};
-        float scale[3] = {pos->scale.x, pos->scale.y, pos->scale.z};
-        ImGui::InputFloat3("Position", translation);
-        ImGui::InputFloat3("Scale", scale);
-        ImGui::InputFloat3("Rotation", rotation);
-        pos->SetRotation({rotation[0], rotation[1], rotation[2]});
-        pos->SetScale({scale[0], scale[1], scale[2]});
-        pos->SetPosition({translation[0], translation[1], translation[2]});
-        pos->UpdateModel();
+        if (ImGui::CollapsingHeader("Position")) {
+            auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
+            float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
+            float rotation[3] = {pos->rotation.x, pos->rotation.y, pos->rotation.z};
+            float scale[3] = {pos->scale.x, pos->scale.y, pos->scale.z};
+            ImGui::InputFloat3("Position", translation);
+            ImGui::InputFloat3("Scale", scale);
+            ImGui::InputFloat3("Rotation", rotation);
+            pos->SetRotation({rotation[0], rotation[1], rotation[2]});
+            pos->SetScale({scale[0], scale[1], scale[2]});
+            pos->SetPosition({translation[0], translation[1], translation[2]});
+            pos->UpdateModel();
+
+            ShowGuizmo(entity);
+        }
     }
 
     void ShowEntityPosition2DController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto pos = voxie::helper::GetComponent<voxie::Position2D>(entity);
-        float translation[2] = {pos->pos.x, pos->pos.y};
-        float rotation = pos->rotation;
-        float scale[2] = {pos->scale.x, pos->scale.y};
-        ImGui::SliderFloat2("Position", translation, -1000, 1000);
-        ImGui::SliderFloat2("Scale", scale, 0, 10);
-        ImGui::SliderFloat("Rotation", &rotation, 0, 90);
-        pos->SetRotation(rotation);
-        pos->SetScale({scale[0], scale[1]});
-        pos->SetPosition({translation[0], translation[1]});
-        pos->UpdateModel();
+        if (ImGui::CollapsingHeader("Position2D")) {
+            auto pos = voxie::helper::GetComponent<voxie::Position2D>(entity);
+            float translation[2] = {pos->pos.x, pos->pos.y};
+            float rotation = pos->rotation;
+            float scale[2] = {pos->scale.x, pos->scale.y};
+            ImGui::SliderFloat2("Position", translation, -1000, 1000);
+            ImGui::SliderFloat2("Scale", scale, 0, 10);
+            ImGui::SliderFloat("Rotation", &rotation, 0, 90);
+            pos->SetRotation(rotation);
+            pos->SetScale({scale[0], scale[1]});
+            pos->SetPosition({translation[0], translation[1]});
+            pos->UpdateModel();
+        }
     }
 
     void ShowEntityNameController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto name = voxie::helper::GetComponent<voxie::Name>(entity);
-        internal::InputText("name", &name->name);
+        if (ImGui::CollapsingHeader("Name")) {
+            auto name = voxie::helper::GetComponent<voxie::Name>(entity);
+            internal::InputText("name", &name->name);
+        }
     }
 
     void ShowEntityVisibleTextController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto name = voxie::helper::GetComponent<voxie::VisibleText>(entity);
-        internal::InputText("text", &name->text);
+        if (ImGui::CollapsingHeader("Visible Text")) {
+            ImGui::Separator();
+            auto name = voxie::helper::GetComponent<voxie::VisibleText>(entity);
+            internal::InputText("text", &name->text);
+        }
     }
 
     void ShowSceneNameController() {
-        ImGui::Separator();
         auto &name = voxie::Engine::GetEngine().GetScene().GetSceneName();
         char *buf = (char *) name.c_str();
         auto callback = [](ImGuiInputTextCallbackData *data) -> int {
@@ -178,19 +156,22 @@ namespace gui {
     }
 
     void ShowEntityDirectionController(const voxie::Handle &entity) {
-        ImGui::Separator();
-        auto direction = voxie::helper::GetComponent<voxie::Direction>(entity);
-        ImGui::InputFloat("Yaw", &direction->yaw);
-        ImGui::InputFloat("Pitch", &direction->pitch);
+        if (ImGui::CollapsingHeader("Direction")) {
+            ImGui::Separator();
+            auto direction = voxie::helper::GetComponent<voxie::Direction>(entity);
+            ImGui::InputFloat("Yaw", &direction->yaw);
+            ImGui::InputFloat("Pitch", &direction->pitch);
+        }
     }
 
     void ShowCameraSelectorController(const voxie::Handle &entity) {
-        if (ImGui::Button("Set as camera"))
-            voxie::Engine::GetEngine().SetCamera(entity);
+        if (ImGui::CollapsingHeader("Camera")) {
+            if (ImGui::Button("Set as camera"))
+                voxie::Engine::GetEngine().SetCamera(entity);
+        }
     }
 
     void ShowGuizmo(const voxie::Handle &entity) {
-        ImGui::Separator();
         static auto mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
         static auto mCurrentGizmoMode = ImGuizmo::WORLD;
         if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
@@ -462,7 +443,6 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::Position>(entity)) {
             ShowEntityPositionController(entity);
-            ShowGuizmo(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::Position2D>(entity)) {
