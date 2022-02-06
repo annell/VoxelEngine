@@ -108,6 +108,35 @@ namespace gui {
         }
     }
 
+    void ShowEntityBodyController(const voxie::Handle &entity) {
+        if (ImGui::CollapsingHeader("Body")) {
+            auto body = voxie::helper::GetComponent<voxie::Body>(entity);
+            auto bodyType = body->GetBodyType();
+
+            if (ImGui::RadioButton("Kinematic", bodyType == voxie::BodyType::KINEMATIC)) {
+                body->SetBodyType(voxie::BodyType::KINEMATIC);
+            }
+
+            if (ImGui::RadioButton("Static", bodyType == voxie::BodyType::STATIC)) {
+                body->SetBodyType(voxie::BodyType::STATIC);
+            }
+
+            if (ImGui::RadioButton("Dynamic", bodyType == voxie::BodyType::DYNAMIC)) {
+                body->SetBodyType(voxie::BodyType::DYNAMIC);
+            }
+
+            ImGui::Separator();
+
+            float mass = body->GetMass();
+            ImGui::DragFloat("Mass [kg]", &mass);
+            body->SetMass(mass);
+
+            bool gravity = body->GetGravity();
+            ImGui::Checkbox("Gravity", &gravity);
+            body->SetGravity(gravity);
+        }
+    }
+
     void ShowEntityPosition2DController(const voxie::Handle &entity) {
         if (ImGui::CollapsingHeader("Position2D")) {
             auto pos = voxie::helper::GetComponent<voxie::Position2D>(entity);
@@ -193,7 +222,12 @@ namespace gui {
             const auto proj = camera->GetProjectionMatrix();
 
             if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
+                auto& engine = voxie::Engine::GetEngine();
                 pos->SetModel(mModel);
+                if (voxie::helper::HasComponent<voxie::Body>(entity)) {
+                    auto body = voxie::helper::GetComponent<voxie::Body>(entity);
+                    body->SetPosition(*pos);
+                }
             }
         }
     }
@@ -436,6 +470,10 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::Position>(entity)) {
             ShowEntityPositionController(entity);
+        }
+
+        if (voxie::helper::HasComponent<voxie::Body>(entity)) {
+            ShowEntityBodyController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::Position2D>(entity)) {

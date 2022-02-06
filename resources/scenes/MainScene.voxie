@@ -1,13 +1,13 @@
 - node:
     type: Camera
-    id: 4054188769704435938
+    id: 4332166420956594899
     activeCamera: true
     name: Editor Camera
     position:
       position:
-        x: -8.52594185
-        y: 3.64259052
-        z: -12.4106398
+        x: -10.5826836
+        y: 5.43879414
+        z: -8.04875374
       rotation:
         x: 0
         y: 0
@@ -17,21 +17,22 @@
         y: 1
         z: 1
     direction:
-      yaw: 41.5
-      pitch: -11.3999987
-- parent: 4054188769704435938
+      yaw: 33.0999832
+      pitch: -10.4000158
+- parent: 4332166420956594899
   node:
-    type: CubeEntity
-    id: 2823444831312357228
-    name: Cube
+    type: LightSource
+    id: 4408232323620398058
+    lightType: 0
+    name: Ambient light
     position:
       position:
-        x: 0
-        y: 0
-        z: 0
+        x: -7.21358299
+        y: 10.3188114
+        z: -0.119930625
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
         x: 52.0593681
@@ -74,16 +75,11 @@
       r: 0.5
       g: 0.5
       b: 0.5
-    attenuation:
-      constant: 1
-      linear: 1
-      quadratic: 1
-- parent: 4054188769704435938
+- parent: 4332166420956594899
   node:
-    type: LightSource
-    id: 4185854633302021234
-    lightType: 0
-    name: Ambient light
+    type: CubeEntity
+    id: 2940827699049369871
+    name: Floor
     position:
       position:
         x: 0
@@ -94,10 +90,132 @@
         y: -0
         z: 0
       scale:
+        x: 18.6176987
+        y: 0.00100000005
+        z: 17.6296635
+    material:
+      ambient:
+        x: 0.55392158
+        y: 0.960174263
+        z: 1
+      diffuse:
+        x: 0.490196049
+        y: 0.953659236
+        z: 1
+      specular:
+        x: 0
+        y: 0
+        z: 0
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 0
+- parent: 4332166420956594899
+  node:
+    type: CubeEntity
+    id: 4312600264552971144
+    name: Cube
+    position:
+      position:
+        x: -0.0341884494
+        y: 3.52965331
+        z: 0.0517489314
+      rotation:
+        x: 0.0272309072
+        y: -0.0523347966
+        z: 0.247609183
+      scale:
+        x: 0.999999881
+        y: 0.999999762
+        z: 0.999999762
+    material:
+      ambient:
+        x: 0.763694465
+        y: 0.297361523
+        z: 0.808823526
+      diffuse:
+        x: 0.331559569
+        y: 0.0580065437
+        z: 0.34803921
+      specular:
+        x: 0
+        y: 0
+        z: 0
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+- parent: 4332166420956594899
+  node:
+    type: CubeEntity
+    id: 2708227842813315695
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 8.51637554
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
         x: 1
         y: 1
         z: 1
-    color:
-      r: 0.5
-      g: 0.5
-      b: 0.5
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+- parent: 4332166420956594899
+  node:
+    type: CubeEntity
+    id: 2795592886228797057
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 6.27458572
+        z: 0
+      rotation:
+        x: 0.718175411
+        y: -0.809129179
+        z: 2.57769775
+      scale:
+        x: 0.999999225
+        y: 0.999999285
+        z: 0.999999344
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2

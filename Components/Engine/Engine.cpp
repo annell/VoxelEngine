@@ -40,6 +40,7 @@ namespace voxie {
         ecsManager.RegisterComponent<Shader>();
         ecsManager.RegisterComponent<VertexBufferArray>();
         ecsManager.RegisterComponent<Body>();
+        ecsManager.RegisterComponent<VertexBufferArray>();
     }
 
     bool Engine::Init() {

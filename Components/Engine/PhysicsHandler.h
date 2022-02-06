@@ -10,6 +10,7 @@
 
 namespace reactphysics3d {
     class PhysicsWorld;
+    class PhysicsCommon;
 }
 
 namespace voxie {
@@ -23,5 +24,7 @@ public:
 private:
     reactphysics3d::PhysicsWorld* world;
 };
+
+reactphysics3d::PhysicsCommon& getPhysicsCommon();
 
 }

@@ -32,12 +32,15 @@ namespace voxie {
         node["name"] = name->name;
         node["position"] = *helper::GetComponent<Position>(handle).get();
         node["material"] = *helper::GetComponent<Material>(handle).get();
+        node["rigidBody"] = *helper::GetComponent<Body>(handle).get();
     }
 
     bool CubeEntity::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         GetMaterial()->decode(node["material"]);
         RefreshMaterial();
+        GetBody()->SetPosition(*GetPosition());
+        GetBody()->decode(node["rigidBody"]);
         return true;
     }
 
