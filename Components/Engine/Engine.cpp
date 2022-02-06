@@ -8,6 +8,7 @@
 #include "Text.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <RigidBody.h>
 
 namespace voxie {
     const unsigned int SCR_WIDTH = 1024;
@@ -38,6 +39,7 @@ namespace voxie {
         ecsManager.RegisterComponent<VisibleText>();
         ecsManager.RegisterComponent<Shader>();
         ecsManager.RegisterComponent<VertexBufferArray>();
+        ecsManager.RegisterComponent<Body>();
     }
 
     bool Engine::Init() {
@@ -105,8 +107,18 @@ namespace voxie {
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
 
+            if (gameMode->IsStarted()) {
+                physicsHandler.Update(GetDeltaTime());
+            }
+
             std::vector<std::shared_ptr<voxie::Text>> texts;
             for (const auto &entity : GetScene().GetNodesForRendering()) {
+                if (helper::HasComponent<Body>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
+                    auto body = helper::GetComponent<Body>(entity->GetHandle());
+                    auto pos = helper::GetComponent<Position>(entity->GetHandle());
+                    body->UpdatePosition(*pos);
+                }
+
                 if (auto model = std::dynamic_pointer_cast<voxie::Chunk>(entity)) {
                     voxie::helper::Submit(model->GetRenderingConfig());
                 } else if (auto model = std::dynamic_pointer_cast<voxie::Sprite>(entity)) {
@@ -194,6 +206,9 @@ namespace voxie {
 
     GameMode *Engine::GetGameMode() {
         return gameMode.get();
+    }
+    PhysicsHandler &Engine::GetPhysicsHandler() {
+        return physicsHandler;
     }
 
     namespace helper {

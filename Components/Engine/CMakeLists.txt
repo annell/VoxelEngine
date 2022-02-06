@@ -80,6 +80,14 @@ ExternalProject_Add(glm
         LOG_INSTALL ON
         )
 
+ExternalProject_Add(ReactPhysics3D
+        GIT_REPOSITORY git@github.com:DanielChappuis/reactphysics3d.git
+        GIT_TAG v0.9.0
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        LOG_DOWNLOAD ON
+        LOG_INSTALL ON
+        )
+
 add_library(${PROJECT_NAME} STATIC
         ${CPP_FILES}
         )
@@ -88,6 +96,7 @@ add_dependencies(${PROJECT_NAME}
         yaml-cpp
         glfw3
         glm
+        ReactPhysics3D
         )
 
 target_include_directories(${PROJECT_NAME}
@@ -108,6 +117,7 @@ endif()
 target_link_libraries(${PROJECT_NAME}
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libyaml-cpp.a
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
+        PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libreactphysics3d.a
         PRIVATE ${GLEW_DYN_LIB}
         PRIVATE ${FREETYPE_LIBRARIES}
         PRIVATE ${OSX_GLFW_DEP}

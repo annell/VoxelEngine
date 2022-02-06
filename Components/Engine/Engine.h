@@ -5,6 +5,7 @@
 #include "RenderingHandler.h"
 #include "Scene.h"
 #include "TextHandler.h"
+#include "PhysicsHandler.h"
 
 class GLFWwindow;
 
@@ -32,6 +33,7 @@ namespace voxie {
         Scene &GetScene();
         Logging &GetLogger();
         ECSManager &GetECSManager();
+        PhysicsHandler &GetPhysicsHandler();
         GameMode *GetGameMode();
 
         OnTick onTick;
@@ -54,6 +56,7 @@ namespace voxie {
         Logging logging;
         std::unique_ptr<TextHandler> textHandler;
         ECSManager ecsManager;
+        PhysicsHandler physicsHandler;
     };
 
     namespace helper {

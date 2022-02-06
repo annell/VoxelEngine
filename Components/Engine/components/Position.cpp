@@ -91,13 +91,13 @@ namespace voxie {
         }
     }
 
-    void Position::SetModel(const glm::mat4 &model) {
-        this->model = model;
-        glm::vec3 skew;
-        glm::vec4 perspective;
-        glm::decompose(model, scale, rotationQuat, pos, skew, perspective);
-        rotation = glm::eulerAngles(rotationQuat);
-        onUpdate.Broadcast();
+
+    glm::mat4 Position::GetModel(const glm::vec3 &pos, const glm::vec3 &scale, const glm::vec3 &rotation) {
+        auto model = glm::mat4(1.0f);
+        model = glm::translate(glm::mat4(1.0f), pos);
+        model = glm::scale(model, scale);
+        model *= glm::toMat4(glm::quat((rotation)));
+        return model;
     }
 
     glm::mat4 Position::GetModel(const glm::vec3 &pos, const glm::vec3 &scale, const glm::vec3 &rotation) {

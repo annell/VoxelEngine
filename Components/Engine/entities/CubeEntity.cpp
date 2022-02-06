@@ -5,6 +5,7 @@
 #include "CubeEntity.h"
 #include "Core.h"
 #include "Material.h"
+#include "RigidBody.h"
 #include <GL/glew.h>
 
 namespace voxie {
@@ -13,6 +14,7 @@ namespace voxie {
         : NodeWrapper(handle) {
 
         COMPONENT_REGISTER(Material, material);
+        COMPONENT_REGISTER(Body, std::make_shared<Body>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);

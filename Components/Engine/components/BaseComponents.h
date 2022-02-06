@@ -13,6 +13,7 @@
 #include "Position2D.h"
 #include "Skybox.h"
 #include "VisibleText.h"
+#include "RigidBody.h"
 
 namespace YAML {
     template<typename T>
