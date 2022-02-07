@@ -17,7 +17,7 @@ namespace voxie {
     class Position;
     class Cube;
     class Material;
-    class Body;
+    class RigidBody;
 
     class CubeEntity : public NodeWrapper {
 
@@ -28,7 +28,7 @@ namespace voxie {
         COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(Material);
         COMPONENT_ADD_FUNCTION(Position);
-        COMPONENT_ADD_FUNCTION(Body);
+        COMPONENT_ADD_FUNCTION(RigidBody);
 
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);

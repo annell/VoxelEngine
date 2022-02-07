@@ -109,8 +109,8 @@ namespace gui {
     }
 
     void ShowEntityBodyController(const voxie::Handle &entity) {
-        if (ImGui::CollapsingHeader("Body")) {
-            auto body = voxie::helper::GetComponent<voxie::Body>(entity);
+        if (ImGui::CollapsingHeader("RigidBody")) {
+            auto body = voxie::helper::GetComponent<voxie::RigidBody>(entity);
             auto bodyType = body->GetBodyType();
 
             if (ImGui::RadioButton("Kinematic", bodyType == voxie::BodyType::KINEMATIC)) {
@@ -216,6 +216,12 @@ namespace gui {
         ImGuizmo::SetRect(0, 0, voxie::Engine::GetEngine().GetWindow()->GetWidth(), voxie::Engine::GetEngine().GetWindow()->GetHeight());
 
         if (auto camera = voxie::Engine::GetEngine().GetCamera()) {
+            static std::shared_ptr<voxie::RigidBody> cachedBody;
+            if (cachedBody) {
+                cachedBody->SetGravity(true);
+                cachedBody.reset();
+            }
+
             auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
             auto mModel = pos->model;
             const auto view = camera->GetViewMatrix();
@@ -224,9 +230,11 @@ namespace gui {
             if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
                 auto& engine = voxie::Engine::GetEngine();
                 pos->SetModel(mModel);
-                if (voxie::helper::HasComponent<voxie::Body>(entity)) {
-                    auto body = voxie::helper::GetComponent<voxie::Body>(entity);
+                if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
+                    auto body = voxie::helper::GetComponent<voxie::RigidBody>(entity);
+                    body->SetGravity(false);
                     body->SetPosition(*pos);
+                    cachedBody = body;
                 }
             }
         }
@@ -472,7 +480,7 @@ namespace gui {
             ShowEntityPositionController(entity);
         }
 
-        if (voxie::helper::HasComponent<voxie::Body>(entity)) {
+        if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
             ShowEntityBodyController(entity);
         }
 

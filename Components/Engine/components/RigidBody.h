@@ -18,9 +18,9 @@ namespace voxie {
     };
 
 struct Position;
-struct Body {
-    Body(const Position&);
-    ~Body();
+struct RigidBody {
+    RigidBody(const Position&);
+    ~RigidBody();
 
     void encode(YAML::Node &node) const;
     bool decode(const YAML::Node &node);

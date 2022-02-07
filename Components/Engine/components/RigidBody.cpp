@@ -59,63 +59,63 @@ namespace internal {
     }
 }
 
-Body::Body(const Position& pos)
+RigidBody::RigidBody(const Position& pos)
     : rigidBody(internal::createRigidBody(pos))
     , collider(nullptr) {
     collider = internal::createCollider(rigidBody, pos);
 }
 
-Body::~Body() {
+RigidBody::~RigidBody() {
     Engine::GetEngine().GetPhysicsHandler().GetWorld()->destroyRigidBody(rigidBody);
 }
 
-void Body::encode(YAML::Node &node) const {
+void RigidBody::encode(YAML::Node &node) const {
     node["mass"] = GetMass();
     node["gravity"] = GetGravity();
     node["bodyType"] = static_cast<int>(GetBodyType());
 }
 
-bool Body::decode(const YAML::Node &node) {
+bool RigidBody::decode(const YAML::Node &node) {
     SetMass(node["mass"].as<float>());
     SetGravity(node["gravity"].as<bool>());
     SetBodyType(static_cast<voxie::BodyType>(node["bodyType"].as<int>()));
     return true;
 }
 
-void Body::SetPosition(const Position& pos) const {
+void RigidBody::SetPosition(const Position& pos) const {
     assert(rigidBody);
     rigidBody->setTransform(internal::PositionToTransform(pos));
     dynamic_cast<reactphysics3d::BoxShape*>(collider->getCollisionShape())->setHalfExtents({pos.scale.x/2, pos.scale.y/2, pos.scale.z/2});
 }
 
-void Body::UpdatePosition(Position &pos) const {
+void RigidBody::UpdatePosition(Position &pos) const {
     assert(rigidBody);
     internal::TransformToPosition(rigidBody->getTransform(), pos);
 }
 
-BodyType Body::GetBodyType() const {
+BodyType RigidBody::GetBodyType() const {
     assert(rigidBody);
     return internal::reactToVoxieBodyType(rigidBody->getType());
 }
-void Body::SetBodyType(BodyType bodyType) const {
+void RigidBody::SetBodyType(BodyType bodyType) const {
     assert(rigidBody);
     rigidBody->setType(internal::voxieToReactBodyType(bodyType));
 }
-void Body::SetMass(float mass) const {
+void RigidBody::SetMass(float mass) const {
     assert(rigidBody);
     rigidBody->setMass(mass);
 }
-float Body::GetMass() const {
+float RigidBody::GetMass() const {
     assert(rigidBody);
     return rigidBody->getMass();
 }
 
-bool Body::GetGravity() const {
+bool RigidBody::GetGravity() const {
     assert(rigidBody);
     return rigidBody->isGravityEnabled();
 }
 
-void Body::SetGravity(bool gravity) const {
+void RigidBody::SetGravity(bool gravity) const {
     assert(rigidBody);
     rigidBody->enableGravity(gravity);
 }

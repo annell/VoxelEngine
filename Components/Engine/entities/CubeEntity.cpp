@@ -14,7 +14,7 @@ namespace voxie {
         : NodeWrapper(handle) {
 
         COMPONENT_REGISTER(Material, material);
-        COMPONENT_REGISTER(Body, std::make_shared<Body>(*position.get()));
+        COMPONENT_REGISTER(RigidBody, std::make_shared<RigidBody>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
@@ -32,15 +32,15 @@ namespace voxie {
         node["name"] = name->name;
         node["position"] = *helper::GetComponent<Position>(handle).get();
         node["material"] = *helper::GetComponent<Material>(handle).get();
-        node["rigidBody"] = *helper::GetComponent<Body>(handle).get();
+        node["rigidBody"] = *helper::GetComponent<RigidBody>(handle).get();
     }
 
     bool CubeEntity::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         GetMaterial()->decode(node["material"]);
         RefreshMaterial();
-        GetBody()->SetPosition(*GetPosition());
-        GetBody()->decode(node["rigidBody"]);
+        GetRigidBody()->SetPosition(*GetPosition());
+        GetRigidBody()->decode(node["rigidBody"]);
         return true;
     }
 

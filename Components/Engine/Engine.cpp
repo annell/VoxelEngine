@@ -38,8 +38,7 @@ namespace voxie {
         ecsManager.RegisterComponent<Cube>();
         ecsManager.RegisterComponent<VisibleText>();
         ecsManager.RegisterComponent<Shader>();
-        ecsManager.RegisterComponent<VertexBufferArray>();
-        ecsManager.RegisterComponent<Body>();
+        ecsManager.RegisterComponent<RigidBody>();
         ecsManager.RegisterComponent<VertexBufferArray>();
     }
 
@@ -114,8 +113,8 @@ namespace voxie {
 
             std::vector<std::shared_ptr<voxie::Text>> texts;
             for (const auto &entity : GetScene().GetNodesForRendering()) {
-                if (helper::HasComponent<Body>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
-                    auto body = helper::GetComponent<Body>(entity->GetHandle());
+                if (helper::HasComponent<RigidBody>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
+                    auto body = helper::GetComponent<RigidBody>(entity->GetHandle());
                     auto pos = helper::GetComponent<Position>(entity->GetHandle());
                     body->UpdatePosition(*pos);
                 }
