@@ -30,6 +30,8 @@ namespace voxie {
         static void MovementLock();
         static void MovementUnlock();
 
+        static void CastRay();
+
         static void processInput();
         static void RegisterAction(const MouseAction &);
     };

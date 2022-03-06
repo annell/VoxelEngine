@@ -100,5 +100,8 @@ namespace voxie {
     const Handle &Camera::GetSelection() const {
         return selectedEntity;
     }
+    void Camera::GetRay(float mouseX, float mouseY) {
+
+    }
 
 }// namespace voxie

@@ -44,6 +44,7 @@ namespace voxie {
         glm::mat4 GetProjectionMatrix() const;
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
+        void GetRay(float mouseX, float mouseY);
         void SetShaderParameters(const Shader &shader) const;
         void SetSelection(const Handle &selection);
         const Handle &GetSelection() const;

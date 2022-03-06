@@ -97,6 +97,11 @@ namespace voxie {
                                              voxie::MouseButton::BUTTON_2, voxie::ActionType::RELEASE});
 
         voxie::MouseHandler::RegisterAction({[]() {
+                                                 voxie::MouseHandler::CastRay();
+                                             },
+                                             voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
+
+        voxie::MouseHandler::RegisterAction({[]() {
                                                  if (voxie::KeyboardHandler::IsKeyState(Key::KEY_LEFT_SHIFT, voxie::ActionType::PRESS)) {
                                                      voxie::MouseHandler::MovementLock();
                                                  } else {

@@ -60,6 +60,7 @@ ExternalProject_Add(yaml-cpp
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION} -DYAML_CPP_BUILD_TESTS=OFF
         LOG_DOWNLOAD ON
         LOG_INSTALL ON
+        UPDATE_COMMAND ""
         )
 
 ExternalProject_Add(glfw3
@@ -68,6 +69,7 @@ ExternalProject_Add(glfw3
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
         LOG_DOWNLOAD ON
         LOG_INSTALL ON
+        UPDATE_COMMAND ""
         )
 
 ExternalProject_Add(glm
@@ -78,6 +80,7 @@ ExternalProject_Add(glm
         INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/glm ${EXTERNAL_INSTALL_LOCATION}/include/glm
         LOG_DOWNLOAD ON
         LOG_INSTALL ON
+        UPDATE_COMMAND ""
         )
 
 ExternalProject_Add(ReactPhysics3D
@@ -86,6 +89,7 @@ ExternalProject_Add(ReactPhysics3D
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
         LOG_DOWNLOAD ON
         LOG_INSTALL ON
+        UPDATE_COMMAND ""
         )
 
 add_library(${PROJECT_NAME} STATIC

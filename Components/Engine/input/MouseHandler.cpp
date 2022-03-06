@@ -16,6 +16,7 @@ namespace voxie {
         bool firstMouse = true;
         bool mouseLock = false;
         bool movementLock = false;
+        bool castRay = false;
 
         MouseHandler::RegistredKeys &GetRegisteredMouseKeys() {
             static MouseHandler::RegistredKeys registeredKeys;
@@ -60,6 +61,23 @@ namespace voxie {
                 Engine::GetEngine().GetCamera()->ProcessMouseMovement(static_cast<float>(xoffset), static_cast<float>(yoffset));
             }
         }
+        if (internal::castRay) {
+            std::cout << "Helloooooooo???" << std::endl;
+            internal::castRay = false;
+            Ray ray = {
+               Engine::GetEngine().GetCamera()->GetPosition()->pos,
+               {0, 0, 0}
+            };
+            Engine::GetEngine().GetPhysicsHandler().RayCast(
+                ray,
+                [] (const RaycastInfo& info) {
+                  ImGui::LogText("hello");
+                  std::cout << info.worldPoint.x << " " << info.worldPoint.y << " " << info.worldPoint.z << std::endl;
+                  std::cout << info.worldNormal.x << " " << info.worldNormal.y << " " << info.worldNormal.z << std::endl;
+                }
+            );
+
+        }
     }
 
     void MouseHandler::scroll_callback(GLFWwindow *, double, double) {
@@ -76,6 +94,10 @@ namespace voxie {
             internal::firstMouse = true;
         }
         internal::mouseLock = true;
+    }
+
+    void MouseHandler::CastRay() {
+        internal::castRay = true;
     }
 
     void MouseHandler::MovementUnlock() {
