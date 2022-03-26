@@ -3,6 +3,7 @@
 #include "Panel.h"
 #include "Core.h"
 #include "CubeEntity.h"
+#include "EditorGameMode.h"
 #include <GLFW/glfw3.h>
 #include <GameMode.h>
 namespace internal {
@@ -228,7 +229,7 @@ namespace gui {
             const auto proj = camera->GetProjectionMatrix();
 
             if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
-                auto& engine = voxie::Engine::GetEngine();
+                auto &engine = voxie::Engine::GetEngine();
                 pos->SetModel(mModel);
                 if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
                     auto body = voxie::helper::GetComponent<voxie::RigidBody>(entity);
@@ -389,7 +390,8 @@ namespace gui {
         }
         bool open = ImGui::TreeNodeEx(name->name.c_str(), flags);
         if (ImGui::IsItemClicked()) {
-            selected = rootNode;
+            auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
+            editorGameMode->SetSelection(rootNode);
         }
         if (ImGui::BeginDragDropSource()) {
             ImGui::SetDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE, NULL, 0);
@@ -446,8 +448,8 @@ namespace gui {
     auto ShowEntityList() {
         ImGui::Separator();
         std::vector<const char *> items;
-        auto entities = voxie::Engine::GetEngine().GetScene().GetEntities();
-        static auto selected = entities.front();
+        auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
+        auto selected = editorGameMode->GetSelection();
 
         ShowTreeView(selected);
 

@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include "EntityComponentSystem.h"
 #include "GameMode.h"
+
 namespace voxie {
 
 
@@ -15,7 +17,13 @@ namespace voxie {
         void Initialize() override;
         void OnTick(float deltaTime) override;
 
+        void Start() override;
+
+        Handle GetSelection() const;
+        void SetSelection(const Handle &);
+
     private:
+        Handle selection = NullEntity;
     };
 
 }// namespace voxie

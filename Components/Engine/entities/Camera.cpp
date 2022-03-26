@@ -100,8 +100,25 @@ namespace voxie {
     const Handle &Camera::GetSelection() const {
         return selectedEntity;
     }
-    void Camera::GetRay(float mouseX, float mouseY) {
+    Ray Camera::GetRay(float mouseX, float mouseY) {
+        auto window = Engine::GetEngine().GetWindow();
+        float halfScreenWidth = (float) (window->GetWidth()) / 2;
+        float halfScreenHeight = (float) (window->GetHeight()) / 2;
+        auto invMat = glm::inverse(GetProjectionMatrix() * GetViewMatrix());
 
+        glm::vec4 near = glm::vec4((mouseX - halfScreenWidth) / halfScreenWidth, -1 * (mouseY - halfScreenHeight) / halfScreenHeight, -1, 1.0);
+        glm::vec4 far = glm::vec4((mouseX - halfScreenWidth) / halfScreenWidth, -1 * (mouseY - halfScreenHeight) / halfScreenHeight, 1, 1.0);
+        glm::vec4 nearResult = invMat * near;
+        glm::vec4 farResult = invMat * far;
+        nearResult /= nearResult.w;
+        farResult /= farResult.w;
+        glm::vec3 dir = glm::vec3(farResult - nearResult);
+        auto endPos = glm::normalize(dir);
+
+        Ray ray = {
+                GetPosition()->pos,
+                glm::vec3(farResult)};
+        return ray;
     }
 
 }// namespace voxie

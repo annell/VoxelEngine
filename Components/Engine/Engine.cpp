@@ -107,9 +107,8 @@ namespace voxie {
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
 
-            if (gameMode->IsStarted()) {
-                physicsHandler.Update(GetDeltaTime());
-            }
+            // Needs to run physics all the time to make Raycasting work in editor mode.
+            physicsHandler.Update(GetDeltaTime());
 
             std::vector<std::shared_ptr<voxie::Text>> texts;
             for (const auto &entity : GetScene().GetNodesForRendering()) {

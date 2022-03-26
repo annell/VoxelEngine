@@ -8,7 +8,7 @@
 namespace reactphysics3d {
     class RigidBody;
     class Collider;
-}
+}// namespace reactphysics3d
 
 namespace voxie {
     enum class BodyType {
@@ -17,27 +17,33 @@ namespace voxie {
         DYNAMIC
     };
 
-struct Position;
-struct RigidBody {
-    RigidBody(const Position&);
-    ~RigidBody();
+    struct Position;
+    struct RigidBody {
+        RigidBody(const Position &);
+        ~RigidBody();
 
-    void encode(YAML::Node &node) const;
-    bool decode(const YAML::Node &node);
+        void BeginPlay() const;
 
-    void SetPosition(const Position&) const;
-    void UpdatePosition(Position&) const;
+        void encode(YAML::Node &node) const;
+        bool decode(const YAML::Node &node);
 
-    BodyType GetBodyType() const;
-    void SetBodyType(BodyType) const;
+        void SetPosition(const Position &) const;
+        void UpdatePosition(Position &) const;
 
-    float GetMass() const;
-    void SetMass(float) const;
+        BodyType GetBodyType() const;
+        void SetBodyType(BodyType);
 
-    bool GetGravity() const;
-    void SetGravity(bool) const;
+        float GetMass() const;
+        void SetMass(float) const;
 
-    reactphysics3d::RigidBody* rigidBody;
-    reactphysics3d::Collider* collider;
-};
-}
+        bool GetGravity() const;
+        void SetGravity(bool) const;
+
+        uint32_t GetColliderId() const;
+
+        reactphysics3d::RigidBody *rigidBody;
+        reactphysics3d::Collider *collider;
+
+        BodyType bodyType;
+    };
+}// namespace voxie

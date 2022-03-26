@@ -117,4 +117,25 @@ namespace voxie {
         gui::ShowSceneOverview();
     }
 
+    void EditorGameMode::Start() {
+        GameMode::Start();
+
+        auto &engine = voxie::Engine::GetEngine();
+        auto &scene = engine.GetScene();
+
+        for (const auto &entity : scene.GetEntities()) {
+            if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
+                rigidBody->BeginPlay();
+            }
+        }
+    }
+
+    Handle EditorGameMode::GetSelection() const {
+        return selection;
+    }
+
+    void EditorGameMode::SetSelection(const Handle &selectionIn) {
+        selection = selectionIn;
+    }
+
 }// namespace voxie

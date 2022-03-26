@@ -4,6 +4,7 @@
 
 #include "MouseHandler.h"
 #include "Core.h"
+#include "EditorGameMode.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,6 +12,8 @@
 namespace voxie {
     namespace internal {
 
+        double x = 0;
+        double y = 0;
         double lastX = 0;
         double lastY = 0;
         bool firstMouse = true;
@@ -33,6 +36,8 @@ namespace voxie {
     }
 
     void MouseHandler::mouse_callback(GLFWwindow *, double xpos, double ypos) {
+        internal::x = xpos;
+        internal::y = ypos;
         if (internal::mouseLock) {
             if (internal::firstMouse) {
                 internal::lastX = xpos;
@@ -62,21 +67,7 @@ namespace voxie {
             }
         }
         if (internal::castRay) {
-            std::cout << "Helloooooooo???" << std::endl;
             internal::castRay = false;
-            Ray ray = {
-               Engine::GetEngine().GetCamera()->GetPosition()->pos,
-               {0, 0, 0}
-            };
-            Engine::GetEngine().GetPhysicsHandler().RayCast(
-                ray,
-                [] (const RaycastInfo& info) {
-                  ImGui::LogText("hello");
-                  std::cout << info.worldPoint.x << " " << info.worldPoint.y << " " << info.worldPoint.z << std::endl;
-                  std::cout << info.worldNormal.x << " " << info.worldNormal.y << " " << info.worldNormal.z << std::endl;
-                }
-            );
-
         }
     }
 
@@ -98,6 +89,24 @@ namespace voxie {
 
     void MouseHandler::CastRay() {
         internal::castRay = true;
+        Engine::GetEngine().GetPhysicsHandler().RayCast(
+                Engine::GetEngine().GetCamera()->GetRay(internal::x, internal::y),
+                [](const RaycastInfo &info) {
+                    std::cout << "Response from Raycast:" << std::endl;
+                    std::cout << "id: " << info.collisionId << std::endl;
+                    std::cout << "Collsion Pos: " << info.worldPoint.x << " " << info.worldPoint.y << " " << info.worldPoint.z << std::endl;
+                    std::cout << "Collision normal: " << info.worldNormal.x << " " << info.worldNormal.y << " " << info.worldNormal.z << std::endl;
+                    for (const auto &entity : Engine::GetEngine().GetScene().GetEntities()) {
+                        if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
+                            if (rigidBody->GetColliderId() == info.collisionId) {
+                                std::cout << "Found body, selecting: " << entity.GetId() << std::endl;
+                                auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
+                                editorGameMode->SetSelection(entity);
+                                return;
+                            }
+                        }
+                    }
+                });
     }
 
     void MouseHandler::MovementUnlock() {
