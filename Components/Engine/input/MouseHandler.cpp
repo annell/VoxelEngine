@@ -84,13 +84,17 @@ namespace voxie {
     }
 
     void MouseHandler::CastRay() {
-        Engine::GetEngine().GetPhysicsHandler().RayCast(
-                Engine::GetEngine().GetCamera()->GetRay(internal::x, internal::y),
-                [](const RaycastInfo &info) {
-                    auto handle = Engine::GetEngine().GetPhysicsHandler().GetHandleFromRigidBodyId(info.collisionId);
-                    auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
-                    editorGameMode->SetSelection(handle);
-                });
+        auto &engine = Engine::GetEngine();
+        auto &physicsHandler = engine.GetPhysicsHandler();
+        auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(engine.GetGameMode());
+        if (!editorGameMode->IsStarted()) {
+            physicsHandler.RayCast(
+                    Engine::GetEngine().GetCamera()->GetRay(internal::x, internal::y),
+                    [physicsHandler, editorGameMode](const RaycastInfo &info) {
+                        auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
+                        editorGameMode->SetSelection(handle);
+                    });
+        }
     }
 
     void MouseHandler::MovementUnlock() {

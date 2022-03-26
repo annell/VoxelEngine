@@ -119,6 +119,7 @@ namespace voxie {
 
     void EditorGameMode::Start() {
         GameMode::Start();
+        SetSelection(NullEntity);
 
         auto &engine = voxie::Engine::GetEngine();
         auto &scene = engine.GetScene();

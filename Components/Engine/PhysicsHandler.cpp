@@ -17,7 +17,10 @@ namespace voxie {
         glm::vec3 reactVectorToGlm(const reactphysics3d::Vector3 &vector) {
             return glm::vec3(vector.x, vector.y, vector.z);
         }
-
+        uint physicsLoglevel = static_cast<uint>(
+                static_cast<uint>(reactphysics3d::Logger::Level::Warning) | static_cast<uint>(reactphysics3d::Logger::Level::Error)
+                //| static_cast<uint>(reactphysics3d::Logger::Level::Information)
+        );
     }// namespace internal
 
     class voxieCallbackClass : public reactphysics3d::RaycastCallback {
@@ -46,29 +49,20 @@ namespace voxie {
 
     PhysicsHandler::PhysicsHandler()
         : world(getPhysicsCommon().createPhysicsWorld()) {
-
-        // Create the default logger
         reactphysics3d::DefaultLogger *logger = getPhysicsCommon().createDefaultLogger();
-
-        // Log level (warnings and errors)
-        uint logLevel = static_cast<uint>(
-                static_cast<uint>(reactphysics3d::Logger::Level::Warning) |
-                static_cast<uint>(reactphysics3d::Logger::Level::Error) /*|
-                static_cast<uint>(reactphysics3d::Logger::Level::Information)*/
-        );
-
-        // Output the logs into the standard output
-        logger->addStreamDestination(std::cout, logLevel, reactphysics3d::DefaultLogger::Format::Text);
-
-        // Set the logger
+        logger->addStreamDestination(std::cerr, internal::physicsLoglevel, reactphysics3d::DefaultLogger::Format::Text);
         getPhysicsCommon().setLogger(logger);
+    }
+
+    void PhysicsHandler::Initialize() {
+        Engine::GetEngine().onTick.Bind(std::bind(&PhysicsHandler::Tick, this, std::placeholders::_1));
     }
 
     reactphysics3d::PhysicsWorld *PhysicsHandler::GetWorld() {
         return world;
     }
 
-    void PhysicsHandler::Update(float timeStep) {
+    void PhysicsHandler::Tick(float timeStep) {
         static const float timeStepFraction = 1.0f / 60.0f;
         static float accumulator = 0.0f;
         accumulator += timeStep;
@@ -84,6 +78,7 @@ namespace voxie {
         voxieCallbackClass voxieCallback(callback);
         world->raycast(reactRay, &voxieCallback);
     }
+
     Handle PhysicsHandler::GetHandleFromRigidBodyId(uint32_t id) const {
         for (const auto &entity : Engine::GetEngine().GetScene().GetEntities()) {
             if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {

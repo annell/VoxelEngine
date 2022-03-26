@@ -2,10 +2,10 @@
 
 #include "Delegate.h"
 #include "Logging.h"
+#include "PhysicsHandler.h"
 #include "RenderingHandler.h"
 #include "Scene.h"
 #include "TextHandler.h"
-#include "PhysicsHandler.h"
 
 class GLFWwindow;
 
@@ -13,6 +13,7 @@ namespace voxie {
     class Camera;
     class Window;
     class GameMode;
+    class Text;
 
     using OnTick = Delegate<float>;
     class Engine {
@@ -30,7 +31,7 @@ namespace voxie {
         void StartLoop();
         float GetDeltaTime() const;
         RenderingHandler &GetRenderingHandler();
-        Scene &GetScene();
+        Scene &GetScene() const;
         Logging &GetLogger();
         ECSManager &GetECSManager();
         PhysicsHandler &GetPhysicsHandler();
@@ -44,6 +45,8 @@ namespace voxie {
         bool InitWindow();
         void UpdateTime();
         void NewFrame() const;
+        void SubmitNodesForRendering(const Scene::SceneNodes &) const;
+        void SubmitTextForRendering(const std::vector<std::shared_ptr<voxie::Text>> &) const;
         void RenderFrame() const;
 
         float deltaTime = 0.0f;

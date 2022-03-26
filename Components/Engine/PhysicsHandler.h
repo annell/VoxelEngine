@@ -37,13 +37,15 @@ namespace voxie {
     public:
         using raycastCallback = std::function<void(const RaycastInfo &)>;
         PhysicsHandler();
-        void Update(float timeStep);
-        reactphysics3d::PhysicsWorld *GetWorld();
-        void RayCast(const Ray &, raycastCallback);
 
+        void Initialize();
+        reactphysics3d::PhysicsWorld *GetWorld();
+
+        void RayCast(const Ray &, raycastCallback);
         Handle GetHandleFromRigidBodyId(uint32_t id) const;
 
     private:
+        void Tick(float timeStep);
         reactphysics3d::PhysicsWorld *world;
     };
 

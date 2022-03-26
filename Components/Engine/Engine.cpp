@@ -48,6 +48,7 @@ namespace voxie {
             return false;
         }
         InitGUI();
+        GetPhysicsHandler().Initialize();
         return true;
     }
 
@@ -106,39 +107,44 @@ namespace voxie {
             MouseHandler::processInput();
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
+            SubmitNodesForRendering(GetScene().GetNodesForRendering());
 
-            // Needs to run physics all the time to make Raycasting work in editor mode.
-            physicsHandler.Update(GetDeltaTime());
-
-            std::vector<std::shared_ptr<voxie::Text>> texts;
-            for (const auto &entity : GetScene().GetNodesForRendering()) {
-                if (helper::HasComponent<RigidBody>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
-                    auto body = helper::GetComponent<RigidBody>(entity->GetHandle());
-                    auto pos = helper::GetComponent<Position>(entity->GetHandle());
-                    body->UpdatePosition(*pos);
-                }
-
-                if (auto model = std::dynamic_pointer_cast<voxie::Chunk>(entity)) {
-                    voxie::helper::Submit(model->GetRenderingConfig());
-                } else if (auto model = std::dynamic_pointer_cast<voxie::Sprite>(entity)) {
-                    voxie::helper::Submit(model->GetRenderingConfig());
-                } else if (auto model = std::dynamic_pointer_cast<voxie::CubeEntity>(entity)) {
-                    voxie::helper::Submit(model->GetRenderingConfig());
-                } else if (auto model = std::dynamic_pointer_cast<voxie::Text>(entity)) {
-                    texts.push_back(model);
-                }
-            }
-
-            auto skybox = GetScene().GetSkybox();
-            voxie::helper::Submit(skybox->GetRenderingConfig());
-
-            voxie::helper::RenderingEnd();
-
-            for (auto model : texts) {
-                auto pos = model->GetPosition2D();
-                textHandler->RenderText(model->GetVisibleText()->text, pos->pos.x, pos->pos.y, 1, model->GetColor()->color);
-            }
             RenderFrame();
+        }
+    }
+
+    void Engine::SubmitNodesForRendering(const Scene::SceneNodes &nodes) const {
+        std::vector<std::shared_ptr<voxie::Text>> texts;
+        for (const auto &entity : nodes) {
+            if (helper::HasComponent<RigidBody>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
+                auto body = helper::GetComponent<RigidBody>(entity->GetHandle());
+                auto pos = helper::GetComponent<Position>(entity->GetHandle());
+                body->UpdatePosition(*pos);
+            }
+
+            if (auto model = std::dynamic_pointer_cast<voxie::Chunk>(entity)) {
+                voxie::helper::Submit(model->GetRenderingConfig());
+            } else if (auto model = std::dynamic_pointer_cast<voxie::Sprite>(entity)) {
+                voxie::helper::Submit(model->GetRenderingConfig());
+            } else if (auto model = std::dynamic_pointer_cast<voxie::CubeEntity>(entity)) {
+                voxie::helper::Submit(model->GetRenderingConfig());
+            } else if (auto model = std::dynamic_pointer_cast<voxie::Text>(entity)) {
+                texts.push_back(model);
+            }
+        }
+
+        auto skybox = GetScene().GetSkybox();
+        voxie::helper::Submit(skybox->GetRenderingConfig());
+
+        voxie::helper::RenderingEnd();
+
+        SubmitTextForRendering(texts);
+    }
+
+    void Engine::SubmitTextForRendering(const std::vector<std::shared_ptr<voxie::Text>> &texts) const {
+        for (auto model : texts) {
+            auto pos = model->GetPosition2D();
+            textHandler->RenderText(model->GetVisibleText()->text, pos->pos.x, pos->pos.y, 1, model->GetColor()->color);
         }
     }
 
@@ -182,7 +188,7 @@ namespace voxie {
         return logging;
     }
 
-    Scene &Engine::GetScene() {
+    Scene &Engine::GetScene() const {
         return *scene.get();
     }
 
