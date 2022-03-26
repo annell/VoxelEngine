@@ -92,14 +92,9 @@ namespace voxie {
         Engine::GetEngine().GetPhysicsHandler().RayCast(
                 Engine::GetEngine().GetCamera()->GetRay(internal::x, internal::y),
                 [](const RaycastInfo &info) {
-                    std::cout << "Response from Raycast:" << std::endl;
-                    std::cout << "id: " << info.collisionId << std::endl;
-                    std::cout << "Collsion Pos: " << info.worldPoint.x << " " << info.worldPoint.y << " " << info.worldPoint.z << std::endl;
-                    std::cout << "Collision normal: " << info.worldNormal.x << " " << info.worldNormal.y << " " << info.worldNormal.z << std::endl;
                     for (const auto &entity : Engine::GetEngine().GetScene().GetEntities()) {
                         if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
                             if (rigidBody->GetColliderId() == info.collisionId) {
-                                std::cout << "Found body, selecting: " << entity.GetId() << std::endl;
                                 auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
                                 editorGameMode->SetSelection(entity);
                                 return;

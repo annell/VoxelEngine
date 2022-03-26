@@ -53,8 +53,9 @@ namespace voxie {
         // Log level (warnings and errors)
         uint logLevel = static_cast<uint>(
                 static_cast<uint>(reactphysics3d::Logger::Level::Warning) |
-                static_cast<uint>(reactphysics3d::Logger::Level::Error) |
-                static_cast<uint>(reactphysics3d::Logger::Level::Information));
+                static_cast<uint>(reactphysics3d::Logger::Level::Error) /*|
+                static_cast<uint>(reactphysics3d::Logger::Level::Information)*/
+        );
 
         // Output the logs into the standard output
         logger->addStreamDestination(std::cout, logLevel, reactphysics3d::DefaultLogger::Format::Text);

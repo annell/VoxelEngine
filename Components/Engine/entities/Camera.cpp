@@ -112,12 +112,9 @@ namespace voxie {
         glm::vec4 farResult = invMat * far;
         nearResult /= nearResult.w;
         farResult /= farResult.w;
-        glm::vec3 dir = glm::vec3(farResult - nearResult);
-        auto endPos = glm::normalize(dir);
-
         Ray ray = {
-                GetPosition()->pos,
-                glm::vec3(farResult)};
+                nearResult,
+                farResult};
         return ray;
     }
 
