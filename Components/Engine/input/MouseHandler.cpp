@@ -19,7 +19,6 @@ namespace voxie {
         bool firstMouse = true;
         bool mouseLock = false;
         bool movementLock = false;
-        bool castRay = false;
 
         MouseHandler::RegistredKeys &GetRegisteredMouseKeys() {
             static MouseHandler::RegistredKeys registeredKeys;
@@ -66,9 +65,6 @@ namespace voxie {
                 Engine::GetEngine().GetCamera()->ProcessMouseMovement(static_cast<float>(xoffset), static_cast<float>(yoffset));
             }
         }
-        if (internal::castRay) {
-            internal::castRay = false;
-        }
     }
 
     void MouseHandler::scroll_callback(GLFWwindow *, double, double) {
@@ -88,19 +84,12 @@ namespace voxie {
     }
 
     void MouseHandler::CastRay() {
-        internal::castRay = true;
         Engine::GetEngine().GetPhysicsHandler().RayCast(
                 Engine::GetEngine().GetCamera()->GetRay(internal::x, internal::y),
                 [](const RaycastInfo &info) {
-                    for (const auto &entity : Engine::GetEngine().GetScene().GetEntities()) {
-                        if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
-                            if (rigidBody->GetColliderId() == info.collisionId) {
-                                auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
-                                editorGameMode->SetSelection(entity);
-                                return;
-                            }
-                        }
-                    }
+                    auto handle = Engine::GetEngine().GetPhysicsHandler().GetHandleFromRigidBodyId(info.collisionId);
+                    auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(voxie::Engine::GetEngine().GetGameMode());
+                    editorGameMode->SetSelection(handle);
                 });
     }
 

@@ -84,5 +84,15 @@ namespace voxie {
         voxieCallbackClass voxieCallback(callback);
         world->raycast(reactRay, &voxieCallback);
     }
+    Handle PhysicsHandler::GetHandleFromRigidBodyId(uint32_t id) const {
+        for (const auto &entity : Engine::GetEngine().GetScene().GetEntities()) {
+            if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
+                if (rigidBody->GetColliderId() == id) {
+                    return entity;
+                }
+            }
+        }
+        return NullEntity;
+    }
 
 }// namespace voxie

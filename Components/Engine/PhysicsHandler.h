@@ -41,6 +41,8 @@ namespace voxie {
         reactphysics3d::PhysicsWorld *GetWorld();
         void RayCast(const Ray &, raycastCallback);
 
+        Handle GetHandleFromRigidBodyId(uint32_t id) const;
+
     private:
         reactphysics3d::PhysicsWorld *world;
     };
