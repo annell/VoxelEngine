@@ -22,6 +22,9 @@ namespace voxie {
     }
 
     void KeyboardHandler::processInput() {
+        if (ImGui::GetIO().WantCaptureKeyboard) {
+            return;
+        }
         auto &engine = Engine::GetEngine();
         for (auto &keyAction : internal::GetRegisteredKeys()) {
             if (IsKeyState(keyAction.key, ActionType::PRESS)) {

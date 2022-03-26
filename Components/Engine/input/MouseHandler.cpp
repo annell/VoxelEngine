@@ -34,7 +34,19 @@ namespace voxie {
         voxie::Engine::GetEngine().GetWindow()->SetHeight(static_cast<unsigned int>(height));
     }
 
-    void MouseHandler::mouse_callback(GLFWwindow *, double xpos, double ypos) {
+    void MouseHandler::mouse_clicked_callback(GLFWwindow *window, int button, int action, int mods) {
+        if (ImGui::GetIO().WantCaptureMouse) {
+            return;
+        }
+        auto &engine = Engine::GetEngine();
+        for (auto &key : internal::GetRegisteredMouseKeys()) {
+            if (key.type == action && key.key == button) {
+                key.action();
+            }
+        }
+    }
+
+    void MouseHandler::mouse_movement_callback(GLFWwindow *, double xpos, double ypos) {
         internal::x = xpos;
         internal::y = ypos;
         if (internal::mouseLock) {
@@ -104,15 +116,6 @@ namespace voxie {
     void MouseHandler::MovementLock() {
         if (internal::mouseLock) {
             internal::movementLock = true;
-        }
-    }
-
-    void MouseHandler::processInput() {
-        auto &engine = Engine::GetEngine();
-        for (auto &key : internal::GetRegisteredMouseKeys()) {
-            if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), key.key) == key.type) {
-                key.action();
-            }
         }
     }
 

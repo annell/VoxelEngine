@@ -71,8 +71,9 @@ namespace voxie {
         }
         glfwMakeContextCurrent(window->GetWindow());
         glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
-        glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_callback);
+        glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_movement_callback);
         glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
+        glfwSetMouseButtonCallback(window->GetWindow(), MouseHandler::mouse_clicked_callback);
         glfwSwapInterval(1);
 
         glewInit();
@@ -104,7 +105,6 @@ namespace voxie {
             NewFrame();
 
             KeyboardHandler::processInput();
-            MouseHandler::processInput();
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
             SubmitNodesForRendering(GetScene().GetNodesForRendering());

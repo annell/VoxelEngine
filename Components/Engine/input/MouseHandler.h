@@ -22,7 +22,8 @@ namespace voxie {
         using RegistredKeys = std::vector<MouseAction>;
 
         static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-        static void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+        static void mouse_movement_callback(GLFWwindow *window, double xpos, double ypos);
+        static void mouse_clicked_callback(GLFWwindow *window, int button, int action, int mods);
         static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
         static void UnlockCamera();
         static void LockCamera();
@@ -32,7 +33,6 @@ namespace voxie {
 
         static void CastRay();
 
-        static void processInput();
         static void RegisterAction(const MouseAction &);
     };
 
