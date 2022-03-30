@@ -103,9 +103,12 @@ namespace gui {
             pos->SetRotation({rotation[0], rotation[1], rotation[2]});
             pos->SetScale({scale[0], scale[1], scale[2]});
             pos->SetPosition({translation[0], translation[1], translation[2]});
-            pos->UpdateModel();
 
             ShowGuizmo(entity);
+            pos->SetModel(pos->model);
+            if (auto rigidBody = voxie::helper::GetComponent<voxie::RigidBody>(entity)) {
+                rigidBody->SetPosition(*pos);
+            }
         }
     }
 
@@ -217,26 +220,12 @@ namespace gui {
         ImGuizmo::SetRect(0, 0, voxie::Engine::GetEngine().GetWindow()->GetWidth(), voxie::Engine::GetEngine().GetWindow()->GetHeight());
 
         if (auto camera = voxie::Engine::GetEngine().GetCamera()) {
-            static std::shared_ptr<voxie::RigidBody> cachedBody;
-            if (cachedBody) {
-                cachedBody->SetGravity(true);
-                cachedBody.reset();
-            }
 
             auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
-            auto mModel = pos->model;
             const auto view = camera->GetViewMatrix();
             const auto proj = camera->GetProjectionMatrix();
 
-            if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(mModel), nullptr, nullptr, nullptr, nullptr)) {
-                auto &engine = voxie::Engine::GetEngine();
-                pos->SetModel(mModel);
-                if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
-                    auto body = voxie::helper::GetComponent<voxie::RigidBody>(entity);
-                    body->SetGravity(false);
-                    body->SetPosition(*pos);
-                    cachedBody = body;
-                }
+            if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(pos->model), nullptr, nullptr, nullptr, nullptr)) {
             }
         }
     }

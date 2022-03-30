@@ -116,7 +116,7 @@ namespace voxie {
     void Engine::SubmitNodesForRendering(const Scene::SceneNodes &nodes) const {
         std::vector<std::shared_ptr<voxie::Text>> texts;
         for (const auto &entity : nodes) {
-            if (helper::HasComponent<RigidBody>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
+            if (GetGameMode()->IsStarted() && helper::HasComponent<RigidBody>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
                 auto body = helper::GetComponent<RigidBody>(entity->GetHandle());
                 auto pos = helper::GetComponent<Position>(entity->GetHandle());
                 body->UpdatePosition(*pos);
@@ -209,7 +209,7 @@ namespace voxie {
         return ecsManager;
     }
 
-    GameMode *Engine::GetGameMode() {
+    GameMode *Engine::GetGameMode() const {
         return gameMode.get();
     }
     PhysicsHandler &Engine::GetPhysicsHandler() {

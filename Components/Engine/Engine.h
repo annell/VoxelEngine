@@ -35,7 +35,7 @@ namespace voxie {
         Logging &GetLogger();
         ECSManager &GetECSManager();
         PhysicsHandler &GetPhysicsHandler();
-        GameMode *GetGameMode();
+        GameMode *GetGameMode() const;
 
         OnTick onTick;
 

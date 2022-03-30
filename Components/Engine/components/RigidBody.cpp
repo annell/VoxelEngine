@@ -16,6 +16,12 @@ namespace voxie {
             return transform;
         }
 
+        void TransformToPosition(const reactphysics3d::Transform &transform, Position &pos) {
+            glm::mat4 model;
+            transform.getOpenGLMatrix(glm::value_ptr(model));
+            pos.SetModel(glm::scale(model, pos.scale));
+        }
+
         reactphysics3d::Collider *createCollider(reactphysics3d::RigidBody *body, const Position &pos) {
             auto *shape = getPhysicsCommon().createBoxShape({pos.scale.x / 2, pos.scale.y / 2, pos.scale.z / 2});
             return body->addCollider(shape, reactphysics3d::Transform::identity());
@@ -23,14 +29,6 @@ namespace voxie {
 
         reactphysics3d::RigidBody *createRigidBody(const Position &pos) {
             return Engine::GetEngine().GetPhysicsHandler().GetWorld()->createRigidBody(PositionToTransform(pos));
-        }
-
-        void TransformToPosition(const reactphysics3d::Transform &transform, Position &pos) {
-            auto scale = pos.scale;
-            transform.getOpenGLMatrix(glm::value_ptr(pos.model));
-            pos.SetModel(pos.model);
-            pos.scale = scale;
-            pos.UpdateModel();
         }
 
         reactphysics3d::BodyType voxieToReactBodyType(BodyType bodyType) {
