@@ -90,9 +90,28 @@ namespace voxie {
                                                 },
                                                 voxie::Key::KEY_ESCAPE});
 
+        voxie::KeyboardHandler::RegisterAction({[&engine]() {
+                                                    engine.GetCamera()->ProcessKeyboard(FORWARD, engine.GetDeltaTime());
+                                                },
+                                                voxie::Key::KEY_W});
+
+        voxie::KeyboardHandler::RegisterAction({[&engine]() {
+                                                    engine.GetCamera()->ProcessKeyboard(LEFT, engine.GetDeltaTime());
+                                                },
+                                                voxie::Key::KEY_A});
+
+        voxie::KeyboardHandler::RegisterAction({[&engine]() {
+                                                    engine.GetCamera()->ProcessKeyboard(BACKWARD, engine.GetDeltaTime());
+                                                },
+                                                voxie::Key::KEY_S});
+
+        voxie::KeyboardHandler::RegisterAction({[&engine]() {
+                                                    engine.GetCamera()->ProcessKeyboard(RIGHT, engine.GetDeltaTime());
+                                                },
+                                                voxie::Key::KEY_D});
+
         voxie::MouseHandler::RegisterAction({[]() {
                                                  voxie::MouseHandler::UnlockCamera();
-                                                 voxie::MouseHandler::MovementUnlock();
                                              },
                                              voxie::MouseButton::BUTTON_2, voxie::ActionType::RELEASE});
 
@@ -102,12 +121,7 @@ namespace voxie {
                                              voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
 
         voxie::MouseHandler::RegisterAction({[]() {
-                                                 if (voxie::KeyboardHandler::IsKeyState(Key::KEY_LEFT_SHIFT, voxie::ActionType::PRESS)) {
-                                                     voxie::MouseHandler::MovementLock();
-                                                 } else {
-                                                     voxie::MouseHandler::LockCamera();
-                                                     MouseHandler::MovementUnlock();
-                                                 }
+                                                 voxie::MouseHandler::LockCamera();
                                              },
                                              voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
     }

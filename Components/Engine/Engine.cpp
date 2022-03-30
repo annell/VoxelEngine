@@ -116,12 +116,6 @@ namespace voxie {
     void Engine::SubmitNodesForRendering(const Scene::SceneNodes &nodes) const {
         std::vector<std::shared_ptr<voxie::Text>> texts;
         for (const auto &entity : nodes) {
-            if (GetGameMode()->IsStarted() && helper::HasComponent<RigidBody>(entity->GetHandle()) && helper::GetComponent<Position>(entity->GetHandle())) {
-                auto body = helper::GetComponent<RigidBody>(entity->GetHandle());
-                auto pos = helper::GetComponent<Position>(entity->GetHandle());
-                body->UpdatePosition(*pos);
-            }
-
             if (auto model = std::dynamic_pointer_cast<voxie::Chunk>(entity)) {
                 voxie::helper::Submit(model->GetRenderingConfig());
             } else if (auto model = std::dynamic_pointer_cast<voxie::Sprite>(entity)) {

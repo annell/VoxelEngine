@@ -4,6 +4,7 @@
 
 #include "PhysicsHandler.h"
 #include "Core.h"
+#include "GameMode.h"
 #include <reactphysics3d/reactphysics3d.h>
 
 namespace voxie {
@@ -70,6 +71,13 @@ namespace voxie {
         if (accumulator >= timeStepFraction) {
             world->update(timeStepFraction);
             accumulator -= timeStepFraction;
+            for (const auto &node : Engine::GetEngine().GetScene().GetNodesForRendering()) {
+                if (Engine::GetEngine().GetGameMode()->IsStarted() && helper::HasComponent<RigidBody>(node->GetHandle()) && helper::GetComponent<Position>(node->GetHandle())) {
+                    auto body = helper::GetComponent<RigidBody>(node->GetHandle());
+                    auto pos = helper::GetComponent<Position>(node->GetHandle());
+                    body->UpdatePosition(*pos);
+                }
+            }
         }
     }
 
