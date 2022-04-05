@@ -25,7 +25,7 @@
 
 #include "RigidBody.h"
 
-#include "InvertedHull.h"
+#include "Outline.h"
 
 namespace YAML {
     template<typename T>

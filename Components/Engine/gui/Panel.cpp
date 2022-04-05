@@ -57,7 +57,7 @@ namespace gui {
 
     void ShowEntityInvertedHullController(const voxie::Handle &entity) {
         if (ImGui::CollapsingHeader("Outline")) {
-            auto invertedHull = voxie::helper::GetComponent<voxie::InvertedHull>(entity);
+            auto invertedHull = voxie::helper::GetComponent<voxie::Outline>(entity);
             ImGui::SliderFloat("Scale", &invertedHull->scale, 1, 1.5);
         }
     }
@@ -497,7 +497,7 @@ namespace gui {
             ShowEntityColorController(entity);
         }
 
-        if (voxie::helper::HasComponent<voxie::InvertedHull>(entity)) {
+        if (voxie::helper::HasComponent<voxie::Outline>(entity)) {
             ShowEntityInvertedHullController(entity);
         }
 

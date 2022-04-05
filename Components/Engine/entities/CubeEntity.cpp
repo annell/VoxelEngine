@@ -18,7 +18,7 @@ namespace voxie {
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
-        COMPONENT_REGISTER(InvertedHull, std::make_shared<InvertedHull>());
+        COMPONENT_REGISTER(Outline, std::make_shared<Outline>());
 
         Init();
     }
@@ -43,14 +43,14 @@ namespace voxie {
         GetRigidBody()->SetPosition(*GetPosition());
         GetRigidBody()->decode(node["rigidBody"]);
 
-        auto invertedHull = GetInvertedHull();
+        auto outline = GetOutline();
 
-        invertedHull->shader = std::make_shared<voxie::Shader>(
+        outline->shader = std::make_shared<voxie::Shader>(
                 std::map<std::string, unsigned int>{
-                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.vs", GL_VERTEX_SHADER),
-                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.fs", GL_FRAGMENT_SHADER)});
-        invertedHull->vertexBufferArray = cube.GetVertexBufferArray();
-        invertedHull->position = GetPosition();
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
+        outline->vertexBufferArray = cube.GetVertexBufferArray();
+        outline->position = GetPosition();
         return true;
     }
 
@@ -66,14 +66,14 @@ namespace voxie {
         shader->setMat4("model", GetPosition()->model);
         RefreshMaterial();
 
-        auto invertedHull = GetInvertedHull();
+        auto outline = GetOutline();
 
-        invertedHull->shader = std::make_shared<voxie::Shader>(
+        outline->shader = std::make_shared<voxie::Shader>(
                 std::map<std::string, unsigned int>{
-                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.vs", GL_VERTEX_SHADER),
-                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.fs", GL_FRAGMENT_SHADER)});
-        invertedHull->vertexBufferArray = cube.GetVertexBufferArray();
-        invertedHull->position = GetPosition();
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
+        outline->vertexBufferArray = cube.GetVertexBufferArray();
+        outline->position = GetPosition();
     }
 
     void CubeEntity::RefreshMaterial() const {
@@ -99,7 +99,7 @@ namespace voxie {
                     shader->setMat4("model", position->model);
                 },
                 [&]() {
-                    GetInvertedHull()->Render();
+                    GetOutline()->Render();
                 },
                 [&]() {
                     glBindVertexArray(cube.GetVertexBufferArray()->VAO);

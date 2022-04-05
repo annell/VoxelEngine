@@ -11,7 +11,7 @@ namespace voxie {
     struct VertexBufferArray;
     struct Position;
 
-    struct InvertedHull {
+    struct Outline {
         float scale = 1.02;
 
         std::shared_ptr<Shader> shader;

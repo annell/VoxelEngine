@@ -2,13 +2,13 @@
 // Created by Stefan Annell on 2022-04-03.
 //
 
-#include "InvertedHull.h"
+#include "Outline.h"
 #include "Core.h"
 #include <GL/glew.h>
 
 namespace voxie {
 
-    void InvertedHull::Render() const {
+    void Outline::Render() const {
         shader->use();
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);

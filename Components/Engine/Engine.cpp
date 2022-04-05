@@ -5,7 +5,7 @@
 #define GL_SILENCE_DEPRECATION
 #include "CubeEntity.h"
 #include "GameMode.h"
-#include "InvertedHull.h"
+#include "Outline.h"
 #include "Text.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -41,7 +41,7 @@ namespace voxie {
         ecsManager.RegisterComponent<Shader>();
         ecsManager.RegisterComponent<RigidBody>();
         ecsManager.RegisterComponent<VertexBufferArray>();
-        ecsManager.RegisterComponent<InvertedHull>();
+        ecsManager.RegisterComponent<Outline>();
     }
 
     bool Engine::Init() {
