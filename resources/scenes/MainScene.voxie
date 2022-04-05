@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -2.59324026
-        y: 6.86524963
-        z: -10.5062485
+        x: -11.1848392
+        y: 4.66333818
+        z: 7.60071468
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 62.9999771
-      pitch: -23.1000462
+      yaw: -54.7999001
+      pitch: -6.60007524
 - parent: 4332166420956594899
   node:
     type: LightSource
@@ -32,7 +32,7 @@
         z: -1.69601524
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 52.0593681
@@ -87,7 +87,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 18.6176987
@@ -99,9 +99,9 @@
         y: 0.990196049
         z: 0.990186155
       diffuse:
-        x: 0.730392158
-        y: 0.730384827
-        z: 0.730384827
+        x: 0
+        y: 0
+        z: 0
       specular:
         x: 0
         y: 0
@@ -135,13 +135,13 @@
         y: 0.483614683
         z: 0.301422507
       diffuse:
-        x: 0.622549057
-        y: 0.622542799
-        z: 0.622542799
+        x: 0
+        y: 0
+        z: 0
       specular:
-        x: 0.75
-        y: 0.74999249
-        z: 0.74999249
+        x: 0
+        y: 0
+        z: 0
       shininess: 32
     rigidBody:
       mass: 1
@@ -171,13 +171,13 @@
         y: 0.483614683
         z: 0.301422507
       diffuse:
-        x: 0.754901946
-        y: 0.754894376
-        z: 0.754894376
+        x: 0
+        y: 0
+        z: 0
       specular:
-        x: 0.730392158
-        y: 0.726811826
-        z: 0.726811826
+        x: 0
+        y: 0
+        z: 0
       shininess: 32
     rigidBody:
       mass: 1
@@ -207,13 +207,13 @@
         y: 0.483614683
         z: 0.301422507
       diffuse:
-        x: 0.735294104
-        y: 0.735286713
-        z: 0.735286713
+        x: 0
+        y: 0
+        z: 0
       specular:
-        x: 0.769607842
-        y: 0.769600153
-        z: 0.769600153
+        x: 0
+        y: 0
+        z: 0
       shininess: 32
     rigidBody:
       mass: 1
@@ -243,13 +243,13 @@
         y: 0.483614683
         z: 0.301422507
       diffuse:
-        x: 0.666666627
-        y: 0.666659951
-        z: 0.666659951
+        x: 0
+        y: 0
+        z: 0
       specular:
-        x: 0.700980425
-        y: 0.700973392
-        z: 0.700973392
+        x: 0
+        y: 0
+        z: 0
       shininess: 32
     rigidBody:
       mass: 1
@@ -264,28 +264,28 @@
       position:
         x: 0.474208742
         y: 4.54683065
-        z: -0.329265773
+        z: -0.329265833
       rotation:
-        x: 1.56992161
-        y: 0.0677823797
-        z: 0.000501808943
+        x: 1.56992173
+        y: 0.0677817687
+        z: 0.000501801493
       scale:
         x: 0.999999642
-        y: 0.999990642
-        z: 0.999990582
+        y: 0.999990582
+        z: 0.999990702
     material:
       ambient:
         x: 0.627450943
         y: 0.483614683
         z: 0.301422507
       diffuse:
-        x: 0.705882311
-        y: 0.705875218
-        z: 0.705875218
+        x: 0
+        y: 0
+        z: 0
       specular:
-        x: 0.676470578
-        y: 0.676463783
-        z: 0.676463783
+        x: 0
+        y: 0
+        z: 0
       shininess: 32
     rigidBody:
       mass: 1
@@ -315,15 +315,53 @@
         y: 0.483614683
         z: 0.301422507
       diffuse:
-        x: 0.671568632
-        y: 0.671561897
-        z: 0.671561897
+        x: 0
+        y: 0
+        z: 0
       specular:
-        x: 0.661764741
-        y: 0.661758125
-        z: 0.661758125
+        x: 0
+        y: 0
+        z: 0
       shininess: 32
     rigidBody:
       mass: 1
       gravity: true
       bodyType: 2
+- parent: 4332166420956594899
+  node:
+    type: Chunk
+    id: 3549980493952860096
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
+    name: AxeGal
+    position:
+      position:
+        x: -5.30774593
+        y: 2.43601799
+        z: 0
+      rotation:
+        x: 0
+        y: 1.44674337
+        z: 0
+      scale:
+        x: 0.229999989
+        y: 0.230000019
+        z: 0.229999989
+- parent: 4332166420956594899
+  node:
+    type: Chunk
+    id: 3797099042646646264
+    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_sword.vox
+    name: SwordGuy
+    position:
+      position:
+        x: 4.44186592
+        y: 2.72325754
+        z: 0
+      rotation:
+        x: 0
+        y: -1.22696209
+        z: 0
+      scale:
+        x: 0.170000061
+        y: 0.170000002
+        z: 0.170000061

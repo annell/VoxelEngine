@@ -17,6 +17,7 @@ namespace voxie {
     class Shader;
     class Name;
     class VertexBufferArray;
+    class Outline;
 
     struct ChunkPosition {
         int x;
@@ -31,18 +32,17 @@ namespace voxie {
     class Chunk : public NodeWrapper {
     public:
         Chunk(const Handle &, const std::string &path, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>);
-        ~Chunk();
 
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);
 
         void AddCube(ChunkPosition, std::unique_ptr<Cube> &&);
-        size_t NrVertex() const;
 
         COMPONENT_ADD_FUNCTION(Position);
         COMPONENT_ADD_FUNCTION(Name);
         COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(VertexBufferArray);
+        COMPONENT_ADD_FUNCTION(Outline);
 
         RenderingConfig GetRenderingConfig() const override;
 
@@ -55,7 +55,6 @@ namespace voxie {
 
         size_t nrMaterials = 0;
         std::vector<Cube *> cubesToRender;
-        std::shared_ptr<VertexBufferArray> vertexBufferArray;
         std::string path;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;

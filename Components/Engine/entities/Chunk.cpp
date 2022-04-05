@@ -16,16 +16,24 @@
 namespace voxie {
 
     Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
-        : NodeWrapper(handle), vertexBufferArray(std::move(std::make_shared<VertexBufferArray>())), path(path) {
+        : NodeWrapper(handle), path(path) {
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
+        COMPONENT_REGISTER(VertexBufferArray, std::move(std::make_shared<VertexBufferArray>()));
+        COMPONENT_REGISTER(Outline, std::make_shared<Outline>());
         voxie::ModelLoader::LoadModel(path, this);
         SetupCubesForRendering();
         SetupShader();
-    }
 
-    Chunk::~Chunk() {
+        auto outline = GetOutline();
+
+        outline->shader = std::make_shared<voxie::Shader>(
+                std::map<std::string, unsigned int>{
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
+        outline->vertexBufferArray = GetVertexBufferArray();
+        outline->position = GetPosition();
     }
 
     void Chunk::encode(YAML::Node &node) const {
@@ -39,6 +47,15 @@ namespace voxie {
 
     bool Chunk::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
+
+        auto outline = GetOutline();
+
+        outline->shader = std::make_shared<voxie::Shader>(
+                std::map<std::string, unsigned int>{
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
+        outline->vertexBufferArray = GetVertexBufferArray();
+        outline->position = GetPosition();
         return true;
     }
 
@@ -83,10 +100,6 @@ namespace voxie {
         cubesMap[position] = std::move(cube);
     }
 
-    size_t Chunk::NrVertex() const {
-        return GetVertexBufferArray()->nrVertex;
-    }
-
     void Chunk::FaceCulling() const {
         auto render = [&](Cube *cube, Cube::Face face, const ChunkPosition &pos) {
             auto it = cubesMap.find(pos);
@@ -122,16 +135,14 @@ namespace voxie {
 
     auto Chunk::GetPreDrawAction(const std::shared_ptr<Shader> &shader, const glm::mat4 &model) const {
         return [=]() {
-            glEnable(GL_CULL_FACE);
-            glCullFace(GL_FRONT);
             shader->use();
             shader->setMat4("model", model);
         };
     }
 
     auto Chunk::GetPostDrawAction() const {
-        return []() {
-            glDisable(GL_CULL_FACE);
+        return [&]() {
+            GetOutline()->Render();
         };
     }
 
