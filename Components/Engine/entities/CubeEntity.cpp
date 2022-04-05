@@ -18,6 +18,7 @@ namespace voxie {
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
+        COMPONENT_REGISTER(InvertedHull, std::make_shared<InvertedHull>());
 
         Init();
     }
@@ -41,6 +42,15 @@ namespace voxie {
         RefreshMaterial();
         GetRigidBody()->SetPosition(*GetPosition());
         GetRigidBody()->decode(node["rigidBody"]);
+
+        auto invertedHull = GetInvertedHull();
+
+        invertedHull->shader = std::make_shared<voxie::Shader>(
+                std::map<std::string, unsigned int>{
+                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.fs", GL_FRAGMENT_SHADER)});
+        invertedHull->vertexBufferArray = cube.GetVertexBufferArray();
+        invertedHull->position = GetPosition();
         return true;
     }
 
@@ -55,6 +65,15 @@ namespace voxie {
         shader->use();
         shader->setMat4("model", GetPosition()->model);
         RefreshMaterial();
+
+        auto invertedHull = GetInvertedHull();
+
+        invertedHull->shader = std::make_shared<voxie::Shader>(
+                std::map<std::string, unsigned int>{
+                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.vs", GL_VERTEX_SHADER),
+                        std::make_pair(BASE_PATH + SHADERS + "/invertedHull.fs", GL_FRAGMENT_SHADER)});
+        invertedHull->vertexBufferArray = cube.GetVertexBufferArray();
+        invertedHull->position = GetPosition();
     }
 
     void CubeEntity::RefreshMaterial() const {
@@ -79,7 +98,9 @@ namespace voxie {
                     shader->use();
                     shader->setMat4("model", position->model);
                 },
-                []() {},
+                [&]() {
+                    GetInvertedHull()->Render();
+                },
                 [&]() {
                     glBindVertexArray(cube.GetVertexBufferArray()->VAO);
                     glDrawArrays(GL_TRIANGLES, 0, cube.GetVertexBufferArray()->nrVertex);

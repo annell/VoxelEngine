@@ -55,6 +55,13 @@ namespace gui {
         }
     }
 
+    void ShowEntityInvertedHullController(const voxie::Handle &entity) {
+        if (ImGui::CollapsingHeader("Outline")) {
+            auto invertedHull = voxie::helper::GetComponent<voxie::InvertedHull>(entity);
+            ImGui::SliderFloat("Scale", &invertedHull->scale, 1, 1.5);
+        }
+    }
+
     void ShowEntityAttenuationController(const voxie::Handle &entity) {
         if (ImGui::CollapsingHeader("Attenuation")) {
             auto attenuation = voxie::helper::GetComponent<voxie::Attenuation>(entity);
@@ -89,7 +96,7 @@ namespace gui {
         }
     }
 
-    void ShowGuizmo(const voxie::Handle &entity);
+    bool ShowGuizmo(const voxie::Handle &entity);
 
     void ShowEntityPositionController(const voxie::Handle &entity) {
         if (ImGui::CollapsingHeader("Position")) {
@@ -97,14 +104,15 @@ namespace gui {
             float translation[3] = {pos->pos.x, pos->pos.y, pos->pos.z};
             float rotation[3] = {pos->rotation.x, pos->rotation.y, pos->rotation.z};
             float scale[3] = {pos->scale.x, pos->scale.y, pos->scale.z};
-            ImGui::InputFloat3("Position", translation);
-            ImGui::InputFloat3("Scale", scale);
-            ImGui::InputFloat3("Rotation", rotation);
+            ImGui::DragFloat3("Position", translation);
+            ImGui::DragFloat3("Scale", scale);
+            ImGui::DragFloat3("Rotation", rotation);
             pos->SetRotation({rotation[0], rotation[1], rotation[2]});
             pos->SetScale({scale[0], scale[1], scale[2]});
             pos->SetPosition({translation[0], translation[1], translation[2]});
 
-            ShowGuizmo(entity);
+            if (ShowGuizmo(entity)) {
+            }
             pos->SetModel(pos->model);
             if (auto rigidBody = voxie::helper::GetComponent<voxie::RigidBody>(entity)) {
                 rigidBody->SetPosition(*pos);
@@ -186,8 +194,8 @@ namespace gui {
         if (ImGui::CollapsingHeader("Direction")) {
             ImGui::Separator();
             auto direction = voxie::helper::GetComponent<voxie::Direction>(entity);
-            ImGui::InputFloat("Yaw", &direction->yaw);
-            ImGui::InputFloat("Pitch", &direction->pitch);
+            ImGui::DragFloat("Yaw", &direction->yaw);
+            ImGui::DragFloat("Pitch", &direction->pitch);
         }
     }
 
@@ -198,7 +206,7 @@ namespace gui {
         }
     }
 
-    void ShowGuizmo(const voxie::Handle &entity) {
+    bool ShowGuizmo(const voxie::Handle &entity) {
         static auto mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
         static auto mCurrentGizmoMode = ImGuizmo::WORLD;
         if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
@@ -226,8 +234,10 @@ namespace gui {
             const auto proj = camera->GetProjectionMatrix();
 
             if (ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, glm::value_ptr(pos->model), nullptr, nullptr, nullptr, nullptr)) {
+                return true;
             }
         }
+        return false;
     }
 
     void AddNewComponent() {
@@ -485,6 +495,10 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::Color>(entity)) {
             ShowEntityColorController(entity);
+        }
+
+        if (voxie::helper::HasComponent<voxie::InvertedHull>(entity)) {
+            ShowEntityInvertedHullController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::Attenuation>(entity)) {

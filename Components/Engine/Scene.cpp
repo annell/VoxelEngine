@@ -128,6 +128,9 @@ namespace voxie {
                         auto shader = helper::GetComponent<Shader>(nodePtr->GetHandle());
                         camera->SetShaderParameters(*shader);
                         shader->setBool("selected", nodePtr->GetHandle() == camera->GetSelection());
+                        if (auto invertedHull = helper::GetComponent<InvertedHull>(nodePtr->GetHandle())) {
+                            camera->SetShaderParameters(*invertedHull->shader);
+                        }
                     }
                     nodesForRendering.push_back(nodePtr);
                 }
