@@ -18,6 +18,7 @@ namespace voxie {
     }
 
     void Cube::GenerateVertexAttributes() {
+        vertices.clear();
         for (auto side : sides) {
             if (side.render) {
                 GenerateVertexAttributes(side);
@@ -65,11 +66,12 @@ namespace voxie {
     }
 
     void Cube::GenerateVertexAttributes(const Side &side) {
-        const auto addAttributes = [useNormals = useNormals, useMaterials = useMaterials](const Triangle &triangle, const float normals[3], float materialIndex, std::vector<float> &vertexAttributes) {
+        const auto addAttributes = [&, useNormals = useNormals, useMaterials = useMaterials](const Triangle &triangle, const float normals[3], float materialIndex, std::vector<float> &vertexAttributes) {
             int index = 0;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     vertexAttributes.push_back(triangle.vertex[index]);
+                    vertices.push_back(triangle.vertex[index]);
                     index++;
                 }
                 if (useNormals) {
@@ -170,6 +172,9 @@ namespace voxie {
     }
     void Cube::DisableMaterials() {
         useMaterials = false;
+    }
+    const std::vector<float> &Cube::GetVertices() const {
+        return vertices;
     }
 
 }// namespace voxie

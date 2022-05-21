@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <glm/glm.hpp>
 #include <yaml-cpp/yaml.h>
 
 namespace reactphysics3d {
@@ -18,6 +19,21 @@ namespace voxie {
     };
 
     struct Position;
+
+    reactphysics3d::Collider *CreateBoxCollider(reactphysics3d::RigidBody *body, const Position &pos);
+    reactphysics3d::Collider *CreateConvexCollider(reactphysics3d::RigidBody *body, const std::vector<float> &vertices, const Position &pos);
+
+    struct ChunkMaxMin {
+        float max = -999999;
+        float min = 9999999;
+        float diff() const {
+            return max - min;
+        }
+    };
+
+    constexpr ChunkMaxMin ChunkDefaultSize = {1, 0};
+    constexpr std::array<ChunkMaxMin, 3> DefaultMaxMin = {ChunkDefaultSize, ChunkDefaultSize, ChunkDefaultSize};
+
     struct RigidBody {
         RigidBody(const Position &);
         ~RigidBody();
@@ -45,5 +61,6 @@ namespace voxie {
         reactphysics3d::Collider *collider;
 
         BodyType bodyType;
+        std::array<ChunkMaxMin, 3> maxMin = DefaultMaxMin;
     };
 }// namespace voxie

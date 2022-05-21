@@ -40,8 +40,10 @@ namespace voxie {
         GetPosition()->decode(node["position"]);
         GetMaterial()->decode(node["material"]);
         RefreshMaterial();
-        GetRigidBody()->SetPosition(*GetPosition());
-        GetRigidBody()->decode(node["rigidBody"]);
+        auto rigidBody = GetRigidBody();
+        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
+        rigidBody->SetPosition(*GetPosition());
+        rigidBody->decode(node["rigidBody"]);
 
         auto outline = GetOutline();
 

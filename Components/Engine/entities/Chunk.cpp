@@ -17,6 +17,7 @@ namespace voxie {
 
     Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
         : NodeWrapper(handle), path(path) {
+        COMPONENT_REGISTER(RigidBody, std::make_shared<RigidBody>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
@@ -43,6 +44,7 @@ namespace voxie {
         auto name = helper::GetComponent<Name>(handle).get();
         node["name"] = name->name;
         node["position"] = *helper::GetComponent<Position>(handle).get();
+        node["rigidBody"] = *helper::GetComponent<RigidBody>(handle).get();
     }
 
     bool Chunk::decode(const YAML::Node &node) {
@@ -56,6 +58,13 @@ namespace voxie {
                         std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
         outline->vertexBufferArray = GetVertexBufferArray();
         outline->position = GetPosition();
+
+        auto rigidBody = GetRigidBody();
+        rigidBody->maxMin = chunkMaxMins;
+        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
+        rigidBody->SetPosition(*GetPosition());
+        rigidBody->decode(node["rigidBody"]);
+
         return true;
     }
 
@@ -68,6 +77,9 @@ namespace voxie {
                 nrMaterials = cube->GetMaterialIndex();
             }
             if (cube->ShouldRender()) {
+                for (const auto &vertex : cube->GetVertices()) {
+                    verticesToRender.push_back(vertex);
+                }
                 cubesToRender.push_back(cube.get());
             }
         }
@@ -98,6 +110,7 @@ namespace voxie {
 
     void Chunk::AddCube(ChunkPosition position, std::unique_ptr<Cube> &&cube) {
         cubesMap[position] = std::move(cube);
+        UpdateChunkMaxMin(position);
     }
 
     void Chunk::FaceCulling() const {
@@ -156,6 +169,21 @@ namespace voxie {
                     glBindVertexArray(GetVertexBufferArray()->VAO);
                     glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
                 }};
+    }
+
+    void Chunk::UpdateChunkMaxMin(const ChunkPosition &chunkPosition) {
+        auto maxMin = [](float coordinate, ChunkMaxMin &chunkMaxMin) {
+            if (chunkMaxMin.min > coordinate) {
+                chunkMaxMin.min = coordinate;
+            }
+            if (chunkMaxMin.max < coordinate) {
+                chunkMaxMin.max = coordinate;
+            }
+            std::cout << coordinate << std::endl;
+        };
+        maxMin(chunkPosition.x, chunkMaxMins[0]);
+        maxMin(chunkPosition.y, chunkMaxMins[1]);
+        maxMin(chunkPosition.z, chunkMaxMins[2]);
     }
 
 }// namespace voxie

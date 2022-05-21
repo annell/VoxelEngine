@@ -55,6 +55,8 @@ namespace voxie {
         void DisableNormals();
         void DisableMaterials();
 
+        const std::vector<float>& GetVertices() const;
+
     private:
         void GenerateVertexAttributes(const Side &side);
         void GenerateSides(Position p, Dimensions d);
@@ -62,6 +64,7 @@ namespace voxie {
         Material material;
         int materialIndex;
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
+        std::vector<float> vertices;
         Side sides[6];
         bool useNormals = true;
         bool useMaterials = true;

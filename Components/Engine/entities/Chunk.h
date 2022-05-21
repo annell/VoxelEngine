@@ -11,6 +11,7 @@
 #include "EntityComponentSystem.h"
 #include "Node.h"
 #include "RenderingHandler.h"
+#include "RigidBody.h"
 
 namespace voxie {
     class Cube;
@@ -43,10 +44,12 @@ namespace voxie {
         COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(VertexBufferArray);
         COMPONENT_ADD_FUNCTION(Outline);
+        COMPONENT_ADD_FUNCTION(RigidBody);
 
         RenderingConfig GetRenderingConfig() const override;
 
     private:
+        void UpdateChunkMaxMin(const ChunkPosition &);
         void SetupCubesForRendering();
         void SetupShader();
         void FaceCulling() const;
@@ -56,8 +59,10 @@ namespace voxie {
         size_t nrMaterials = 0;
         std::vector<Cube *> cubesToRender;
         std::string path;
+        std::vector<float> verticesToRender;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
+        std::array<ChunkMaxMin, 3> chunkMaxMins;
     };
 
 }// namespace voxie

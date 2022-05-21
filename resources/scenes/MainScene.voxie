@@ -346,6 +346,10 @@
         x: 0.229999989
         y: 0.230000019
         z: 0.229999989
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
 - parent: 4332166420956594899
   node:
     type: Chunk
@@ -365,3 +369,7 @@
         x: 0.170000061
         y: 0.170000002
         z: 0.170000061
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
