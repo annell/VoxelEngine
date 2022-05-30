@@ -60,10 +60,10 @@ namespace voxie {
         outline->position = GetPosition();
 
         auto rigidBody = GetRigidBody();
-        rigidBody->maxMin = chunkMaxMins;
+        rigidBody->chunkAxises = chunkMaxMins;
         rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
-        rigidBody->SetPosition(*GetPosition());
         rigidBody->decode(node["rigidBody"]);
+        rigidBody->SetPosition(*GetPosition());
 
         return true;
     }
@@ -172,18 +172,17 @@ namespace voxie {
     }
 
     void Chunk::UpdateChunkMaxMin(const ChunkPosition &chunkPosition) {
-        auto maxMin = [](float coordinate, ChunkMaxMin &chunkMaxMin) {
+        auto updateMaxMin = [](float coordinate, ChunkAxis &chunkMaxMin) {
             if (chunkMaxMin.min > coordinate) {
                 chunkMaxMin.min = coordinate;
             }
             if (chunkMaxMin.max < coordinate) {
                 chunkMaxMin.max = coordinate;
             }
-            std::cout << coordinate << std::endl;
         };
-        maxMin(chunkPosition.x, chunkMaxMins[0]);
-        maxMin(chunkPosition.y, chunkMaxMins[1]);
-        maxMin(chunkPosition.z, chunkMaxMins[2]);
+        updateMaxMin(chunkPosition.x, chunkMaxMins.x);
+        updateMaxMin(chunkPosition.y, chunkMaxMins.y);
+        updateMaxMin(chunkPosition.z, chunkMaxMins.z);
     }
 
 }// namespace voxie

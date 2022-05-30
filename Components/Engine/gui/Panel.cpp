@@ -146,6 +146,12 @@ namespace gui {
             bool gravity = body->GetGravity();
             ImGui::Checkbox("Gravity", &gravity);
             body->SetGravity(gravity);
+
+            float offset[3] = {body->GetOffset().x, body->GetOffset().y, body->GetOffset().z};
+            ImGui::DragFloat3("Offset", offset);
+            body->SetOffset(glm::make_vec3(offset));
+            auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
+            body->SetPosition(*pos);
         }
     }
 
@@ -155,9 +161,9 @@ namespace gui {
             float translation[2] = {pos->pos.x, pos->pos.y};
             float rotation = pos->rotation;
             float scale[2] = {pos->scale.x, pos->scale.y};
-            ImGui::SliderFloat2("Position", translation, -1000, 1000);
-            ImGui::SliderFloat2("Scale", scale, 0, 10);
-            ImGui::SliderFloat("Rotation", &rotation, 0, 90);
+            ImGui::DragFloat2("Position", translation);
+            ImGui::DragFloat2("Scale", scale);
+            ImGui::DragFloat("Rotation", &rotation);
             pos->SetRotation(rotation);
             pos->SetScale({scale[0], scale[1]});
             pos->SetPosition({translation[0], translation[1]});

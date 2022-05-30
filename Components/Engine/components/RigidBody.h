@@ -5,6 +5,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <yaml-cpp/yaml.h>
+#include <limits>
 
 namespace reactphysics3d {
     class RigidBody;
@@ -23,16 +24,26 @@ namespace voxie {
     reactphysics3d::Collider *CreateBoxCollider(reactphysics3d::RigidBody *body, const Position &pos);
     reactphysics3d::Collider *CreateConvexCollider(reactphysics3d::RigidBody *body, const std::vector<float> &vertices, const Position &pos);
 
-    struct ChunkMaxMin {
-        float max = -999999;
-        float min = 9999999;
+    struct ChunkAxis {
+        float max = std::numeric_limits<float>::lowest();
+        float min = std::numeric_limits<float>::max();
+
         float diff() const {
             return max - min;
         }
+
+        float shift() const {
+            return min;
+        }
     };
 
-    constexpr ChunkMaxMin ChunkDefaultSize = {1, 0};
-    constexpr std::array<ChunkMaxMin, 3> DefaultMaxMin = {ChunkDefaultSize, ChunkDefaultSize, ChunkDefaultSize};
+    constexpr ChunkAxis ChunkDefaultSize = {1, 0};
+
+    struct ChunkAxises {
+        ChunkAxis x = ChunkDefaultSize;
+        ChunkAxis y = ChunkDefaultSize;
+        ChunkAxis z = ChunkDefaultSize;
+    };
 
     struct RigidBody {
         RigidBody(const Position &);
@@ -44,7 +55,11 @@ namespace voxie {
         bool decode(const YAML::Node &node);
 
         void SetPosition(const Position &) const;
-        void UpdatePosition(Position &) const;
+        void GetPosition(Position &) const;
+
+        void SetOffset(const glm::vec3 &);
+        glm::vec3 GetOffset() const;
+        Position GetPositionWithOffset(const Position &) const;
 
         BodyType GetBodyType() const;
         void SetBodyType(BodyType);
@@ -60,7 +75,8 @@ namespace voxie {
         reactphysics3d::RigidBody *rigidBody;
         reactphysics3d::Collider *collider;
 
+        glm::vec3 offset = {0, 0, 0};
         BodyType bodyType;
-        std::array<ChunkMaxMin, 3> maxMin = DefaultMaxMin;
+        ChunkAxises chunkAxises;
     };
 }// namespace voxie

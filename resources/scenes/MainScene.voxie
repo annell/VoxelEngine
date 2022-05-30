@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -11.1848392
-        y: 4.66333818
-        z: 7.60071468
+        x: -15.6374817
+        y: 8.13320351
+        z: 14.1135979
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: -54.7999001
-      pitch: -6.60007524
+      yaw: 293.300262
+      pitch: -14.000041
 - parent: 4332166420956594899
   node:
     type: LightSource
@@ -111,6 +111,10 @@
       mass: 1
       gravity: true
       bodyType: 0
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: CubeEntity
@@ -147,6 +151,10 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: CubeEntity
@@ -183,6 +191,10 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: CubeEntity
@@ -219,6 +231,10 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: CubeEntity
@@ -255,6 +271,10 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: CubeEntity
@@ -291,6 +311,10 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: CubeEntity
@@ -327,6 +351,10 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
 - parent: 4332166420956594899
   node:
     type: Chunk
@@ -335,21 +363,25 @@
     name: AxeGal
     position:
       position:
-        x: -5.30774593
-        y: 2.43601799
-        z: 0
+        x: -6.49148083
+        y: 5.02205992
+        z: 1.26734436
       rotation:
         x: 0
-        y: 1.44674337
+        y: -0
         z: 0
       scale:
-        x: 0.229999989
+        x: 0.000341475068
         y: 0.230000019
-        z: 0.229999989
+        z: 0.158089131
     rigidBody:
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: -0.600000024
+        y: -0.600000024
+        z: 0
 - parent: 4332166420956594899
   node:
     type: Chunk
@@ -373,3 +405,7 @@
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: -0.600000024
+        z: 0

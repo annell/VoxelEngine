@@ -75,7 +75,7 @@ namespace voxie {
                 if (Engine::GetEngine().GetGameMode()->IsStarted() && helper::HasComponent<RigidBody>(node->GetHandle()) && helper::GetComponent<Position>(node->GetHandle())) {
                     auto body = helper::GetComponent<RigidBody>(node->GetHandle());
                     auto pos = helper::GetComponent<Position>(node->GetHandle());
-                    body->UpdatePosition(*pos);
+                    body->GetPosition(*pos);
                 }
             }
         }

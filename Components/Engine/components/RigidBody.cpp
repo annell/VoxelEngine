@@ -111,9 +111,19 @@ namespace voxie {
         node["mass"] = GetMass();
         node["gravity"] = GetGravity();
         node["bodyType"] = static_cast<int>(GetBodyType());
+
+        YAML::Node offsetNode;
+        offsetNode["x"] = offset[0];
+        offsetNode["y"] = offset[1];
+        offsetNode["z"] = offset[2];
+        node["offset"] = offsetNode;
     }
 
     bool RigidBody::decode(const YAML::Node &node) {
+        auto offsetNode = node["offset"];
+        SetOffset({ offsetNode["x"].as<float>(),
+                    offsetNode["y"].as<float>(),
+                    offsetNode["z"].as<float>()});
         SetMass(node["mass"].as<float>());
         SetGravity(node["gravity"].as<bool>());
         SetBodyType(static_cast<voxie::BodyType>(node["bodyType"].as<int>()));
@@ -123,13 +133,34 @@ namespace voxie {
 
     void RigidBody::SetPosition(const Position &pos) const {
         assert(rigidBody && collider);
-        rigidBody->setTransform(internal::PositionToTransform(pos));
-        dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents({(maxMin[0].diff() * pos.scale.x) / 2, (maxMin[1].diff() * pos.scale.y) / 2, (maxMin[2].diff() * pos.scale.z) / 2});
+        rigidBody->setTransform(internal::PositionToTransform(GetPositionWithOffset(pos)));
+        dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents(
+            {(chunkAxises.x.diff() * pos.scale.x) / 2,
+            (chunkAxises.y.diff() * pos.scale.y) / 2, 
+            (chunkAxises.z.diff() * pos.scale.z) / 2
+            });
     }
 
-    void RigidBody::UpdatePosition(Position &pos) const {
+    Position RigidBody::GetPositionWithOffset(const Position & pos) const {
+        auto modifiedpos = pos;
+        modifiedpos.pos += GetOffset();
+        modifiedpos.UpdateModel();
+        return modifiedpos;
+    }
+
+    void RigidBody::SetOffset(const glm::vec3 & offset) {
+        this->offset = offset;
+    }
+
+    glm::vec3 RigidBody::GetOffset() const {
+        return offset;
+    }
+
+    void RigidBody::GetPosition(Position &pos) const {
         assert(rigidBody);
         internal::TransformToPosition(rigidBody->getTransform(), pos);
+        pos.pos -= GetOffset();
+        pos.UpdateModel();
     }
 
     BodyType RigidBody::GetBodyType() const {

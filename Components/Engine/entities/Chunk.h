@@ -62,7 +62,7 @@ namespace voxie {
         std::vector<float> verticesToRender;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-        std::array<ChunkMaxMin, 3> chunkMaxMins;
+        ChunkAxises chunkMaxMins;
     };
 
 }// namespace voxie
