@@ -7,7 +7,7 @@
 
 namespace voxie {
     Name::Name(std::string name)
-            : name(std::move(name)) {
+        : name(std::move(name)) {
     }
 
     void Name::encode(YAML::Node &node) const {
@@ -21,4 +21,4 @@ namespace voxie {
         name = node[0].as<std::string>();
         return true;
     }
-}
+}// namespace voxie

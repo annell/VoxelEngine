@@ -6,12 +6,12 @@
 
 #include "Camera.h"
 #include "Chunk.h"
-#include "CubeEntity.h"
 #include "Core.h"
+#include "CubeEntity.h"
 #include "Engine.h"
+#include "Shader.h"
 #include <Sprite.h>
 #include <filesystem>
-#include "Shader.h"
 
 #define GL_SILENCE_DEPRECATION
 #include <GL/glew.h>
@@ -82,8 +82,7 @@ namespace voxie {
                 std::make_shared<voxie::Shader>(
                         std::map<std::string, unsigned int>{
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", GL_VERTEX_SHADER),
-                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}
-                ),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}),
                 std::make_shared<voxie::Position>(0, 0, 0),
                 std::make_shared<voxie::Material>(config.material));
         return std::move(model);
@@ -98,11 +97,9 @@ namespace voxie {
                         {0, 0, 0},
                         {0.1, 0.1, 0.1},
                 },
-                {
-                        "Ambient light",
-                        LightType::AMBIENT,
-                        entity
-                }};
+                {"Ambient light",
+                 LightType::AMBIENT,
+                 entity}};
     }
 
     std::shared_ptr<voxie::LightSource> MakeLight(LightFactoryConfig config) {

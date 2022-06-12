@@ -8,7 +8,7 @@
 namespace voxie {
 
     Handle::Handle(Handle::Identity id)
-            : id(id) {
+        : id(id) {
     }
 
     auto Handle::as_tie() const {
@@ -26,7 +26,7 @@ namespace voxie {
     Handle Handle::MakeEntity() {
         static std::random_device rd;
         static std::mt19937_64 e2(rd());
-        static std::uniform_int_distribution<long long int> dist(std::llround(std::pow(2,61)), std::llround(std::pow(2,62)));
+        static std::uniform_int_distribution<long long int> dist(std::llround(std::pow(2, 61)), std::llround(std::pow(2, 62)));
 
         return Handle(dist(e2));
     }

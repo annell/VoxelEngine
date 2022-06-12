@@ -3,12 +3,12 @@
 //
 
 #pragma once
-#include <algorithm>
-#include <vector>
-#include <unordered_map>
-#include <string>
-#include <cassert>
 #include "Handle.h"
+#include <algorithm>
+#include <cassert>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace voxie {
 
@@ -22,13 +22,11 @@ namespace voxie {
         virtual ~ECSContainerInterface() = default;
 
         virtual void Remove(Handle handle) = 0;
-
     };
 
     template<typename T>
     class ECSContainer : public ECSContainerInterface {
     public:
-
         void Add(const Handle &handle, std::shared_ptr<T> component) {
             components.insert({handle, std::move(component)});
         }
@@ -55,12 +53,11 @@ namespace voxie {
     };
 
 
-
     class ECSManager {
     public:
-        template <typename T>
+        template<typename T>
         void RegisterComponent() {
-            const char* typeName = typeid(T).name();
+            const char *typeName = typeid(T).name();
 
             assert(componentArrays.find(typeName) == componentArrays.end() && "Registering component type more than once.");
 
@@ -68,22 +65,22 @@ namespace voxie {
         }
 
         template<typename T>
-        void Add(const Handle& handle, std::shared_ptr<T> component) {
+        void Add(const Handle &handle, std::shared_ptr<T> component) {
             GetComponentArray<T>()->Add(handle, component);
         }
 
         template<typename T>
-        void Remove(const Handle& handle) {
+        void Remove(const Handle &handle) {
             GetComponentArray<T>()->Remove(handle);
         }
 
         template<typename T>
-        std::shared_ptr<T> Get(const Handle& handle) {
+        std::shared_ptr<T> Get(const Handle &handle) {
             return GetComponentArray<T>()->Get(handle);
         }
 
         template<typename T>
-        bool Has(const Handle& handle) {
+        bool Has(const Handle &handle) {
             return Get<T>(handle) != nullptr;
         }
 

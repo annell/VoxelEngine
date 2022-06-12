@@ -48,8 +48,7 @@ namespace voxie {
         const LightType &GetType() const;
 
     private:
-
-        void OnPositionUpdate(const Position& position);
+        void OnPositionUpdate(const Position &position);
         LightType type;
     };
 }// namespace voxie

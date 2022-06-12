@@ -19,4 +19,4 @@ namespace voxie {
 
         std::string text;
     };
-}
+}// namespace voxie

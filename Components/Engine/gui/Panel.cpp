@@ -7,47 +7,41 @@
 #include <GameMode.h>
 namespace internal {
 
-struct InputTextCallback_UserData
-{
-    std::string*            Str;
-    ImGuiInputTextCallback  ChainCallback;
-    void*                   ChainCallbackUserData;
-};
+    struct InputTextCallback_UserData {
+        std::string *Str;
+        ImGuiInputTextCallback ChainCallback;
+        void *ChainCallbackUserData;
+    };
 
-static int InputTextCallback(ImGuiInputTextCallbackData* data)
-{
-    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
-    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
-    {
-        // Resize string callback
-        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
-        std::string* str = user_data->Str;
-        IM_ASSERT(data->Buf == str->c_str());
-        str->resize(data->BufTextLen);
-        data->Buf = (char*)str->c_str();
+    static int InputTextCallback(ImGuiInputTextCallbackData *data) {
+        InputTextCallback_UserData *user_data = (InputTextCallback_UserData *) data->UserData;
+        if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
+            // Resize string callback
+            // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+            std::string *str = user_data->Str;
+            IM_ASSERT(data->Buf == str->c_str());
+            str->resize(data->BufTextLen);
+            data->Buf = (char *) str->c_str();
+        } else if (user_data->ChainCallback) {
+            // Forward to user callback, if any
+            data->UserData = user_data->ChainCallbackUserData;
+            return user_data->ChainCallback(data);
+        }
+        return 0;
     }
-    else if (user_data->ChainCallback)
-    {
-        // Forward to user callback, if any
-        data->UserData = user_data->ChainCallbackUserData;
-        return user_data->ChainCallback(data);
+
+    bool InputText(const char *label, std::string *str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void *user_data = NULL) {
+        IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+        flags |= ImGuiInputTextFlags_CallbackResize;
+
+        InputTextCallback_UserData cb_user_data;
+        cb_user_data.Str = str;
+        cb_user_data.ChainCallback = callback;
+        cb_user_data.ChainCallbackUserData = user_data;
+        return ImGui::InputText(label, (char *) str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
     }
-    return 0;
-}
 
-bool InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void* user_data = NULL)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
-
-    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return ImGui::InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
-}
-
-}
+}// namespace internal
 
 namespace gui {
 
@@ -229,16 +223,16 @@ namespace gui {
             }
 
             if (ImGui::BeginMenu("Base primitives")) {
-                    for (const auto& primitive : voxie::GetBasePrimitives()) {
-                        if (primitive == voxie::BasePrimitives::Cube) {
-                            if (ImGui::Selectable("Cube")) {
-                                voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube}), nullptr);
-                            }
+                for (const auto &primitive : voxie::GetBasePrimitives()) {
+                    if (primitive == voxie::BasePrimitives::Cube) {
+                        if (ImGui::Selectable("Cube")) {
+                            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube}), nullptr);
                         }
                     }
-                    if (ImGui::Selectable("Text")) {
-                        voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeText({"Text", "Text"}), nullptr);
-                    }
+                }
+                if (ImGui::Selectable("Text")) {
+                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeText({"Text", "Text"}), nullptr);
+                }
                 ImGui::EndMenu();
             }
 
@@ -342,9 +336,9 @@ namespace gui {
         }
     }
 
-    bool DisplayNode(voxie::Node * root, voxie::Handle & selected, int flags) {
-        #define IMGUI_PAYLOAD_TYPE_SCENENODE "_SCENENODE"
-        static voxie::Node * draggedNode = nullptr;
+    bool DisplayNode(voxie::Node *root, voxie::Handle &selected, int flags) {
+#define IMGUI_PAYLOAD_TYPE_SCENENODE "_SCENENODE"
+        static voxie::Node *draggedNode = nullptr;
         auto rootNode = root->GetHandle();
         auto name = voxie::helper::GetComponent<voxie::Name>(rootNode);
         bool isSelected = rootNode == selected;
@@ -363,7 +357,7 @@ namespace gui {
         }
 
         if (ImGui::BeginDragDropTarget()) {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE)) {
+            if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload(IMGUI_PAYLOAD_TYPE_SCENENODE)) {
                 draggedNode->MoveTo(root);
                 draggedNode = nullptr;
             }
@@ -374,29 +368,28 @@ namespace gui {
         return open;
     }
 
-    void DisplayTreeView(voxie::Node * root, voxie::Handle & selected) {
+    void DisplayTreeView(voxie::Node *root, voxie::Handle &selected) {
         if (!root) {
             return;
         }
         bool isFolder = root->GetNumChildren() > 0;
         if (isFolder) {
             if (DisplayNode(root, selected, ImGuiTreeNodeFlags_SpanFullWidth)) {
-                for (const auto& node : root->GetChildNodes()) {
+                for (const auto &node : root->GetChildNodes()) {
                     DisplayTreeView(node.get(), selected);
                 }
                 ImGui::TreePop();
             }
         } else {
-            DisplayNode(root, selected, ImGuiTreeNodeFlags_Leaf  | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
-            for (const auto& node : root->GetChildNodes()) {
+            DisplayNode(root, selected, ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen | ImGuiTreeNodeFlags_SpanFullWidth);
+            for (const auto &node : root->GetChildNodes()) {
                 DisplayTreeView(node.get(), selected);
             }
         }
     }
 
-    void ShowTreeView(voxie::Handle & selected) {
-        static ImGuiTableFlags flags = ImGuiTableFlags_Resizable
-                                       | ImGuiTableFlags_NoBordersInBody;
+    void ShowTreeView(voxie::Handle &selected) {
+        static ImGuiTableFlags flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_NoBordersInBody;
 
         if (ImGui::BeginTable("Entities", 1, flags)) {
             ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);

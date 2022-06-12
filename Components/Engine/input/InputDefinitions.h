@@ -146,4 +146,4 @@ namespace voxie {
         BUTTON_7 = 6,
         BUTTON_8 = 7,
     };
-}
+}// namespace voxie

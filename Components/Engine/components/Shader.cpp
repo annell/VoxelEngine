@@ -1,10 +1,10 @@
 #include "Shader.h"
 
+#include <GL/glew.h>
 #include <fstream>
 #include <iostream>
 #include <vector>
 #include <yaml-cpp/yaml.h>
-#include <GL/glew.h>
 
 namespace {
     void checkCompileErrors(GLuint shader, const std::string &type) {

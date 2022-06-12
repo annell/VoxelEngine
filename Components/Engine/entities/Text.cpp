@@ -7,7 +7,7 @@
 
 namespace voxie {
 
-    Text::Text(const Handle & handle, std::shared_ptr<Name> name, std::shared_ptr<Position2D> position, std::shared_ptr<Color> color, std::shared_ptr<VisibleText> visibleText)
+    Text::Text(const Handle &handle, std::shared_ptr<Name> name, std::shared_ptr<Position2D> position, std::shared_ptr<Color> color, std::shared_ptr<VisibleText> visibleText)
         : NodeWrapper(handle) {
         COMPONENT_REGISTER(Position2D, position);
         COMPONENT_REGISTER(Name, name);
@@ -34,4 +34,4 @@ namespace voxie {
         GetVisibleText()->decode(node["text"]);
         return true;
     }
-}
+}// namespace voxie

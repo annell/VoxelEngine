@@ -21,7 +21,7 @@ namespace voxie {
     unsigned int Window::GetHeight() const {
         return height;
     }
-    void Window::SetTitle(const std::string & titleIn) {
+    void Window::SetTitle(const std::string &titleIn) {
         title = titleIn;
         glfwSetWindowTitle(GetWindow(), title.c_str());
     }

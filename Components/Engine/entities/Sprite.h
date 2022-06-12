@@ -5,10 +5,10 @@
 #pragma once
 
 #include "EntityComponentSystem.h"
+#include "LoadTexture.h"
 #include <Node.h>
 #include <RenderingHandler.h>
 #include <memory>
-#include "LoadTexture.h"
 
 namespace voxie {
     class Position2D;

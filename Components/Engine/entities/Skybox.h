@@ -6,8 +6,8 @@
 
 #include "Cube.h"
 #include "EntityComponentSystem.h"
-#include "RenderingHandler.h"
 #include "Node.h"
+#include "RenderingHandler.h"
 
 namespace voxie {
     class Shader;

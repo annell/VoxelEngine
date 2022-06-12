@@ -18,4 +18,4 @@ namespace voxie {
         float pitch;
     };
 
-}
+}// namespace voxie

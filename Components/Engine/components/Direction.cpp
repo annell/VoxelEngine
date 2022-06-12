@@ -6,7 +6,7 @@
 
 namespace voxie {
     Direction::Direction(float yaw, float pitch)
-            : yaw(yaw), pitch(pitch) {
+        : yaw(yaw), pitch(pitch) {
     }
 
     void Direction::encode(YAML::Node &node) const {
@@ -32,4 +32,4 @@ namespace voxie {
         }
     }
 
-}
+}// namespace voxie

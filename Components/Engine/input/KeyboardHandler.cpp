@@ -17,12 +17,12 @@ namespace voxie {
 
     }// namespace internal
 
-    bool KeyboardHandler::IsKeyState(const Key& key, const ActionType& actionType) {
+    bool KeyboardHandler::IsKeyState(const Key &key, const ActionType &actionType) {
         return glfwGetKey(Engine::GetEngine().GetWindow()->GetWindow(), key) == actionType;
     }
 
     void KeyboardHandler::processInput() {
-        auto& engine = Engine::GetEngine();
+        auto &engine = Engine::GetEngine();
         for (auto &keyAction : internal::GetRegisteredKeys()) {
             if (IsKeyState(keyAction.key, ActionType::PRESS)) {
                 keyAction.action();

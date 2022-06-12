@@ -1,13 +1,13 @@
 //
 // Created by Stefan Annell on 2021-04-10.
 //
-#include "Core.h"
 #include "Lightsource.h"
 #include "Camera.h"
+#include "Core.h"
 #include "Cube.h"
 #include "CubeEntity.h"
-#include <Engine.h>
 #include "Shader.h"
+#include <Engine.h>
 
 #define GL_SILENCE_DEPRECATION
 #include <GL/glew.h>
@@ -19,8 +19,8 @@ namespace voxie {
         : NodeWrapper(config.handle), type(config.type) {
         config.position->model = glm::translate(config.position->model, config.position->pos);
         config.position->SetPosition(config.position->pos);
-        config.position->onUpdate.Bind([] () { Engine::GetEngine().GetScene().UpdateLights(); });
-        config.color->onUpdate.Bind([] () { Engine::GetEngine().GetScene().UpdateLights(); });
+        config.position->onUpdate.Bind([]() { Engine::GetEngine().GetScene().UpdateLights(); });
+        config.color->onUpdate.Bind([]() { Engine::GetEngine().GetScene().UpdateLights(); });
 
         COMPONENT_REGISTER(Position, config.position);
         COMPONENT_REGISTER(Name, config.name);
@@ -62,7 +62,7 @@ namespace voxie {
         return type;
     }
 
-    void LightSource::OnPositionUpdate(const Position&) {
+    void LightSource::OnPositionUpdate(const Position &) {
     }
 
 }// namespace voxie

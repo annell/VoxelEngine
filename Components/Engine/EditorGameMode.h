@@ -8,13 +8,14 @@
 namespace voxie {
 
 
-class EditorGameMode : public GameMode {
-public:
-    EditorGameMode();
+    class EditorGameMode : public GameMode {
+    public:
+        EditorGameMode();
 
-    void Initialize() override;
-    void OnTick(float deltaTime) override;
-private:
-};
+        void Initialize() override;
+        void OnTick(float deltaTime) override;
 
-}
+    private:
+    };
+
+}// namespace voxie

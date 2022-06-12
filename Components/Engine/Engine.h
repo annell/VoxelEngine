@@ -1,9 +1,9 @@
 #pragma once
 
-#include "RenderingHandler.h"
-#include "Scene.h"
 #include "Delegate.h"
 #include "Logging.h"
+#include "RenderingHandler.h"
+#include "Scene.h"
 #include "TextHandler.h"
 
 class GLFWwindow;

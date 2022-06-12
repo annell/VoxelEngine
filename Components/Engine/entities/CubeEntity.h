@@ -6,38 +6,37 @@
 
 #include <memory>
 
-#include "RenderingHandler.h"
+#include "Cube.h"
 #include "EntityComponentSystem.h"
 #include "Node.h"
-#include "Cube.h"
+#include "RenderingHandler.h"
 
-namespace voxie
-{
-class Name;
-class Shader;
-class Position;
-class Cube;
-class Material;
+namespace voxie {
+    class Name;
+    class Shader;
+    class Position;
+    class Cube;
+    class Material;
 
-class CubeEntity : public NodeWrapper {
+    class CubeEntity : public NodeWrapper {
 
-public:
-    CubeEntity(const Handle &, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>, std::shared_ptr<Material>);
-    ~CubeEntity();
+    public:
+        CubeEntity(const Handle &, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>, std::shared_ptr<Material>);
+        ~CubeEntity();
 
-    COMPONENT_ADD_FUNCTION(Shader);
-    COMPONENT_ADD_FUNCTION(Material);
-    COMPONENT_ADD_FUNCTION(Position);
+        COMPONENT_ADD_FUNCTION(Shader);
+        COMPONENT_ADD_FUNCTION(Material);
+        COMPONENT_ADD_FUNCTION(Position);
 
-    void encode(YAML::Node &) const;
-    bool decode(const YAML::Node &);
+        void encode(YAML::Node &) const;
+        bool decode(const YAML::Node &);
 
-    RenderingConfig GetRenderingConfig() const override;
-    void RefreshMaterial() const;
+        RenderingConfig GetRenderingConfig() const override;
+        void RefreshMaterial() const;
 
-private:
-    void Init();
-    Cube cube;
-};
+    private:
+        void Init();
+        Cube cube;
+    };
 
-}
+}// namespace voxie

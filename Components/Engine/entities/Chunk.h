@@ -8,9 +8,9 @@
 #include <memory>
 #include <vector>
 
-#include "RenderingHandler.h"
 #include "EntityComponentSystem.h"
 #include "Node.h"
+#include "RenderingHandler.h"
 
 namespace voxie {
     class Cube;

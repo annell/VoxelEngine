@@ -18,5 +18,4 @@ namespace voxie {
 
         std::string name;
     };
-}
-
+}// namespace voxie

@@ -89,7 +89,7 @@ namespace voxie {
     }
 
     void MouseHandler::processInput() {
-        auto& engine = Engine::GetEngine();
+        auto &engine = Engine::GetEngine();
         for (auto &key : internal::GetRegisteredMouseKeys()) {
             if (glfwGetMouseButton(engine.GetWindow()->GetWindow(), key.key) == key.type) {
                 key.action();

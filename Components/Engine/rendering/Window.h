@@ -18,7 +18,7 @@ namespace voxie {
         void SetWidth(unsigned int widthIn);
         void SetHeight(unsigned int heightIn);
         unsigned int GetHeight() const;
-        void SetTitle(const std::string&);
+        void SetTitle(const std::string &);
         void CloseWindow() const;
 
     private:

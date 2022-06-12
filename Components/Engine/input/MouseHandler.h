@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "InputDefinitions.h"
 #include <functional>
 #include <vector>
-#include "InputDefinitions.h"
 
 class GLFWwindow;
 namespace voxie {
@@ -34,4 +34,4 @@ namespace voxie {
         static void RegisterAction(const MouseAction &);
     };
 
-}// namespace voxie::MouseHandler
+}// namespace voxie

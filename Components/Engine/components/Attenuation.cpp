@@ -7,7 +7,7 @@
 namespace voxie {
 
     Attenuation::Attenuation(float constant, float linear, float quadratic)
-            : constant(constant), linear(linear), quadratic(quadratic) {
+        : constant(constant), linear(linear), quadratic(quadratic) {
     }
 
     void Attenuation::encode(YAML::Node &node) const {
@@ -22,4 +22,4 @@ namespace voxie {
         quadratic = node["quadratic"].as<float>();
         return true;
     }
-}
+}// namespace voxie

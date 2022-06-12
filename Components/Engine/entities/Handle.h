@@ -9,35 +9,33 @@
 namespace voxie {
 
 
-class Handle {
-public:
-    using Identity = u_int64_t;
-    explicit Handle(Identity);
+    class Handle {
+    public:
+        using Identity = u_int64_t;
+        explicit Handle(Identity);
 
-    static Handle MakeEntity();
+        static Handle MakeEntity();
 
-    Handle::Identity GetId() const;
+        Handle::Identity GetId() const;
 
-    bool operator<(const Handle &rhs) const;
+        bool operator<(const Handle &rhs) const;
 
-    bool operator==(const Handle &rhs) const;
+        bool operator==(const Handle &rhs) const;
 
 
-private:
-    auto as_tie() const;
+    private:
+        auto as_tie() const;
 
-    Handle::Identity id;
-};
+        Handle::Identity id;
+    };
 
-}
+}// namespace voxie
 
 namespace std {
 
-    template <>
-    struct hash<voxie::Handle>
-    {
-        std::size_t operator()(const voxie::Handle& handle) const
-        {
+    template<>
+    struct hash<voxie::Handle> {
+        std::size_t operator()(const voxie::Handle &handle) const {
             // Compute individual hash values for first,
             // second and third and combine them using XOR
             // and bit shifting:
@@ -46,4 +44,4 @@ namespace std {
         }
     };
 
-}
+}// namespace std

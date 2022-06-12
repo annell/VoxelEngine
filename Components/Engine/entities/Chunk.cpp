@@ -4,10 +4,10 @@
 
 #include "Chunk.h"
 #include "Core.h"
-#include <map>
-#include <utility>
 #include "Cube.h"
 #include "ModelLoader.h"
+#include <map>
+#include <utility>
 
 #define GL_SILENCE_DEPRECATION
 #include <GL/glew.h>

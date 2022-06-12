@@ -7,7 +7,7 @@
 
 namespace voxie {
     VisibleText::VisibleText(std::string text)
-            : text(text) {
+        : text(text) {
     }
 
     void VisibleText::encode(YAML::Node &node) const {
@@ -18,4 +18,4 @@ namespace voxie {
         text = node["text"].as<std::string>();
         return true;
     }
-}
+}// namespace voxie

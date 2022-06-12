@@ -3,8 +3,8 @@
 //
 
 #pragma once
-#include <yaml-cpp/yaml.h>
 #include <glm/glm.hpp>
+#include <yaml-cpp/yaml.h>
 
 namespace YAML {
     class Node;
@@ -22,4 +22,4 @@ namespace voxie {
         bool decode(const YAML::Node &node);
     };
 
-}
+}// namespace voxie

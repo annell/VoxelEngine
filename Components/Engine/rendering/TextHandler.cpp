@@ -8,8 +8,8 @@
 #include <utility>
 
 #include "VertexBufferArray.h"
-#include <ft2build.h>
 #include "freetype/freetype.h"
+#include <ft2build.h>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

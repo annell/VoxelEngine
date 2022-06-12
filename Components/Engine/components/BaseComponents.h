@@ -3,15 +3,15 @@
 //
 
 #pragma once
-#include "Name.h"
-#include "Material.h"
-#include "Color.h"
 #include "Attenuation.h"
+#include "Color.h"
+#include "Cube.h"
+#include "Direction.h"
+#include "Material.h"
+#include "Name.h"
 #include "Position.h"
 #include "Position2D.h"
-#include "Direction.h"
 #include "Skybox.h"
-#include "Cube.h"
 #include "VisibleText.h"
 
 namespace YAML {

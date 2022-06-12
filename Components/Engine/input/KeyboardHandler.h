@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "InputDefinitions.h"
 #include <functional>
 #include <vector>
-#include "InputDefinitions.h"
 
 namespace voxie {
     struct KeyAction {
@@ -20,7 +20,7 @@ namespace voxie {
         using RegistredKeys = std::vector<KeyAction>;
         static void processInput();
         static void RegisterAction(const KeyAction &);
-        static bool IsKeyState(const Key& key, const ActionType& actionType);
+        static bool IsKeyState(const Key &key, const ActionType &actionType);
     };
 
 }// namespace voxie

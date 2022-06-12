@@ -3,23 +3,23 @@
 //
 
 #pragma once
-#include <yaml-cpp/yaml.h>
-#include <glm/glm.hpp>
 #include "Delegate.h"
+#include <glm/glm.hpp>
+#include <yaml-cpp/yaml.h>
 
 namespace voxie {
 
-struct Color {
-    Color(glm::vec3 color);
+    struct Color {
+        Color(glm::vec3 color);
 
-    void encode(YAML::Node &node) const;
-    bool decode(const YAML::Node &node);
+        void encode(YAML::Node &node) const;
+        bool decode(const YAML::Node &node);
 
-    void SetColor(float r, float g, float b);
+        void SetColor(float r, float g, float b);
 
-    glm::vec3 color;
+        glm::vec3 color;
 
-    using OnUpdate = Delegate<>;
-    OnUpdate onUpdate;
-};
-}
+        using OnUpdate = Delegate<>;
+        OnUpdate onUpdate;
+    };
+}// namespace voxie

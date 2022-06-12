@@ -8,7 +8,6 @@ namespace voxie {
 
     Color::Color(glm::vec3 color)
         : color(color) {
-
     }
 
     void Color::encode(YAML::Node &node) const {
@@ -29,4 +28,4 @@ namespace voxie {
         onUpdate.Broadcast();
     }
 
-}
+}// namespace voxie
