@@ -4,10 +4,10 @@
 
 #include "Scene.h"
 #include "Factory.h"
-#include <fstream>
-#include <Skybox.h>
 #include "Node.h"
 #include "Shader.h"
+#include <Skybox.h>
+#include <fstream>
 
 #define GL_SILENCE_DEPRECATION
 #include <GL/glew.h>
@@ -73,9 +73,9 @@ namespace voxie {
         }
 
         skybox = std::make_unique<Skybox>(Handle::MakeEntity(), std::make_shared<voxie::Shader>(
-        std::map<std::string, unsigned int>{
-                std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", GL_VERTEX_SHADER),
-                std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", GL_FRAGMENT_SHADER)}));
+                                                                        std::map<std::string, unsigned int>{
+                                                                                std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", GL_VERTEX_SHADER),
+                                                                                std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", GL_FRAGMENT_SHADER)}));
         UpdateLights();
     }
 
@@ -95,7 +95,7 @@ namespace voxie {
         return nodePtr;
     }
 
-    void Scene::AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode) {
+    void Scene::AddNodeImplementation(std::unique_ptr<Node> &&node, Node *rootNode) {
         nodes[node->GetHandle()] = node.get();
         if (rootNode) {
             rootNode->AddChild(std::move(node));
@@ -106,7 +106,7 @@ namespace voxie {
 
     Scene::SceneEntities Scene::GetEntities() const {
         SceneEntities keys;
-        for (const auto& node : nodes) {
+        for (const auto &node : nodes) {
             keys.push_back(node.first);
         }
         return keys;
@@ -117,7 +117,7 @@ namespace voxie {
         auto camera = Engine::GetEngine().GetCamera();
 
         Scene::SceneNodes nodesForRendering;
-        for (const auto& node : nodes) {
+        for (const auto &node : nodes) {
             auto nodePtr = node.second->GetNodePtr();
             if (nodePtr->IsEnabled()) {
                 if (std::dynamic_pointer_cast<Chunk>(nodePtr) ||
@@ -162,17 +162,17 @@ namespace voxie {
         return nullptr;
     }
 
-    Skybox* Scene::GetSkybox() const {
+    Skybox *Scene::GetSkybox() const {
         return skybox.get();
     }
 
-    void Scene::DisableEntity(const Handle& handle) {
+    void Scene::DisableEntity(const Handle &handle) {
         if (auto node = FindNode(handle)) {
             node->Disable();
         }
     }
 
-    void Scene::EnableEntity(const Handle& handle) {
+    void Scene::EnableEntity(const Handle &handle) {
         if (auto node = FindNode(handle)) {
             node->Enable();
         }
@@ -183,7 +183,7 @@ namespace voxie {
                std::dynamic_pointer_cast<CubeEntity>(node);
     }
 
-    void Scene::UpdateLightSources(std::shared_ptr<Shader> shader, const std::vector<std::shared_ptr<LightSource>>& lightSources) const {
+    void Scene::UpdateLightSources(std::shared_ptr<Shader> shader, const std::vector<std::shared_ptr<LightSource>> &lightSources) const {
         shader->use();
         shader->setInt("nrLights", lightSources.size());
         int n = 0;
@@ -205,7 +205,7 @@ namespace voxie {
     void Scene::UpdateLights() const {
         auto lightSources = helper::GetSceneNodes<LightSource>(GetEntities());
 
-        for (const auto& node : GetNodesForRendering()) {
+        for (const auto &node : GetNodesForRendering()) {
             if (IsAffectedByLight(node)) {
                 UpdateLightSources(helper::GetComponent<Shader>(node->GetHandle()), lightSources);
             }

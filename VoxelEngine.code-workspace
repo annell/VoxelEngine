@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"C_Cpp.autocompleteAddParentheses": true,
+		"C_Cpp.codeAnalysis.clangTidy.enabled": true,
+		"C_Cpp.clang_format_fallbackStyle": "Google",
+		"editor.formatOnSave": true,
+		"editor.formatOnType": ";",
+		"C_Cpp.clang_format_sortIncludes": false,
+		"formatFiles.excludedFolders": [
+			"node_modules",
+			".vscode",
+			".git",
+			"dist",
+			".chrome",
+			"build",
+			"Components/Engine/external",
+			"*.vs",
+			"*.fs",
+			"resources",
+		],
+	}
+}

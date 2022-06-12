@@ -1,31 +1,13 @@
 - node:
-    type: TransformNode
-    id: 1312
-    name: "World\x00orm Node"
-    position:
-      position:
-        x: 0
-        y: 0
-        z: -0.00406378508
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 1.85967743
-        z: 1
-- parent: 1312
-  node:
     type: Camera
-    id: 1
+    id: 4054188769704435938
     activeCamera: true
     name: Editor Camera
     position:
       position:
-        x: 8.87147141
-        y: 2.94392872
-        z: 17.7191315
+        x: -8.52594185
+        y: 3.64259052
+        z: -12.4106398
       rotation:
         x: 0
         y: 0
@@ -35,22 +17,54 @@
         y: 1
         z: 1
     direction:
-      yaw: 238.295959
-      pitch: -0.999765277
-- parent: 1312
+      yaw: 41.5
+      pitch: -11.3999987
+- parent: 4054188769704435938
   node:
-    type: LightSource
-    id: 8244
-    lightType: 0
-    name: Ambient light
+    type: CubeEntity
+    id: 2823444831312357228
+    name: Cube
     position:
       position:
-        x: -4.20409775
-        y: 20.5406017
-        z: -9.64328861
+        x: 0
+        y: 0
+        z: 0
       rotation:
         x: 0
         y: 0
+        z: 0
+      scale:
+        x: 52.0593681
+        y: 0.00100000005
+        z: 46.4123383
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      specular:
+        x: 0
+        y: 0
+        z: 0
+      shininess: 32
+- parent: 4054188769704435938
+  node:
+    type: LightSource
+    id: 3836173917837072672
+    lightType: 1
+    name: Point light
+    position:
+      position:
+        x: 0
+        y: 1.05608678
+        z: 0
+      rotation:
+        x: 0
+        y: -0
         z: 0
       scale:
         x: 1
@@ -60,177 +74,30 @@
       r: 0.5
       g: 0.5
       b: 0.5
-- parent: 1312
-  node:
-    type: Chunk
-    id: 659
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/castle.vox
-    name: castle.vox
-    position:
-      position:
-        x: -3.78894879e-06
-        y: 3.9025681
-        z: 1.33966097e-07
-      rotation:
-        x: -6.46910564e-07
-        y: -1.54127538
-        z: 1.06578362e-07
-      scale:
-        x: 0.35999915
-        y: 0.360000014
-        z: 0.35999915
-- parent: 1312
-  node:
-    type: Chunk
-    id: 994
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
-    name: "chr_knight\x00\x00ox"
-    position:
-      position:
-        x: 5.7598772
-        y: 2.06520057
-        z: 3.60984254
-      rotation:
-        x: 3.1415925
-        y: 1.48246622
-        z: 3.1415925
-      scale:
-        x: 0.189999998
-        y: 0.189999998
-        z: 0.189999998
-- parent: 1312
-  node:
-    type: LightSource
-    id: 1362
-    lightType: 1
-    name: Point light
-    position:
-      position:
-        x: 2.77092147
-        y: 0.184938446
-        z: 3.26535034
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 2.28009486
-        z: 1
-    color:
-      r: 0.32432431
-      g: 0
-      b: 0.314671993
     attenuation:
-      constant: 0.633000016
-      linear: 1.26600003
-      quadratic: 0.633000016
-- parent: 1312
-  node:
-    type: LightSource
-    id: 1488
-    lightType: 1
-    name: Point light
-    position:
-      position:
-        x: 6.43633366
-        y: 0.295289457
-        z: 3.82763481
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    color:
-      r: 0.35162577
-      g: 0.010266657
-      b: 0.513333321
-    attenuation:
-      constant: 0.323000014
-      linear: 0.644999981
-      quadratic: 1.61300004
-- parent: 1312
-  node:
-    type: LightSource
-    id: 1768
-    lightType: 1
-    name: Point light
-    position:
-      position:
-        x: -1.87092686
-        y: 1.47699571
-        z: 3.42206717
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    color:
-      r: 1
-      g: 0.336666644
-      b: 0.336666644
-    attenuation:
-      constant: 0.323000014
-      linear: 0.644999981
+      constant: 1
+      linear: 1
       quadratic: 1
-- parent: 1312
+- parent: 4054188769704435938
   node:
-    type: Chunk
-    id: 2551
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
-    name: "chr_knight 2\x00x"
-    position:
-      position:
-        x: 2.4807899
-        y: 0.827063918
-        z: 6.32866573
-      rotation:
-        x: 3.1415925
-        y: 0.817960382
-        z: 3.1415925
-      scale:
-        x: 0.0794999674
-        y: 0.0795000121
-        z: 0.0794999674
-- parent: 1312
-  node:
-    type: CubeEntity
-    id: 4329160489113576905
-    name: Cube
+    type: LightSource
+    id: 4185854633302021234
+    lightType: 0
+    name: Ambient light
     position:
       position:
         x: 0
-        y: 0
+        y: 7.73217487
         z: 0
       rotation:
         x: 0
         y: -0
         z: 0
       scale:
-        x: 58.8260689
-        y: 0.00100000005
-        z: 51.408596
-    material:
-      color:
-        r: 0.200000003
-        g: 0.800000012
-        b: 0.300000012
-      ambient:
-        x: 0.777027011
-        y: 0.777019203
-        z: 0.777019203
-      diffuse:
         x: 1
-        y: 0.5
-        z: 0.310000002
-      specular:
-        x: 0.5
-        y: 0.5
-        z: 0.5
-      shininess: 32
+        y: 1
+        z: 1
+    color:
+      r: 0.5
+      g: 0.5
+      b: 0.5

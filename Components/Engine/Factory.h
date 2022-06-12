@@ -3,23 +3,24 @@
 //
 #pragma once
 
-#include <TransformNode.h>
+#include "Text.h"
 #include <Lightsource.h>
 #include <Sprite.h>
-#include "Text.h"
-#include <string>
+#include <TransformNode.h>
 #include <filesystem>
 #include <memory>
+#include <string>
 
-#include "Cube.h"
 #include "BaseComponents.h"
+#include "Cube.h"
 
 namespace voxie {
 
     class Chunk;
     class CubeEntity;
 
-    const std::string BASE_PATH = std::filesystem::current_path().string() + std::string("/resources");
+    const std::string WORKSPACE_ADJUST = "/../../..";
+    const std::string BASE_PATH = std::filesystem::current_path().string() + WORKSPACE_ADJUST + std::string("/resources");
     const std::string SHADERS = "/shaders";
     const std::string FONTS = "/fonts";
     const std::string MODELS = "/voxelObjects";

@@ -3,9 +3,10 @@
 //
 
 #pragma once
+#include <EntityComponentSystem.h>
 #include <iostream>
 #include <list>
-#include <EntityComponentSystem.h>
+#include <memory>
 #include <unordered_map>
 
 namespace voxie {
@@ -24,13 +25,13 @@ namespace voxie {
         void SaveAs(const std::string &name);
         void Load(const std::string &name);
         void ClearScene();
-        Node * AddEntity(std::shared_ptr<NodeWrapper>, Node * parent = nullptr);
-        Node * AddEntity(Handle, Node * parent = nullptr);
-        void DisableEntity(const Handle&);
-        void EnableEntity(const Handle&);
+        Node *AddEntity(std::shared_ptr<NodeWrapper>, Node *parent = nullptr);
+        Node *AddEntity(Handle, Node *parent = nullptr);
+        void DisableEntity(const Handle &);
+        void EnableEntity(const Handle &);
 
-        template <typename T>
-        void AddNode(std::shared_ptr<T> nodeWrapper, Node * parent) {
+        template<typename T>
+        void AddNode(std::shared_ptr<T> nodeWrapper, Node *parent) {
             auto rootNode = parent ? parent : GetRoot();
             auto node = std::make_unique<Node>(std::dynamic_pointer_cast<NodeWrapper>(std::move(nodeWrapper)), rootNode);
             AddNodeImplementation(std::move(node), rootNode);
@@ -44,22 +45,22 @@ namespace voxie {
         std::shared_ptr<NodeWrapper> FindNode(const Handle &);
 
         const std::string &GetSceneName() const;
-        Node * GetRoot() const;
-        Skybox* GetSkybox() const;
+        Node *GetRoot() const;
+        Skybox *GetSkybox() const;
 
         void UpdateLights() const;
 
     private:
-        void AddNodeImplementation(std::unique_ptr<Node>&& node, Node* rootNode);
+        void AddNodeImplementation(std::unique_ptr<Node> &&node, Node *rootNode);
 
         bool IsAffectedByLight(std::shared_ptr<NodeWrapper>) const;
-        void UpdateLightSources(std::shared_ptr<Shader>, const std::vector<std::shared_ptr<LightSource>>&) const;
+        void UpdateLightSources(std::shared_ptr<Shader>, const std::vector<std::shared_ptr<LightSource>> &) const;
 
         std::unique_ptr<Node> root;
         std::string folder;
         std::string sceneName;
         std::unique_ptr<Skybox> skybox;
-        std::unordered_map<Handle, Node*> nodes;
+        std::unordered_map<Handle, Node *> nodes;
     };
 
 }// namespace voxie

@@ -3,7 +3,8 @@
 //
 #include "LoadTexture.h"
 #include <GLFW/glfw3.h>
-#include <stb_image.h>
+
+#include "external/stb/stb_image.h"
 
 namespace voxie {
 

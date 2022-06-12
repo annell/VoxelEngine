@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.4)
 project(Engine)
 
 # Add header file
@@ -7,10 +7,6 @@ pkg_search_module(GLEW REQUIRED GLEW)
 set(GLEW_DYN_LIB ${GLEW_INCLUDE_DIRS}/../lib/libGLEW.a)
 
 find_package(Freetype REQUIRED)
-
-set(SOIL_H /opt/local/include/SOIL)
-
-set(SOIL_LINK /opt/local/lib/libSOIL.a)
 
 # Execute compilation command
 file(GLOB CPP_FILES
@@ -57,12 +53,11 @@ set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/external/vox
         CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
-
 include(ExternalProject)
 ExternalProject_Add(yaml-cpp
         GIT_REPOSITORY git@github.com:jbeder/yaml-cpp.git
         GIT_TAG yaml-cpp-0.7.0
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION} -DYAML_CPP_BUILD_TESTS=OFF
         LOG_DOWNLOAD ON
         LOG_INSTALL ON
         )
@@ -100,7 +95,6 @@ target_include_directories(${PROJECT_NAME}
         PUBLIC ${GLEW_INCLUDE_DIRS}
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/include
         PRIVATE ${FREETYPE_INCLUDE_DIRS}
-        PRIVATE ${SOIL_H}
         )
 
 if(APPLE)
@@ -116,7 +110,6 @@ target_link_libraries(${PROJECT_NAME}
         PRIVATE ${EXTERNAL_INSTALL_LOCATION}/lib/libglfw3.a
         PRIVATE ${GLEW_DYN_LIB}
         PRIVATE ${FREETYPE_LIBRARIES}
-        PRIVATE ${SOIL_LINK}
         PRIVATE ${OSX_GLFW_DEP}
         )
 

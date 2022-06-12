@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.4)
 project(Voxie)
 # You can tweak some common (for all subprojects) stuff here. For example:
 
 # Address sanitizer
-option(USE_ASAN "Run the project with ASAN" ON)
+option(USE_ASAN "Run the project with ASAN" OFF)
 if(USE_ASAN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 endif()

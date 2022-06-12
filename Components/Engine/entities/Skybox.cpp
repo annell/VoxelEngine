@@ -1,10 +1,12 @@
 //
 // Created by Stefan Annell on 2021-11-21.
 //
-
 #include "Skybox.h"
+
 #include "Core.h"
-#include <stb_image_aug.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <GL/glew.h>
 
@@ -58,14 +60,12 @@ namespace voxie {
         cube.CreateRenderBuffers();
         cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) nullptr);
 
-        cubemapTexture = internal::loadCubemap({
-            BASE_PATH + SPRITES + "/skybox/right.jpg",
-            BASE_PATH + SPRITES + "/skybox/left.jpg",
-            BASE_PATH + SPRITES + "/skybox/top.jpg",
-            BASE_PATH + SPRITES + "/skybox/bottom.jpg",
-            BASE_PATH + SPRITES + "/skybox/front.jpg",
-            BASE_PATH + SPRITES + "/skybox/back.jpg"}
-        );
+        cubemapTexture = internal::loadCubemap({BASE_PATH + SPRITES + "/skybox/right.jpg",
+                                                BASE_PATH + SPRITES + "/skybox/left.jpg",
+                                                BASE_PATH + SPRITES + "/skybox/top.jpg",
+                                                BASE_PATH + SPRITES + "/skybox/bottom.jpg",
+                                                BASE_PATH + SPRITES + "/skybox/front.jpg",
+                                                BASE_PATH + SPRITES + "/skybox/back.jpg"});
 
         auto shader = GetShader();
         shader->use();
