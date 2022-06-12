@@ -1,13 +1,13 @@
 - node:
     type: Camera
-    id: 4332166420956594899
+    id: 2958638728098174689
     activeCamera: true
     name: Editor Camera
     position:
       position:
-        x: -15.6374817
-        y: 8.13320351
-        z: 14.1135979
+        x: -6.35198069
+        y: 3.48776293
+        z: -4.60567522
       rotation:
         x: 0
         y: 0
@@ -17,96 +17,40 @@
         y: 1
         z: 1
     direction:
-      yaw: 293.300262
-      pitch: -14.000041
-- parent: 4332166420956594899
+      yaw: 39.7000427
+      pitch: -6.60000038
+- parent: 2958638728098174689
   node:
-    type: LightSource
-    id: 4408232323620398058
-    lightType: 0
-    name: Ambient light
+    type: CubeEntity
+    id: 4351011322699060133
+    name: Floor
     position:
       position:
-        x: 4.77948332
-        y: 6.96778011
-        z: -1.69601524
+        x: 0
+        y: 0
+        z: 0
       rotation:
         x: 0
         y: 0
         z: 0
       scale:
-        x: 52.0593681
+        x: 30.3861027
         y: 0.00100000005
-        z: 46.4123383
+        z: 30.5530014
     material:
       ambient:
-        x: 0.5
-        y: 0.5
-        z: 0.5
+        x: 1
+        y: 0.993434727
+        z: 0.779411793
       diffuse:
-        x: 0.5
-        y: 0.5
-        z: 0.5
+        x: 0
+        y: 0
+        z: 0
       specular:
         x: 0
         y: 0
         z: 0
       shininess: 32
-- parent: 4054188769704435938
-  node:
-    type: LightSource
-    id: 3836173917837072672
-    lightType: 1
-    name: Point light
-    position:
-      position:
-        x: 0
-        y: 1.05608678
-        z: 0
-      rotation:
-        x: 0
-        y: -0
-        z: 0
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    color:
-      r: 0.431372523
-      g: 0.43137148
-      b: 0.431368202
-- parent: 4332166420956594899
-  node:
-    type: CubeEntity
-    id: 2940827699049369871
-    name: Floor
-    position:
-      position:
-        x: 0
-        y: 7.73217487
-        z: 0
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 18.6176987
-        y: 0.00100000005
-        z: 17.6296635
-    material:
-      ambient:
-        x: 0.990186453
-        y: 0.990196049
-        z: 0.990186155
-      diffuse:
-        x: 0
-        y: 0
-        z: 0
-      specular:
-        x: 0
-        y: 0
-        z: 0
-      shininess: 70.4970016
     rigidBody:
       mass: 1
       gravity: true
@@ -115,29 +59,119 @@
         x: 0
         y: 0
         z: 0
-- parent: 4332166420956594899
+- parent: 2958638728098174689
   node:
-    type: CubeEntity
-    id: 3794869041118124616
-    name: Cube1
+    type: LightSource
+    id: 3472422637909380024
+    lightType: 1
+    name: Point light
     position:
       position:
-        x: 1.08002126
-        y: 0.49560225
-        z: 0.00304046785
+        x: -0.540509582
+        y: 0.468765825
+        z: 1.98062491
       rotation:
-        x: 0.00388450944
-        y: 0.000429863925
-        z: -0.000550633529
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 2.34512329
+        z: 1
+    color:
+      r: 1
+      g: 0.0294117928
+      b: 0.857266307
+    attenuation:
+      constant: 0.86500001
+      linear: 2.5940001
+      quadratic: 5
+- parent: 2958638728098174689
+  node:
+    type: LightSource
+    id: 2895332820676678602
+    lightType: 0
+    name: Ambient light
+    position:
+      position:
+        x: 0
+        y: 5.7539072
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    color:
+      r: 0.5
+      g: 0.5
+      b: 0.5
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 4544682653325333397
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 0.984841466
+        z: 2.36930776
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 0.999999821
+        y: 0.999999583
+        z: 0.999999702
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 0
+        y: 0
+        z: 0
+      specular:
+        x: 0
+        y: 0
+        z: 0
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 2695132888093817933
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 2.36509967
+        z: 1.7932744
+      rotation:
+        x: 0
+        y: 0
+        z: 0
       scale:
         x: 1
         y: 1
         z: 1
     material:
       ambient:
-        x: 0.627450943
-        y: 0.483614683
-        z: 0.301422507
+        x: 0.5
+        y: 0.5
+        z: 0.5
       diffuse:
         x: 0
         y: 0
@@ -154,258 +188,4 @@
       offset:
         x: 0
         y: 0
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: CubeEntity
-    id: 2794869041118124617
-    name: Cube2
-    position:
-      position:
-        x: -0.0068231863
-        y: 0.499944925
-        z: -6.78030265e-05
-      rotation:
-        x: 0.000808282988
-        y: -0.00099199987
-        z: -0.000159691961
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    material:
-      ambient:
-        x: 0.627450943
-        y: 0.483614683
-        z: 0.301422507
-      diffuse:
-        x: 0
-        y: 0
-        z: 0
-      specular:
-        x: 0
-        y: 0
-        z: 0
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: 0
-        y: 0
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: CubeEntity
-    id: 3794869041118124618
-    name: Cube3
-    position:
-      position:
-        x: -1.06761467
-        y: 0.499391198
-        z: 0.000518073386
-      rotation:
-        x: 0.00108430686
-        y: -5.95955044e-07
-        z: 0.000918568636
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    material:
-      ambient:
-        x: 0.627450943
-        y: 0.483614683
-        z: 0.301422507
-      diffuse:
-        x: 0
-        y: 0
-        z: 0
-      specular:
-        x: 0
-        y: 0
-        z: 0
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: 0
-        y: 0
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: CubeEntity
-    id: 3794869041118134616
-    name: Cube4
-    position:
-      position:
-        x: 1.12596595
-        y: 1.4934119
-        z: 0.00938912202
-      rotation:
-        x: 0.0029935725
-        y: 0.00473027769
-        z: -0.00350634777
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    material:
-      ambient:
-        x: 0.627450943
-        y: 0.483614683
-        z: 0.301422507
-      diffuse:
-        x: 0
-        y: 0
-        z: 0
-      specular:
-        x: 0
-        y: 0
-        z: 0
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: 0
-        y: 0
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: CubeEntity
-    id: 3794869041118124617
-    name: Cube5
-    position:
-      position:
-        x: 0.474208742
-        y: 4.54683065
-        z: -0.329265833
-      rotation:
-        x: 1.56992173
-        y: 0.0677817687
-        z: 0.000501801493
-      scale:
-        x: 0.999999642
-        y: 0.999990582
-        z: 0.999990702
-    material:
-      ambient:
-        x: 0.627450943
-        y: 0.483614683
-        z: 0.301422507
-      diffuse:
-        x: 0
-        y: 0
-        z: 0
-      specular:
-        x: 0
-        y: 0
-        z: 0
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: 0
-        y: 0
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: CubeEntity
-    id: 3794862041118124618
-    name: Cube6
-    position:
-      position:
-        x: -1.10571086
-        y: 1.49884725
-        z: 0.00698624318
-      rotation:
-        x: 0.000629596412
-        y: -0.000521002279
-        z: 0.000899340201
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    material:
-      ambient:
-        x: 0.627450943
-        y: 0.483614683
-        z: 0.301422507
-      diffuse:
-        x: 0
-        y: 0
-        z: 0
-      specular:
-        x: 0
-        y: 0
-        z: 0
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: 0
-        y: 0
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: Chunk
-    id: 3549980493952860096
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_knight.vox
-    name: AxeGal
-    position:
-      position:
-        x: -6.49148083
-        y: 5.02205992
-        z: 1.26734436
-      rotation:
-        x: 0
-        y: -0
-        z: 0
-      scale:
-        x: 0.000341475068
-        y: 0.230000019
-        z: 0.158089131
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: -0.600000024
-        y: -0.600000024
-        z: 0
-- parent: 4332166420956594899
-  node:
-    type: Chunk
-    id: 3797099042646646264
-    path: /Users/stan/dev/C++/VoxelEngine/resources/voxelObjects/chr_sword.vox
-    name: SwordGuy
-    position:
-      position:
-        x: 4.44186592
-        y: 2.72325754
-        z: 0
-      rotation:
-        x: 0
-        y: -1.22696209
-        z: 0
-      scale:
-        x: 0.170000061
-        y: 0.170000002
-        z: 0.170000061
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 2
-      offset:
-        x: 0
-        y: -0.600000024
         z: 0
