@@ -55,7 +55,7 @@ namespace voxie {
         void DisableNormals();
         void DisableMaterials();
 
-        const std::vector<float>& GetVertices() const;
+        const std::vector<float> &GetVertices() const;
 
     private:
         void GenerateVertexAttributes(const Side &side);

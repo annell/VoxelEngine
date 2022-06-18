@@ -4,8 +4,8 @@
 
 #pragma once
 #include <glm/glm.hpp>
-#include <yaml-cpp/yaml.h>
 #include <limits>
+#include <yaml-cpp/yaml.h>
 
 namespace reactphysics3d {
     class RigidBody;

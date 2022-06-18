@@ -121,9 +121,9 @@ namespace voxie {
 
     bool RigidBody::decode(const YAML::Node &node) {
         auto offsetNode = node["offset"];
-        SetOffset({ offsetNode["x"].as<float>(),
-                    offsetNode["y"].as<float>(),
-                    offsetNode["z"].as<float>()});
+        SetOffset({offsetNode["x"].as<float>(),
+                   offsetNode["y"].as<float>(),
+                   offsetNode["z"].as<float>()});
         SetMass(node["mass"].as<float>());
         SetGravity(node["gravity"].as<bool>());
         SetBodyType(static_cast<voxie::BodyType>(node["bodyType"].as<int>()));
@@ -134,21 +134,17 @@ namespace voxie {
     void RigidBody::SetPosition(const Position &pos) const {
         assert(rigidBody && collider);
         rigidBody->setTransform(internal::PositionToTransform(GetPositionWithOffset(pos)));
-        dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents(
-            {(chunkAxises.x.diff() * pos.scale.x) / 2,
-            (chunkAxises.y.diff() * pos.scale.y) / 2, 
-            (chunkAxises.z.diff() * pos.scale.z) / 2
-            });
+        dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents({(chunkAxises.x.diff() * pos.scale.x) / 2, (chunkAxises.y.diff() * pos.scale.y) / 2, (chunkAxises.z.diff() * pos.scale.z) / 2});
     }
 
-    Position RigidBody::GetPositionWithOffset(const Position & pos) const {
+    Position RigidBody::GetPositionWithOffset(const Position &pos) const {
         auto modifiedpos = pos;
         modifiedpos.pos += GetOffset();
         modifiedpos.UpdateModel();
         return modifiedpos;
     }
 
-    void RigidBody::SetOffset(const glm::vec3 & offset) {
+    void RigidBody::SetOffset(const glm::vec3 &offset) {
         this->offset = offset;
     }
 

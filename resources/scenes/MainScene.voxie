@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -6.35198069
-        y: 3.48776293
-        z: -4.60567522
+        x: -10.6713781
+        y: 4.07236862
+        z: -2.11922431
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 39.7000427
-      pitch: -6.60000038
+      yaw: 9.89997864
+      pitch: -7.09999275
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -121,7 +121,7 @@
         z: 2.36930776
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
         x: 0.999999821
@@ -129,17 +129,17 @@
         z: 0.999999702
     material:
       ambient:
-        x: 0.5
-        y: 0.5
-        z: 0.5
+        x: 0.90196079
+        y: 0.90195173
+        z: 0.90195173
       diffuse:
-        x: 0
-        y: 0
-        z: 0
+        x: 0.588235259
+        y: 0.588229358
+        z: 0.588229358
       specular:
-        x: 0
-        y: 0
-        z: 0
+        x: 0.911764681
+        y: 0.911755562
+        z: 0.911755562
       shininess: 32
     rigidBody:
       mass: 1
@@ -161,7 +161,7 @@
         z: 1.7932744
       rotation:
         x: 0
-        y: 0
+        y: -0
         z: 0
       scale:
         x: 1
@@ -169,22 +169,49 @@
         z: 1
     material:
       ambient:
-        x: 0.5
-        y: 0.5
-        z: 0.5
+        x: 1
+        y: 0.914653182
+        z: 0.426470578
       diffuse:
-        x: 0
-        y: 0
-        z: 0
+        x: 1
+        y: 0.981617689
+        z: 0.460784316
       specular:
-        x: 0
-        y: 0
-        z: 0
+        x: 0.972816408
+        y: 1
+        z: 0.700980425
       shininess: 32
     rigidBody:
       mass: 1
       gravity: true
       bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+- parent: 2958638728098174689
+  node:
+    type: Chunk
+    id: 3322178905651564604
+    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/voxelObjects/chr_sword.vox
+    name: chr_sword.vox
+    position:
+      position:
+        x: -0.366467267
+        y: 2.03036046
+        z: -0.0861530006
+      rotation:
+        x: 0
+        y: 0.0784358159
+        z: 0
+      scale:
+        x: 0.180000067
+        y: 0.180000007
+        z: 0.180000067
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 0
       offset:
         x: 0
         y: 0
