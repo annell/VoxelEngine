@@ -16,9 +16,6 @@ namespace voxie {
         GameMode(const std::string &);
         virtual ~GameMode();
 
-        // Called once
-        virtual void Initialize();
-
         // Starts / stops tick
         virtual void Start();
         virtual void Stop();

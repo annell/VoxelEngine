@@ -77,10 +77,7 @@ namespace voxie {
 
     EditorGameMode::EditorGameMode()
         : voxie::GameMode() {
-        Initialize();
-    }
 
-    void EditorGameMode::Initialize() {
         StyleColorsDark(nullptr);
         auto &engine = voxie::Engine::GetEngine();
         auto &scene = engine.GetScene();

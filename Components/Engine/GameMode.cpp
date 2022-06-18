@@ -7,9 +7,19 @@
 
 namespace voxie {
 
-    void GameMode::Initialize() {
+    GameMode::GameMode()
+        : GameMode("MainScene.voxie") {
+    }
+
+    GameMode::GameMode(const std::string &sceneSaveFile)
+        : sceneSavefile(sceneSaveFile) {
         auto &engine = Engine::GetEngine();
         OnTickHandle = engine.onTick.Bind(std::bind(&GameMode::OnTick, this, std::placeholders::_1));
+    }
+
+    GameMode::~GameMode() {
+        auto &engine = Engine::GetEngine();
+        engine.onTick.Unbind(OnTickHandle);
     }
 
     void GameMode::Reset() {
@@ -41,19 +51,6 @@ namespace voxie {
     void GameMode::OnTick(float deltaTime) {
     }
 
-    GameMode::GameMode()
-        : GameMode("MainScene.voxie") {
-    }
-
-    GameMode::GameMode(const std::string &sceneSaveFile)
-        : sceneSavefile(sceneSaveFile) {
-        Initialize();
-    }
-
-    GameMode::~GameMode() {
-        auto &engine = Engine::GetEngine();
-        engine.onTick.Unbind(OnTickHandle);
-    }
     bool GameMode::IsStarted() const {
         return started;
     }

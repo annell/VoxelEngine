@@ -14,7 +14,6 @@ namespace voxie {
     public:
         EditorGameMode();
 
-        void Initialize() override;
         void OnTick(float deltaTime) override;
 
         void Start() override;
