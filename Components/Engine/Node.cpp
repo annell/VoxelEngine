@@ -43,6 +43,8 @@ namespace voxie {
             node["node"] = *sprite.get();
         } else if (auto sprite = helper::GetSceneNode<Text>(handle)) {
             node["node"] = *sprite.get();
+        } else if (auto sprite = helper::GetSceneNode<PlayerController>(handle)) {
+            node["node"] = *sprite.get();
         }
         root.push_back(node);
 
@@ -99,7 +101,11 @@ namespace voxie {
                                  nodeEntity});
             obj->decode(n);
             nodePtr = std::move(obj);
-            return true;
+        } else if (n["type"].as<std::string>() == "PlayerController") {
+            auto obj = MakePlayerController({n["name"].as<std::string>(),
+                                             nodeEntity});
+            obj->decode(n);
+            nodePtr = std::move(obj);
         }
         return true;
     }

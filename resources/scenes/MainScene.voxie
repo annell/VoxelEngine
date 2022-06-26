@@ -121,7 +121,7 @@
         z: 2.36930776
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 0.999999821
@@ -161,7 +161,7 @@
         z: 1.7932744
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -216,3 +216,52 @@
         x: 0
         y: 0
         z: 0
+- parent: 2958638728098174689
+  node:
+    type: PlayerController
+    id: 4290297168568620581
+    name: Player Controller
+    position:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      rotation:
+        x: 0
+        y: 0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: -1064078205
+      offset:
+        x: 0
+        y: 0
+        z: 0
+    cameraView: 3268650726063865125
+- parent: 4290297168568620581
+  node:
+    type: Camera
+    id: 3268650726063865125
+    activeCamera: false
+    name: Camera
+    position:
+      position:
+        x: -6.11811733
+        y: 2.64362597
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    direction:
+      yaw: 45
+      pitch: 0
