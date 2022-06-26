@@ -42,7 +42,18 @@ namespace voxie {
 
         using SceneNodes = std::list<std::shared_ptr<NodeWrapper>>;
         SceneNodes GetNodesForRendering() const;
+        SceneNodes GetNodesPtrs() const;
         std::shared_ptr<NodeWrapper> FindNode(const Handle &);
+
+        template<typename T>
+        std::shared_ptr<T> FindEntity() {
+            for (auto nodePtr : GetNodesPtrs()) {
+                if (auto entity = std::dynamic_pointer_cast<T>(nodePtr)) {
+                    return entity;
+                }
+            }
+            return {};
+        }
 
         const std::string &GetSceneName() const;
         Node *GetRoot() const;

@@ -10,6 +10,7 @@ namespace voxie {
 
         void OnTick(float delta);
         void SetCamera(const Handle &);
+        std::shared_ptr<class Camera> GetCamera();
 
     private:
         int OnTickHandle = 0;

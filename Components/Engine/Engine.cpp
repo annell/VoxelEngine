@@ -93,6 +93,13 @@ namespace voxie {
     }
 
     std::shared_ptr<Camera> Engine::GetCamera() {
+        if (gameMode->IsStarted()) {
+            if (auto entity = GetScene().FindEntity<PlayerController>()) {
+                if (auto playerCamera = entity->GetCamera()) {
+                    return playerCamera;
+                }
+            }
+        }
         return helper::GetSceneNode<Camera>(camera);
     }
 
@@ -198,8 +205,8 @@ namespace voxie {
         ImGui::StyleColorsDark();
     }
 
-    void Engine::SetCamera(const Handle &entity) {
-        camera = entity;
+    void Engine::SetCamera(const Handle &handle) {
+        camera = handle;
     }
     ECSManager &Engine::GetECSManager() {
         return ecsManager;

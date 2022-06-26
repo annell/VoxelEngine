@@ -21,4 +21,8 @@ namespace voxie {
     void PlayerController::SetCamera(const Handle &currentView) {
         CurrentView = currentView;
     }
+
+    std::shared_ptr<Camera> PlayerController::GetCamera() {
+        return helper::GetSceneNode<Camera>(CurrentView);
+    }
 }// namespace voxie

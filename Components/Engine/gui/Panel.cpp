@@ -207,8 +207,12 @@ namespace gui {
 
     void ShowCameraSelectorController(const voxie::Handle &entity) {
         if (ImGui::CollapsingHeader("Camera")) {
-            if (ImGui::Button("Set as camera"))
+            if (ImGui::Button("Assign Editor"))
                 voxie::Engine::GetEngine().SetCamera(entity);
+            if (auto node = voxie::Engine::GetEngine().GetScene().FindEntity<voxie::PlayerController>()) {
+                if (ImGui::Button("Assign Player Controller"))
+                    node->SetCamera(entity);
+            }
         }
     }
 
@@ -298,6 +302,8 @@ namespace gui {
                     voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Camera", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 if (ImGui::Selectable("Player Controller")) {
+                    auto node = voxie::Engine::GetEngine().GetScene().FindEntity<voxie::PlayerController>();
+                    assert(!node && "Only one playercontroller is supported!");
                     voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePlayerController({"Player Controller", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 if (ImGui::Selectable("Transform Node")) {

@@ -139,6 +139,15 @@ namespace voxie {
         return nodesForRendering;
     }
 
+    Scene::SceneNodes Scene::GetNodesPtrs() const {
+        Scene::SceneNodes nodePtrs;
+        for (const auto &node : nodes) {
+            auto nodePtr = node.second->GetNodePtr();
+            nodePtrs.push_back(nodePtr);
+        }
+        return nodePtrs;
+    }
+
     void Scene::RemoveEntity(Handle handle) {
         nodes.erase(handle);
         if (root) {
