@@ -11,7 +11,6 @@
 #include <vector>
 
 namespace voxie {
-
     static const Handle NullEntity(0);
 
     using ComponentType = std::uint8_t;

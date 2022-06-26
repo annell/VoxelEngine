@@ -293,19 +293,19 @@ namespace gui {
                 ImGui::EndMenu();
             }
 
-            if (ImGui::BeginMenu("Camera")) {
+            if (ImGui::BeginMenu("Basic Components")) {
                 if (ImGui::Selectable("Camera")) {
                     voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Camera", voxie::Handle::MakeEntity()}), nullptr);
                 }
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Transform Node")) {
+                if (ImGui::Selectable("Player Controller")) {
+                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePlayerController({"Player Controller", voxie::Handle::MakeEntity()}), nullptr);
+                }
                 if (ImGui::Selectable("Transform Node")) {
                     voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 ImGui::EndMenu();
             }
+
             ImGui::EndPopup();
         }
     }

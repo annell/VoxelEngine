@@ -8,6 +8,7 @@
 #include "Chunk.h"
 #include "Core.h"
 #include "CubeEntity.h"
+#include "PlayerController.h"
 #include "Engine.h"
 #include "Shader.h"
 #include <Sprite.h>
@@ -159,6 +160,14 @@ namespace voxie {
 
     std::vector<SceneConfig> GetScenes() {
         return internal::GetFiles<SceneConfig>(BASE_PATH + SCENES, {SCENEFILESENDING});
+    }
+
+    std::shared_ptr<PlayerController> MakePlayerController(const PlayerControllerFactoryConfig &config) {
+        auto playerController = std::make_shared<PlayerController>(
+                config.entity.GetId() ? config.entity : Handle::MakeEntity(),
+                std::make_shared<voxie::Name>(config.name),
+                std::make_shared<voxie::Position>(0, 0, 0));
+        return std::move(playerController);
     }
 
 }// namespace voxie

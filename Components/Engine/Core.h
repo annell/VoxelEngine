@@ -44,6 +44,7 @@
 #include "KeyboardHandler.h"
 #include "Logging.h"
 #include "MouseHandler.h"
+#include "PlayerController.h"
 #include "RenderingHandler.h"
 #include "Scene.h"
 #include "Window.h"

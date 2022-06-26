@@ -18,6 +18,7 @@ namespace voxie {
 
     class Chunk;
     class CubeEntity;
+    class PlayerController;
 
     const std::string WORKSPACE_ADJUST = "/../../..";
     const std::string BASE_PATH = std::filesystem::current_path().string() + WORKSPACE_ADJUST + std::string("/resources");
@@ -109,5 +110,13 @@ namespace voxie {
         Handle entity = NullEntity;
     };
     std::vector<SceneConfig> GetScenes();
+
+    struct PlayerControllerFactoryConfig {
+        std::string name;
+        Handle entity = NullEntity;
+        glm::vec3 position = {0, 0, 0};
+    };
+
+    std::shared_ptr<PlayerController> MakePlayerController(const PlayerControllerFactoryConfig &);
 
 }// namespace voxie
