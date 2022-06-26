@@ -41,7 +41,7 @@ namespace voxie {
                    root["z"].as<float>()};
 
         root = node["specular"];
-        diffuse = {root["x"].as<float>(),
+        specular = {root["x"].as<float>(),
                    root["y"].as<float>(),
                    root["z"].as<float>()};
 
