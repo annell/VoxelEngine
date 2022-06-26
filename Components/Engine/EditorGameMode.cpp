@@ -88,51 +88,51 @@ namespace voxie {
                                                 voxie::Key::KEY_ESCAPE});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-            if (!this->IsStarted()) {
-                                                    engine.GetCamera()->ProcessKeyboard(FORWARD, engine.GetDeltaTime());
-            }
+                                                    if (!this->IsStarted()) {
+                                                        engine.GetCamera()->ProcessKeyboard(FORWARD, engine.GetDeltaTime());
+                                                    }
                                                 },
                                                 voxie::Key::KEY_W});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-            if (!this->IsStarted()) {
-                                                    engine.GetCamera()->ProcessKeyboard(LEFT, engine.GetDeltaTime());
-            }
+                                                    if (!this->IsStarted()) {
+                                                        engine.GetCamera()->ProcessKeyboard(LEFT, engine.GetDeltaTime());
+                                                    }
                                                 },
                                                 voxie::Key::KEY_A});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-            if (!this->IsStarted()) {
-                                                    engine.GetCamera()->ProcessKeyboard(BACKWARD, engine.GetDeltaTime());
-            }
+                                                    if (!this->IsStarted()) {
+                                                        engine.GetCamera()->ProcessKeyboard(BACKWARD, engine.GetDeltaTime());
+                                                    }
                                                 },
                                                 voxie::Key::KEY_S});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-            if (!this->IsStarted()) {
-                                                    engine.GetCamera()->ProcessKeyboard(RIGHT, engine.GetDeltaTime());
-            }
+                                                    if (!this->IsStarted()) {
+                                                        engine.GetCamera()->ProcessKeyboard(RIGHT, engine.GetDeltaTime());
+                                                    }
                                                 },
                                                 voxie::Key::KEY_D});
 
         voxie::MouseHandler::RegisterAction({[this]() {
-            if (!this->IsStarted()) {
-                                                 voxie::MouseHandler::UnlockCamera();
-            }
+                                                 if (!this->IsStarted()) {
+                                                     voxie::MouseHandler::UnlockCamera();
+                                                 }
                                              },
                                              voxie::MouseButton::BUTTON_2, voxie::ActionType::RELEASE});
 
         voxie::MouseHandler::RegisterAction({[this]() {
-            if (!this->IsStarted()) {
-                                                 voxie::MouseHandler::CastRay();
-            }
+                                                 if (!this->IsStarted()) {
+                                                     voxie::MouseHandler::CastRay();
+                                                 }
                                              },
                                              voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
 
         voxie::MouseHandler::RegisterAction({[this]() {
-            if (!this->IsStarted()) {
-                                                 voxie::MouseHandler::LockCamera();
-            }
+                                                 if (!this->IsStarted()) {
+                                                     voxie::MouseHandler::LockCamera();
+                                                 }
                                              },
                                              voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
     }

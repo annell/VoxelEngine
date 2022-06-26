@@ -42,8 +42,8 @@ namespace voxie {
 
         root = node["specular"];
         specular = {root["x"].as<float>(),
-                   root["y"].as<float>(),
-                   root["z"].as<float>()};
+                    root["y"].as<float>(),
+                    root["z"].as<float>()};
 
         shininess = node["shininess"].as<float>();
 

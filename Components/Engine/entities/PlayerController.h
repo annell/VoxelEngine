@@ -10,6 +10,7 @@ namespace voxie {
 
         void OnTick(float delta);
         void SetCamera(const Handle &);
+
     private:
         int OnTickHandle = 0;
         Handle CurrentView;

@@ -18,7 +18,7 @@ namespace voxie {
     void PlayerController::OnTick(float delta) {
     }
 
-    void PlayerController::SetCamera(const Handle & currentView) {
+    void PlayerController::SetCamera(const Handle &currentView) {
         CurrentView = currentView;
     }
 }// namespace voxie
