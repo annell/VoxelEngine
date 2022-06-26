@@ -82,9 +82,10 @@ namespace voxie {
         auto &engine = voxie::Engine::GetEngine();
         auto &scene = engine.GetScene();
 
-        voxie::KeyboardHandler::RegisterAction({[&engine]() {
-                                                    engine.GetWindow()->CloseWindow();
-                                                },
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    if (this->IsStarted()) {
+                                                        Reset();
+                                                    } },
                                                 voxie::Key::KEY_ESCAPE});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
