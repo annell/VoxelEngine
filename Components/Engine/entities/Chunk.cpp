@@ -17,7 +17,6 @@ namespace voxie {
 
     Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
         : NodeWrapper(handle), path(path) {
-        COMPONENT_REGISTER(RigidBody, std::make_shared<RigidBody>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
@@ -44,7 +43,6 @@ namespace voxie {
         auto name = helper::GetComponent<Name>(handle).get();
         node["name"] = name->name;
         node["position"] = *helper::GetComponent<Position>(handle).get();
-        node["rigidBody"] = *helper::GetComponent<RigidBody>(handle).get();
     }
 
     bool Chunk::decode(const YAML::Node &node) {
@@ -58,12 +56,6 @@ namespace voxie {
                         std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
         outline->vertexBufferArray = GetVertexBufferArray();
         outline->position = GetPosition();
-
-        auto rigidBody = GetRigidBody();
-        rigidBody->chunkAxises = chunkMaxMins;
-        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
-        rigidBody->decode(node["rigidBody"]);
-        rigidBody->SetPosition(*GetPosition());
 
         return true;
     }

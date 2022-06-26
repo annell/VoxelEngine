@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -7.12815809
-        y: 7.91164589
-        z: -10.403204
+        x: -15.3209925
+        y: 9.44479179
+        z: -10.1798553
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 100.800049
-      pitch: -29.2999706
+      yaw: 18.5000553
+      pitch: -17.4999485
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -31,7 +31,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 30.3861027
@@ -221,17 +221,17 @@
     name: chr_sword.vox
     position:
       position:
-        x: -0.366467267
-        y: 2.03036046
+        x: 23.9542961
+        y: 11.5997458
         z: -0.0861530006
       rotation:
         x: 0
         y: 0
         z: 0
       scale:
-        x: 0.180000067
-        y: 0.180000007
-        z: 0.180000067
+        x: 1.35540044
+        y: 1.35539997
+        z: 1.35540044
     rigidBody:
       mass: 1
       gravity: true
@@ -317,7 +317,7 @@
         z: -15.2888832
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 31.9964828
@@ -365,7 +365,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 0.0120230038
@@ -413,7 +413,7 @@
         z: 15.2906132
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 32.1574974
@@ -461,7 +461,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 0.257988989
@@ -485,6 +485,473 @@
       mass: 1
       gravity: true
       bodyType: 0
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: Chunk
+    id: 3799647793666674575
+    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/voxelObjects/chr_knight.vox
+    name: chr_knight.vox
+    position:
+      position:
+        x: 0
+        y: 8.69868374
+        z: 24.8332024
+      rotation:
+        x: 3.1415925
+        y: -1.45013249
+        z: 3.1415925
+      scale:
+        x: 1.00000012
+        y: 1
+        z: 1.00000012
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 0
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 3886228735563638838
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 10.0762482
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 4436024015683847605
+    name: Cube
+    position:
+      position:
+        x: -4.79332876
+        y: 10.2637997
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 2807178550438140158
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 10.0266466
+        z: -5.8406496
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 3195125514867862927
+    name: Cube
+    position:
+      position:
+        x: 0
+        y: 8.67730045
+        z: -2.13629818
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 2412235935404331292
+    name: Cube
+    position:
+      position:
+        x: -2.38168192
+        y: 7.89691305
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 3249002981945547679
+    name: Cube
+    position:
+      position:
+        x: -1.08441782
+        y: 17.6798
+        z: 0
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 3641629422523729666
+    name: Cube
+    position:
+      position:
+        x: 3.03744531
+        y: 11.6035948
+        z: 6.77123928
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 2908468727706712207
+    name: Cube
+    position:
+      position:
+        x: 3.29355145
+        y: 16.7734413
+        z: -6.5211587
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 2947605364722864110
+    name: Cube
+    position:
+      position:
+        x: -7.08579683
+        y: 8.25752544
+        z: -6.45471573
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    material:
+      ambient:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      diffuse:
+        x: 1
+        y: 0.5
+        z: 0.310000002
+      specular:
+        x: 0.5
+        y: 0.5
+        z: 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 2
       offset:
         x: 0
         y: 0

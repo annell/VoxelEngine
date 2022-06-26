@@ -44,7 +44,6 @@ namespace voxie {
         COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(VertexBufferArray);
         COMPONENT_ADD_FUNCTION(Outline);
-        COMPONENT_ADD_FUNCTION(RigidBody);
 
         RenderingConfig GetRenderingConfig() const override;
 

@@ -22,12 +22,14 @@ namespace voxie {
                                                     if (gameMode->IsStarted()) {
                                                         auto camera = engine.GetCamera();
                                                         auto front = camera->GetFront();
+                                                        front.y = 0;
                                                         float velocity = 5 * engine.GetDeltaTime();
-                                                        auto position = GetPosition();
-                                                        position->pos += front * velocity;
-                                                        position->UpdateModel();
-                                                        position->SetModel(position->model);
-                                                        GetRigidBody()->SetPosition(*position);
+                                                        if (auto position = GetPosition()) {
+                                                            position->pos += front * velocity;
+                                                            position->UpdateModel();
+                                                            position->SetModel(position->model);
+                                                            GetRigidBody()->SetPosition(*position);
+                                                        }
                                                     }
                                                 },
                                                 voxie::Key::KEY_W});
@@ -37,12 +39,14 @@ namespace voxie {
                                                     if (gameMode->IsStarted()) {
                                                         auto camera = engine.GetCamera();
                                                         auto right = camera->GetRight();
+                                                        right.y = 0;
                                                         float velocity = 5 * engine.GetDeltaTime();
-                                                        auto position = GetPosition();
-                                                        position->pos -= right * velocity;
-                                                        position->UpdateModel();
-                                                        position->SetModel(position->model);
-                                                        GetRigidBody()->SetPosition(*position);
+                                                        if (auto position = GetPosition()) {
+                                                            position->pos -= right * velocity;
+                                                            position->UpdateModel();
+                                                            position->SetModel(position->model);
+                                                            GetRigidBody()->SetPosition(*position);
+                                                        }
                                                     }
                                                 },
                                                 voxie::Key::KEY_A});
@@ -52,12 +56,14 @@ namespace voxie {
                                                     if (gameMode->IsStarted()) {
                                                         auto camera = engine.GetCamera();
                                                         auto front = camera->GetFront();
+                                                        front.y = 0;
                                                         float velocity = 5 * engine.GetDeltaTime();
-                                                        auto position = GetPosition();
-                                                        position->pos -= front * velocity;
-                                                        position->UpdateModel();
-                                                        position->SetModel(position->model);
-                                                        GetRigidBody()->SetPosition(*position);
+                                                        if (auto position = GetPosition()) {
+                                                            position->pos -= front * velocity;
+                                                            position->UpdateModel();
+                                                            position->SetModel(position->model);
+                                                            GetRigidBody()->SetPosition(*position);
+                                                        }
                                                     }
                                                 },
                                                 voxie::Key::KEY_S});
@@ -67,12 +73,14 @@ namespace voxie {
                                                     if (gameMode->IsStarted()) {
                                                         auto camera = engine.GetCamera();
                                                         auto right = camera->GetRight();
+                                                        right.y = 0;
                                                         float velocity = 5 * engine.GetDeltaTime();
-                                                        auto position = GetPosition();
-                                                        position->pos += right * velocity;
-                                                        position->UpdateModel();
-                                                        position->SetModel(position->model);
-                                                        GetRigidBody()->SetPosition(*position);
+                                                        if (auto position = GetPosition()) {
+                                                            position->pos += right * velocity;
+                                                            position->UpdateModel();
+                                                            position->SetModel(position->model);
+                                                            GetRigidBody()->SetPosition(*position);
+                                                        }
                                                     }
                                                 },
                                                 voxie::Key::KEY_D});
@@ -92,9 +100,11 @@ namespace voxie {
         GetPosition()->decode(node["position"]);
         auto rigidBody = GetRigidBody();
         auto pos = GetPosition();
-        pos->scale.y = 2;
-        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
-        rigidBody->SetPosition(*GetPosition());
+        pos->scale.y = 4;
+        pos->scale.x = 2;
+        pos->scale.z = 2;
+        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *pos);
+        rigidBody->SetPosition(*pos);
         rigidBody->decode(node["rigidBody"]);
         SetCamera(Handle(node["cameraView"].as<u_int64_t>()));
 
