@@ -24,7 +24,6 @@ namespace voxie {
 
     public:
         CubeEntity(const Handle &, std::shared_ptr<Name>, std::shared_ptr<Shader>, std::shared_ptr<Position>, std::shared_ptr<Material>);
-        ~CubeEntity();
 
         COMPONENT_ADD_FUNCTION(Shader);
         COMPONENT_ADD_FUNCTION(Material);

@@ -4,8 +4,6 @@
 
 #include "CubeEntity.h"
 #include "Core.h"
-#include "Material.h"
-#include "RigidBody.h"
 #include <GL/glew.h>
 
 namespace voxie {
@@ -21,9 +19,6 @@ namespace voxie {
         COMPONENT_REGISTER(Outline, std::make_shared<Outline>());
 
         Init();
-    }
-
-    CubeEntity::~CubeEntity() {
     }
 
     void CubeEntity::encode(YAML::Node &node) const {
