@@ -117,15 +117,15 @@ namespace voxie {
 
     void Engine::SubmitNodesForRendering(const Scene::SceneNodes &nodes) const {
         std::vector<std::shared_ptr<voxie::Text>> texts;
-        for (const auto &entity : nodes) {
-            if (auto model = std::dynamic_pointer_cast<voxie::Chunk>(entity)) {
-                voxie::helper::Submit(model->GetRenderingConfig());
-            } else if (auto model = std::dynamic_pointer_cast<voxie::Sprite>(entity)) {
-                voxie::helper::Submit(model->GetRenderingConfig());
-            } else if (auto model = std::dynamic_pointer_cast<voxie::CubeEntity>(entity)) {
-                voxie::helper::Submit(model->GetRenderingConfig());
-            } else if (auto model = std::dynamic_pointer_cast<voxie::Text>(entity)) {
-                texts.push_back(model);
+        for (const auto &node : nodes) {
+            if (auto entity = std::dynamic_pointer_cast<voxie::Chunk>(node)) {
+                voxie::helper::Submit(entity->GetRenderingConfig());
+            } else if (auto entity = std::dynamic_pointer_cast<voxie::Sprite>(node)) {
+                voxie::helper::Submit(entity->GetRenderingConfig());
+            } else if (auto entity = std::dynamic_pointer_cast<voxie::CubeEntity>(node)) {
+                voxie::helper::Submit(entity->GetRenderingConfig());
+            } else if (auto entity = std::dynamic_pointer_cast<voxie::Text>(node)) {
+                texts.push_back(entity);
             }
         }
 
