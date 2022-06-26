@@ -1,5 +1,7 @@
 #include "PlayerController.h"
+#include "Camera.h"
 #include "Core.h"
+#include "GameMode.h"
 #include "Name.h"
 #include "Position.h"
 #include "RigidBody.h"
@@ -13,6 +15,67 @@ namespace voxie {
         COMPONENT_REGISTER(RigidBody, std::make_shared<RigidBody>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Name, name);
+
+
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted()) {
+                                                        auto camera = engine.GetCamera();
+                                                        auto front = camera->GetFront();
+                                                        float velocity = 5 * engine.GetDeltaTime();
+                                                        auto position = GetPosition();
+                                                        position->pos += front * velocity;
+                                                        position->UpdateModel();
+                                                        position->SetModel(position->model);
+                                                        GetRigidBody()->SetPosition(*position);
+                                                    }
+                                                },
+                                                voxie::Key::KEY_W});
+
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted()) {
+                                                        auto camera = engine.GetCamera();
+                                                        auto right = camera->GetRight();
+                                                        float velocity = 5 * engine.GetDeltaTime();
+                                                        auto position = GetPosition();
+                                                        position->pos -= right * velocity;
+                                                        position->UpdateModel();
+                                                        position->SetModel(position->model);
+                                                        GetRigidBody()->SetPosition(*position);
+                                                    }
+                                                },
+                                                voxie::Key::KEY_A});
+
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted()) {
+                                                        auto camera = engine.GetCamera();
+                                                        auto front = camera->GetFront();
+                                                        float velocity = 5 * engine.GetDeltaTime();
+                                                        auto position = GetPosition();
+                                                        position->pos -= front * velocity;
+                                                        position->UpdateModel();
+                                                        position->SetModel(position->model);
+                                                        GetRigidBody()->SetPosition(*position);
+                                                    }
+                                                },
+                                                voxie::Key::KEY_S});
+
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted()) {
+                                                        auto camera = engine.GetCamera();
+                                                        auto right = camera->GetRight();
+                                                        float velocity = 5 * engine.GetDeltaTime();
+                                                        auto position = GetPosition();
+                                                        position->pos += right * velocity;
+                                                        position->UpdateModel();
+                                                        position->SetModel(position->model);
+                                                        GetRigidBody()->SetPosition(*position);
+                                                    }
+                                                },
+                                                voxie::Key::KEY_D});
     }
 
     void PlayerController::encode(YAML::Node &node) const {
@@ -28,10 +91,12 @@ namespace voxie {
     bool PlayerController::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         auto rigidBody = GetRigidBody();
+        auto pos = GetPosition();
+        pos->scale.y = 2;
         rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
         rigidBody->SetPosition(*GetPosition());
         rigidBody->decode(node["rigidBody"]);
-        CurrentView = Handle(node["cameraView"].as<u_int64_t>());
+        SetCamera(Handle(node["cameraView"].as<u_int64_t>()));
 
         return true;
     }
@@ -39,8 +104,21 @@ namespace voxie {
     void PlayerController::OnTick(float delta) {
     }
 
+    void PlayerController::BeginPlay() {
+        voxie::MouseHandler::LockCamera();
+    }
+
+    void PlayerController::StopPlay() {
+        voxie::MouseHandler::UnlockCamera();
+    }
+
     void PlayerController::SetCamera(const Handle &currentView) {
         CurrentView = currentView;
+        if (auto camera = GetCamera()) {
+            GetPosition()->onUpdate.Bind([&, CameraPos = camera->GetPosition()]() {
+                CameraPos->SetModel(GetPosition()->model);
+            });
+        }
     }
 
     std::shared_ptr<Camera> PlayerController::GetCamera() {

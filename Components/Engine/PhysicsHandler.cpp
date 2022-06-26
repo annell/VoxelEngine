@@ -71,11 +71,12 @@ namespace voxie {
         if (accumulator >= timeStepFraction) {
             world->update(timeStepFraction);
             accumulator -= timeStepFraction;
-            for (const auto &node : Engine::GetEngine().GetScene().GetNodesForRendering()) {
+            for (const auto &node : Engine::GetEngine().GetScene().GetNodesPtrs()) {
                 if (Engine::GetEngine().GetGameMode()->IsStarted() && helper::HasComponent<RigidBody>(node->GetHandle()) && helper::GetComponent<Position>(node->GetHandle())) {
                     auto body = helper::GetComponent<RigidBody>(node->GetHandle());
                     auto pos = helper::GetComponent<Position>(node->GetHandle());
                     body->GetPosition(*pos);
+                    pos->onUpdate.Broadcast();
                 }
             }
         }

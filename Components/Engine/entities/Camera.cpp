@@ -39,7 +39,7 @@ namespace voxie {
     }
 
     glm::mat4 Camera::GetViewMatrix() const {
-        return glm::lookAt(GetPosition()->pos, GetPosition()->pos + Front, Up);
+        return glm::lookAt(GetPosition()->pos, GetPosition()->pos + GetFront(), Up);
     }
 
     glm::mat4 Camera::GetProjectionMatrix() const {
@@ -54,13 +54,21 @@ namespace voxie {
         float velocity = MovementSpeed * deltaTime;
         auto &Position = GetPosition()->pos;
         if (direction == FORWARD)
-            Position += Front * velocity;
+            Position += GetFront() * velocity;
         if (direction == BACKWARD)
-            Position -= Front * velocity;
+            Position -= GetFront() * velocity;
         if (direction == LEFT)
-            Position -= Right * velocity;
+            Position -= GetRight() * velocity;
         if (direction == RIGHT)
-            Position += Right * velocity;
+            Position += GetRight() * velocity;
+    }
+
+    const glm::vec3 &Camera::GetFront() const {
+        return Front;
+    }
+
+    const glm::vec3 &Camera::GetRight() const {
+        return Right;
     }
 
     void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch) {

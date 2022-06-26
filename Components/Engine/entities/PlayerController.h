@@ -10,6 +10,9 @@ namespace voxie {
     public:
         PlayerController(const Handle &handle, std::shared_ptr<class Name> name, std::shared_ptr<class Position> position);
 
+        void BeginPlay() override;
+        void StopPlay() override;
+
         void OnTick(float delta);
         void SetCamera(const Handle &);
         std::shared_ptr<class Camera> GetCamera();

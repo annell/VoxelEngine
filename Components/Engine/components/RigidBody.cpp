@@ -117,6 +117,20 @@ namespace voxie {
         offsetNode["y"] = offset[1];
         offsetNode["z"] = offset[2];
         node["offset"] = offsetNode;
+
+        YAML::Node linearLockNode;
+        auto linearLockFactor = rigidBody->getLinearLockAxisFactor();
+        linearLockNode["x"] = linearLockFactor[0];
+        linearLockNode["y"] = linearLockFactor[1];
+        linearLockNode["z"] = linearLockFactor[2];
+        node["linearLockFactor"] = linearLockNode;
+
+        YAML::Node angularLockNode;
+        auto angularLockFactor = rigidBody->getAngularLockAxisFactor();
+        angularLockNode["x"] = angularLockFactor[0];
+        angularLockNode["y"] = angularLockFactor[1];
+        angularLockNode["z"] = angularLockFactor[2];
+        node["angularLockFactor"] = angularLockNode;
     }
 
     bool RigidBody::decode(const YAML::Node &node) {
@@ -128,6 +142,16 @@ namespace voxie {
         SetGravity(node["gravity"].as<bool>());
         SetBodyType(static_cast<voxie::BodyType>(node["bodyType"].as<int>()));
         rigidBody->setType(internal::voxieToReactBodyType(BodyType::STATIC));
+
+        auto linearLock = node["linearLockFactor"];
+        SetLinearAxisFactor({linearLock["x"].as<float>(),
+                             linearLock["y"].as<float>(),
+                             linearLock["z"].as<float>()});
+
+        auto angularLock = node["angularLockFactor"];
+        SetAngularAxisFactor({angularLock["x"].as<float>(),
+                              angularLock["y"].as<float>(),
+                              angularLock["z"].as<float>()});
         return true;
     }
 
@@ -150,6 +174,22 @@ namespace voxie {
 
     glm::vec3 RigidBody::GetOffset() const {
         return offset;
+    }
+
+    glm::vec3 RigidBody::GetLinearAxisFactor() const {
+        auto factor = rigidBody->getLinearLockAxisFactor();
+        return {factor.x, factor.y, factor.z};
+    }
+    void RigidBody::SetLinearAxisFactor(const glm::vec3 &factor) const {
+        rigidBody->setLinearLockAxisFactor({factor.x, factor.y, factor.z});
+    }
+
+    glm::vec3 RigidBody::GetAngularAxisFactor() const {
+        auto factor = rigidBody->getAngularLockAxisFactor();
+        return {factor.x, factor.y, factor.z};
+    }
+    void RigidBody::SetAngularAxisFactor(const glm::vec3 &factor) const {
+        rigidBody->setAngularLockAxisFactor({factor.x, factor.y, factor.z});
     }
 
     void RigidBody::GetPosition(Position &pos) const {

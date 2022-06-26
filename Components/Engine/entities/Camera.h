@@ -49,6 +49,9 @@ namespace voxie {
         void SetSelection(const Handle &selection);
         const Handle &GetSelection() const;
 
+        const glm::vec3 &GetFront() const;
+        const glm::vec3 &GetRight() const;
+
     private:
         void updateCameraVectors();
         Handle selectedEntity;

@@ -29,6 +29,10 @@ namespace voxie {
                 component();
             }
         }
+
+        virtual void BeginPlay() {}
+        virtual void StopPlay() {}
+
         const Handle &GetHandle() const { return handle; }
         virtual RenderingConfig GetRenderingConfig() const { return {}; }
 

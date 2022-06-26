@@ -152,6 +152,14 @@ namespace gui {
             body->SetOffset(glm::make_vec3(offset));
             auto pos = voxie::helper::GetComponent<voxie::Position>(entity);
             body->SetPosition(*pos);
+
+            float linearLockFactor[3] = {body->GetLinearAxisFactor().x, body->GetLinearAxisFactor().y, body->GetLinearAxisFactor().z};
+            ImGui::DragFloat3("Linear Axis Lock Factor", linearLockFactor);
+            body->SetLinearAxisFactor(glm::make_vec3(linearLockFactor));
+
+            float angularLockFactor[3] = {body->GetAngularAxisFactor().x, body->GetAngularAxisFactor().y, body->GetAngularAxisFactor().z};
+            ImGui::DragFloat3("Angular Axis Lock Factor", angularLockFactor);
+            body->SetAngularAxisFactor(glm::make_vec3(angularLockFactor));
         }
     }
 

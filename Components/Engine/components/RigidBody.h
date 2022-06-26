@@ -70,6 +70,12 @@ namespace voxie {
         bool GetGravity() const;
         void SetGravity(bool) const;
 
+        glm::vec3 GetLinearAxisFactor() const;
+        void SetLinearAxisFactor(const glm::vec3 &) const;
+
+        glm::vec3 GetAngularAxisFactor() const;
+        void SetAngularAxisFactor(const glm::vec3 &) const;
+
         uint32_t GetColliderId() const;
 
         reactphysics3d::RigidBody *rigidBody;
