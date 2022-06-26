@@ -71,6 +71,10 @@ namespace voxie {
                         std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
         outline->vertexBufferArray = cube.GetVertexBufferArray();
         outline->position = GetPosition();
+
+        auto rigidBody = GetRigidBody();
+        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
+        rigidBody->SetPosition(*GetPosition());
     }
 
     void CubeEntity::RefreshMaterial() const {
