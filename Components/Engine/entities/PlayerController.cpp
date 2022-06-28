@@ -84,6 +84,25 @@ namespace voxie {
                                                     }
                                                 },
                                                 voxie::Key::KEY_D});
+
+        voxie::MouseHandler::RegisterAction({[this, &engine]() {
+                                                 auto gameMode = engine.GetGameMode();
+                                                 if (gameMode->IsStarted()) {
+                                                     auto physicsHandler = engine.GetPhysicsHandler();
+                                                     auto window = engine.GetWindow();
+                                                     if (auto camera = this->GetCamera()) {
+                                                         physicsHandler.RayCast(
+                                                                 camera->GetRay(window->GetWidth() / 2, window->GetHeight() / 2),
+                                                                 [physicsHandler](const RaycastInfo &info) {
+                                                                     auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
+                                                                     if (auto body = helper::GetComponent<RigidBody>(handle)) {
+                                                                         body->SetPosition({0, 10, 0});
+                                                                     }
+                                                                 });
+                                                     }
+                                                 }
+                                             },
+                                             voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
     }
 
     void PlayerController::encode(YAML::Node &node) const {

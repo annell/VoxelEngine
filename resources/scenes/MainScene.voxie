@@ -232,22 +232,6 @@
         x: 1.35540044
         y: 1.35539997
         z: 1.35540044
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 0
-      offset:
-        x: 0
-        y: 0
-        z: 0
-      linearLockFactor:
-        x: 1
-        y: 1
-        z: 1
-      angularLockFactor:
-        x: 1
-        y: 1
-        z: 1
 - parent: 2958638728098174689
   node:
     type: Camera
@@ -285,11 +269,11 @@
         y: 0
         z: 0
       scale:
-        x: 0.99999994
-        y: 2
-        z: 1.00000024
+        x: 2
+        y: 4
+        z: 2
     rigidBody:
-      mass: 2
+      mass: 0.5
       gravity: true
       bodyType: 2
       offset:
@@ -516,22 +500,6 @@
         x: 1.00000012
         y: 1
         z: 1.00000012
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 0
-      offset:
-        x: 0
-        y: 0
-        z: 0
-      linearLockFactor:
-        x: 1
-        y: 1
-        z: 1
-      angularLockFactor:
-        x: 1
-        y: 1
-        z: 1
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -544,7 +512,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -592,7 +560,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -640,7 +608,7 @@
         z: -5.8406496
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -688,7 +656,7 @@
         z: -2.13629818
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -736,7 +704,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -784,7 +752,7 @@
         z: 0
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -832,7 +800,7 @@
         z: 6.77123928
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -880,7 +848,7 @@
         z: -6.5211587
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -928,7 +896,7 @@
         z: -6.45471573
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -964,3 +932,17 @@
         x: 1
         y: 1
         z: 1
+- parent: 2958638728098174689
+  node:
+    type: Sprite
+    id: 3797603705103894641
+    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/sprites/wall.jpeg
+    name: Crosshair
+    position:
+      position:
+        x: 0
+        y: 0
+      rotation: 0
+      scale:
+        x: 0.00999999978
+        y: 0.00999999978

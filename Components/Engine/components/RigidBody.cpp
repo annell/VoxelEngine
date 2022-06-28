@@ -159,6 +159,8 @@ namespace voxie {
         assert(rigidBody && collider);
         rigidBody->setTransform(internal::PositionToTransform(GetPositionWithOffset(pos)));
         dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents({(chunkAxises.x.diff() * pos.scale.x) / 2, (chunkAxises.y.diff() * pos.scale.y) / 2, (chunkAxises.z.diff() * pos.scale.z) / 2});
+        rigidBody->resetForce();
+        rigidBody->resetTorque();
     }
 
     Position RigidBody::GetPositionWithOffset(const Position &pos) const {
@@ -226,6 +228,10 @@ namespace voxie {
 
     uint32_t RigidBody::GetColliderId() const {
         return rigidBody->getEntity().getIndex();
+    }
+
+    void RigidBody::ApplyLocalForceAtCenterOfMass(const glm::vec3 &force) const {
+        rigidBody->applyLocalForceAtCenterOfMass({force.x, force.y, force.z});
     }
 
 }// namespace voxie

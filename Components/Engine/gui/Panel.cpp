@@ -365,31 +365,14 @@ namespace gui {
 
             bool started = gameMode->IsStarted();
             float spacing = 10;
-            static bool pressedPlay = false;
-            if (started) {
-                if (ImGui::SmallButton("Pause")) {
-                    gameMode->Stop();
+            if (!started) {
+                if (ImGui::SmallButton("Play")) {
+                    gameMode->Start();
                 }
                 ImGui::SameLine(0, spacing);
-
             } else {
-                if (!pressedPlay) {
-                    if (ImGui::SmallButton("Play")) {
-                        gameMode->Start();
-                        pressedPlay = true;
-                    }
-                    ImGui::SameLine(0, spacing);
-                } else {
-                    if (ImGui::SmallButton("Resume")) {
-                        gameMode->Resume();
-                    }
-                    ImGui::SameLine(0, spacing);
-                }
-            }
-            if (pressedPlay) {
                 if (ImGui::SmallButton("Stop")) {
                     gameMode->Reset();
-                    pressedPlay = false;
                 }
             }
 

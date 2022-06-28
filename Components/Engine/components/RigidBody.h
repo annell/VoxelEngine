@@ -78,6 +78,8 @@ namespace voxie {
 
         uint32_t GetColliderId() const;
 
+        void ApplyLocalForceAtCenterOfMass(const glm::vec3 &) const;
+
         reactphysics3d::RigidBody *rigidBody;
         reactphysics3d::Collider *collider;
 
