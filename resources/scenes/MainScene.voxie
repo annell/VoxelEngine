@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -15.3209925
-        y: 9.44479179
-        z: -10.1798553
+        x: -20.1917572
+        y: 8.65540409
+        z: -9.64244175
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 18.5000553
-      pitch: -17.4999485
+      yaw: 13.9000454
+      pitch: -11.2999496
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -935,8 +935,8 @@
 - parent: 2958638728098174689
   node:
     type: Sprite
-    id: 3797603705103894641
-    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/sprites/wall.jpeg
+    id: 3408038652390227071
+    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/sprites/blackdot.png
     name: Crosshair
     position:
       position:
@@ -944,5 +944,5 @@
         y: 0
       rotation: 0
       scale:
-        x: 0.00999999978
-        y: 0.00999999978
+        x: 0.00499999989
+        y: 0.00499999989

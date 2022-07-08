@@ -68,12 +68,13 @@ namespace voxie {
         std::list<Handle> GetChildEntities() const;
         Node *GetParent() const;
 
+        std::shared_ptr<NodeWrapper> nodePtr;
+
     private:
         void MoveChild(Node *child, Node *target);
 
         Node *parent = nullptr;
         Handle handle;
-        std::shared_ptr<NodeWrapper> nodePtr;
         std::list<std::unique_ptr<Node>> children;
     };
 
