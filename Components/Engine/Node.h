@@ -70,7 +70,6 @@ namespace voxie {
 
         std::shared_ptr<NodeWrapper> nodePtr;
 
-
     private:
         void MoveChild(Node *child, Node *target);
 
