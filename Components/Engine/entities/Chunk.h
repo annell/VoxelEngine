@@ -48,7 +48,6 @@ namespace voxie {
         RenderingConfig GetRenderingConfig() const override;
 
     private:
-        void UpdateChunkMaxMin(const ChunkPosition &);
         void SetupCubesForRendering();
         void SetupShader();
         void FaceCulling() const;
@@ -61,7 +60,6 @@ namespace voxie {
         std::vector<float> verticesToRender;
 
         std::map<ChunkPosition, std::unique_ptr<Cube>> cubesMap;
-        ChunkAxises chunkMaxMins;
     };
 
 }// namespace voxie

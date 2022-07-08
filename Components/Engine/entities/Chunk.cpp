@@ -94,7 +94,7 @@ namespace voxie {
         }
 
         vba->CreateBuffers();
-        vba->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) nullptr);
+        vba->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (0 * sizeof(float)));
         vba->SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
         vba->SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
         shader->setMat4("model", GetPosition()->model);
@@ -102,7 +102,6 @@ namespace voxie {
 
     void Chunk::AddCube(ChunkPosition position, std::unique_ptr<Cube> &&cube) {
         cubesMap[position] = std::move(cube);
-        UpdateChunkMaxMin(position);
     }
 
     void Chunk::FaceCulling() const {
@@ -161,20 +160,6 @@ namespace voxie {
                     glBindVertexArray(GetVertexBufferArray()->VAO);
                     glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
                 }};
-    }
-
-    void Chunk::UpdateChunkMaxMin(const ChunkPosition &chunkPosition) {
-        auto updateMaxMin = [](float coordinate, ChunkAxis &chunkMaxMin) {
-            if (chunkMaxMin.min > coordinate) {
-                chunkMaxMin.min = coordinate;
-            }
-            if (chunkMaxMin.max < coordinate) {
-                chunkMaxMin.max = coordinate;
-            }
-        };
-        updateMaxMin(chunkPosition.x, chunkMaxMins.x);
-        updateMaxMin(chunkPosition.y, chunkMaxMins.y);
-        updateMaxMin(chunkPosition.z, chunkMaxMins.z);
     }
 
 }// namespace voxie

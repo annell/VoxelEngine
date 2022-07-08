@@ -36,9 +36,9 @@ namespace voxie {
 
         RenderingConfig GetRenderingConfig() const override;
         void RefreshMaterial() const;
+        void Init();
 
     private:
-        void Init();
         Cube cube;
     };
 

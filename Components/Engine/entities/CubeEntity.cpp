@@ -18,6 +18,11 @@ namespace voxie {
         COMPONENT_REGISTER(Name, name);
         COMPONENT_REGISTER(Outline, std::make_shared<Outline>());
 
+        cube.GenerateVertexAttributes();
+        cube.CreateRenderBuffers();
+        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (0 * sizeof(float)));
+        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
+        cube.SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
         Init();
     }
 
@@ -34,30 +39,13 @@ namespace voxie {
     bool CubeEntity::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
         GetMaterial()->decode(node["material"]);
-        RefreshMaterial();
         auto rigidBody = GetRigidBody();
-        rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *GetPosition());
-        rigidBody->SetPosition(*GetPosition());
         rigidBody->decode(node["rigidBody"]);
-
-        auto outline = GetOutline();
-
-        outline->shader = std::make_shared<voxie::Shader>(
-                std::map<std::string, unsigned int>{
-                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", GL_VERTEX_SHADER),
-                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
-        outline->vertexBufferArray = cube.GetVertexBufferArray();
-        outline->position = GetPosition();
+        Init();
         return true;
     }
 
     void CubeEntity::Init() {
-        cube.GenerateVertexAttributes();
-        cube.CreateRenderBuffers();
-        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) nullptr);
-        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
-        cube.SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
-
         auto shader = GetShader();
         shader->use();
         shader->setMat4("model", GetPosition()->model);
@@ -81,12 +69,12 @@ namespace voxie {
         auto shader = GetShader();
         shader->use();
 
-        auto material = GetMaterial();
         std::string index = "0";
-        shader->setVec3("materials[" + index + "].ambient", material->ambient);
-        shader->setVec3("materials[" + index + "].diffuse", material->diffuse);
-        shader->setVec3("materials[" + index + "].specular", material->specular);
-        shader->setFloat("materials[" + index + "].shininess", material->shininess);
+        shader->setVec3("materials[" + index + "].ambient", GetMaterial()->ambient);
+        shader->setVec3("materials[" + index + "].diffuse", GetMaterial()->diffuse);
+        shader->setVec3("materials[" + index + "].specular", GetMaterial()->specular);
+        shader->setFloat("materials[" + index + "].shininess", GetMaterial()->shininess);
+        shader->setInt("material", 0);
     }
 
     RenderingConfig CubeEntity::GetRenderingConfig() const {
