@@ -6,6 +6,12 @@
 #include <yaml-cpp/yaml.h>
 
 namespace voxie {
+    Material::Material(const glm::vec3 &ambient, const glm::vec3 &diffuse, const glm::vec3 &specular, float shininess)
+        : ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess) {
+    }
+    Material::Material(const Material &material)
+        : ambient(material.ambient), diffuse(material.diffuse), specular(material.specular), shininess(material.shininess) {
+    }
 
     void Material::encode(YAML::Node &node) const {
         YAML::Node ambientNode;

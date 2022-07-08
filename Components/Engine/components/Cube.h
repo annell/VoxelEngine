@@ -62,7 +62,7 @@ namespace voxie {
         void GenerateSides(Position p, Dimensions d);
 
         Material material;
-        int materialIndex;
+        int materialIndex = 0;
         std::shared_ptr<VertexBufferArray> vertexBufferArray;
         std::vector<float> vertices;
         Side sides[6];

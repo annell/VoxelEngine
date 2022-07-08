@@ -4,6 +4,7 @@
 
 #include "RigidBody.h"
 #include "Core.h"
+#include "GameMode.h"
 #include "PhysicsHandler.h"
 #include "reactphysics3d/reactphysics3d.h"
 
@@ -49,54 +50,20 @@ namespace voxie {
             }
             return BodyType::STATIC;
         }
+
+        reactphysics3d::Vector3 getHalfExtens(const Position &pos) {
+            return {pos.scale.x / 2, pos.scale.y / 2, pos.scale.z / 2};
+        }
     }// namespace internal
 
     reactphysics3d::Collider *CreateBoxCollider(reactphysics3d::RigidBody *body, const Position &pos) {
-        auto *shape = getPhysicsCommon().createBoxShape({(pos.scale.x) / 2, (pos.scale.y) / 2, (pos.scale.z) / 2});
-        return body->addCollider(shape, reactphysics3d::Transform::identity());
-    }
-
-    reactphysics3d::Collider *CreateConvexCollider(reactphysics3d::RigidBody *body, const std::vector<float> &vertices, const Position &pos) {
-        int numberOfFacesPerSide = 2;
-        int numberOfVerticesPerFace = 3;
-        int numberOfVerticesPerSide = numberOfFacesPerSide * numberOfVerticesPerFace;
-        int verticeStride = 3;
-        int faceSize = numberOfVerticesPerSide * verticeStride;
-        int numberOfVertices = vertices.size() / verticeStride;
-        int numberOfFaces = numberOfVertices / numberOfVerticesPerSide;
-        std::vector<int> indices;
-        for (int i = 0; i < vertices.size(); i += faceSize) {
-            for (int j = 0; j < faceSize; j++) {
-                indices.push_back(j);
-            }
-        }
-
-        reactphysics3d::PolygonVertexArray::PolygonFace *polygonFaces = new reactphysics3d::PolygonVertexArray::PolygonFace[numberOfFaces];
-        for (int f = 0; f < numberOfFaces; f++) {
-            auto &face = polygonFaces[f];
-            // First vertex of the face in the indices array
-            face.indexBase = f * numberOfVerticesPerSide;
-            // Number of vertices in the face
-            face.nbVertices = numberOfVerticesPerSide;
-        }
-
-
-        // Create the polygon vertex array
-        reactphysics3d::PolygonVertexArray *polygonVertexArray = new reactphysics3d::PolygonVertexArray(numberOfVerticesPerFace, vertices.data(), 2 * sizeof(float),
-                                                                                                        indices.data(), sizeof(int), numberOfFaces, polygonFaces,
-                                                                                                        reactphysics3d::PolygonVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
-                                                                                                        reactphysics3d::PolygonVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
-
-        // Create the polyhedron mesh
-        reactphysics3d::PolyhedronMesh *polyhedronMesh = getPhysicsCommon().createPolyhedronMesh(polygonVertexArray);
-
-        // Create the convex mesh collision shape
-        reactphysics3d::ConvexMeshShape *shape = getPhysicsCommon().createConvexMeshShape(polyhedronMesh, {pos.scale.x / 2, pos.scale.y / 2, pos.scale.z / 2});
+        auto *shape = getPhysicsCommon().createBoxShape(internal::getHalfExtens(pos));
         return body->addCollider(shape, reactphysics3d::Transform::identity());
     }
 
     RigidBody::RigidBody(const Position &pos)
         : rigidBody(internal::createRigidBody(pos)), collider(nullptr) {
+        rigidBody->setType(internal::voxieToReactBodyType(BodyType::STATIC));
     }
 
     RigidBody::~RigidBody() {
@@ -158,7 +125,7 @@ namespace voxie {
     void RigidBody::SetPosition(const Position &pos) const {
         assert(rigidBody && collider);
         rigidBody->setTransform(internal::PositionToTransform(GetPositionWithOffset(pos)));
-        dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents({(chunkAxises.x.diff() * pos.scale.x) / 2, (chunkAxises.y.diff() * pos.scale.y) / 2, (chunkAxises.z.diff() * pos.scale.z) / 2});
+        dynamic_cast<reactphysics3d::BoxShape *>(collider->getCollisionShape())->setHalfExtents(internal::getHalfExtens(pos));
         rigidBody->resetForce();
         rigidBody->resetTorque();
     }
@@ -206,6 +173,9 @@ namespace voxie {
     }
     void RigidBody::SetBodyType(BodyType type) {
         bodyType = type;
+        if (Engine::GetEngine().GetGameMode()->IsStarted()) {
+            rigidBody->setType(internal::voxieToReactBodyType(bodyType));
+        }
     }
     void RigidBody::SetMass(float mass) const {
         assert(rigidBody);
@@ -230,8 +200,33 @@ namespace voxie {
         return rigidBody->getEntity().getIndex();
     }
 
-    void RigidBody::ApplyLocalForceAtCenterOfMass(const glm::vec3 &force) const {
-        rigidBody->applyLocalForceAtCenterOfMass({force.x, force.y, force.z});
+    void RigidBody::ApplyForceAtCenterOfMass(const glm::vec3 &force) const {
+        rigidBody->applyWorldForceAtCenterOfMass({force.x, force.y, force.z});
+    }
+
+    void RigidBody::ResetForces() const {
+        rigidBody->resetForce();
+    }
+
+    glm::vec3 RigidBody::GetForces() const {
+        auto forces = rigidBody->getForce();
+        return {forces.x, forces.y, forces.z};
+    }
+
+    float RigidBody::GetLinearDampening() const {
+        return rigidBody->getLinearDamping();
+    }
+
+    void RigidBody::SetLinearDampening(float factor) const {
+        rigidBody->setLinearDamping(factor);
+    }
+
+    float RigidBody::GetBounciness() const {
+        return collider->getMaterial().getBounciness();
+    }
+
+    void RigidBody::SetBounciness(float factor) const {
+        collider->getMaterial().setBounciness(factor);
     }
 
 }// namespace voxie

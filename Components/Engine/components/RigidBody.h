@@ -22,7 +22,6 @@ namespace voxie {
     struct Position;
 
     reactphysics3d::Collider *CreateBoxCollider(reactphysics3d::RigidBody *body, const Position &pos);
-    reactphysics3d::Collider *CreateConvexCollider(reactphysics3d::RigidBody *body, const std::vector<float> &vertices, const Position &pos);
 
     struct ChunkAxis {
         float max = std::numeric_limits<float>::lowest();
@@ -35,14 +34,6 @@ namespace voxie {
         float shift() const {
             return min;
         }
-    };
-
-    constexpr ChunkAxis ChunkDefaultSize = {1, 0};
-
-    struct ChunkAxises {
-        ChunkAxis x = ChunkDefaultSize;
-        ChunkAxis y = ChunkDefaultSize;
-        ChunkAxis z = ChunkDefaultSize;
     };
 
     struct RigidBody {
@@ -78,13 +69,20 @@ namespace voxie {
 
         uint32_t GetColliderId() const;
 
-        void ApplyLocalForceAtCenterOfMass(const glm::vec3 &) const;
+        void ApplyForceAtCenterOfMass(const glm::vec3 &) const;
+        void ResetForces() const;
+        glm::vec3 GetForces() const;
+
+        float GetLinearDampening() const;
+        void SetLinearDampening(float) const;
+
+        float GetBounciness() const;
+        void SetBounciness(float) const;
 
         reactphysics3d::RigidBody *rigidBody;
         reactphysics3d::Collider *collider;
 
         glm::vec3 offset = {0, 0, 0};
-        BodyType bodyType;
-        ChunkAxises chunkAxises;
+        BodyType bodyType = BodyType::STATIC;
     };
 }// namespace voxie

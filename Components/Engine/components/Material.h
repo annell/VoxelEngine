@@ -13,10 +13,13 @@ namespace YAML {
 namespace voxie {
 
     struct Material {
-        glm::vec3 ambient;
-        glm::vec3 diffuse;
-        glm::vec3 specular;
-        float shininess;
+        Material() {}
+        Material(const glm::vec3 &, const glm::vec3 &, const glm::vec3 &, float);
+        Material(const Material &);
+        glm::vec3 ambient = {};
+        glm::vec3 diffuse = {};
+        glm::vec3 specular = {};
+        float shininess = 0;
 
         void encode(YAML::Node &node) const;
         bool decode(const YAML::Node &node);
