@@ -49,7 +49,7 @@ namespace voxie {
     void MouseHandler::mouse_movement_callback(GLFWwindow *, double xpos, double ypos) {
         internal::x = xpos;
         internal::y = ypos;
-        if (internal::mouseLock) {
+        if (!MouseHandler::IsCameraLocked()) {
             if (internal::firstMouse) {
                 internal::lastX = xpos;
                 internal::lastY = ypos;
@@ -89,7 +89,7 @@ namespace voxie {
 
     void MouseHandler::LockCamera() {
         glfwSetInputMode(Engine::GetEngine().GetWindow()->GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        if (!internal::mouseLock) {
+        if (MouseHandler::IsCameraLocked()) {
             internal::firstMouse = true;
         }
         internal::mouseLock = true;
@@ -114,9 +114,13 @@ namespace voxie {
     }
 
     void MouseHandler::MovementLock() {
-        if (internal::mouseLock) {
+        if (!IsCameraLocked()) {
             internal::movementLock = true;
         }
+    }
+
+    bool MouseHandler::IsCameraLocked() {
+        return !internal::mouseLock;
     }
 
     void MouseHandler::RegisterAction(const MouseAction &keyAction) {

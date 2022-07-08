@@ -10,16 +10,31 @@ namespace voxie {
     PlayerController::PlayerController(const Handle &handle, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
         : NodeWrapper(handle), CurrentView(0) {
         auto &engine = Engine::GetEngine();
-        OnTickHandle = engine.onTick.Bind(std::bind(&PlayerController::OnTick, this, std::placeholders::_1));
 
         COMPONENT_REGISTER(RigidBody, std::make_shared<RigidBody>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Name, name);
 
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted()) {
+                                                        MouseHandler::LockCamera();
+                                                    }
+                                                },
+                                                voxie::Key::KEY_LEFT_CONTROL});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
                                                     if (gameMode->IsStarted()) {
+                                                        MouseHandler::UnlockCamera();
+                                                    }
+                                                },
+                                                voxie::Key::KEY_LEFT_ALT});
+
+
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
                                                         auto camera = engine.GetCamera();
                                                         auto front = camera->GetFront();
                                                         front.y = 0;
@@ -36,7 +51,7 @@ namespace voxie {
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted()) {
+                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
                                                         auto camera = engine.GetCamera();
                                                         auto right = camera->GetRight();
                                                         right.y = 0;
@@ -53,7 +68,7 @@ namespace voxie {
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted()) {
+                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
                                                         auto camera = engine.GetCamera();
                                                         auto front = camera->GetFront();
                                                         front.y = 0;
@@ -70,7 +85,7 @@ namespace voxie {
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted()) {
+                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
                                                         auto camera = engine.GetCamera();
                                                         auto right = camera->GetRight();
                                                         right.y = 0;
@@ -85,15 +100,28 @@ namespace voxie {
                                                 },
                                                 voxie::Key::KEY_D});
 
+        voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
+                                                    auto gameMode = engine.GetGameMode();
+                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
+                                                        if (auto body = this->GetRigidBody()) {
+                                                            body->ResetForces();
+                                                            body->ApplyForceAtCenterOfMass({0, this->jumpHeight, 0});
+                                                            this->jumped = true;
+                                                        } else {
+                                                        }
+                                                    }
+                                                },
+                                                voxie::Key::KEY_SPACE});
+
         voxie::MouseHandler::RegisterAction({[this, &engine]() {
                                                  auto gameMode = engine.GetGameMode();
-                                                 if (gameMode->IsStarted()) {
-                                                     auto physicsHandler = engine.GetPhysicsHandler();
+                                                 if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
+                                                     auto &physicsHandler = engine.GetPhysicsHandler();
                                                      auto window = engine.GetWindow();
                                                      if (auto camera = this->GetCamera()) {
                                                          physicsHandler.RayCast(
                                                                  camera->GetRay(window->GetWidth() / 2, window->GetHeight() / 2),
-                                                                 [physicsHandler](const RaycastInfo &info) {
+                                                                 [&physicsHandler](const RaycastInfo &info) {
                                                                      auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
                                                                      if (auto body = helper::GetComponent<RigidBody>(handle)) {
                                                                          body->SetPosition({0, 10, 0});
@@ -103,6 +131,30 @@ namespace voxie {
                                                  }
                                              },
                                              voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
+
+        voxie::MouseHandler::RegisterAction({[this, &engine]() {
+                                                 auto gameMode = engine.GetGameMode();
+                                                 if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
+                                                     auto &physicsHandler = engine.GetPhysicsHandler();
+                                                     auto window = engine.GetWindow();
+                                                     if (auto camera = this->GetCamera()) {
+                                                         physicsHandler.RayCast(
+                                                                 camera->GetRay(window->GetWidth() / 2, window->GetHeight() / 2),
+                                                                 [this, &physicsHandler](const RaycastInfo &info) {
+                                                                     auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
+                                                                     if (auto body = helper::GetComponent<RigidBody>(handle)) {
+                                                                         auto myPos = this->GetPosition();
+                                                                         auto bodyPos = helper::GetComponent<Position>(handle);
+                                                                         auto pos = glm::normalize(bodyPos->pos - myPos->pos);
+                                                                         pos *= 1000;
+                                                                         body->ApplyForceAtCenterOfMass({pos.x, pos.y, pos.z});
+                                                                     }
+                                                                 });
+                                                     }
+                                                 }
+                                             },
+                                             voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
+        OnTickHandle = engine.onTick.Bind(std::bind(&PlayerController::OnTick, this, std::placeholders::_1));
     }
 
     void PlayerController::encode(YAML::Node &node) const {
@@ -131,6 +183,52 @@ namespace voxie {
     }
 
     void PlayerController::OnTick(float delta) {
+        auto gameMode = Engine::GetEngine().GetGameMode();
+        if (!gameMode->IsStarted()) {
+            return;
+        }
+
+        static float timer = 0;
+        timer += delta;
+        static float delay = 10;
+        static float jumpTimeoutDelay = 1;
+
+        ImGui::SliderFloat("Delay", &delay, 0.1f, 20.0f);
+        ImGui::SliderFloat("Jump height", &jumpHeight, 0.1f, 500.0f);
+        ImGui::SliderFloat("Jump timeout", &jumpTimeoutDelay, 0.1f, 10.0f);
+
+        if (auto rigidBody = GetRigidBody()) {
+            auto linearDampening = rigidBody->GetLinearDampening();
+            ImGui::DragFloat("Linear dampening", &linearDampening);
+            rigidBody->SetLinearDampening(linearDampening);
+
+            auto bounciness = rigidBody->GetBounciness();
+            ImGui::SliderFloat("Bounciness", &bounciness, 0.0f, 1.0f);
+            rigidBody->SetBounciness(bounciness);
+        }
+        if (timer >= delay) {
+            timer = 0;
+            auto cube = voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube});
+            auto cubePtr = cube.get();
+            voxie::Engine::GetEngine().GetScene().AddNode(std::move(cube), nullptr);
+            cubePtr->GetPosition()->SetPosition({0, 15, 0});
+            cubePtr->GetRigidBody()->SetPosition({0, 15, 0});
+            cubePtr->GetRigidBody()->SetBodyType(BodyType::DYNAMIC);
+            cubePtr->Init();
+        }
+        static float jumpTimeout = 0;
+        static bool jumpCountDown = false;
+        if (jumped && !jumpCountDown) {
+            jumpTimeout = jumpTimeoutDelay;
+            jumpCountDown = true;
+        }
+        if (jumpCountDown) {
+            jumpTimeout -= delta;
+            if (jumpTimeout <= 0.1) {
+                jumped = false;
+                jumpCountDown = false;
+            }
+        }
     }
 
     void PlayerController::BeginPlay() {
@@ -153,4 +251,5 @@ namespace voxie {
     std::shared_ptr<Camera> PlayerController::GetCamera() {
         return helper::GetSceneNode<Camera>(CurrentView);
     }
+
 }// namespace voxie

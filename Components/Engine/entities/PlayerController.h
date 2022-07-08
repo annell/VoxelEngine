@@ -26,6 +26,9 @@ namespace voxie {
     private:
         int OnTickHandle = 0;
         Handle CurrentView;
+
+        bool jumped = false;
+        float jumpHeight = 20;
     };
 
 }// namespace voxie

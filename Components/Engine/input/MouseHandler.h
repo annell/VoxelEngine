@@ -27,6 +27,7 @@ namespace voxie {
         static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
         static void UnlockCamera();
         static void LockCamera();
+        static bool IsCameraLocked();
 
         static void MovementLock();
         static void MovementUnlock();
