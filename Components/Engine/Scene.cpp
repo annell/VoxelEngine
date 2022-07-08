@@ -58,8 +58,8 @@ namespace voxie {
     void Scene::Load(const std::string &name) {
         SetFilename(name);
         ClearScene();
-        auto nodes = YAML::Load(internal::read_file(folder + sceneName));
-        for (const auto &node : nodes) {
+        auto saveFile = YAML::Load(internal::read_file(folder + sceneName));
+        for (const auto &node : saveFile) {
             auto entity = Handle(node["node"]["id"].as<Handle::Identity>());
             Node *parent = nullptr;
             if (node["parent"].IsDefined()) {
@@ -214,13 +214,15 @@ namespace voxie {
         }
     }
 
-    void Scene::UpdateLights() const {
-        auto lightSources = helper::GetSceneNodes<LightSource>(GetEntities());
+    void Scene::UpdateLight(std::shared_ptr<NodeWrapper> node) const {
+        if (IsAffectedByLight(node)) {
+            UpdateLightSources(helper::GetComponent<Shader>(node->GetHandle()), helper::GetSceneNodes<LightSource>(GetEntities()));
+        }
+    }
 
+    void Scene::UpdateLights() const {
         for (const auto &node : GetNodesForRendering()) {
-            if (IsAffectedByLight(node)) {
-                UpdateLightSources(helper::GetComponent<Shader>(node->GetHandle()), lightSources);
-            }
+            UpdateLight(node);
         }
     }
 

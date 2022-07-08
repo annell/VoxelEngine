@@ -31,10 +31,11 @@ namespace voxie {
         void EnableEntity(const Handle &);
 
         template<typename T>
-        void AddNode(std::shared_ptr<T> nodeWrapper, Node *parent) {
-            auto rootNode = parent ? parent : GetRoot();
-            auto node = std::make_unique<Node>(std::dynamic_pointer_cast<NodeWrapper>(std::move(nodeWrapper)), rootNode);
-            AddNodeImplementation(std::move(node), rootNode);
+        void AddNode(std::shared_ptr<T> nodeT, Node *parent) {
+            auto nodeWrapper = std::dynamic_pointer_cast<NodeWrapper>(std::move(nodeT));
+            auto node = AddEntity(nodeWrapper->GetHandle(), parent);
+            node->nodePtr = nodeWrapper;
+            UpdateLight(nodeWrapper);
         }
         using SceneEntities = std::list<Handle>;
         void RemoveEntity(Handle);
@@ -62,6 +63,7 @@ namespace voxie {
         void UpdateLights() const;
 
     private:
+        void UpdateLight(std::shared_ptr<NodeWrapper>) const;
         void AddNodeImplementation(std::unique_ptr<Node> &&node, Node *rootNode);
 
         bool IsAffectedByLight(std::shared_ptr<NodeWrapper>) const;
