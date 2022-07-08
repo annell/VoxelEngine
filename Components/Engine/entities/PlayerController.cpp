@@ -121,25 +121,6 @@ namespace voxie {
                                                      if (auto camera = this->GetCamera()) {
                                                          physicsHandler.RayCast(
                                                                  camera->GetRay(window->GetWidth() / 2, window->GetHeight() / 2),
-                                                                 [&physicsHandler](const RaycastInfo &info) {
-                                                                     auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
-                                                                     if (auto body = helper::GetComponent<RigidBody>(handle)) {
-                                                                         body->SetPosition({0, 10, 0});
-                                                                     }
-                                                                 });
-                                                     }
-                                                 }
-                                             },
-                                             voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
-
-        voxie::MouseHandler::RegisterAction({[this, &engine]() {
-                                                 auto gameMode = engine.GetGameMode();
-                                                 if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-                                                     auto &physicsHandler = engine.GetPhysicsHandler();
-                                                     auto window = engine.GetWindow();
-                                                     if (auto camera = this->GetCamera()) {
-                                                         physicsHandler.RayCast(
-                                                                 camera->GetRay(window->GetWidth() / 2, window->GetHeight() / 2),
                                                                  [this, &physicsHandler](const RaycastInfo &info) {
                                                                      auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
                                                                      if (auto body = helper::GetComponent<RigidBody>(handle)) {
@@ -153,7 +134,7 @@ namespace voxie {
                                                      }
                                                  }
                                              },
-                                             voxie::MouseButton::BUTTON_2, voxie::ActionType::PRESS});
+                                             voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
         OnTickHandle = engine.onTick.Bind(std::bind(&PlayerController::OnTick, this, std::placeholders::_1));
     }
 
@@ -211,6 +192,16 @@ namespace voxie {
             auto cube = voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube});
             auto cubePtr = cube.get();
             voxie::Engine::GetEngine().GetScene().AddNode(std::move(cube), nullptr);
+            auto material = cubePtr->GetMaterial();
+            auto makeRandomColor = []() {
+                float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+                float g = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+                float b = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+                return glm::vec3{r, g, b};
+            };
+            material->ambient = makeRandomColor();
+            material->diffuse = makeRandomColor();
+            material->specular = makeRandomColor();
             cubePtr->GetPosition()->SetPosition({0, 15, 0});
             cubePtr->GetRigidBody()->SetPosition({0, 15, 0});
             cubePtr->GetRigidBody()->SetBodyType(BodyType::DYNAMIC);

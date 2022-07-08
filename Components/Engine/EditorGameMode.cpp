@@ -140,7 +140,7 @@ namespace voxie {
 
     void EditorGameMode::OnTick(float deltaTime) {
         voxie::GameMode::OnTick(deltaTime);
-        if (!IsStarted()) {
+        if (voxie::MouseHandler::IsCameraLocked()) {
             gui::ShowSceneOverview();
         }
     }
