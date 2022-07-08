@@ -69,12 +69,12 @@ namespace voxie {
         auto shader = GetShader();
         shader->use();
 
+        auto material = GetMaterial();
         std::string index = "0";
-        shader->setVec3("materials[" + index + "].ambient", GetMaterial()->ambient);
-        shader->setVec3("materials[" + index + "].diffuse", GetMaterial()->diffuse);
-        shader->setVec3("materials[" + index + "].specular", GetMaterial()->specular);
-        shader->setFloat("materials[" + index + "].shininess", GetMaterial()->shininess);
-        shader->setInt("material", 0);
+        shader->setVec3("materials[" + index + "].ambient", material->ambient);
+        shader->setVec3("materials[" + index + "].diffuse", material->diffuse);
+        shader->setVec3("materials[" + index + "].specular", material->specular);
+        shader->setFloat("materials[" + index + "].shininess", material->shininess);
     }
 
     RenderingConfig CubeEntity::GetRenderingConfig() const {
