@@ -140,7 +140,9 @@ namespace voxie {
 
     void EditorGameMode::OnTick(float deltaTime) {
         voxie::GameMode::OnTick(deltaTime);
-        gui::ShowSceneOverview();
+        if (!IsStarted()) {
+            gui::ShowSceneOverview();
+        }
     }
 
     void EditorGameMode::Start() {

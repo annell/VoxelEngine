@@ -111,8 +111,7 @@ namespace gui {
             pos->SetScale({scale[0], scale[1], scale[2]});
             pos->SetPosition({translation[0], translation[1], translation[2]});
 
-            if (ShowGuizmo(entity)) {
-            }
+            ShowGuizmo(entity);
             pos->SetModel(pos->model);
             if (auto rigidBody = voxie::helper::GetComponent<voxie::RigidBody>(entity)) {
                 rigidBody->SetPosition(*pos);
