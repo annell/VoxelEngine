@@ -54,9 +54,9 @@ namespace voxie {
         auto outline = GetOutline();
 
         outline->shader = std::make_shared<voxie::Shader>(
-                std::map<std::string, unsigned int>{
-                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", GL_VERTEX_SHADER),
-                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", GL_FRAGMENT_SHADER)});
+                std::map<std::string, ShaderType>{
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.vs", ShaderType::VERTEX),
+                        std::make_pair(BASE_PATH + SHADERS + "/outline.fs", ShaderType::FRAGMENT)});
         outline->vertexBufferArray = cube.GetVertexBufferArray();
         outline->position = GetPosition();
 

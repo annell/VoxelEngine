@@ -7,6 +7,12 @@
 #include "GameMode.h"
 #include <gtest/gtest.h>
 
+namespace {
+    std::unique_ptr<voxie::GameMode> MakeEmptySceneGameMode() {
+        return std::move(std::make_unique<voxie::GameMode>("Empty.voxie"));
+    }
+}// namespace
+
 TEST(Engine, Construction) {
     using engine = voxie::Engine;
     ASSERT_FALSE(std::is_constructible<engine>::value);
@@ -55,7 +61,7 @@ TEST(Engine, GetGameMode) {
     auto gameMode = engine.GetGameMode();
     ASSERT_FALSE(gameMode);
 
-    engine.SetGameMode(std::make_unique<voxie::GameMode>());
+    engine.SetGameMode(MakeEmptySceneGameMode());
     gameMode = engine.GetGameMode();
     ASSERT_TRUE(gameMode);
 }
@@ -74,8 +80,10 @@ TEST(Engine, GetRenderingHandler) {
 
 TEST(Engine, Loop) {
     auto &engine = voxie::Engine::GetEngine();
+    engine.SetGameMode(MakeEmptySceneGameMode());
     ASSERT_FALSE(engine.IsRunning());
-    engine.onTick.Bind([&](auto) {
+    engine.onTick.Bind([&](float deltaTime) {
+        ASSERT_TRUE(deltaTime > 0);
         ASSERT_TRUE(engine.IsRunning());
         voxie::Engine::GetEngine().StopLoop();
     });

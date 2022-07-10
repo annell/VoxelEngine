@@ -26,6 +26,16 @@ namespace {
             }
         }
     }
+
+    unsigned int GetGLShaderFromShaderType(voxie::ShaderType type) {
+        switch (type) {
+            case voxie::ShaderType::VERTEX:
+                return GL_VERTEX_SHADER;
+            case voxie::ShaderType::FRAGMENT:
+                return GL_FRAGMENT_SHADER;
+        }
+        return 0;
+    }
 }// namespace
 
 namespace voxie {
@@ -35,7 +45,7 @@ namespace voxie {
         std::vector<unsigned int> compiledShaders;
         for (const auto &pair : shaders) {
             const auto &path = pair.first;
-            const unsigned int &type = pair.second;
+            const unsigned int &type = GetGLShaderFromShaderType(pair.second);
             std::string code;
             std::ifstream shaderFile;
             shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -66,7 +76,6 @@ namespace voxie {
     }
 
     void Shader::encode(YAML::Node &node) const {
-        node["shaderCode"] = shaderCode;
     }
 
     bool Shader::decode(const YAML::Node &node) {

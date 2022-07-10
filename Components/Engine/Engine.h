@@ -42,24 +42,23 @@ namespace voxie {
 
     private:
         bool Init();
-        void InitGUI() const;
         void RegisterComponents();
         bool InitWindow();
         void UpdateTime();
-        void NewFrame() const;
         void SubmitNodesForRendering(const Scene::SceneNodes &) const;
         void SubmitTextForRendering(const std::vector<std::shared_ptr<voxie::Text>> &) const;
-        void RenderFrame() const;
 
         float deltaTime = 0.0f;
         float lastFrame = 0.0f;
         bool isRunning = false;
         Handle camera;
+
         std::shared_ptr<Window> window;
         std::unique_ptr<Scene> scene;
         std::unique_ptr<GameMode> gameMode;
-        RenderingHandler renderingHandler;
         std::unique_ptr<TextHandler> textHandler;
+
+        RenderingHandler renderingHandler;
         ECSManager ecsManager;
         PhysicsHandler physicsHandler;
     };

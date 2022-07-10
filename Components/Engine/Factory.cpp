@@ -14,10 +14,6 @@
 #include <Sprite.h>
 #include <filesystem>
 
-#define GL_SILENCE_DEPRECATION
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 namespace internal {
 
     void eraseSubStr(std::string &mainStr, const std::string &toErase) {
@@ -65,9 +61,9 @@ namespace voxie {
                 config.path,
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
-                        std::map<std::string, unsigned int>{
-                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", GL_VERTEX_SHADER),
-                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}),
+                        std::map<std::string, ShaderType>{
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", ShaderType::VERTEX),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)}),
                 std::make_shared<voxie::Position>(0, 0, 0));
         return std::move(model);
     }
@@ -81,9 +77,9 @@ namespace voxie {
                 config.entity.GetId() ? config.entity : Handle::MakeEntity(),
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
-                        std::map<std::string, unsigned int>{
-                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", GL_VERTEX_SHADER),
-                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", GL_FRAGMENT_SHADER)}),
+                        std::map<std::string, ShaderType>{
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", ShaderType::VERTEX),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)}),
                 std::make_shared<voxie::Position>(0, 0, 0),
                 std::make_shared<voxie::Material>(config.material));
         return std::move(model);
@@ -133,9 +129,9 @@ namespace voxie {
                 config.path,
                 std::make_shared<voxie::Name>(config.name),
                 std::make_shared<voxie::Shader>(
-                        std::map<std::string, unsigned int>{
-                                std::make_pair(BASE_PATH + SHADERS + "/sprite.vs", GL_VERTEX_SHADER),
-                                std::make_pair(BASE_PATH + SHADERS + "/sprite.fs", GL_FRAGMENT_SHADER)}),
+                        std::map<std::string, ShaderType>{
+                                std::make_pair(BASE_PATH + SHADERS + "/sprite.vs", ShaderType::VERTEX),
+                                std::make_pair(BASE_PATH + SHADERS + "/sprite.fs", ShaderType::FRAGMENT)}),
                 std::make_shared<voxie::Position2D>(0, 0));
         return std::move(sprite);
     }

@@ -2,28 +2,24 @@
 #include "Core.h"
 #include <iostream>
 
-#define GL_SILENCE_DEPRECATION
 #include "CubeEntity.h"
 #include "GameMode.h"
 #include "Outline.h"
+#include "RenderingInterface.h"
 #include "Text.h"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <RigidBody.h>
 
+const unsigned int SCR_WIDTH = 1024;
+const unsigned int SCR_HEIGHT = 768;
+
 namespace voxie {
-    const unsigned int SCR_WIDTH = 1024;
-    const unsigned int SCR_HEIGHT = 768;
 
     Engine::Engine()
         : scene(std::make_unique<Scene>(BASE_PATH + SCENES + "/")), camera(NullEntity), gameMode(nullptr), textHandler(nullptr) {
     }
 
     Engine::~Engine() {
-        glfwTerminate();
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        RenderingInterface::Shutdown();
         scene.reset();
     }
 
@@ -49,40 +45,15 @@ namespace voxie {
         if (!InitWindow()) {
             return false;
         }
-        InitGUI();
         GetPhysicsHandler()->Initialize();
         return true;
     }
 
     bool Engine::InitWindow() {
-        glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        RenderingInterface::Init();
+        window = RenderingInterface::CreateWindow();
 
-#ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-        window = std::make_shared<Window>(glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Voxie", nullptr, nullptr), SCR_WIDTH,
-                                          SCR_HEIGHT);
-        if (window == nullptr) {
-            std::cout << "Failed to create GLFW window" << std::endl;
-            glfwTerminate();
-            return false;
-        }
-        glfwMakeContextCurrent(window->GetWindow());
-        glfwSetFramebufferSizeCallback(window->GetWindow(), MouseHandler::framebuffer_size_callback);
-        glfwSetCursorPosCallback(window->GetWindow(), MouseHandler::mouse_movement_callback);
-        glfwSetScrollCallback(window->GetWindow(), MouseHandler::scroll_callback);
-        glfwSetMouseButtonCallback(window->GetWindow(), MouseHandler::mouse_clicked_callback);
-        glfwSwapInterval(1);
-
-        glewInit();
-
-        glEnable(GL_DEPTH_TEST);
-
-        textHandler = std::make_unique<TextHandler>(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", std::make_shared<voxie::Shader>(std::map<std::string, unsigned int>{std::make_pair(BASE_PATH + SHADERS + "/text.vs", GL_VERTEX_SHADER), std::make_pair(BASE_PATH + SHADERS + "/text.fs", GL_FRAGMENT_SHADER)}));
+        textHandler = std::make_unique<TextHandler>(SCR_WIDTH, SCR_HEIGHT, BASE_PATH + FONTS + "/Arial.ttf", std::make_shared<voxie::Shader>(std::map<std::string, ShaderType>{std::make_pair(BASE_PATH + SHADERS + "/text.vs", ShaderType::VERTEX), std::make_pair(BASE_PATH + SHADERS + "/text.fs", ShaderType::FRAGMENT)}));
         textHandler->Init();
         return true;
     }
@@ -112,15 +83,14 @@ namespace voxie {
 
         while (IsRunning()) {
             UpdateTime();
-
-            NewFrame();
+            RenderingInterface::NewFrame();
 
             KeyboardHandler::processInput();
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
             SubmitNodesForRendering(GetScene()->GetNodesForRendering());
 
-            RenderFrame();
+            RenderingInterface::RenderFrame(GetWindow());
         }
     }
 
@@ -129,7 +99,7 @@ namespace voxie {
     }
 
     bool Engine::IsRunning() const {
-        return isRunning && !glfwWindowShouldClose(window->GetWindow());
+        return isRunning && !RenderingInterface::ShouldClose(GetWindow());
     }
 
     void Engine::SubmitNodesForRendering(const Scene::SceneNodes &nodes) const {
@@ -161,25 +131,8 @@ namespace voxie {
         }
     }
 
-    void Engine::RenderFrame() const {
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        glfwSwapBuffers(window->GetWindow());
-        glfwPollEvents();
-    }
-
-    void Engine::NewFrame() const {
-        glClearColor(0.25f, 0.6f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-    }
-
     void Engine::UpdateTime() {
-        float currentFrame = glfwGetTime();
+        float currentFrame = RenderingInterface::GetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
     }
@@ -204,16 +157,6 @@ namespace voxie {
 
     Scene *Engine::GetScene() const {
         return scene.get();
-    }
-
-    void Engine::InitGUI() const {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        ImGui_ImplGlfw_InitForOpenGL(GetWindow()->GetWindow(), true);
-        ImGui_ImplOpenGL3_Init(nullptr);
-        ImGui::StyleColorsDark();
     }
 
     void Engine::SetCamera(const Handle &handle) {

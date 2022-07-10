@@ -11,10 +11,15 @@ namespace YAML {
 }
 
 namespace voxie {
+
+    enum ShaderType {
+        VERTEX,
+        FRAGMENT,
+    };
+
     class Shader {
     public:
         using ShaderDefinition = std::string;
-        using ShaderType = unsigned int;
         unsigned int ID;
         explicit Shader(const std::map<ShaderDefinition, ShaderType> &shaders);
 

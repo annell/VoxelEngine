@@ -24,5 +24,9 @@
 			"resources",
 		],
 		"C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false,
+		"files.associations": {
+			"ios": "cpp",
+			"map": "cpp"
+		},
 	}
 }

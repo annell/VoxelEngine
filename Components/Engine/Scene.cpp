@@ -9,10 +9,6 @@
 #include <Skybox.h>
 #include <fstream>
 
-#define GL_SILENCE_DEPRECATION
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 namespace internal {
     auto read_file(std::string_view path) -> std::string {
         constexpr auto read_size = std::size_t{4096};
@@ -73,9 +69,9 @@ namespace voxie {
         }
 
         skybox = std::make_unique<Skybox>(Handle::MakeEntity(), std::make_shared<voxie::Shader>(
-                                                                        std::map<std::string, unsigned int>{
-                                                                                std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", GL_VERTEX_SHADER),
-                                                                                std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", GL_FRAGMENT_SHADER)}));
+                                                                        std::map<std::string, ShaderType>{
+                                                                                std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", ShaderType::VERTEX),
+                                                                                std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", ShaderType::FRAGMENT)}));
         UpdateLights();
     }
 

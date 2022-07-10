@@ -24,6 +24,8 @@
 #include <vector>
 
 // Internal
+#include "RenderingInterface.h"
+
 #include "Engine.h"
 #include "Factory.h"
 
