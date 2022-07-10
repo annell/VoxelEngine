@@ -108,7 +108,9 @@ namespace voxie {
     }
 
     void Engine::StartLoop() {
-        while (!glfwWindowShouldClose(window->GetWindow())) {
+        isRunning = true;
+
+        while (IsRunning()) {
             UpdateTime();
 
             NewFrame();
@@ -120,6 +122,14 @@ namespace voxie {
 
             RenderFrame();
         }
+    }
+
+    void Engine::StopLoop() {
+        isRunning = false;
+    }
+
+    bool Engine::IsRunning() const {
+        return isRunning && !glfwWindowShouldClose(window->GetWindow());
     }
 
     void Engine::SubmitNodesForRendering(const Scene::SceneNodes &nodes) const {
@@ -180,6 +190,11 @@ namespace voxie {
 
     Engine &Engine::GetEngine() {
         static Engine engine;
+        static bool initialized = false;
+        if (!initialized) {
+            initialized = true;
+            engine.Init();
+        }
         return engine;
     }
 

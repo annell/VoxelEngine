@@ -7,9 +7,15 @@
 #include "GameMode.h"
 #include <gtest/gtest.h>
 
-TEST(Engine, Init) {
-    auto &engine = voxie::Engine::GetEngine();
-    ASSERT_TRUE(engine.Init());
+TEST(Engine, Construction) {
+    using engine = voxie::Engine;
+    ASSERT_FALSE(std::is_constructible<engine>::value);
+    ASSERT_FALSE(std::is_destructible<engine>::value);
+    ASSERT_FALSE((std::is_assignable<engine, engine>::value));
+    ASSERT_FALSE(std::is_copy_assignable<engine>::value);
+    ASSERT_FALSE(std::is_copy_constructible<engine>::value);
+    ASSERT_FALSE(std::is_move_assignable<engine>::value);
+    ASSERT_FALSE(std::is_move_constructible<engine>::value);
 }
 
 TEST(Engine, GetCamera) {
@@ -64,6 +70,17 @@ TEST(Engine, GetRenderingHandler) {
     auto &engine = voxie::Engine::GetEngine();
     auto renderingHandler = engine.GetRenderingHandler();
     ASSERT_TRUE(renderingHandler);
+}
+
+TEST(Engine, Loop) {
+    auto &engine = voxie::Engine::GetEngine();
+    ASSERT_FALSE(engine.IsRunning());
+    engine.onTick.Bind([&](auto) {
+        ASSERT_TRUE(engine.IsRunning());
+        voxie::Engine::GetEngine().StopLoop();
+    });
+    engine.StartLoop();
+    ASSERT_FALSE(engine.IsRunning());
 }
 
 int main(int argc, char **argv) {
