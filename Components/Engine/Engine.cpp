@@ -87,7 +87,7 @@ namespace voxie {
         return true;
     }
 
-    void Engine::LoadGameMode(std::unique_ptr<GameMode> gameModeIn) {
+    void Engine::SetGameMode(std::unique_ptr<GameMode> gameModeIn) {
         gameMode = std::move(gameModeIn);
         gameMode->Reset();
     }

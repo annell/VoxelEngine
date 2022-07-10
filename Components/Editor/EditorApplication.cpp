@@ -7,7 +7,7 @@
 int main() {
     auto &engine = voxie::Engine::GetEngine();
     engine.Init();
-    engine.LoadGameMode(std::make_unique<voxie::EditorGameMode>());
+    engine.SetGameMode(std::make_unique<voxie::EditorGameMode>());
     engine.GetWindow()->SetTitle("Voxie Editor");
     engine.StartLoop();
     return 0;

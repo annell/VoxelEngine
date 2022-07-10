@@ -22,11 +22,11 @@ namespace voxie {
 
     public:
         static Engine &GetEngine();
+
         bool Init();
-        void LoadGameMode(std::unique_ptr<GameMode>);
+
+        void SetGameMode(std::unique_ptr<GameMode>);
         void SetCamera(const Handle &);
-        void StartLoop();
-        float GetDeltaTime() const;
 
         std::shared_ptr<Camera> GetCamera();
         Window *GetWindow() const;
@@ -36,8 +36,9 @@ namespace voxie {
         PhysicsHandler *GetPhysicsHandler();
         RenderingHandler *GetRenderingHandler();
 
+        void StartLoop();
+        float GetDeltaTime() const;
         OnTick onTick;
-
 
     private:
         void InitGUI() const;

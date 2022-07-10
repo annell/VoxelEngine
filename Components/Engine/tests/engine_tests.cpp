@@ -3,6 +3,8 @@
 //
 
 #include "Engine.h"
+#include "Factory.h"
+#include "GameMode.h"
 #include <gtest/gtest.h>
 
 TEST(Engine, Init) {
@@ -14,6 +16,14 @@ TEST(Engine, GetCamera) {
     auto &engine = voxie::Engine::GetEngine();
     auto camera = engine.GetCamera();
     ASSERT_FALSE(camera);
+
+    camera = voxie::MakeCamera({});
+    engine.GetScene()->AddNode(camera, nullptr);
+    engine.SetCamera(camera->GetHandle());
+
+    auto camera2 = engine.GetCamera();
+    ASSERT_TRUE(camera2);
+    ASSERT_EQ(camera, camera2);
 }
 
 TEST(Engine, GetWindow) {
@@ -38,6 +48,10 @@ TEST(Engine, GetGameMode) {
     auto &engine = voxie::Engine::GetEngine();
     auto gameMode = engine.GetGameMode();
     ASSERT_FALSE(gameMode);
+
+    engine.SetGameMode(std::make_unique<voxie::GameMode>());
+    gameMode = engine.GetGameMode();
+    ASSERT_TRUE(gameMode);
 }
 
 TEST(Engine, GetPhysicsHandler) {
