@@ -42,7 +42,6 @@
 #include "Camera.h"
 #include "InputDefinitions.h"
 #include "KeyboardHandler.h"
-#include "Logging.h"
 #include "MouseHandler.h"
 #include "PlayerController.h"
 #include "RenderingHandler.h"

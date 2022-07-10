@@ -19,8 +19,8 @@ namespace voxie {
         : NodeWrapper(config.handle), type(config.type) {
         config.position->model = glm::translate(config.position->model, config.position->pos);
         config.position->SetPosition(config.position->pos);
-        config.position->onUpdate.Bind([]() { Engine::GetEngine().GetScene().UpdateLights(); });
-        config.color->onUpdate.Bind([]() { Engine::GetEngine().GetScene().UpdateLights(); });
+        config.position->onUpdate.Bind([]() { Engine::GetEngine().GetScene()->UpdateLights(); });
+        config.color->onUpdate.Bind([]() { Engine::GetEngine().GetScene()->UpdateLights(); });
 
         COMPONENT_REGISTER(Position, config.position);
         COMPONENT_REGISTER(Name, config.name);

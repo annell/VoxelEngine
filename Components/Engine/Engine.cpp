@@ -50,7 +50,7 @@ namespace voxie {
             return false;
         }
         InitGUI();
-        GetPhysicsHandler().Initialize();
+        GetPhysicsHandler()->Initialize();
         return true;
     }
 
@@ -93,8 +93,8 @@ namespace voxie {
     }
 
     std::shared_ptr<Camera> Engine::GetCamera() {
-        if (gameMode->IsStarted()) {
-            if (auto entity = GetScene().FindEntity<PlayerController>()) {
+        if (gameMode && gameMode->IsStarted()) {
+            if (auto entity = GetScene()->FindEntity<PlayerController>()) {
                 if (auto playerCamera = entity->GetCamera()) {
                     return playerCamera;
                 }
@@ -103,8 +103,8 @@ namespace voxie {
         return helper::GetSceneNode<Camera>(camera);
     }
 
-    std::shared_ptr<Window> Engine::GetWindow() const {
-        return window;
+    Window *Engine::GetWindow() const {
+        return window.get();
     }
 
     void Engine::StartLoop() {
@@ -116,7 +116,7 @@ namespace voxie {
             KeyboardHandler::processInput();
             voxie::helper::RenderingBegin();
             onTick.Broadcast(GetDeltaTime());
-            SubmitNodesForRendering(GetScene().GetNodesForRendering());
+            SubmitNodesForRendering(GetScene()->GetNodesForRendering());
 
             RenderFrame();
         }
@@ -136,7 +136,7 @@ namespace voxie {
             }
         }
 
-        auto skybox = GetScene().GetSkybox();
+        auto skybox = GetScene()->GetSkybox();
         voxie::helper::Submit(skybox->GetRenderingConfig());
 
         voxie::helper::RenderingEnd();
@@ -183,16 +183,12 @@ namespace voxie {
         return engine;
     }
 
-    RenderingHandler &Engine::GetRenderingHandler() {
-        return renderingHandler;
+    RenderingHandler *Engine::GetRenderingHandler() {
+        return &renderingHandler;
     }
 
-    Logging &Engine::GetLogger() {
-        return logging;
-    }
-
-    Scene &Engine::GetScene() const {
-        return *scene.get();
+    Scene *Engine::GetScene() const {
+        return scene.get();
     }
 
     void Engine::InitGUI() const {
@@ -208,33 +204,28 @@ namespace voxie {
     void Engine::SetCamera(const Handle &handle) {
         camera = handle;
     }
-    ECSManager &Engine::GetECSManager() {
-        return ecsManager;
+    ECSManager *Engine::GetECSManager() {
+        return &ecsManager;
     }
 
     GameMode *Engine::GetGameMode() const {
         return gameMode.get();
     }
-    PhysicsHandler &Engine::GetPhysicsHandler() {
-        return physicsHandler;
+    PhysicsHandler *Engine::GetPhysicsHandler() {
+        return &physicsHandler;
     }
 
     namespace helper {
-
-        void Log(const std::string &log) {
-            Engine::GetEngine().GetLogger().AddLog("%s", log.c_str());
-        }
-
         void RenderingBegin() {
-            Engine::GetEngine().GetRenderingHandler().Begin();
+            Engine::GetEngine().GetRenderingHandler()->Begin();
         }
 
         void RenderingEnd() {
-            Engine::GetEngine().GetRenderingHandler().End();
+            Engine::GetEngine().GetRenderingHandler()->End();
         }
 
         void Submit(const voxie::RenderingConfig &config) {
-            Engine::GetEngine().GetRenderingHandler().Submit(config);
+            Engine::GetEngine().GetRenderingHandler()->Submit(config);
         }
     }// namespace helper
 

@@ -92,6 +92,13 @@ ExternalProject_Add(ReactPhysics3D
         UPDATE_COMMAND ""
         )
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+)
+FetchContent_MakeAvailable(googletest)
+
 add_library(${PROJECT_NAME} STATIC
         ${CPP_FILES}
         )
@@ -128,6 +135,22 @@ target_link_libraries(${PROJECT_NAME}
         )
 
 include_directories(${Engine_INCLUDE_DIRS})
+
+
+enable_testing()
+add_executable(engine_tests ${PROJECT_SOURCE_DIR}/tests/engine_tests.cpp)
+target_link_libraries(engine_tests
+        PRIVATE
+        gtest
+        gtest_main
+        ${PROJECT_NAME}
+        )
+target_include_directories(engine_tests
+PRIVATE "."
+)
+
+include(GoogleTest)
+gtest_discover_tests(engine_tests)
 
 if (DO_INSTALL)
     install(TARGETS ${PROJECT_NAME} DESTINATION lib)

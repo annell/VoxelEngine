@@ -97,13 +97,13 @@ namespace voxie {
 
     void MouseHandler::CastRay() {
         auto &engine = Engine::GetEngine();
-        auto &physicsHandler = engine.GetPhysicsHandler();
+        auto physicsHandler = engine.GetPhysicsHandler();
         auto editorGameMode = dynamic_cast<voxie::EditorGameMode *>(engine.GetGameMode());
         if (!editorGameMode->IsStarted()) {
-            physicsHandler.RayCast(
+            physicsHandler->RayCast(
                     Engine::GetEngine().GetCamera()->GetRay(internal::x, internal::y),
                     [physicsHandler, editorGameMode](const RaycastInfo &info) {
-                        auto handle = physicsHandler.GetHandleFromRigidBodyId(info.collisionId);
+                        auto handle = physicsHandler->GetHandleFromRigidBodyId(info.collisionId);
                         editorGameMode->SetSelection(handle);
                     });
         }

@@ -24,7 +24,7 @@ namespace voxie {
         }
 
         reactphysics3d::RigidBody *createRigidBody(const Position &pos) {
-            return Engine::GetEngine().GetPhysicsHandler().GetWorld()->createRigidBody(PositionToTransform(pos));
+            return Engine::GetEngine().GetPhysicsHandler()->GetWorld()->createRigidBody(PositionToTransform(pos));
         }
 
         reactphysics3d::BodyType voxieToReactBodyType(BodyType bodyType) {
@@ -67,7 +67,7 @@ namespace voxie {
     }
 
     RigidBody::~RigidBody() {
-        Engine::GetEngine().GetPhysicsHandler().GetWorld()->destroyRigidBody(rigidBody);
+        Engine::GetEngine().GetPhysicsHandler()->GetWorld()->destroyRigidBody(rigidBody);
     }
 
     void RigidBody::BeginPlay() const {

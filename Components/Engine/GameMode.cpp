@@ -24,13 +24,13 @@ namespace voxie {
 
     void GameMode::Reset() {
         auto &engine = Engine::GetEngine();
-        auto &scene = engine.GetScene();
-        scene.ClearScene();
-        scene.Load(sceneSavefile);
-        if (scene.GetEntities().empty()) {
+        auto scene = engine.GetScene();
+        scene->ClearScene();
+        scene->Load(sceneSavefile);
+        if (scene->GetEntities().empty()) {
             auto camera = MakeCamera({"Editor Camera"});
             auto entity = camera->GetHandle();
-            scene.AddNode(camera, nullptr);
+            scene->AddNode(camera, nullptr);
             engine.SetCamera(entity);
         }
         Stop();
@@ -38,14 +38,14 @@ namespace voxie {
 
     void GameMode::Start() {
         started = true;
-        for (auto node : Engine::GetEngine().GetScene().GetNodesPtrs()) {
+        for (auto node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
             node->BeginPlay();
         }
     }
 
     void GameMode::Stop() {
         started = false;
-        for (auto node : Engine::GetEngine().GetScene().GetNodesPtrs()) {
+        for (auto node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
             node->StopPlay();
         }
     }

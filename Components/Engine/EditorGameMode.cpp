@@ -80,7 +80,6 @@ namespace voxie {
 
         StyleColorsDark(nullptr);
         auto &engine = voxie::Engine::GetEngine();
-        auto &scene = engine.GetScene();
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     if (this->IsStarted()) {
@@ -150,9 +149,9 @@ namespace voxie {
         SetSelection(NullEntity);
 
         auto &engine = voxie::Engine::GetEngine();
-        auto &scene = engine.GetScene();
+        auto scene = engine.GetScene();
 
-        for (const auto &entity : scene.GetEntities()) {
+        for (const auto &entity : scene->GetEntities()) {
             if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
                 rigidBody->BeginPlay();
             }

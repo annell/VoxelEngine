@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -16.425045
-        y: 11.7563601
-        z: -17.2598763
+        x: -17.1935291
+        y: 12.3343439
+        z: -21.5315781
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 54.1999741
-      pitch: -8.39988804
+      yaw: 58.0999756
+      pitch: -20.0998936
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -118,7 +118,7 @@
         z: 1.98062491
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -145,7 +145,7 @@
         z: -0.433560491
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -226,3 +226,26 @@
       scale:
         x: 0.00499999989
         y: 0.00499999989
+- parent: 2958638728098174689
+  node:
+    type: LightSource
+    id: 2492124342504629332
+    lightType: 0
+    name: Ambient light
+    position:
+      position:
+        x: -11.9213676
+        y: 1.30668235
+        z: 10.0849466
+      rotation:
+        x: 0
+        y: -0
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1
+    color:
+      r: 0.5
+      g: 0.5
+      b: 0.5

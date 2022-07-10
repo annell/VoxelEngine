@@ -194,13 +194,13 @@ namespace gui {
     }
 
     void ShowSceneNameController() {
-        auto &name = voxie::Engine::GetEngine().GetScene().GetSceneName();
+        auto &name = voxie::Engine::GetEngine().GetScene()->GetSceneName();
         char *buf = (char *) name.c_str();
         auto callback = [](ImGuiInputTextCallbackData *data) -> int {
             return 1;
         };
         ImGui::InputText("Scene Name", buf, 20, 0, callback, (void *) nullptr);
-        voxie::Engine::GetEngine().GetScene().SetFilename(std::string(buf));
+        voxie::Engine::GetEngine().GetScene()->SetFilename(std::string(buf));
     }
 
     void ShowEntityDirectionController(const voxie::Handle &entity) {
@@ -216,7 +216,7 @@ namespace gui {
         if (ImGui::CollapsingHeader("Camera")) {
             if (ImGui::Button("Assign Editor"))
                 voxie::Engine::GetEngine().SetCamera(entity);
-            if (auto node = voxie::Engine::GetEngine().GetScene().FindEntity<voxie::PlayerController>()) {
+            if (auto node = voxie::Engine::GetEngine().GetScene()->FindEntity<voxie::PlayerController>()) {
                 if (ImGui::Button("Assign Player Controller"))
                     node->SetCamera(entity);
             }
@@ -265,7 +265,7 @@ namespace gui {
             if (ImGui::BeginMenu("Lights")) {
                 for (auto &light : lights) {
                     if (ImGui::Selectable(light.name.c_str())) {
-                        voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeLight(light), nullptr);
+                        voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeLight(light), nullptr);
                     }
                 }
                 ImGui::EndMenu();
@@ -275,7 +275,7 @@ namespace gui {
                 auto models = voxie::GetModels();
                 for (auto &model : models) {
                     if (ImGui::Selectable(model.name.c_str())) {
-                        voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeModel(model), nullptr);
+                        voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeModel(model), nullptr);
                     }
                 }
                 ImGui::EndMenu();
@@ -285,12 +285,12 @@ namespace gui {
                 for (const auto &primitive : voxie::GetBasePrimitives()) {
                     if (primitive == voxie::BasePrimitives::Cube) {
                         if (ImGui::Selectable("Cube")) {
-                            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube}), nullptr);
+                            voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube}), nullptr);
                         }
                     }
                 }
                 if (ImGui::Selectable("Text")) {
-                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeText({"Text", "Text"}), nullptr);
+                    voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeText({"Text", "Text"}), nullptr);
                 }
                 ImGui::EndMenu();
             }
@@ -298,7 +298,7 @@ namespace gui {
             if (ImGui::BeginMenu("Sprites")) {
                 for (auto &sprite : voxie::GetSprites()) {
                     if (ImGui::Selectable(sprite.name.c_str())) {
-                        voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeSprite(sprite), nullptr);
+                        voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeSprite(sprite), nullptr);
                     }
                 }
                 ImGui::EndMenu();
@@ -306,15 +306,15 @@ namespace gui {
 
             if (ImGui::BeginMenu("Basic Components")) {
                 if (ImGui::Selectable("Camera")) {
-                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Camera", voxie::Handle::MakeEntity()}), nullptr);
+                    voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeCamera({"Camera", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 if (ImGui::Selectable("Player Controller")) {
-                    auto node = voxie::Engine::GetEngine().GetScene().FindEntity<voxie::PlayerController>();
+                    auto node = voxie::Engine::GetEngine().GetScene()->FindEntity<voxie::PlayerController>();
                     assert(!node && "Only one playercontroller is supported!");
-                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakePlayerController({"Player Controller", voxie::Handle::MakeEntity()}), nullptr);
+                    voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakePlayerController({"Player Controller", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 if (ImGui::Selectable("Transform Node")) {
-                    voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
+                    voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
                 }
                 ImGui::EndMenu();
             }
@@ -325,28 +325,28 @@ namespace gui {
 
     void RemoveComponent(const voxie::Handle &entity) {
         if (ImGui::Button("Remove")) {
-            voxie::Engine::GetEngine().GetScene().RemoveEntity(entity);
+            voxie::Engine::GetEngine().GetScene()->RemoveEntity(entity);
         }
     }
 
     void ShowTopMenu() {
         if (ImGui::MenuItem("New")) {
-            voxie::Engine::GetEngine().GetScene().ClearScene();
-            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
+            voxie::Engine::GetEngine().GetScene()->ClearScene();
+            voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeTransformNode({"Transform Node", voxie::Handle::MakeEntity()}), nullptr);
             auto camera = voxie::Handle::MakeEntity();
-            voxie::Engine::GetEngine().GetScene().AddNode(voxie::MakeCamera({"Editor Camera", camera}), nullptr);
+            voxie::Engine::GetEngine().GetScene()->AddNode(voxie::MakeCamera({"Editor Camera", camera}), nullptr);
             voxie::Engine::GetEngine().SetCamera(camera);
         }
         if (ImGui::BeginMenu("Open")) {
             for (auto &scene : voxie::GetScenes()) {
                 if (ImGui::Selectable(scene.name.c_str())) {
-                    voxie::Engine::GetEngine().GetScene().Load(scene.name);
+                    voxie::Engine::GetEngine().GetScene()->Load(scene.name);
                 }
             }
             ImGui::EndMenu();
         }
         if (ImGui::MenuItem("Save")) {
-            voxie::Engine::GetEngine().GetScene().Save();
+            voxie::Engine::GetEngine().GetScene()->Save();
         }
         if (ImGui::MenuItem("Quit")) {
             glfwSetWindowShouldClose(voxie::Engine::GetEngine().GetWindow()->GetWindow(), 1);
@@ -441,7 +441,7 @@ namespace gui {
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
 
-            DisplayTreeView(voxie::Engine::GetEngine().GetScene().GetRoot(), selected);
+            DisplayTreeView(voxie::Engine::GetEngine().GetScene()->GetRoot(), selected);
             ImGui::EndTable();
         }
     }

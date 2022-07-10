@@ -71,7 +71,7 @@ namespace voxie {
         if (accumulator >= timeStepFraction) {
             world->update(timeStepFraction);
             accumulator -= timeStepFraction;
-            for (const auto &node : Engine::GetEngine().GetScene().GetNodesPtrs()) {
+            for (const auto &node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
                 if (Engine::GetEngine().GetGameMode()->IsStarted() && helper::HasComponent<RigidBody>(node->GetHandle()) && helper::GetComponent<Position>(node->GetHandle())) {
                     auto body = helper::GetComponent<RigidBody>(node->GetHandle());
                     auto pos = helper::GetComponent<Position>(node->GetHandle());
@@ -89,7 +89,7 @@ namespace voxie {
     }
 
     Handle PhysicsHandler::GetHandleFromRigidBodyId(uint32_t id) const {
-        for (const auto &entity : Engine::GetEngine().GetScene().GetEntities()) {
+        for (const auto &entity : Engine::GetEngine().GetScene()->GetEntities()) {
             if (auto rigidBody = helper::GetComponent<RigidBody>(entity)) {
                 if (rigidBody->GetColliderId() == id) {
                     return entity;
