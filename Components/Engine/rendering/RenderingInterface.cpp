@@ -55,6 +55,10 @@ namespace voxie {
         ImGui::StyleColorsDark();
         return std::move(window);
     }
+    void RenderingInterface::Draw(std::shared_ptr<VertexBufferArray> vba) {
+        glBindVertexArray(vba->VAO);
+        glDrawArrays(GL_TRIANGLES, 0, vba->nrVertex);
+    }
 
     void RenderingInterface::NewFrame() {
         glClearColor(0.25f, 0.6f, 1.0f, 1.0f);

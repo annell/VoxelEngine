@@ -91,8 +91,7 @@ namespace voxie {
                     GetOutline()->Render();
                 },
                 [&]() {
-                    glBindVertexArray(cube.GetVertexBufferArray()->VAO);
-                    glDrawArrays(GL_TRIANGLES, 0, cube.GetVertexBufferArray()->nrVertex);
+                    RenderingInterface::Draw(cube.GetVertexBufferArray());
                 },
                 IsEnabled()};
     }

@@ -157,8 +157,7 @@ namespace voxie {
                 GetPreDrawAction(GetShader(), GetPosition()->model),
                 GetPostDrawAction(),
                 [&]() {
-                    glBindVertexArray(GetVertexBufferArray()->VAO);
-                    glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
+                    RenderingInterface::Draw(GetVertexBufferArray());
                 }};
     }
 
