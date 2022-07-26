@@ -47,6 +47,10 @@ namespace {
                 return GL_RGB;
             case rendering::UnsignedByte:
                 return GL_UNSIGNED_BYTE;
+            case rendering::Less:
+                return GL_LESS;
+            case rendering::LessEqual:
+                return GL_LEQUAL;
             case rendering::Linear:
                 return GL_LINEAR;
         }
@@ -132,6 +136,13 @@ namespace voxie {
 
     void RenderingInterface::GenerateTexture(int count, unsigned int *textureID) {
         glGenTextures(count, textureID);
+    }
+
+    void RenderingInterface::DepthFunction(RenderingType type) {
+        glDepthFunc(RenderingTypeToOpenGL(type));
+    }
+    void RenderingInterface::ActivateTexture(RenderingType type) {
+        glActiveTexture(RenderingTypeToOpenGL(type));
     }
 
     void RenderingInterface::BindTexture(RenderingType type, unsigned int textureID) {

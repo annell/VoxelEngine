@@ -49,7 +49,6 @@ namespace internal {
         for (unsigned int i = 0; i < faces.size(); i++) {
             unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
             if (data) {
-                //glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
                 rIF::TextureImage2D(getCubeFaceType(i), 0, rType::RGB, width, height, 0, rType::RGB, rType::UnsignedByte, data);
                 stbi_image_free(data);
             } else {
@@ -104,7 +103,7 @@ namespace voxie {
 
     auto Skybox::GetPreDrawAction(const std::shared_ptr<Shader> &shader, const std::shared_ptr<Camera> &camera) const {
         return [=]() {
-            glDepthFunc(GL_LEQUAL);
+            RenderingInterface::DepthFunction(RenderingType::LessEqual);
             shader->use();
             auto view = glm::mat4(glm::mat3(camera->GetViewMatrix()));
             shader->setMat4("view", view);
@@ -114,7 +113,7 @@ namespace voxie {
 
     auto Skybox::GetPostDrawAction() const {
         return []() {
-            glDepthFunc(GL_LESS);
+            RenderingInterface::DepthFunction(RenderingType::Less);
         };
     }
 
@@ -125,11 +124,9 @@ namespace voxie {
                 GetPreDrawAction(GetShader(), Engine::GetEngine().GetCamera()),
                 GetPostDrawAction(),
                 [&]() {
-                    glBindVertexArray(GetVertexBufferArray()->VAO);
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-                    glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
-                    glBindVertexArray(0);
+                    RenderingInterface::Draw(GetVertexBufferArray());
+                    RenderingInterface::ActivateTexture(RenderingType::Texture0);
+                    RenderingInterface::BindTexture(RenderingType::TextureCubeMap, cubemapTexture);
                 }};
     }
 

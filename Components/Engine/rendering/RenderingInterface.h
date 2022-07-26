@@ -21,6 +21,8 @@ namespace voxie {
         TextureCubeMapNegativeZ,
         RGB,
         UnsignedByte,
+        Less,
+        LessEqual,
         Linear
     };
 
@@ -35,8 +37,11 @@ namespace voxie {
         static float GetTime();
         static bool ShouldClose(class Window *);
 
+        static void DepthFunction(RenderingType type);
+
         static void GenerateTexture(int count, unsigned int *textureID);
         static void BindTexture(RenderingType type, unsigned int textureID);
+        static void ActivateTexture(RenderingType);
         static void TextureParameter(RenderingType target, RenderingType paramName, RenderingType param);
         static void TextureImage2D(RenderingType, int, RenderingType, int, int, int, RenderingType, RenderingType, const void *);
     };
