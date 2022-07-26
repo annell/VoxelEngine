@@ -21,26 +21,47 @@ namespace internal {
     // -Z (back)
     // -------------------------------------------------------
     unsigned int loadCubemap(std::vector<std::string> faces) {
+        using rIF = voxie::RenderingInterface;
+        using rType = voxie::RenderingType;
+
         unsigned int textureID;
-        glGenTextures(1, &textureID);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+        rIF::GenerateTexture(1, &textureID);
+        rIF::BindTexture(rType::TextureCubeMap, textureID);
+        auto getCubeFaceType = [](int i) {
+            switch (i) {
+                case 0:
+                    return rType::TextureCubeMapPositiveX;
+                case 1:
+                    return rType::TextureCubeMapNegativeX;
+                case 2:
+                    return rType::TextureCubeMapPositiveY;
+                case 3:
+                    return rType::TextureCubeMapNegativeY;
+                case 4:
+                    return rType::TextureCubeMapPositiveZ;
+                case 5:
+                    return rType::TextureCubeMapNegativeZ;
+            }
+            return rType::TextureCubeMapNegativeZ;
+        };
 
         int width, height, nrChannels;
         for (unsigned int i = 0; i < faces.size(); i++) {
             unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
             if (data) {
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                //glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                rIF::TextureImage2D(getCubeFaceType(i), 0, rType::RGB, width, height, 0, rType::RGB, rType::UnsignedByte, data);
                 stbi_image_free(data);
             } else {
                 std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
                 stbi_image_free(data);
             }
         }
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        rIF::TextureParameter(rType::TextureCubeMap, rType::TextureMinFilter, rType::Linear);
+        rIF::TextureParameter(rType::TextureCubeMap, rType::TextureMagFilter, rType::Linear);
+        rIF::TextureParameter(rType::TextureCubeMap, rType::TextureWrapS, rType::ClampToEdge);
+        rIF::TextureParameter(rType::TextureCubeMap, rType::TextureWrapT, rType::ClampToEdge);
+        rIF::TextureParameter(rType::TextureCubeMap, rType::TextureWrapR, rType::ClampToEdge);
 
         return textureID;
     }

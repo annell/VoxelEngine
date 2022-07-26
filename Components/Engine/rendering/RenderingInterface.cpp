@@ -9,6 +9,52 @@
 const unsigned int SCR_WIDTH = 1024;
 const unsigned int SCR_HEIGHT = 768;
 
+namespace {
+    int RenderingTypeToOpenGL(voxie::RenderingType type) {
+        using rendering = voxie::RenderingType;
+        switch (type) {
+            case rendering::Texture0:
+                return GL_TEXTURE0;
+            case rendering::TextureCubeMap:
+                return GL_TEXTURE_CUBE_MAP;
+            case rendering::Triangles:
+                return GL_TRIANGLES;
+            case rendering::TextureMinFilter:
+                return GL_TEXTURE_MIN_FILTER;
+            case rendering::TextureMagFilter:
+                return GL_TEXTURE_MAG_FILTER;
+            case rendering::TextureWrapS:
+                return GL_TEXTURE_WRAP_S;
+            case rendering::TextureWrapT:
+                return GL_TEXTURE_WRAP_T;
+            case rendering::TextureWrapR:
+                return GL_TEXTURE_WRAP_R;
+            case rendering::ClampToEdge:
+                return GL_CLAMP_TO_EDGE;
+            case rendering::TextureCubeMapPositiveX:
+                return GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+            case rendering::TextureCubeMapNegativeX:
+                return GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
+            case rendering::TextureCubeMapPositiveY:
+                return GL_TEXTURE_CUBE_MAP_POSITIVE_Y;
+            case rendering::TextureCubeMapNegativeY:
+                return GL_TEXTURE_CUBE_MAP_NEGATIVE_Y;
+            case rendering::TextureCubeMapPositiveZ:
+                return GL_TEXTURE_CUBE_MAP_POSITIVE_Z;
+            case rendering::TextureCubeMapNegativeZ:
+                return GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+            case rendering::RGB:
+                return GL_RGB;
+            case rendering::UnsignedByte:
+                return GL_UNSIGNED_BYTE;
+            case rendering::Linear:
+                return GL_LINEAR;
+        }
+        return -1;
+    }
+
+}// namespace
+
 namespace voxie {
     void RenderingInterface::Init() {
         glfwInit();
@@ -82,5 +128,19 @@ namespace voxie {
     }
     bool RenderingInterface::ShouldClose(Window *window) {
         return glfwWindowShouldClose(window->GetWindow());
+    }
+
+    void RenderingInterface::GenerateTexture(int count, unsigned int *textureID) {
+        glGenTextures(count, textureID);
+    }
+
+    void RenderingInterface::BindTexture(RenderingType type, unsigned int textureID) {
+        glBindTexture(RenderingTypeToOpenGL(type), textureID);
+    }
+    void RenderingInterface::TextureParameter(RenderingType target, RenderingType paramName, RenderingType param) {
+        glTexParameteri(RenderingTypeToOpenGL(target), RenderingTypeToOpenGL(paramName), RenderingTypeToOpenGL(param));
+    }
+    void RenderingInterface::TextureImage2D(RenderingType target, int level, RenderingType internalFormat, int width, int height, int border, RenderingType format, RenderingType type, const void *pixels) {
+        glTexImage2D(RenderingTypeToOpenGL(target), level, RenderingTypeToOpenGL(internalFormat), width, height, border, RenderingTypeToOpenGL(format), RenderingTypeToOpenGL(type), pixels);
     }
 }// namespace voxie
