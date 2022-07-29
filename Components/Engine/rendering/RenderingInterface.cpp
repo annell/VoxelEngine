@@ -109,8 +109,9 @@ namespace voxie {
         ImGui::StyleColorsDark();
         return std::move(window);
     }
+
     void RenderingInterface::Draw(std::shared_ptr<VertexBufferArray> vba) {
-        glBindVertexArray(vba->VAO);
+        glBindVertexArray(vba->buffers.VAO);
         glDrawArrays(GL_TRIANGLES, 0, vba->nrVertex);
     }
 
@@ -158,4 +159,25 @@ namespace voxie {
     void RenderingInterface::TextureImage2D(RenderingType target, int level, RenderingType internalFormat, int width, int height, int border, RenderingType format, RenderingType type, const void *pixels) {
         glTexImage2D(RenderingTypeToOpenGL(target), level, RenderingTypeToOpenGL(internalFormat), width, height, border, RenderingTypeToOpenGL(format), RenderingTypeToOpenGL(type), pixels);
     }
+
+    RenderingInterface::VertexBuffers RenderingInterface::CreateBuffers(const std::vector<float> &attributes) {
+        RenderingInterface::VertexBuffers buffer;
+        glGenBuffers(1, &buffer.VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * attributes.size(), &attributes[0], GL_STATIC_DRAW);
+        glGenVertexArrays(1, &buffer.VAO);
+        glBindVertexArray(buffer.VAO);
+        return buffer;
+    }
+
+    void RenderingInterface::ResetBuffers(const VertexBuffers &buffers) {
+        glDeleteVertexArrays(1, &buffers.VAO);
+        glDeleteBuffers(1, &buffers.VBO);
+    }
+
+    void RenderingInterface::SetVertexAttrib(int attributes, unsigned int size, int stride, const void *ptr) {
+        glVertexAttribPointer(attributes, size, GL_FLOAT, GL_FALSE, stride, ptr);
+        glEnableVertexAttribArray(attributes);
+    }
+
 }// namespace voxie

@@ -1,6 +1,4 @@
 #include "VertexBufferArray.h"
-
-#include <GL/glew.h>
 #include <yaml-cpp/yaml.h>
 
 namespace voxie {
@@ -11,9 +9,6 @@ namespace voxie {
     }
 
     void VertexBufferArray::encode(YAML::Node &node) const {
-        //node["vertexAttributes"] = vertexAttributes;
-        node["nrVertex"] = nrVertex;
-        node["attributes"] = attributes;
     }
 
     bool VertexBufferArray::decode(const YAML::Node &node) {
@@ -21,20 +16,14 @@ namespace voxie {
     }
 
     void VertexBufferArray::CreateBuffers() {
-        glGenBuffers(1, &VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexAttributes.size(), &vertexAttributes[0], GL_STATIC_DRAW);
-        glGenVertexArrays(1, &VAO);
-        glBindVertexArray(VAO);
+        buffers = RenderingInterface::CreateBuffers(vertexAttributes);
     }
 
     void VertexBufferArray::ResetBuffers() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
+        RenderingInterface::ResetBuffers(buffers);
     }
 
     void VertexBufferArray::SetVertexAttrib(unsigned int size, int stride, const void *ptr) {
-        glVertexAttribPointer(attributes, size, GL_FLOAT, GL_FALSE, stride, ptr);
-        glEnableVertexAttribArray(attributes++);
+        RenderingInterface::SetVertexAttrib(attributes++, size, stride, ptr);
     }
 }// namespace voxie

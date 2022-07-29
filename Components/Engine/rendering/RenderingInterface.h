@@ -45,5 +45,13 @@ namespace voxie {
         static void ActivateTexture(RenderingType);
         static void TextureParameter(RenderingType target, RenderingType paramName, RenderingType param);
         static void TextureImage2D(RenderingType, int, RenderingType, int, int, int, RenderingType, RenderingType, const void *);
+
+        struct VertexBuffers {
+            unsigned int VBO = 0;
+            unsigned int VAO = 0;
+        };
+        static VertexBuffers CreateBuffers(const std::vector<float> &attributes);
+        static void ResetBuffers(const VertexBuffers &);
+        static void SetVertexAttrib(int attributes, unsigned int size, int stride, const void *ptr);
     };
 }// namespace voxie

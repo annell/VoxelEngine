@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "RenderingInterface.h"
 #include <vector>
 
 namespace YAML {
@@ -20,8 +21,7 @@ namespace voxie {
         void CreateBuffers();
         void ResetBuffers();
         void SetVertexAttrib(unsigned int size, int stride, const void *ptr);
-        unsigned int VBO;
-        unsigned int VAO;
+        RenderingInterface::VertexBuffers buffers;
         std::vector<float> vertexAttributes;
         size_t nrVertex = 0;
         int attributes = 0;
