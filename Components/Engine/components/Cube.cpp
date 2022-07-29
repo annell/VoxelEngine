@@ -18,7 +18,7 @@ namespace voxie {
 
     void Cube::GenerateVertexAttributes() {
         vertices.clear();
-        for (auto side : sides) {
+        for (const auto &side : sides) {
             if (side.render) {
                 GenerateVertexAttributes(side);
                 vertexBufferArray->nrVertex += 6;

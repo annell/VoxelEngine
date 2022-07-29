@@ -158,7 +158,7 @@ namespace voxie {
 
     std::list<Handle> Node::GetChildEntities() const {
         std::list<Handle> entities = {GetHandle()};
-        for (auto &child : GetChildNodes()) {
+        for (const auto &child : GetChildNodes()) {
             if (child) {
                 entities.merge(child->GetChildEntities());
             }

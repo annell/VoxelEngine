@@ -36,10 +36,6 @@ namespace std {
     template<>
     struct hash<voxie::Handle> {
         std::size_t operator()(const voxie::Handle &handle) const {
-            // Compute individual hash values for first,
-            // second and third and combine them using XOR
-            // and bit shifting:
-
             return std::hash<voxie::Handle::Identity>()(handle.GetId());
         }
     };

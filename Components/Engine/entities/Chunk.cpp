@@ -58,7 +58,7 @@ namespace voxie {
 
     void Chunk::SetupCubesForRendering() {
         FaceCulling();
-        for (auto &pair : cubesMap) {
+        for (const auto &pair : cubesMap) {
             auto &cube = pair.second;
             cube->GenerateVertexAttributes();
             if (cube->GetMaterialIndex() > nrMaterials) {
@@ -77,7 +77,7 @@ namespace voxie {
         auto shader = GetShader();
         auto vba = GetVertexBufferArray();
         shader->use();
-        for (auto cube : cubesToRender) {
+        for (const auto &cube : cubesToRender) {
             vba->nrVertex += cube->GetNrVertex();
             auto &material = cube->GetMaterial();
             std::string index = std::to_string(cube->GetMaterialIndex());
@@ -107,7 +107,7 @@ namespace voxie {
                 cube->SetRenderSide(face, false);
             }
         };
-        for (auto &pair : cubesMap) {
+        for (const auto &pair : cubesMap) {
             auto cube = pair.second.get();
             auto pos = pair.first;
             pos.x++;

@@ -38,14 +38,14 @@ namespace voxie {
 
     void GameMode::Start() {
         started = true;
-        for (auto node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
+        for (const auto &node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
             node->BeginPlay();
         }
     }
 
     void GameMode::Stop() {
         started = false;
-        for (auto node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
+        for (const auto &node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
             node->StopPlay();
         }
     }

@@ -44,7 +44,7 @@ namespace voxie {
         node["name"] = name->name;
         node["position"] = *helper::GetComponent<Position>(handle).get();
         node["color"] = *helper::GetComponent<Color>(handle).get();
-        if (auto attenuation = GetAttenuation()) {
+        if (const auto &attenuation = GetAttenuation()) {
             node["attenuation"] = *attenuation;
         }
     }

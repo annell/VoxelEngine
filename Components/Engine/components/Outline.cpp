@@ -15,8 +15,7 @@ namespace voxie {
         auto model = glm::scale(position->model, glm::vec3(scale, scale, scale));
         shader->setMat4("model", model);
 
-        glBindVertexArray(vertexBufferArray->buffers.VAO);
-        glDrawArrays(GL_TRIANGLES, 0, vertexBufferArray->nrVertex);
+        RenderingInterface::Draw(vertexBufferArray);
 
         glFrontFace(GL_CW);
         glDisable(GL_CULL_FACE);
