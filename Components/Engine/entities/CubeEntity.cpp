@@ -4,7 +4,6 @@
 
 #include "CubeEntity.h"
 #include "Core.h"
-#include <GL/glew.h>
 
 namespace voxie {
 
@@ -20,9 +19,9 @@ namespace voxie {
 
         cube.GenerateVertexAttributes();
         cube.CreateRenderBuffers();
-        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (0 * sizeof(float)));
-        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (3 * sizeof(float)));
-        cube.SetVertexAttrib(1, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *) (6 * sizeof(float)));
+        cube.SetVertexAttrib(3, 7 * sizeof(float), (void *) (0 * sizeof(float)));
+        cube.SetVertexAttrib(3, 7 * sizeof(float), (void *) (3 * sizeof(float)));
+        cube.SetVertexAttrib(1, 7 * sizeof(float), (void *) (6 * sizeof(float)));
         Init();
     }
 

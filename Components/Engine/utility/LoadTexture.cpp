@@ -2,6 +2,9 @@
 // Created by Stefan Annell on 2021-09-25.
 //
 #include "LoadTexture.h"
+#ifndef GL_SILENCE_DEPRECATION
+#define GL_SILENCE_DEPRECATION
+#endif
 #include <GLFW/glfw3.h>
 
 #include "external/stb/stb_image.h"

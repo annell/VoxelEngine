@@ -43,7 +43,7 @@ namespace voxie {
         void GenerateVertexAttributes();
         void CreateRenderBuffers();
         const std::vector<float> &GetVertexAttributes();
-        void SetVertexAttrib(unsigned int size, int type, bool normalized, int stride, const void *ptr);
+        void SetVertexAttrib(unsigned int size, int stride, const void *ptr);
         void SetRenderSide(Face face, bool render);
         const Material &GetMaterial() const;
         const int &GetMaterialIndex() const;

@@ -9,10 +9,6 @@
 #include <map>
 #include <utility>
 
-#define GL_SILENCE_DEPRECATION
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 namespace voxie {
 
     Chunk::Chunk(const Handle &handle, const std::string &path, std::shared_ptr<Name> name, std::shared_ptr<Shader> shader, std::shared_ptr<Position> position)
@@ -94,9 +90,9 @@ namespace voxie {
         }
 
         vba->CreateBuffers();
-        vba->SetVertexAttrib(3, GL_FLOAT, false, 7 * sizeof(float), (void *) (0 * sizeof(float)));
-        vba->SetVertexAttrib(3, GL_FLOAT, false, 7 * sizeof(float), (void *) (3 * sizeof(float)));
-        vba->SetVertexAttrib(1, GL_FLOAT, false, 7 * sizeof(float), (void *) (6 * sizeof(float)));
+        vba->SetVertexAttrib(3, 7 * sizeof(float), (void *) (0 * sizeof(float)));
+        vba->SetVertexAttrib(3, 7 * sizeof(float), (void *) (3 * sizeof(float)));
+        vba->SetVertexAttrib(1, 7 * sizeof(float), (void *) (6 * sizeof(float)));
         shader->setMat4("model", GetPosition()->model);
     }
 

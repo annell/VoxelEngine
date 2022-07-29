@@ -6,6 +6,7 @@ namespace voxie {
     enum RenderingType {
         Texture0,
         TextureCubeMap,
+        TextureType2D,
         Triangles,
         TextureMinFilter,
         TextureMagFilter,

@@ -5,7 +5,6 @@
 #include "VertexBufferArray.h"
 #include "components/Position.h"
 
-
 namespace voxie {
 
     Cube::Cube()
@@ -37,8 +36,8 @@ namespace voxie {
         return vertexBufferArray->vertexAttributes;
     }
 
-    void Cube::SetVertexAttrib(unsigned int size, int type, bool normalized, int stride, const void *ptr) {
-        vertexBufferArray->SetVertexAttrib(size, type, normalized, stride, ptr);
+    void Cube::SetVertexAttrib(unsigned int size, int stride, const void *ptr) {
+        vertexBufferArray->SetVertexAttrib(size, stride, ptr);
     }
 
     void Cube::SetRenderSide(Face face, bool render) {

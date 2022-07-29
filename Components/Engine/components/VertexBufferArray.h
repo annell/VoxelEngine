@@ -19,7 +19,7 @@ namespace voxie {
 
         void CreateBuffers();
         void ResetBuffers();
-        void SetVertexAttrib(unsigned int size, unsigned int type, bool normalized, int stride, const void *ptr);
+        void SetVertexAttrib(unsigned int size, int stride, const void *ptr);
         unsigned int VBO;
         unsigned int VAO;
         std::vector<float> vertexAttributes;

@@ -7,7 +7,6 @@
 #include "VertexBufferArray.h"
 #include "components/BaseComponents.h"
 #include <Engine.h>
-#include <GL/glew.h>
 #include <utility>
 
 namespace internal {
@@ -47,9 +46,8 @@ namespace voxie {
         shader->use();
         shader->setMat4("model", GetPosition2D()->model);
 
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(GetVertexBufferArray()->VAO);
-        glDrawArrays(GL_TRIANGLES, 0, GetVertexBufferArray()->nrVertex);
+        RenderingInterface::BindTexture(RenderingType::TextureType2D, texture);
+        RenderingInterface::Draw(GetVertexBufferArray());
     }
 
     RenderingConfig Sprite::GetRenderingConfig() const {
@@ -85,7 +83,7 @@ namespace voxie {
         shader->setMat4("model", pos->model);
 
         vertexBufferArray->CreateBuffers();
-        vertexBufferArray->SetVertexAttrib(2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) 0);
-        vertexBufferArray->SetVertexAttrib(2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *) (2 * sizeof(float)));
+        vertexBufferArray->SetVertexAttrib(2, 4 * sizeof(float), (void *) 0);
+        vertexBufferArray->SetVertexAttrib(2, 4 * sizeof(float), (void *) (2 * sizeof(float)));
     }
 }// namespace voxie

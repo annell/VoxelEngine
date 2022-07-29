@@ -2,7 +2,9 @@
 #include "Core.h"
 #include "Window.h"
 
+#ifndef GL_SILENCE_DEPRECATION
 #define GL_SILENCE_DEPRECATION
+#endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -17,6 +19,8 @@ namespace {
                 return GL_TEXTURE0;
             case rendering::TextureCubeMap:
                 return GL_TEXTURE_CUBE_MAP;
+            case rendering::TextureType2D:
+                return GL_TEXTURE_2D;
             case rendering::Triangles:
                 return GL_TRIANGLES;
             case rendering::TextureMinFilter:

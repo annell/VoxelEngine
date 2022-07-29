@@ -33,8 +33,8 @@ namespace voxie {
         glDeleteBuffers(1, &VBO);
     }
 
-    void VertexBufferArray::SetVertexAttrib(unsigned int size, unsigned int type, bool normalized, int stride, const void *ptr) {
-        glVertexAttribPointer(attributes, size, type, normalized, stride, ptr);
+    void VertexBufferArray::SetVertexAttrib(unsigned int size, int stride, const void *ptr) {
+        glVertexAttribPointer(attributes, size, GL_FLOAT, GL_FALSE, stride, ptr);
         glEnableVertexAttribArray(attributes++);
     }
 }// namespace voxie

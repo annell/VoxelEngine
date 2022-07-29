@@ -8,8 +8,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include <GL/glew.h>
-
 namespace internal {
     // loads a cubemap texture from 6 individual texture faces
     // order:
@@ -78,7 +76,7 @@ namespace voxie {
         cube.DisableNormals();
         cube.GenerateVertexAttributes();
         cube.CreateRenderBuffers();
-        cube.SetVertexAttrib(3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) nullptr);
+        cube.SetVertexAttrib(3, 3 * sizeof(float), (void *) nullptr);
 
         cubemapTexture = internal::loadCubemap({BASE_PATH + SPRITES + "/skybox/right.jpg",
                                                 BASE_PATH + SPRITES + "/skybox/left.jpg",
