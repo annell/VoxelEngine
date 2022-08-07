@@ -26,6 +26,8 @@
 // Internal
 #include "RenderingInterface.h"
 
+#include "TimeMeasurement.h"
+
 #include "Engine.h"
 #include "Factory.h"
 

@@ -109,6 +109,7 @@ namespace voxie {
     }
 
     Scene::SceneNodes Scene::GetNodesForRendering() const {
+        TimeMeasurment::Start("GetNodesForRendering");
         auto lightSources = helper::GetSceneNodes<LightSource>(GetEntities());
         auto camera = Engine::GetEngine().GetCamera();
 
@@ -132,6 +133,7 @@ namespace voxie {
                 }
             }
         }
+        TimeMeasurment::End("GetNodesForRendering");
         return nodesForRendering;
     }
 

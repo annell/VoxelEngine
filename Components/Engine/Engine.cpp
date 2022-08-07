@@ -7,7 +7,6 @@
 #include "Outline.h"
 #include "RenderingInterface.h"
 #include "Text.h"
-#include "TimeMeasurement.h"
 #include <RigidBody.h>
 
 const unsigned int SCR_WIDTH = 1024;
