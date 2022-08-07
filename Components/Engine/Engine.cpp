@@ -7,6 +7,7 @@
 #include "Outline.h"
 #include "RenderingInterface.h"
 #include "Text.h"
+#include "TimeMeasurement.h"
 #include <RigidBody.h>
 
 const unsigned int SCR_WIDTH = 1024;
@@ -84,13 +85,30 @@ namespace voxie {
         while (IsRunning()) {
             UpdateTime();
             RenderingInterface::NewFrame();
+            TimeMeasurment::RenderResults();
+            TimeMeasurment::Start("Main");
 
+            TimeMeasurment::Start("processInput");
             KeyboardHandler::processInput();
-            voxie::helper::RenderingBegin();
-            onTick.Broadcast(GetDeltaTime());
-            SubmitNodesForRendering(GetScene()->GetNodesForRendering());
+            TimeMeasurment::End("processInput");
 
+            TimeMeasurment::Start("RenderingBegin");
+            voxie::helper::RenderingBegin();
+            TimeMeasurment::End("RenderingBegin");
+
+            TimeMeasurment::Start("onTick");
+            onTick.Broadcast(GetDeltaTime());
+            TimeMeasurment::End("onTick");
+
+            TimeMeasurment::Start("SubmitNodesForRendering");
+            SubmitNodesForRendering(GetScene()->GetNodesForRendering());
+            TimeMeasurment::End("SubmitNodesForRendering");
+
+            TimeMeasurment::Start("RenderFrame");
             RenderingInterface::RenderFrame(GetWindow());
+            TimeMeasurment::End("RenderFrame");
+
+            TimeMeasurment::End("Main");
         }
     }
 

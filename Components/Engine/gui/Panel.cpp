@@ -6,6 +6,7 @@
 #include "EditorGameMode.h"
 #include <GLFW/glfw3.h>
 #include <GameMode.h>
+
 namespace internal {
 
     struct InputTextCallback_UserData {
@@ -464,8 +465,9 @@ namespace gui {
         ImGui::Begin("Scene");
         ShowSceneNameController();
         auto entity = ShowEntityList();
-        if (auto camera = voxie::Engine::GetEngine().GetCamera())
+        if (auto camera = voxie::Engine::GetEngine().GetCamera()) {
             camera->SetSelection(entity);
+        }
 
         AddNewComponent();
         ImGui::SameLine();
