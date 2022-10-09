@@ -6,6 +6,7 @@
 #include "Position.h"
 #include "RigidBody.h"
 
+
 namespace voxie {
     PlayerController::PlayerController(const Handle &handle, std::shared_ptr<Name> name, std::shared_ptr<Position> position)
         : NodeWrapper(handle), CurrentView(0) {
@@ -34,70 +35,24 @@ namespace voxie {
 
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-                                                    auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-                                                        auto camera = engine.GetCamera();
-                                                        auto front = camera->GetFront();
-                                                        front.y = 0;
-                                                        float velocity = 5 * engine.GetDeltaTime();
-                                                        if (auto position = GetPosition()) {
-                                                            position->pos += front * velocity;
-                                                            position->UpdateModel();
-                                                            position->SetModel(position->model);
-                                                            GetRigidBody()->SetPosition(*position);
-                                                        }
-                                                    }
+                                                    Movement(engine.GetCamera()->GetFront());
                                                 },
                                                 voxie::Key::KEY_W});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-                                                    auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-                                                        auto camera = engine.GetCamera();
-                                                        auto right = camera->GetRight();
-                                                        right.y = 0;
-                                                        float velocity = 5 * engine.GetDeltaTime();
-                                                        if (auto position = GetPosition()) {
-                                                            position->pos -= right * velocity;
-                                                            position->UpdateModel();
-                                                            position->SetModel(position->model);
-                                                            GetRigidBody()->SetPosition(*position);
-                                                        }
-                                                    }
+                                                    auto left = glm::vec3{-1, -1, -1} * engine.GetCamera()->GetRight();
+                                                    Movement(left);
                                                 },
                                                 voxie::Key::KEY_A});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-                                                    auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-                                                        auto camera = engine.GetCamera();
-                                                        auto front = camera->GetFront();
-                                                        front.y = 0;
-                                                        float velocity = 5 * engine.GetDeltaTime();
-                                                        if (auto position = GetPosition()) {
-                                                            position->pos -= front * velocity;
-                                                            position->UpdateModel();
-                                                            position->SetModel(position->model);
-                                                            GetRigidBody()->SetPosition(*position);
-                                                        }
-                                                    }
+                                                    auto back = glm::vec3{-1, -1, -1} * engine.GetCamera()->GetFront();
+                                                    Movement(back);
                                                 },
                                                 voxie::Key::KEY_S});
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
-                                                    auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-                                                        auto camera = engine.GetCamera();
-                                                        auto right = camera->GetRight();
-                                                        right.y = 0;
-                                                        float velocity = 5 * engine.GetDeltaTime();
-                                                        if (auto position = GetPosition()) {
-                                                            position->pos += right * velocity;
-                                                            position->UpdateModel();
-                                                            position->SetModel(position->model);
-                                                            GetRigidBody()->SetPosition(*position);
-                                                        }
-                                                    }
+                                                    Movement(engine.GetCamera()->GetRight());
                                                 },
                                                 voxie::Key::KEY_D});
 
@@ -174,40 +129,6 @@ namespace voxie {
         static float delay = 10;
         static float jumpTimeoutDelay = 1;
 
-        ImGui::SliderFloat("Delay", &delay, 0.1f, 20.0f);
-        ImGui::SliderFloat("Jump height", &jumpHeight, 0.1f, 500.0f);
-        ImGui::SliderFloat("Jump timeout", &jumpTimeoutDelay, 0.1f, 10.0f);
-
-        if (auto rigidBody = GetRigidBody()) {
-            auto linearDampening = rigidBody->GetLinearDampening();
-            ImGui::DragFloat("Linear dampening", &linearDampening);
-            rigidBody->SetLinearDampening(linearDampening);
-
-            auto bounciness = rigidBody->GetBounciness();
-            ImGui::SliderFloat("Bounciness", &bounciness, 0.0f, 1.0f);
-            rigidBody->SetBounciness(bounciness);
-        }
-        if (timer >= delay) {
-            timer = 0;
-            auto cube = voxie::MakePrimitive({"Cube", voxie::BasePrimitives::Cube});
-            auto cubePtr = cube.get();
-            voxie::Engine::GetEngine().GetScene()->AddNode(std::move(cube), nullptr);
-            auto material = cubePtr->GetMaterial();
-            auto makeRandomColor = []() {
-                float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-                float g = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-                float b = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-                return glm::vec3{r, g, b};
-            };
-            material->ambient = makeRandomColor();
-            material->diffuse = makeRandomColor();
-            material->specular = makeRandomColor();
-            material->shininess = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 100;
-            cubePtr->GetPosition()->SetPosition({0, 15, 0});
-            cubePtr->GetRigidBody()->SetPosition({0, 15, 0});
-            cubePtr->GetRigidBody()->SetBodyType(BodyType::DYNAMIC);
-            cubePtr->Init();
-        }
         static float jumpTimeout = 0;
         static bool jumpCountDown = false;
         if (jumped && !jumpCountDown) {
@@ -235,8 +156,22 @@ namespace voxie {
         CurrentView = currentView;
         if (auto camera = GetCamera()) {
             GetPosition()->onUpdate.Bind([&, CameraPos = camera->GetPosition()]() {
-                CameraPos->SetModel(GetPosition()->model);
+                auto pos = GetPosition();
+                CameraPos->pos = pos->pos;
+                CameraPos->pos.y += pos->scale.y;
+                CameraPos->UpdateModel();
             });
+        }
+    }
+
+    void PlayerController::Movement(const glm::vec3 &direction) {
+        auto &engine = Engine::GetEngine();
+        auto gameMode = engine.GetGameMode();
+        if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
+            float velocity = 50000 * engine.GetDeltaTime();
+            if (auto position = GetPosition()) {
+                GetVerlet()->MovementVelocity += glm::normalize(direction * glm::vec3{1, 0, 1}) * velocity;
+            }
         }
     }
 

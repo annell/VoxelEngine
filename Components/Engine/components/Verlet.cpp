@@ -20,16 +20,29 @@ namespace voxie {
         return true;
     }
 
-    void Verlet::UpdatePosition(float dt, Position &position_new) {
-        if (!Position_old) {
-            Position_old = position_new.pos;
+    void Verlet::UpdatePosition(float dt, Position &positionNew) {
+        if (!PositionOld) {
+            PositionOld = positionNew.pos;
             return;
         }
-        const glm::vec3 velocity = Directions * (position_new.pos - Position_old.value());
-        Position_old = position_new.pos;
-        position_new.pos += velocity + Acceleration * dt * dt;
+        const glm::vec3 velocity = Directions * (positionNew.pos - PositionOld.value());
+        PositionOld = positionNew.pos;
+        dVelocity = velocity + Acceleration * dt * dt;
+        positionNew.pos += dVelocity;
         Acceleration = {0, 0, 0};
     }
+
+    void Verlet::UpdateMovementPosition(float dt, Position &positionNew) {
+        if (!PositionOld) {
+            PositionOld = positionNew.pos;
+            return;
+        }
+        PositionOld = positionNew.pos;
+        dVelocity = Acceleration * dt * dt;
+        positionNew.pos += dVelocity;
+        Acceleration = {0, 0, 0};
+    }
+
 
     void Verlet::Accelerate(const glm::vec3 &acceleration) {
         Acceleration += acceleration;

@@ -26,8 +26,11 @@ namespace voxie {
         bool decode(const YAML::Node &);
 
     private:
+        void Movement(const glm::vec3 &direction);
         int OnTickHandle = 0;
         Handle CurrentView;
+
+        glm::vec3 MovementVelocity;
 
         bool jumped = false;
         float jumpHeight = 20;
