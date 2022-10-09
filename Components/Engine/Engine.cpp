@@ -38,6 +38,7 @@ namespace voxie {
         ecsManager.RegisterComponent<RigidBody>();
         ecsManager.RegisterComponent<VertexBufferArray>();
         ecsManager.RegisterComponent<Outline>();
+        ecsManager.RegisterComponent<Verlet>();
     }
 
     bool Engine::Init() {
@@ -45,7 +46,8 @@ namespace voxie {
         if (!InitWindow()) {
             return false;
         }
-        GetPhysicsHandler()->Initialize();
+        //GetPhysicsHandler()->Initialize();
+        GetVerletHandler()->Initialize();
         return true;
     }
 
@@ -188,6 +190,10 @@ namespace voxie {
     }
     PhysicsHandler *Engine::GetPhysicsHandler() {
         return &physicsHandler;
+    }
+
+    VerletHandler *Engine::GetVerletHandler() {
+        return &verletHandler;
     }
 
     namespace helper {

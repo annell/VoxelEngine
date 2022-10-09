@@ -5,6 +5,7 @@
 namespace voxie {
 
     class RigidBody;
+    struct Verlet;
 
     class PlayerController : public NodeWrapper {
     public:
@@ -19,6 +20,7 @@ namespace voxie {
 
         COMPONENT_ADD_FUNCTION(Position);
         COMPONENT_ADD_FUNCTION(RigidBody);
+        COMPONENT_ADD_FUNCTION(Verlet);
 
         void encode(YAML::Node &) const;
         bool decode(const YAML::Node &);

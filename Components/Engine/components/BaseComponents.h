@@ -27,6 +27,8 @@
 
 #include "Outline.h"
 
+#include "Verlet.h"
+
 namespace YAML {
     template<typename T>
     struct convert {

@@ -5,6 +5,7 @@
 #include "RenderingHandler.h"
 #include "Scene.h"
 #include "TextHandler.h"
+#include "VerletHandler.h"
 
 class GLFWwindow;
 
@@ -33,6 +34,7 @@ namespace voxie {
         GameMode *GetGameMode() const;
         PhysicsHandler *GetPhysicsHandler();
         RenderingHandler *GetRenderingHandler();
+        VerletHandler *GetVerletHandler();
 
         bool IsRunning() const;
         void StartLoop();
@@ -61,6 +63,7 @@ namespace voxie {
         RenderingHandler renderingHandler;
         ECSManager ecsManager;
         PhysicsHandler physicsHandler;
+        VerletHandler verletHandler;
     };
 
     namespace helper {

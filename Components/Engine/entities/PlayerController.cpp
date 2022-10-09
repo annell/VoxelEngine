@@ -14,6 +14,7 @@ namespace voxie {
         COMPONENT_REGISTER(RigidBody, std::make_shared<RigidBody>(*position.get()));
         COMPONENT_REGISTER(Position, position);
         COMPONENT_REGISTER(Name, name);
+        COMPONENT_REGISTER(Verlet, std::make_shared<Verlet>());
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
@@ -102,10 +103,9 @@ namespace voxie {
 
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
-                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-                                                        if (auto body = this->GetRigidBody()) {
-                                                            body->ResetForces();
-                                                            body->ApplyForceAtCenterOfMass({0, this->jumpHeight, 0});
+                                                    if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked() && !this->jumped) {
+                                                        if (auto body = this->GetVerlet()) {
+                                                            body->Accelerate({0, 300, 0});
                                                             this->jumped = true;
                                                         } else {
                                                         }

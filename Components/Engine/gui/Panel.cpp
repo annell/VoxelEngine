@@ -120,6 +120,14 @@ namespace gui {
         }
     }
 
+    void ShowVerletController(const voxie::Handle &entity) {
+        if (ImGui::CollapsingHeader("Verlet")) {
+            auto body = voxie::helper::GetComponent<voxie::Verlet>(entity);
+
+            ImGui::DragFloat3("Directions", glm::value_ptr(body->Directions), 1, 0, 1);
+        }
+    }
+
     void ShowEntityBodyController(const voxie::Handle &entity) {
         if (ImGui::CollapsingHeader("RigidBody")) {
             auto body = voxie::helper::GetComponent<voxie::RigidBody>(entity);
@@ -483,6 +491,10 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::Position>(entity)) {
             ShowEntityPositionController(entity);
+        }
+
+        if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
+            ShowVerletController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
