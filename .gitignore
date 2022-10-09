@@ -32,9 +32,6 @@
 *.app
 
 .idea
-cmake-build-debug
-cmake-build-release
-.vscode
 build
 .DS_Store
 imgui.ini

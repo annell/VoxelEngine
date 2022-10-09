@@ -20,8 +20,7 @@ namespace voxie {
     class CubeEntity;
     class PlayerController;
 
-    const std::string WORKSPACE_ADJUST = "/../../..";
-    const std::string BASE_PATH = std::filesystem::current_path().string() + WORKSPACE_ADJUST + std::string("/resources");
+    const std::string BASE_PATH = std::filesystem::current_path().string() + std::string("/resources");
     const std::string SHADERS = "/shaders";
     const std::string FONTS = "/fonts";
     const std::string MODELS = "/voxelObjects";

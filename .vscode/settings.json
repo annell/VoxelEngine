@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "locale": "cpp"
+    },
+    "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": false
+}
