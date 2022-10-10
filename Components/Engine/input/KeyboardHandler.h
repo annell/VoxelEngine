@@ -21,6 +21,7 @@ namespace voxie {
         static void processInput();
         static void RegisterAction(const KeyAction &);
         static bool IsKeyState(const Key &key, const ActionType &actionType);
+        static void Reset();
     };
 
 }// namespace voxie

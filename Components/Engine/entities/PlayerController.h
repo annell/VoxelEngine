@@ -10,6 +10,7 @@ namespace voxie {
     class PlayerController : public NodeWrapper {
     public:
         PlayerController(const Handle &handle, std::shared_ptr<class Name> name, std::shared_ptr<class Position> position);
+        ~PlayerController();
 
         void BeginPlay() override;
         void StopPlay() override;
@@ -29,8 +30,6 @@ namespace voxie {
         void Movement(const glm::vec3 &direction);
         int OnTickHandle = 0;
         Handle CurrentView;
-
-        glm::vec3 MovementVelocity;
 
         bool jumped = false;
         float jumpHeight = 20;

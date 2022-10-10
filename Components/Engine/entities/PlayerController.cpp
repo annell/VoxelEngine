@@ -59,10 +59,11 @@ namespace voxie {
         voxie::KeyboardHandler::RegisterAction({[this, &engine]() {
                                                     auto gameMode = engine.GetGameMode();
                                                     if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked() && !this->jumped) {
-                                                        if (auto body = this->GetVerlet()) {
-                                                            body->Accelerate({0, 300, 0});
-                                                            this->jumped = true;
-                                                        } else {
+                                                        if (auto verlet = this->GetVerlet()) {
+                                                            if (verlet->OnGround) {
+                                                                verlet->Accelerate({0, 300, 0});
+                                                                this->jumped = true;
+                                                            }
                                                         }
                                                     }
                                                 },
@@ -92,6 +93,10 @@ namespace voxie {
                                              voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
         OnTickHandle = engine.onTick.Bind(std::bind(&PlayerController::OnTick, this, std::placeholders::_1));
     }
+    PlayerController::~PlayerController() {
+        KeyboardHandler::Reset();// TODO Fix up so that we can bind keyboard actions to a specific object or each bind returns a handle.
+        Engine::GetEngine().onTick.Unbind(OnTickHandle);
+    }
 
     void PlayerController::encode(YAML::Node &node) const {
         node["type"] = "PlayerController";
@@ -101,6 +106,7 @@ namespace voxie {
         node["position"] = *helper::GetComponent<Position>(handle).get();
         node["rigidBody"] = *helper::GetComponent<RigidBody>(handle).get();
         node["cameraView"] = CurrentView.GetId();
+        node["verlet"] = *GetVerlet().get();
     }
 
     bool PlayerController::decode(const YAML::Node &node) {
@@ -114,6 +120,7 @@ namespace voxie {
         rigidBody->SetPosition(*pos);
         rigidBody->decode(node["rigidBody"]);
         SetCamera(Handle(node["cameraView"].as<u_int64_t>()));
+        GetVerlet()->decode(node["verlet"]);
 
         return true;
     }
@@ -165,13 +172,9 @@ namespace voxie {
     }
 
     void PlayerController::Movement(const glm::vec3 &direction) {
-        auto &engine = Engine::GetEngine();
-        auto gameMode = engine.GetGameMode();
-        if (gameMode->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
-            float velocity = 50000 * engine.GetDeltaTime();
-            if (auto position = GetPosition()) {
-                GetVerlet()->MovementVelocity += glm::normalize(direction * glm::vec3{1, 0, 1}) * velocity;
-            }
+        if (Engine::GetEngine().GetGameMode()->IsStarted() && !voxie::MouseHandler::IsCameraLocked()) {
+            float velocity = 500;
+            GetVerlet()->Movement += glm::normalize(direction * glm::vec3{1, 0, 1}) * velocity;
         }
     }
 

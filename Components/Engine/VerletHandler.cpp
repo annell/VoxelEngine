@@ -36,19 +36,15 @@ namespace voxie {
             accumulator -= timeStepFraction;
             for (const auto &node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
                 const auto &handle = node->GetHandle();
-                if (Engine::GetEngine().GetGameMode()->IsStarted() && helper::HasComponent<Verlet>(handle) && helper::GetComponent<Position>(handle)) {
-                    auto verlet = helper::GetComponent<Verlet>(handle);
-                    UpdateGravity(*verlet.get());
-
+                auto verlet = helper::GetComponent<Verlet>(handle);
+                if (Engine::GetEngine().GetGameMode()->IsStarted() && verlet && verlet->dynamic && helper::GetComponent<Position>(handle)) {
                     auto pos = helper::GetComponent<Position>(handle);
-                    verlet->UpdatePosition(timeStep, *pos.get());
-                    ApplyConstraints(*pos.get());
-                    SolvePointCubeCollisions(*pos.get(), *verlet.get(), handle);
 
-                    UpdateMovement(*verlet.get());
+                    UpdateGravity(*verlet.get());
                     verlet->UpdatePosition(timeStep, *pos.get());
                     ApplyConstraints(*pos.get());
                     SolvePointCubeCollisions(*pos.get(), *verlet.get(), handle);
+                    verlet->Movement = {0, 0, 0};
 
                     pos->UpdateModel();
                     pos->onUpdate.Broadcast();
@@ -59,11 +55,7 @@ namespace voxie {
 
     void VerletHandler::UpdateGravity(Verlet &verlet) const {
         verlet.Accelerate(Gravity);
-    }
-
-    void VerletHandler::UpdateMovement(Verlet &verlet) const {
-        verlet.Accelerate(verlet.MovementVelocity);
-        verlet.MovementVelocity = {0, 0, 0};
+        verlet.OnGround = false;
     }
 
     void VerletHandler::ApplyConstraints(Position &pos) const {
@@ -72,7 +64,7 @@ namespace voxie {
         }
     }
 
-    void VerletHandler::SolvePointCubeCollisions(Position &point, const Verlet &verlet, const Handle &handle) const {
+    void VerletHandler::SolvePointCubeCollisions(Position &point, Verlet &verlet, const Handle &handle) const {
         for (const auto &node : Engine::GetEngine().GetScene()->GetNodesPtrs()) {
             const auto &targetHandle = node->GetHandle();
             if (targetHandle == handle) {
@@ -82,6 +74,10 @@ namespace voxie {
                 if (auto cube = entity->GetPosition()) {
                     if (IsPointInCube(point, *cube.get())) {
                         point.pos -= verlet.dVelocity;
+                        verlet.OnGround = true;
+                    }
+                    if (IsPointInCube(point, *cube.get())) {
+                        point.pos -= verlet.MovementVelocity;
                     }
                 }
             }

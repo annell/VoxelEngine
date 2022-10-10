@@ -124,6 +124,7 @@ namespace gui {
         if (ImGui::CollapsingHeader("Verlet")) {
             auto body = voxie::helper::GetComponent<voxie::Verlet>(entity);
 
+            ImGui::Checkbox("Dynamic", &body->dynamic);
             ImGui::DragFloat3("Directions", glm::value_ptr(body->Directions), 1, 0, 1);
         }
     }

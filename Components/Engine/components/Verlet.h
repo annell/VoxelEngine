@@ -11,7 +11,10 @@ namespace voxie {
         glm::vec3 Acceleration = {0, 0, 0};
         std::optional<glm::vec3> PositionOld;
         glm::vec3 dVelocity = {0, 0, 0};
+        glm::vec3 Movement = {0, 0, 0};
         glm::vec3 MovementVelocity = {0, 0, 0};
+        bool OnGround = false;
+        bool dynamic = false;
 
         void encode(YAML::Node &node) const;
         bool decode(const YAML::Node &node);

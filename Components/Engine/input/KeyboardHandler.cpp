@@ -38,4 +38,8 @@ namespace voxie {
         keys.push_back(keyAction);
     }
 
+    void KeyboardHandler::Reset() {
+        internal::GetRegisteredKeys().clear();
+    }
+
 }// namespace voxie
