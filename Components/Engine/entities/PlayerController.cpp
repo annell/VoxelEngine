@@ -121,8 +121,7 @@ namespace voxie {
         rigidBody->SetPosition(*pos);
         rigidBody->decode(node["rigidBody"]);
         SetCamera(Handle(node["cameraView"].as<u_int64_t>()));
-        auto &verlet = *GetVerlet().get();
-        verlet = node["verlet"].as<Verlet>(Verlet{});
+        DecodeComponent(node["verlet"], GetVerlet());
 
         return true;
     }

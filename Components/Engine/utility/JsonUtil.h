@@ -1,6 +1,15 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <string>
 #include <yaml-cpp/yaml.h>
+
+namespace voxie {
+    template<typename T>
+    void DecodeComponent(const YAML::Node &node, std::shared_ptr<T> obj) {
+        T &objRef = *obj.get();
+        objRef = node.as<T>(T{});
+    }
+}// namespace voxie
 
 namespace YAML {
     template<typename T>
