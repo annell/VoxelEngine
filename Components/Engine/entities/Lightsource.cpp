@@ -51,7 +51,7 @@ namespace voxie {
 
     bool LightSource::decode(const YAML::Node &node) {
         GetPosition()->decode(node["position"]);
-        GetColor()->decode(node["color"]);
+        DecodeComponent(node["color"], GetColor());
         if (type == LightType::POINT) {
             DecodeComponent(node["attenuation"], GetAttenuation());
         }
