@@ -1,8 +1,7 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "JsonUtil.h"
 #include <optional>
-#include <yaml-cpp/yaml.h>
 
 namespace voxie {
 
@@ -16,12 +15,31 @@ namespace voxie {
         bool OnGround = false;
         bool dynamic = false;
 
-        void encode(YAML::Node &node) const;
-        bool decode(const YAML::Node &node);
-
         void UpdatePosition(float dt, struct Position &position_new);
         void UpdateMovementPosition(float dt, struct Position &position_new);
         void UpdateOldPosition(const Position &);
         void Accelerate(const glm::vec3 &acceleration);
     };
 }// namespace voxie
+
+namespace YAML {
+    template<>
+    struct convert<voxie::Verlet> {
+        static Node encode(const voxie::Verlet &rhs) {
+            Node node;
+            node["dynamic"] = rhs.dynamic;
+            node["directions"] = rhs.Directions;
+            return node;
+        }
+
+        static bool decode(const Node &node, voxie::Verlet &rhs) {
+            if (!node["dynamic"].IsDefined() || !node["directions"].IsDefined()) {
+                return false;
+            }
+
+            rhs.dynamic = node["dynamic"].as<bool>(false);
+            rhs.Directions = node["directions"].as<glm::vec3>(glm::vec3{});
+            return true;
+        }
+    };
+}// namespace YAML

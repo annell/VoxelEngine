@@ -175,11 +175,11 @@
         z: 0
     cameraView: 3268650726063865125
     verlet:
+      dynamic: true
       directions:
         - 0
         - 1
         - 0
-      dynamic: true
 - parent: 4290297168568620581
   node:
     type: Sprite

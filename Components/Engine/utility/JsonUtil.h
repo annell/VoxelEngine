@@ -2,16 +2,20 @@
 #include <glm/glm.hpp>
 #include <yaml-cpp/yaml.h>
 
-namespace voxie {
-    glm::vec3 GetDefaultVec3(const YAML::Node &node, std::string key) {
-        return node.IsDefined() && node[key].IsDefined() ? glm::vec3{node["x"].as<float>(0.0f),
-                                                                     node["y"].as<float>(0.0f),
-                                                                     node["z"].as<float>(0.0f)}
-                                                         : glm::vec3{0, 0, 0};
-    }
-}// namespace voxie
-
 namespace YAML {
+    template<typename T>
+    struct convert {
+        static Node encode(const T &rhs) {
+            Node node;
+            rhs.encode(node);
+            return node;
+        }
+
+        static bool decode(const Node &node, T &rhs) {
+            return rhs.decode(node);
+        }
+    };
+
     template<>
     struct convert<glm::vec3> {
         static Node encode(const glm::vec3 &rhs) {
@@ -27,9 +31,9 @@ namespace YAML {
                 return false;
             }
 
-            rhs.x = node[0].as<float>();
-            rhs.y = node[1].as<float>();
-            rhs.z = node[2].as<float>();
+            rhs.x = node[0].as<float>(0);
+            rhs.y = node[1].as<float>(0);
+            rhs.z = node[2].as<float>(0);
             return true;
         }
     };

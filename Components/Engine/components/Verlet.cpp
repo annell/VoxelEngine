@@ -3,16 +3,6 @@
 #include "Position.h"
 
 namespace voxie {
-    void Verlet::encode(YAML::Node &node) const {
-        node["directions"] = Directions;
-        node["dynamic"] = dynamic;
-    }
-
-    bool Verlet::decode(const YAML::Node &node) {
-        Directions = node["directions"].as<glm::vec3>(glm::vec3{0, 0, 0});
-        dynamic = node["dynamic"].as<bool>(false);
-        return true;
-    }
 
     void Verlet::UpdatePosition(float dt, Position &positionNew) {
         if (!PositionOld) {

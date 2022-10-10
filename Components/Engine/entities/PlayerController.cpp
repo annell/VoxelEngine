@@ -5,6 +5,7 @@
 #include "Name.h"
 #include "Position.h"
 #include "RigidBody.h"
+#include "Verlet.h"
 
 
 namespace voxie {
@@ -120,7 +121,8 @@ namespace voxie {
         rigidBody->SetPosition(*pos);
         rigidBody->decode(node["rigidBody"]);
         SetCamera(Handle(node["cameraView"].as<u_int64_t>()));
-        GetVerlet()->decode(node["verlet"]);
+        auto &verlet = *GetVerlet().get();
+        verlet = node["verlet"].as<Verlet>(Verlet{});
 
         return true;
     }

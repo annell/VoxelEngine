@@ -28,18 +28,3 @@
 #include "Outline.h"
 
 #include "Verlet.h"
-
-namespace YAML {
-    template<typename T>
-    struct convert {
-        static Node encode(const T &rhs) {
-            Node node;
-            rhs.encode(node);
-            return node;
-        }
-
-        static bool decode(const Node &node, T &rhs) {
-            return rhs.decode(node);
-        }
-    };
-}// namespace YAML
