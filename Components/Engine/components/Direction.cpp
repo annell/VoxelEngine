@@ -5,19 +5,9 @@
 #include "Direction.h"
 
 namespace voxie {
+    Direction::Direction() : Direction(0.0f, 0.0f) {}
     Direction::Direction(float yaw, float pitch)
         : yaw(yaw), pitch(pitch) {
-    }
-
-    void Direction::encode(YAML::Node &node) const {
-        node["yaw"] = yaw;
-        node["pitch"] = pitch;
-    }
-
-    bool Direction::decode(const YAML::Node &node) {
-        yaw = node["yaw"].as<float>();
-        pitch = node["pitch"].as<float>();
-        return true;
     }
 
     void Direction::SetDirection(float yaw, float pitch, bool constrainPitch) {

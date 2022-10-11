@@ -5,9 +5,9 @@
     name: Editor Camera
     position:
       position:
-        x: -17.1935291
+        x: -13.5924692
         y: 12.3343439
-        z: -21.5315781
+        z: -24.2825928
       rotation:
         x: 0
         y: 0
@@ -17,8 +17,8 @@
         y: 1
         z: 1
     direction:
-      yaw: 58.0999756
-      pitch: -20.0998936
+      yaw: 49
+      pitch: -18.6998959
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -80,7 +80,7 @@
         z: 1.98062491
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
@@ -209,7 +209,7 @@
         z: 10.0849466
       rotation:
         x: 0
-        y: -0
+        y: 0
         z: 0
       scale:
         x: 1
