@@ -4,18 +4,34 @@
 
 #pragma once
 
+#include "JsonUtil.h"
 #include <string>
-
-namespace YAML {
-    class Node;
-}
 
 namespace voxie {
     struct Name {
+        Name();
         Name(std::string name);
-        void encode(YAML::Node &node) const;
-        bool decode(const YAML::Node &node);
 
         std::string name;
     };
 }// namespace voxie
+
+namespace YAML {
+    template<>
+    struct convert<voxie::Name> {
+        static Node encode(const voxie::Name &rhs) {
+            Node node;
+            node["name"] = rhs.name;
+            return node;
+        }
+
+        static bool decode(const Node &node, voxie::Name &rhs) {
+            if (!node["name"].IsDefined()) {
+                return false;
+            }
+
+            rhs.name = node["name"].as<std::string>("");
+            return true;
+        }
+    };
+}// namespace YAML
