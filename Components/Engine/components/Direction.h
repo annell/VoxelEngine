@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include <yaml-cpp/yaml.h>
+#include "JsonUtil.h"
 
 namespace voxie {
     struct Direction {
