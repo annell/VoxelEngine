@@ -6,16 +6,10 @@
 #include <yaml-cpp/yaml.h>
 
 namespace voxie {
+    VisibleText::VisibleText() {
+    }
+
     VisibleText::VisibleText(std::string text)
         : text(text) {
-    }
-
-    void VisibleText::encode(YAML::Node &node) const {
-        node["text"] = text;
-    }
-
-    bool VisibleText::decode(const YAML::Node &node) {
-        text = node["text"].as<std::string>();
-        return true;
     }
 }// namespace voxie

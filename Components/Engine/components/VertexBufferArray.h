@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "JsonUtil.h"
 #include "RenderingInterface.h"
 #include <vector>
 
@@ -15,8 +16,6 @@ namespace voxie {
     struct VertexBufferArray {
 
         ~VertexBufferArray();
-        void encode(YAML::Node &node) const;
-        bool decode(const YAML::Node &node);
 
         void CreateBuffers();
         void ResetBuffers();
@@ -28,3 +27,17 @@ namespace voxie {
     };
 
 }// namespace voxie
+
+namespace YAML {
+    template<>
+    struct convert<voxie::VertexBufferArray> {
+        static Node encode(const voxie::VertexBufferArray &rhs) {
+            Node node;
+            return node;
+        }
+
+        static bool decode(const Node &node, voxie::VertexBufferArray &rhs) {
+            return true;
+        }
+    };
+}// namespace YAML

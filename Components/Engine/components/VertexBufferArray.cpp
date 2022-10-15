@@ -8,13 +8,6 @@ namespace voxie {
         ResetBuffers();
     }
 
-    void VertexBufferArray::encode(YAML::Node &node) const {
-    }
-
-    bool VertexBufferArray::decode(const YAML::Node &node) {
-        return true;
-    }
-
     void VertexBufferArray::CreateBuffers() {
         buffers = RenderingInterface::CreateBuffers(vertexAttributes);
     }
