@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <yaml-cpp/yaml.h>
 
 namespace {
     void checkCompileErrors(GLuint shader, const std::string &type) {
@@ -73,13 +72,6 @@ namespace voxie {
         for (auto shader : compiledShaders) {
             glDeleteShader(shader);
         }
-    }
-
-    void Shader::encode(YAML::Node &node) const {
-    }
-
-    bool Shader::decode(const YAML::Node &node) {
-        return true;
     }
 
     // activate the shader

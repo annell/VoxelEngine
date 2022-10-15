@@ -2,6 +2,7 @@
 // Created by Stefan Annell on 2021-03-21.
 //
 #pragma once
+#include "JsonUtil.h"
 #include <glm/glm.hpp>
 #include <map>
 #include <string>
@@ -17,14 +18,11 @@ namespace voxie {
         FRAGMENT,
     };
 
-    class Shader {
+    struct Shader {
     public:
         using ShaderDefinition = std::string;
         unsigned int ID;
         explicit Shader(const std::map<ShaderDefinition, ShaderType> &shaders);
-
-        void encode(YAML::Node &node) const;
-        bool decode(const YAML::Node &node);
 
         void use() const;
 
@@ -47,3 +45,17 @@ namespace voxie {
     };
 
 }// namespace voxie
+
+namespace YAML {
+    template<>
+    struct convert<voxie::Shader> {
+        static Node encode(const voxie::Shader &rhs) {
+            Node node;
+            return node;
+        }
+
+        static bool decode(const Node &node, voxie::Shader &rhs) {
+            return true;
+        }
+    };
+}// namespace YAML
