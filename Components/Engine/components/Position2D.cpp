@@ -6,45 +6,14 @@
 
 namespace voxie {
 
+    Position2D::Position2D() : Position2D(glm::vec2{0, 0}) {
+    }
+
 
     Position2D::Position2D(const glm::vec2 &position)
         : pos(glm::vec2(1.0f)), rotation(0.0), scale(glm::vec2(1.0f)) {
         SetPosition(position);
         UpdateModel();
-    }
-
-    Position2D::Position2D(float x, float y)
-        : Position2D(glm::vec2{x, y}) {}
-
-    Position2D::Position2D(const Position2D &p)
-        : Position2D(p.pos) {}
-
-    void Position2D::encode(YAML::Node &node) const {
-        YAML::Node posNode;
-        posNode["x"] = pos[0];
-        posNode["y"] = pos[1];
-        node["position"] = posNode;
-
-        node["rotation"] = rotation;
-
-        YAML::Node scaleNode;
-        scaleNode["x"] = scale[0];
-        scaleNode["y"] = scale[1];
-        node["scale"] = scaleNode;
-    }
-
-    bool Position2D::decode(const YAML::Node &node) {
-        auto pos = node["position"];
-        SetPosition({pos["x"].as<float>(),
-                     pos["y"].as<float>()});
-
-        SetRotation(node["rotation"].as<float>());
-
-        auto scale = node["scale"];
-        SetScale({scale["x"].as<float>(),
-                  scale["y"].as<float>()});
-        UpdateModel();
-        return true;
     }
 
     bool Position2D::operator<(const Position2D &pos) const {

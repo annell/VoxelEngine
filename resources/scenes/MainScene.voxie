@@ -228,9 +228,9 @@
     name: Crosshair
     position:
       position:
-        x: 0
-        y: 0
+        - 0
+        - 0
       rotation: 0
       scale:
-        x: 0.00499999989
-        y: 0.00499999989
+        - 0.00400000019
+        - 0.00400000019

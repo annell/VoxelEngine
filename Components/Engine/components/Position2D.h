@@ -4,17 +4,13 @@
 
 #pragma once
 #include "Core.h"
-#include <yaml-cpp/yaml.h>
+#include "JsonUtil.h"
 
 namespace voxie {
 
     struct Position2D {
+        Position2D();
         Position2D(const glm::vec2 &position);
-        Position2D(float x, float y);
-        Position2D(const Position2D &p);
-
-        void encode(YAML::Node &node) const;
-        bool decode(const YAML::Node &node);
 
         bool operator<(const Position2D &pos) const;
 
@@ -32,3 +28,28 @@ namespace voxie {
     };
 
 }// namespace voxie
+
+namespace YAML {
+    template<>
+    struct convert<voxie::Position2D> {
+        static Node encode(const voxie::Position2D &rhs) {
+            Node node;
+            node["position"] = rhs.pos;
+            node["rotation"] = rhs.rotation;
+            node["scale"] = rhs.scale;
+            return node;
+        }
+
+        static bool decode(const Node &node, voxie::Position2D &rhs) {
+            if (!node["position"].IsDefined() && !node["rotation"].IsDefined() && !node["scale"].IsDefined()) {
+                return false;
+            }
+
+            rhs.rotation = node["rotation"].as<float>(0.0f);
+            rhs.scale = node["scale"].as<glm::vec2>(glm::vec2{});
+            rhs.pos = node["position"].as<glm::vec2>(glm::vec2{});
+            rhs.UpdateModel();
+            return true;
+        }
+    };
+}// namespace YAML

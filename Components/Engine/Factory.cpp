@@ -132,7 +132,7 @@ namespace voxie {
                         std::map<std::string, ShaderType>{
                                 std::make_pair(BASE_PATH + SHADERS + "/sprite.vs", ShaderType::VERTEX),
                                 std::make_pair(BASE_PATH + SHADERS + "/sprite.fs", ShaderType::FRAGMENT)}),
-                std::make_shared<voxie::Position2D>(0, 0));
+                std::make_shared<voxie::Position2D>());
         return std::move(sprite);
     }
 
@@ -140,7 +140,7 @@ namespace voxie {
         auto text = std::make_shared<voxie::Text>(
                 config.entity.GetId() ? config.entity : Handle::MakeEntity(),
                 std::make_shared<voxie::Name>(config.name),
-                std::make_shared<voxie::Position2D>(0, 0),
+                std::make_shared<voxie::Position2D>(),
                 std::make_shared<voxie::Color>(config.color),
                 std::make_shared<voxie::VisibleText>(config.text));
         return std::move(text);

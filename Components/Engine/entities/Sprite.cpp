@@ -36,7 +36,7 @@ namespace voxie {
     }
 
     bool Sprite::decode(const YAML::Node &node) {
-        GetPosition2D()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition2D());
         return true;
     }
 

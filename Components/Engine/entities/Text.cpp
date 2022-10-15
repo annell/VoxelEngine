@@ -29,7 +29,7 @@ namespace voxie {
     }
 
     bool Text::decode(const YAML::Node &node) {
-        GetPosition2D()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition2D());
         DecodeComponent(node["color"], GetColor());
         GetVisibleText()->decode(node["text"]);
         return true;
