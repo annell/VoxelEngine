@@ -5,20 +5,20 @@
     name: Editor Camera
     position:
       position:
-        x: -13.5924692
-        y: 12.3343439
-        z: -24.2825928
+        - -15.4161263
+        - 8.38473701
+        - -21.0771198
       rotation:
-        x: 0
-        y: 0
-        z: 0
+        - 0
+        - 0
+        - 0
       scale:
-        x: 1
-        y: 1
-        z: 1
+        - 1
+        - 1
+        - 1
     direction:
-      yaw: 49
-      pitch: -18.6998959
+      yaw: 47.5000229
+      pitch: -10.5998888
 - parent: 2958638728098174689
   node:
     type: CubeEntity
@@ -26,17 +26,17 @@
     name: Floor
     position:
       position:
-        x: 0
-        y: -1.06343067
-        z: 0
+        - 0.108926892
+        - 0.00214600563
+        - 0.085370779
       rotation:
-        x: 0
-        y: 0
-        z: 0
+        - 0
+        - -0
+        - 0
       scale:
-        x: 30.3861027
-        y: 1.90683651
-        z: 30.5530014
+        - 12.0296249
+        - 0.580615401
+        - 11.8079901
     material:
       ambient:
         - 0.896988153
@@ -75,17 +75,17 @@
     name: Point light
     position:
       position:
-        x: -3.77067709
-        y: 0.292700052
-        z: 1.98062491
+        - 0
+        - 1.78633523
+        - -2.56487656
       rotation:
-        x: 0
-        y: 0
-        z: 0
+        - 0
+        - 0
+        - 0
       scale:
-        x: 1
-        y: 2.34512329
-        z: 1
+        - 1
+        - 1
+        - 1
     color:
       color:
         - 1
@@ -103,41 +103,79 @@
     name: Ambient light
     position:
       position:
-        x: 0.00264400244
-        y: 13.9293861
-        z: -0.433560491
+        - -0.287518024
+        - 2.45593643
+        - 0
       rotation:
-        x: 0
-        y: 0
-        z: 0
+        - 0
+        - 0
+        - 0
       scale:
-        x: 1
-        y: 1
-        z: 1
+        - 1
+        - 1
+        - 1
     color:
       color:
+        - 1
+        - 0.867647052
+        - 0.867647052
+- parent: 2958638728098174689
+  node:
+    type: Chunk
+    id: 3322178905651564604
+    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/voxelObjects/chr_sword.vox
+    name: chr_sword.vox
+    position:
+      position:
+        - 23.7227535
+        - 6.31224108
+        - 7.41087246
+      rotation:
         - 0
+        - -0
         - 0
-        - 0
+      scale:
+        - 1.00000012
+        - 1.00000012
+        - 1.00000012
+- parent: 3322178905651564604
+  node:
+    type: Chunk
+    id: 3799647793666674575
+    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/voxelObjects/chr_knight.vox
+    name: chr_knight.vox
+    position:
+      position:
+        - 4.08073235
+        - 6.4777689
+        - 26.382616
+      rotation:
+        - 3.1415925
+        - -1.4861095
+        - 3.1415925
+      scale:
+        - 0.999999642
+        - 1
+        - 0.999999642
 - parent: 2958638728098174689
   node:
     type: Camera
     id: 3268650726063865125
     activeCamera: false
-    name: Camera
+    name: PlayerCamera
     position:
       position:
-        x: -4.61465549
-        y: 6.10302162
-        z: 3.61239719
+        - -1.33900964
+        - 3.44562817
+        - 0
       rotation:
-        x: -3.14158988
-        y: -0.91077745
-        z: 3.14158893
+        - 0
+        - 0
+        - 0
       scale:
-        x: 1.99999964
-        y: 4
-        z: 1.99999964
+        - 1
+        - 1
+        - 1
     direction:
       yaw: -55.900013
       pitch: -7.79999113
@@ -148,17 +186,17 @@
     name: Player Controller
     position:
       position:
-        x: -4.61465549
-        y: 2.10302186
-        z: 3.61239719
+        - -1.33900964
+        - 4.80506849
+        - 0
       rotation:
-        x: -3.14158678
-        y: -0.91077745
-        z: 3.14158511
+        - 0
+        - -0
+        - 0
       scale:
-        x: 2
-        y: 4
-        z: 2
+        - 2
+        - 4
+        - 2
     rigidBody:
       mass: 0.5
       gravity: true
@@ -196,161 +234,3 @@
       scale:
         x: 0.00499999989
         y: 0.00499999989
-- parent: 2958638728098174689
-  node:
-    type: LightSource
-    id: 2492124342504629332
-    lightType: 0
-    name: Ambient light
-    position:
-      position:
-        x: -11.9213676
-        y: 1.30668235
-        z: 10.0849466
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    color:
-      color:
-        - 0.681372523
-        - 0.681365728
-        - 0.681365728
-- parent: 2958638728098174689
-  node:
-    type: Chunk
-    id: 3322178905651564604
-    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/voxelObjects/chr_sword.vox
-    name: chr_sword.vox
-    position:
-      position:
-        x: 23.9542961
-        y: 11.5997458
-        z: -0.0861530006
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1.35540044
-        y: 1.35539997
-        z: 1.35540044
-- parent: 3322178905651564604
-  node:
-    type: Chunk
-    id: 3799647793666674575
-    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/voxelObjects/chr_knight.vox
-    name: chr_knight.vox
-    position:
-      position:
-        x: 0
-        y: 8.69868374
-        z: 24.8332024
-      rotation:
-        x: 3.1415925
-        y: -1.45013249
-        z: 3.1415925
-      scale:
-        x: 1
-        y: 1
-        z: 1
-- parent: 2958638728098174689
-  node:
-    type: CubeEntity
-    id: 3377453978158649346
-    name: Cube
-    position:
-      position:
-        x: -8.02725983
-        y: 0.932410419
-        z: 0
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 3.05999994
-        y: 15.2778692
-        z: 3.05999994
-    material:
-      ambient:
-        - 0.445189387
-        - 0.936274529
-        - 0.546294987
-      diffuse:
-        - 0.713936269
-        - 0.965686262
-        - 0.681660831
-      specular:
-        - 0.82420224
-        - 0.960784316
-        - 0.836253762
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 0
-      offset:
-        x: 0
-        y: 0
-        z: 0
-      linearLockFactor:
-        x: 1
-        y: 1
-        z: 1
-      angularLockFactor:
-        x: 1
-        y: 1
-        z: 1
-- parent: 2958638728098174689
-  node:
-    type: CubeEntity
-    id: 2445386849751781301
-    name: Cube
-    position:
-      position:
-        x: 0
-        y: 0
-        z: 0
-      rotation:
-        x: 0
-        y: 0
-        z: 0
-      scale:
-        x: 1
-        y: 1
-        z: 1
-    material:
-      ambient:
-        - 0.754901946
-        - 0.518069983
-        - 0.518069983
-      diffuse:
-        - 0.990196049
-        - 0.713523567
-        - 0.713523567
-      specular:
-        - 0.931372523
-        - 0.830930352
-        - 0.830930352
-      shininess: 32
-    rigidBody:
-      mass: 1
-      gravity: true
-      bodyType: 0
-      offset:
-        x: 0
-        y: 0
-        z: 0
-      linearLockFactor:
-        x: 1
-        y: 1
-        z: 1
-      angularLockFactor:
-        x: 1
-        y: 1
-        z: 1

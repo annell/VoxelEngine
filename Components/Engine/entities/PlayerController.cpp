@@ -111,7 +111,7 @@ namespace voxie {
     }
 
     bool PlayerController::decode(const YAML::Node &node) {
-        GetPosition()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition());
         auto rigidBody = GetRigidBody();
         auto pos = GetPosition();
         pos->scale.y = 4;

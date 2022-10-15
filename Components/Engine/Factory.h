@@ -61,7 +61,7 @@ namespace voxie {
         std::string name;
         voxie::LightType type;
         Handle entity = NullEntity;
-        voxie::Position position = {0, 0, 0};
+        voxie::Position position;
         voxie::Dimensions dimensions = {1, 1, 1};
         voxie::Color color = voxie::Color({0.5, 0.5, 0.5});
         voxie::Attenuation atteunation = {1, 1, 1};

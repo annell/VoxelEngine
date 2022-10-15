@@ -4,22 +4,16 @@
 
 #pragma once
 #include "Delegate.h"
-#include <glm/glm.hpp>
+#include "JsonUtil.h"
 #include <glm/gtx/quaternion.hpp>
-#include <yaml-cpp/yaml.h>
 
 namespace voxie {
 
     struct Position {
+        Position();
         Position(const glm::vec3 &position);
-        Position(float x, float y, float z);
-
-        Position(const Position &p);
 
         bool operator<(const Position &pos) const;
-
-        void encode(YAML::Node &node) const;
-        bool decode(const YAML::Node &node);
 
         void SetPosition(const glm::vec3 &pos);
         void SetScale(const glm::vec3 &scale);
@@ -31,9 +25,9 @@ namespace voxie {
 
         glm::mat4 model{};
 
-        glm::vec3 pos;
-        glm::vec3 rotation;
-        glm::vec3 scale;
+        glm::vec3 pos{};
+        glm::vec3 rotation{};
+        glm::vec3 scale{};
         glm::quat rotationQuat;
 
         using OnUpdate = Delegate<>;
@@ -41,3 +35,28 @@ namespace voxie {
     };
 
 }// namespace voxie
+
+namespace YAML {
+    template<>
+    struct convert<voxie::Position> {
+        static Node encode(const voxie::Position &rhs) {
+            Node node;
+            node["position"] = rhs.pos;
+            node["rotation"] = rhs.rotation;
+            node["scale"] = rhs.scale;
+            return node;
+        }
+
+        static bool decode(const Node &node, voxie::Position &rhs) {
+            if (!node["position"].IsDefined() && !node["rotation"].IsDefined() && !node["scale"].IsDefined()) {
+                return false;
+            }
+
+            rhs.rotation = node["rotation"].as<glm::vec3>(glm::vec3{});
+            rhs.scale = node["scale"].as<glm::vec3>(glm::vec3{});
+            rhs.pos = node["position"].as<glm::vec3>(glm::vec3{});
+            rhs.UpdateModel();
+            return true;
+        }
+    };
+}// namespace YAML

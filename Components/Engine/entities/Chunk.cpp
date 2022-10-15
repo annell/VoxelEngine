@@ -42,7 +42,7 @@ namespace voxie {
     }
 
     bool Chunk::decode(const YAML::Node &node) {
-        GetPosition()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition());
 
         auto outline = GetOutline();
 

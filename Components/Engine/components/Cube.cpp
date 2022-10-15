@@ -8,7 +8,7 @@
 namespace voxie {
 
     Cube::Cube()
-        : Cube(Position{0, 0, 0}, Dimensions{1, 1, 1}, {}, 0) {
+        : Cube(Position(), Dimensions{1, 1, 1}, {}, 0) {
     }
 
     Cube::Cube(const Position &position, Dimensions dimensions, Material material, int materialIndex)

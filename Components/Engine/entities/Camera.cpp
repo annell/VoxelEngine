@@ -31,7 +31,7 @@ namespace voxie {
     }
 
     bool Camera::decode(const YAML::Node &node) {
-        GetPosition()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition());
         DecodeComponent(node["direction"], GetDirection());
 
         updateCameraVectors();

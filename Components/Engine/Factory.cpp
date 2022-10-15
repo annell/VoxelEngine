@@ -64,7 +64,7 @@ namespace voxie {
                         std::map<std::string, ShaderType>{
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", ShaderType::VERTEX),
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)}),
-                std::make_shared<voxie::Position>(0, 0, 0));
+                std::make_shared<voxie::Position>());
         return std::move(model);
     }
 
@@ -80,7 +80,7 @@ namespace voxie {
                         std::map<std::string, ShaderType>{
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", ShaderType::VERTEX),
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)}),
-                std::make_shared<voxie::Position>(0, 0, 0),
+                std::make_shared<voxie::Position>(),
                 std::make_shared<voxie::Material>(config.material));
         return std::move(model);
     }
@@ -91,7 +91,7 @@ namespace voxie {
                         "Point light",
                         LightType::POINT,
                         entity,
-                        {0, 0, 0},
+                        Position(),
                         {0.1, 0.1, 0.1},
                 },
                 {"Ambient light",
@@ -150,7 +150,7 @@ namespace voxie {
         auto sprite = std::make_shared<voxie::TransformNode>(
                 config.entity.GetId() ? config.entity : Handle::MakeEntity(),
                 std::make_shared<voxie::Name>(config.name),
-                std::make_shared<voxie::Position>(0, 0, 0));
+                std::make_shared<voxie::Position>());
         return std::move(sprite);
     }
 
@@ -162,7 +162,7 @@ namespace voxie {
         auto playerController = std::make_shared<PlayerController>(
                 config.entity.GetId() ? config.entity : Handle::MakeEntity(),
                 std::make_shared<voxie::Name>(config.name),
-                std::make_shared<voxie::Position>(0, 0, 0));
+                std::make_shared<voxie::Position>());
         return std::move(playerController);
     }
 

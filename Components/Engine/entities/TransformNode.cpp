@@ -22,7 +22,7 @@ namespace voxie {
     }
 
     bool TransformNode::decode(const YAML::Node &node) {
-        GetPosition()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition());
         return true;
     }
 

@@ -36,7 +36,7 @@ namespace voxie {
     }
 
     bool CubeEntity::decode(const YAML::Node &node) {
-        GetPosition()->decode(node["position"]);
+        DecodeComponent(node["position"], GetPosition());
         DecodeComponent(node["material"], GetMaterial());
         auto rigidBody = GetRigidBody();
         rigidBody->decode(node["rigidBody"]);

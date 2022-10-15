@@ -6,6 +6,8 @@
 #include <Core.h>
 
 namespace voxie {
+    Position::Position() : Position(glm::vec3{}) {
+    }
 
     Position::Position(const glm::vec3 &position)
         : pos(glm::vec3(1.0f)), rotation(glm::vec3(0.0f)), scale(glm::vec3(1.0f)), rotationQuat(glm::quat(glm::radians(rotation))) {
@@ -13,54 +15,8 @@ namespace voxie {
         UpdateModel();
     }
 
-    Position::Position(float x, float y, float z)
-        : Position(glm::vec3{x, y, z}) {}
-
-    Position::Position(const Position &p)
-        : Position(p.pos) {}
-
     bool Position::operator<(const Position &pos) const {
         return std::tie(pos.pos[0], pos.pos[1], pos.pos[2]) < std::tie(pos.pos[0], pos.pos[1], pos.pos[2]);
-    }
-
-    void Position::encode(YAML::Node &node) const {
-        YAML::Node posNode;
-        posNode["x"] = pos[0];
-        posNode["y"] = pos[1];
-        posNode["z"] = pos[2];
-        node["position"] = posNode;
-
-        YAML::Node rotationNode;
-        rotationNode["x"] = rotation[0];
-        rotationNode["y"] = rotation[1];
-        rotationNode["z"] = rotation[2];
-        node["rotation"] = rotationNode;
-
-        YAML::Node scaleNode;
-        scaleNode["x"] = scale[0];
-        scaleNode["y"] = scale[1];
-        scaleNode["z"] = scale[2];
-        node["scale"] = scaleNode;
-    }
-
-    bool Position::decode(const YAML::Node &node) {
-        auto rot = node["rotation"];
-        SetRotation({rot["x"].as<float>(),
-                     rot["y"].as<float>(),
-                     rot["z"].as<float>()});
-
-        auto scale = node["scale"];
-        SetScale({scale["x"].as<float>(),
-                  scale["y"].as<float>(),
-                  scale["z"].as<float>()});
-
-        auto pos = node["position"];
-        SetPosition({pos["x"].as<float>(),
-                     pos["y"].as<float>(),
-                     pos["z"].as<float>()});
-
-        UpdateModel();
-        return true;
     }
 
     void Position::SetPosition(const glm::vec3 &pos) {

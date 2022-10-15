@@ -110,9 +110,9 @@ namespace voxie::ModelLoader {
                                 materials[color_index] = nrMaterials++;
                             float size = 1.0f;
                             auto cube = std::make_unique<Cube>(
-                                    Position{(float) y * size + chunkPos->pos[0] - model->size_y * size / 2,
-                                             (float) z * size + chunkPos->pos[1] - model->size_z * size / 2,
-                                             (float) x * size + chunkPos->pos[2] - model->size_x * size / 2},// <---- They use different coordinate system, so here we compensate.
+                                    Position{{(float) y * size + chunkPos->pos[0] - model->size_y * size / 2,
+                                              (float) z * size + chunkPos->pos[1] - model->size_z * size / 2,
+                                              (float) x * size + chunkPos->pos[2] - model->size_x * size / 2}},// <---- They use different coordinate system, so here we compensate.
                                     Dimensions{size, size, size},
                                     Material{{(float) color.r / 255.0f, (float) color.g / 255.0f, (float) color.b / 255.0f},
                                              {1.0f, 0.5f, 0.31f},
