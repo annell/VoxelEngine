@@ -114,9 +114,6 @@ namespace voxie {
         DecodeComponent(node["position"], GetPosition());
         auto rigidBody = GetRigidBody();
         auto pos = GetPosition();
-        pos->scale.y = 4;
-        pos->scale.x = 2;
-        pos->scale.z = 2;
         rigidBody->collider = CreateBoxCollider(rigidBody->rigidBody, *pos);
         rigidBody->SetPosition(*pos);
         rigidBody->decode(node["rigidBody"]);
