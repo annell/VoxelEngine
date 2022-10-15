@@ -67,6 +67,12 @@
         x: 1
         y: 1
         z: 1
+    verlet:
+      dynamic: false
+      directions:
+        - 0
+        - 1
+        - 0
 - parent: 2958638728098174689
   node:
     type: LightSource
@@ -234,3 +240,57 @@
       scale:
         - 0.00400000019
         - 0.00400000019
+- parent: 2958638728098174689
+  node:
+    type: CubeEntity
+    id: 3126320391551145143
+    name: Cube
+    position:
+      position:
+        - 0
+        - 2.7566309
+        - 3.39647698
+      rotation:
+        - 0
+        - -0
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+    material:
+      ambient:
+        - 0.5
+        - 0.5
+        - 0.5
+      diffuse:
+        - 1
+        - 0.5
+        - 0.310000002
+      specular:
+        - 0.5
+        - 0.5
+        - 0.5
+      shininess: 32
+    rigidBody:
+      mass: 1
+      gravity: true
+      bodyType: 0
+      offset:
+        x: 0
+        y: 0
+        z: 0
+      linearLockFactor:
+        x: 1
+        y: 1
+        z: 1
+      angularLockFactor:
+        x: 1
+        y: 1
+        z: 1
+    verlet:
+      dynamic: true
+      directions:
+        - 0
+        - 1
+        - 0

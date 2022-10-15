@@ -16,6 +16,7 @@ namespace voxie {
         COMPONENT_REGISTER(Shader, shader);
         COMPONENT_REGISTER(Name, name);
         COMPONENT_REGISTER(Outline, std::make_shared<Outline>());
+        COMPONENT_REGISTER(Verlet, std::make_shared<Verlet>());
 
         cube.GenerateVertexAttributes();
         cube.CreateRenderBuffers();
@@ -33,11 +34,13 @@ namespace voxie {
         node["position"] = *helper::GetComponent<Position>(handle).get();
         node["material"] = *helper::GetComponent<Material>(handle).get();
         node["rigidBody"] = *helper::GetComponent<RigidBody>(handle).get();
+        node["verlet"] = *helper::GetComponent<Verlet>(handle).get();
     }
 
     bool CubeEntity::decode(const YAML::Node &node) {
         DecodeComponent(node["position"], GetPosition());
         DecodeComponent(node["material"], GetMaterial());
+        DecodeComponent(node["verlet"], GetVerlet());
         auto rigidBody = GetRigidBody();
         rigidBody->decode(node["rigidBody"]);
         Init();
