@@ -29,7 +29,8 @@
 			"map": "cpp",
 			"any": "cpp",
 			"filesystem": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"variant": "cpp"
 		},
 	}
 }

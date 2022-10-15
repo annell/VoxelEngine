@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <fstream>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -81,51 +82,60 @@ namespace voxie {
     }
     // utility uniform functions
     // ------------------------------------------------------------------------
-    void Shader::setBool(const std::string &name, bool value) const {
+    void Shader::setBool(const std::string &name, bool value) {
+        ShaderValues[name] = value;
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) value);
     }
     // ------------------------------------------------------------------------
-    void Shader::setInt(const std::string &name, int value) const {
+    void Shader::setInt(const std::string &name, int value) {
+        ShaderValues[name] = value;
         glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
     }
     // ------------------------------------------------------------------------
-    void Shader::setFloat(const std::string &name, float value) const {
+    void Shader::setFloat(const std::string &name, float value) {
+        ShaderValues[name] = value;
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
     // ------------------------------------------------------------------------
-    void Shader::setVec2(const std::string &name, const glm::vec2 &value) const {
+    void Shader::setVec2(const std::string &name, const glm::vec2 &value) {
+        ShaderValues[name] = value;
         glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
     }
-    void Shader::setVec2(const std::string &name, float x, float y) const {
+    void Shader::setVec2(const std::string &name, float x, float y) {
         glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
     }
     // ------------------------------------------------------------------------
-    void Shader::setVec3(const std::string &name, const glm::vec3 &value) const {
+    void Shader::setVec3(const std::string &name, const glm::vec3 &value) {
+        ShaderValues[name] = value;
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
     }
-    void Shader::setVec3(const std::string &name, float x, float y, float z) const {
+    void Shader::setVec3(const std::string &name, float x, float y, float z) {
         glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
     }
-    void Shader::setVec3Array(const std::string &name, const glm::vec3 value[], int size) const {
+    void Shader::setVec3Array(const std::string &name, const glm::vec3 value[], int size) {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), size, &(*value)[0]);
     }
     // ------------------------------------------------------------------------
-    void Shader::setVec4(const std::string &name, const glm::vec4 &value) const {
+    void Shader::setVec4(const std::string &name, const glm::vec4 &value) {
+        ShaderValues[name] = value;
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
     }
-    void Shader::setVec4(const std::string &name, float x, float y, float z, float w) const {
+    void Shader::setVec4(const std::string &name, float x, float y, float z, float w) {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
     }
     // ------------------------------------------------------------------------
-    void Shader::setMat2(const std::string &name, const glm::mat2 &mat) const {
+    void Shader::setMat2(const std::string &name, const glm::mat2 &mat) {
+        ShaderValues[name] = mat;
         glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
     // ------------------------------------------------------------------------
-    void Shader::setMat3(const std::string &name, const glm::mat3 &mat) const {
+    void Shader::setMat3(const std::string &name, const glm::mat3 &mat) {
+        ShaderValues[name] = mat;
         glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
     // ------------------------------------------------------------------------
-    void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const {
+    void Shader::setMat4(const std::string &name, const glm::mat4 &mat) {
+        ShaderValues[name] = mat;
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 }// namespace voxie

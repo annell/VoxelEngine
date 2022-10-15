@@ -6,6 +6,8 @@
 #include "EditorGameMode.h"
 #include <GLFW/glfw3.h>
 #include <GameMode.h>
+#include <type_traits>
+#include <variant>
 
 namespace internal {
 
@@ -126,6 +128,56 @@ namespace gui {
 
             ImGui::Checkbox("Dynamic", &body->dynamic);
             ImGui::DragFloat3("Directions", glm::value_ptr(body->Directions), 1, 0, 1);
+        }
+    }
+
+    // helper type for the visitor #4
+    template<class... Ts>
+    struct overloaded : Ts... { using Ts::operator()...; };
+    // explicit deduction guide (not needed as of C++20)
+    template<class... Ts>
+    overloaded(Ts...) -> overloaded<Ts...>;
+
+    void ShowShaderController(const voxie::Handle &entity) {
+        if (ImGui::CollapsingHeader("Shader")) {
+            auto shader = voxie::helper::GetComponent<voxie::Shader>(entity);
+            for (auto &shaderValue : shader->ShaderValues) {
+                std::visit(overloaded{
+                                   [&shaderValue](auto arg) {
+                                       ImGui::Text(shaderValue.first.c_str());
+                                   },
+                                   [&shaderValue, shader](bool arg) {
+                                       if (ImGui::Checkbox(shaderValue.first.c_str(), &arg)) {
+                                           shader->setBool(shaderValue.first, arg);
+                                       }
+                                   },
+                                   [&shaderValue, shader](int arg) {
+                                       if (ImGui::InputInt(shaderValue.first.c_str(), &arg)) {
+                                           shader->setInt(shaderValue.first, arg);
+                                       }
+                                   },
+                                   [&shaderValue, shader](float arg) {
+                                       if (ImGui::InputFloat(shaderValue.first.c_str(), &arg)) {
+                                           shader->setFloat(shaderValue.first, arg);
+                                       }
+                                   },
+                                   [&shaderValue, shader](glm::vec2 arg) {
+                                       if (ImGui::InputFloat2(shaderValue.first.c_str(), glm::value_ptr(arg))) {
+                                           shader->setVec2(shaderValue.first, arg);
+                                       }
+                                   },
+                                   [&shaderValue, shader](glm::vec3 arg) {
+                                       if (ImGui::InputFloat3(shaderValue.first.c_str(), glm::value_ptr(arg))) {
+                                           shader->setVec3(shaderValue.first, arg);
+                                       }
+                                   },
+                                   [&shaderValue, shader](glm::vec4 arg) {
+                                       if (ImGui::InputFloat4(shaderValue.first.c_str(), glm::value_ptr(arg))) {
+                                           shader->setVec4(shaderValue.first, arg);
+                                       }
+                                   }},
+                           shaderValue.second);
+            }
         }
     }
 
@@ -475,7 +527,9 @@ namespace gui {
         ShowSceneNameController();
         auto entity = ShowEntityList();
         if (auto camera = voxie::Engine::GetEngine().GetCamera()) {
-            camera->SetSelection(entity);
+            if (camera->GetSelection() != entity) {
+                camera->SetSelection(entity);
+            }
         }
 
         AddNewComponent();
@@ -496,6 +550,10 @@ namespace gui {
 
         if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {
             ShowVerletController(entity);
+        }
+
+        if (voxie::helper::HasComponent<voxie::Shader>(entity)) {
+            ShowShaderController(entity);
         }
 
         if (voxie::helper::HasComponent<voxie::RigidBody>(entity)) {

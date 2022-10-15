@@ -81,7 +81,7 @@ namespace voxie {
         updateCameraVectors();
     }
 
-    void Camera::SetShaderParameters(const Shader &shader) const {
+    void Camera::SetShaderParameters(Shader &shader) const {
         shader.use();
         shader.setVec3("viewPos", GetPosition()->pos);
         shader.setMat4("projection", GetProjectionMatrix());
@@ -103,6 +103,13 @@ namespace voxie {
         return 10000.0f;
     }
     void Camera::SetSelection(const Handle &selection) {
+        auto setSelection = [](const Handle &selection, bool selected) {
+            if (auto shader = helper::GetComponent<Shader>(selection)) {
+                shader->setBool("selected", selected);
+            }
+        };
+        setSelection(selectedEntity, false);
+        setSelection(selection, true);
         selectedEntity = selection;
     }
     const Handle &Camera::GetSelection() const {

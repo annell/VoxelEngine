@@ -45,7 +45,7 @@ namespace voxie {
         void ProcessKeyboard(Camera_Movement direction, float deltaTime);
         void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
         Ray GetRay(float mouseX, float mouseY);
-        void SetShaderParameters(const Shader &shader) const;
+        void SetShaderParameters(Shader &shader) const;
         void SetSelection(const Handle &selection);
         const Handle &GetSelection() const;
 
