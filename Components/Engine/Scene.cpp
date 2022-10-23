@@ -8,6 +8,9 @@
 #include "Shader.h"
 #include <Skybox.h>
 #include <fstream>
+#include <future>
+
+#include "Position.h"
 
 namespace internal {
     auto read_file(std::string_view path) -> std::string {
@@ -72,7 +75,37 @@ namespace voxie {
                                                                         std::map<std::string, ShaderType>{
                                                                                 std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", ShaderType::VERTEX),
                                                                                 std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", ShaderType::FRAGMENT)}));
+
+        if (!playerControllers.empty()) {
+            LoadWorldChunks(*helper::GetComponent<Position>(playerControllers[0]).get());
+        }
         UpdateLights();
+    }
+
+    void Scene::RegisterPlayerController(const Handle &handle) {
+        playerControllers.push_back(handle);
+    }
+
+    void Scene::LoadWorldChunks(const Position &position) {
+        constexpr float loadDistance = 50;
+
+        for (int x = -5; x < 5; x++) {
+            for (int y = -5; y < 5; y++) {
+                WorldChunkConfig config;
+                auto origChunkPos = ChunkPos::toChunkPos(position.pos);
+                config.ChunkPos = origChunkPos;
+                config.ChunkPos += ChunkPos{x, y};
+                config.seed = 0;
+                auto distance = config.ChunkPos.chunkDistance(position.pos);
+                if (distance < loadDistance) {
+                    if (loadedChunks.find(config.ChunkPos) == loadedChunks.end()) {
+                        auto worldChunk = MakeWorldChunk(config);
+                        loadedChunks.emplace(config.ChunkPos, worldChunk->GetHandle());
+                        AddEntity(std::move(worldChunk), root.get());
+                    }
+                }
+            }
+        }
     }
 
     Node *Scene::AddEntity(std::shared_ptr<NodeWrapper> nodeWrapper, Node *parent) {
@@ -120,6 +153,7 @@ namespace voxie {
                 if (std::dynamic_pointer_cast<Chunk>(nodePtr) ||
                     std::dynamic_pointer_cast<voxie::Sprite>(nodePtr) ||
                     std::dynamic_pointer_cast<voxie::CubeEntity>(nodePtr) ||
+                    std::dynamic_pointer_cast<voxie::WorldChunk>(nodePtr) ||
                     std::dynamic_pointer_cast<voxie::Text>(nodePtr)) {
                     if (IsAffectedByLight(nodePtr)) {
                         auto shader = helper::GetComponent<Shader>(nodePtr->GetHandle());
@@ -164,8 +198,8 @@ namespace voxie {
         return root.get();
     }
 
-    std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle &entity) {
-        auto it = nodes.find(entity);
+    std::shared_ptr<NodeWrapper> Scene::FindNode(const Handle &handle) {
+        auto it = nodes.find(handle);
         if (it != nodes.end()) {
             return it->second->GetNodePtr();
         }
@@ -190,6 +224,7 @@ namespace voxie {
 
     bool Scene::IsAffectedByLight(std::shared_ptr<NodeWrapper> node) const {
         return std::dynamic_pointer_cast<Chunk>(node) ||
+               std::dynamic_pointer_cast<WorldChunk>(node) ||
                std::dynamic_pointer_cast<CubeEntity>(node);
     }
 

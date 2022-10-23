@@ -166,4 +166,15 @@ namespace voxie {
         return std::move(playerController);
     }
 
+    std::shared_ptr<WorldChunk> MakeWorldChunk(const WorldChunkConfig &config) {
+        auto worldChunk = std::make_shared<WorldChunk>(
+                config.entity.GetId() ? config.entity : Handle::MakeEntity(),
+                std::make_shared<voxie::Shader>(
+                        std::map<std::string, ShaderType>{
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", ShaderType::VERTEX),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)}),
+                config.ChunkPos);
+        return worldChunk;
+    }
+
 }// namespace voxie

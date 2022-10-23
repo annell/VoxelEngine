@@ -175,6 +175,13 @@ namespace gui {
                                        if (ImGui::InputFloat4(shaderValue.first.c_str(), glm::value_ptr(arg))) {
                                            shader->setVec4(shaderValue.first, arg);
                                        }
+                                   },
+                                   [&shaderValue, shader](glm::mat4 arg) {
+                                       ImGui::Text(shaderValue.first.c_str());
+                                       ImGui::InputFloat4("[0]", glm::value_ptr(arg[0]));
+                                       ImGui::InputFloat4("[1]", glm::value_ptr(arg[1]));
+                                       ImGui::InputFloat4("[2]", glm::value_ptr(arg[2]));
+                                       ImGui::InputFloat4("[3]", glm::value_ptr(arg[3]));
                                    }},
                            shaderValue.second);
             }

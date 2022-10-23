@@ -6,7 +6,6 @@ namespace {
     bool IsPointInCube(const voxie::Position &point, const voxie::Position &cube) {
         auto axisInCube = [](float projectionI, float axisI, float length) {
             return projectionI <= axisI + length / 2 && projectionI >= axisI - length / 2;
-            //return 2 * abs(projectionI * axisI) <= length;
         };
 
         auto projection = point.pos;
@@ -16,6 +15,17 @@ namespace {
         bool zAxis = axisInCube(projection.z, cube.pos.z, cube.scale.z);
 
         return xAxis && yAxis && zAxis;
+    }
+
+    bool IsCubesOverlapping(const voxie::Position &cubeA, const voxie::Position &cubeB) {
+        auto isOverlapping = [](float axisA, float scaleA, float axisB, float scaleB) {
+            scaleA /= 2;
+            scaleB /= 2;
+            return axisA + scaleA > axisB - scaleB && axisA - scaleA < axisB + scaleB;
+        };
+
+        return isOverlapping(cubeA.pos.x, cubeA.scale.x, cubeB.pos.x, cubeB.scale.x) &&
+               isOverlapping(cubeA.pos.y, cubeA.scale.y, cubeB.pos.y, cubeB.scale.y) && isOverlapping(cubeA.pos.z, cubeA.scale.z, cubeB.pos.z, cubeB.scale.z);
     }
 
 }// namespace

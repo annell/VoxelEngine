@@ -3,9 +3,11 @@
 //
 
 #pragma once
+#include "ChunkPos.h"
 #include <EntityComponentSystem.h>
 #include <iostream>
 #include <list>
+#include <map>
 #include <memory>
 #include <unordered_map>
 
@@ -15,6 +17,7 @@ namespace voxie {
     class NodeWrapper;
     class LightSource;
     class Shader;
+    class Position;
 
     class Scene {
     public:
@@ -61,6 +64,7 @@ namespace voxie {
         Skybox *GetSkybox() const;
 
         void UpdateLights() const;
+        void RegisterPlayerController(const Handle &);
 
     private:
         void UpdateLight(std::shared_ptr<NodeWrapper>) const;
@@ -69,11 +73,15 @@ namespace voxie {
         bool IsAffectedByLight(std::shared_ptr<NodeWrapper>) const;
         void UpdateLightSources(std::shared_ptr<Shader>, const std::vector<std::shared_ptr<LightSource>> &) const;
 
+        void LoadWorldChunks(const Position &);
+
         std::unique_ptr<Node> root;
         std::string folder;
         std::string sceneName;
         std::unique_ptr<Skybox> skybox;
         std::unordered_map<Handle, Node *> nodes;
+        std::vector<Handle> playerControllers;
+        std::map<ChunkPos, Handle> loadedChunks;
     };
 
 }// namespace voxie

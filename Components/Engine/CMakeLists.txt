@@ -34,6 +34,7 @@ file(GLOB H_FILES
         external/rapidjson/*.h
         external/stb/*.h
         external/vox/*.h
+        external/PerlinNoise/*.h
         input/*.h
         rendering/*.h
         utility/*.h
@@ -51,6 +52,7 @@ set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/external/ImGuizmo
         ${PROJECT_SOURCE_DIR}/external/stb
         ${PROJECT_SOURCE_DIR}/external/vox
+        ${PROJECT_SOURCE_DIR}/external/PerlinNoise
         CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 include(ExternalProject)

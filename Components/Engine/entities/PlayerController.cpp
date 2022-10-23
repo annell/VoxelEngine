@@ -93,6 +93,7 @@ namespace voxie {
                                              },
                                              voxie::MouseButton::BUTTON_1, voxie::ActionType::PRESS});
         OnTickHandle = engine.onTick.Bind(std::bind(&PlayerController::OnTick, this, std::placeholders::_1));
+        Engine::GetEngine().GetScene()->RegisterPlayerController(handle);
     }
     PlayerController::~PlayerController() {
         KeyboardHandler::Reset();// TODO Fix up so that we can bind keyboard actions to a specific object or each bind returns a handle.

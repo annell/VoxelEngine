@@ -36,3 +36,4 @@ build
 .DS_Store
 imgui.ini
 resources/scenes/config.yaml
+.VSCodeCounter

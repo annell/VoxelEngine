@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <yaml-cpp/yaml.h>
 
-#include "Engine.h"
+#include "Engine.h"//This include should be removed, its evil...
 
 #define COMPONENT_ADD_FUNCTION(TYPE)                           \
     std::shared_ptr<TYPE> Get##TYPE() const {                  \

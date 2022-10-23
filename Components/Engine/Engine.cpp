@@ -130,6 +130,8 @@ namespace voxie {
                 voxie::helper::Submit(entity->GetRenderingConfig());
             } else if (auto entity = std::dynamic_pointer_cast<voxie::CubeEntity>(node)) {
                 voxie::helper::Submit(entity->GetRenderingConfig());
+            } else if (auto entity = std::dynamic_pointer_cast<voxie::WorldChunk>(node)) {
+                voxie::helper::Submit(entity->GetRenderingConfig());
             } else if (auto entity = std::dynamic_pointer_cast<voxie::Text>(node)) {
                 texts.push_back(entity);
             }

@@ -13,12 +13,11 @@
 
 #include "BaseComponents.h"
 #include "Cube.h"
+#include "CubeEntity.h"
+#include "PlayerController.h"
+#include "WorldChunk.h"
 
 namespace voxie {
-
-    class Chunk;
-    class CubeEntity;
-    class PlayerController;
 
     const std::string BASE_PATH = std::filesystem::current_path().string() + std::string("/resources");
     const std::string SHADERS = "/shaders";
@@ -117,5 +116,13 @@ namespace voxie {
     };
 
     std::shared_ptr<PlayerController> MakePlayerController(const PlayerControllerFactoryConfig &);
+
+    struct WorldChunkConfig {
+        Handle entity = NullEntity;
+        ChunkPos ChunkPos;
+        uint32_t seed = 0;
+    };
+
+    std::shared_ptr<WorldChunk> MakeWorldChunk(const WorldChunkConfig &);
 
 }// namespace voxie
