@@ -39,11 +39,30 @@ namespace {
 }// namespace
 
 namespace voxie {
-    Shader::Shader(const std::map<ShaderDefinition, ShaderType> &shaders) {
-        shaderCode = shaders;
+    Shader::Shader(const std::map<ShaderDefinition, ShaderType> &shaders) : shaderCode(shaders) {
+        Compile();
+    }
+
+    Shader::Shader(const std::map<ShaderDefinition, ShaderType> &shaders, bool noCompile) : shaderCode(shaders), noCompile(true) {
+    }
+
+    void Shader::Compile() {
+        static unsigned int sharedID = 0;
+        static bool initialized = false;
+        if (noCompile) {
+            if (initialized) {
+                ID = sharedID;
+                return;
+            }
+        }
         ID = glCreateProgram();
+        if (noCompile && !initialized) {
+            sharedID = ID;
+            initialized = true;
+        }
+
         std::vector<unsigned int> compiledShaders;
-        for (const auto &pair : shaders) {
+        for (const auto &pair : shaderCode) {
             const auto &path = pair.first;
             const unsigned int &type = GetGLShaderFromShaderType(pair.second);
             std::string code;

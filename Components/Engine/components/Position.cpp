@@ -65,7 +65,8 @@ namespace voxie {
     }
 
     void Position::UpdateModel() {
-        model = GetModel(pos, scale, rotation);
+        model = glm::scale(glm::translate(glm::mat4(1.0f), pos), scale);
+        model *= glm::toMat4(glm::quat((rotation)));
     }
 
 }// namespace voxie

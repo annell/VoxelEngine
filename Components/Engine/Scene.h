@@ -73,6 +73,7 @@ namespace voxie {
         bool IsAffectedByLight(std::shared_ptr<NodeWrapper>) const;
         void UpdateLightSources(std::shared_ptr<Shader>, const std::vector<std::shared_ptr<LightSource>> &) const;
 
+        void DisableWorldChunks();
         void LoadWorldChunks(const Position &);
 
         std::unique_ptr<Node> root;
@@ -82,6 +83,7 @@ namespace voxie {
         std::unordered_map<Handle, Node *> nodes;
         std::vector<Handle> playerControllers;
         std::map<ChunkPos, Handle> loadedChunks;
+        std::vector<Handle> loadingChunks;
     };
 
 }// namespace voxie

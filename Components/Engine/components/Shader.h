@@ -24,6 +24,8 @@ namespace voxie {
         using ShaderDefinition = std::string;
         unsigned int ID;
         explicit Shader(const std::map<ShaderDefinition, ShaderType> &shaders);
+        explicit Shader(const std::map<ShaderDefinition, ShaderType> &shaders, bool noCompile);
+        void Compile();
 
         void use() const;
 
@@ -46,6 +48,7 @@ namespace voxie {
 
     private:
         std::map<ShaderDefinition, ShaderType> shaderCode;
+        bool noCompile = false;
     };
 
 }// namespace voxie

@@ -7,17 +7,18 @@
 
 namespace voxie {
 
-    Cube::Cube()
-        : Cube(Position(), Dimensions{1, 1, 1}, {}, 0) {
+    Cube::Cube() {
     }
 
     Cube::Cube(const Position &position, Dimensions dimensions, Material material, int materialIndex)
-        : material(material), materialIndex(materialIndex), vertexBufferArray(std::make_shared<VertexBufferArray>()) {
+        : material(material), materialIndex(materialIndex), vertexBufferArray(std::make_shared<VertexBufferArray>()), enabled(true) {
         GenerateSides(position, dimensions);
     }
 
     void Cube::GenerateVertexAttributes() {
         vertices.clear();
+        vertices.reserve(2 * 6 * 3 * 3);
+        vertexBufferArray->vertexAttributes.reserve(2 * (6 * (3 * 3 + 3 * 3 + 1)));
         for (const auto &side : sides) {
             if (side.render) {
                 GenerateVertexAttributes(side);
@@ -174,6 +175,10 @@ namespace voxie {
     }
     const std::vector<float> &Cube::GetVertices() const {
         return vertices;
+    }
+
+    bool Cube::IsEnabled() const {
+        return enabled;
     }
 
 }// namespace voxie

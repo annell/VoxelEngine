@@ -8,6 +8,7 @@
 #include "Cube.h"
 #include "PerlinNoise.h"
 #include <map>
+#include <memory>
 #include <random>
 #include <utility>
 
@@ -45,14 +46,13 @@ namespace voxie {
                     float height = (float) y / (float) ChunkPos::ySize;
                     if (val > height) {
                         int index = (height * 10);
-                        Cubes.emplace(ChunkCoordinate{x, y, z}, Cube(Position({(float) x, (float) y, (float) z}), {1, 1, 1}, materials[index], index));
+                        Cubes[x][y][z] = Cube(Position({(float) x, (float) y, (float) z}), Dimensions{1, 1, 1}, materials[index], index);
                     }
                 }
             }
         }
 
         SetupCubesForRendering();
-        SetupShader();
     }
 
     void WorldChunk::encode(YAML::Node &node) const {
@@ -69,33 +69,44 @@ namespace voxie {
 
     void WorldChunk::SetupCubesForRendering() {
         FaceCulling();
-        for (auto &pair : Cubes) {
-            auto &cube = pair.second;
-            cube.GenerateVertexAttributes();
-            if (cube.GetMaterialIndex() > nrMaterials) {
-                nrMaterials = cube.GetMaterialIndex();
-            }
-            if (cube.ShouldRender()) {
-                for (const auto &vertex : cube.GetVertices()) {
-                    VerticesToRender.push_back(vertex);
+        for (int x = 0; x < ChunkPos::xSize; x++) {
+            for (int y = 0; y < ChunkPos::ySize; y++) {
+                for (int z = 0; z < ChunkPos::zSize; z++) {
+                    if (Cubes[x][y][z].IsEnabled()) {
+                        auto &cube = Cubes[x][y][z];
+                        cube.GenerateVertexAttributes();
+                        if (cube.GetMaterialIndex() > nrMaterials) {
+                            nrMaterials = cube.GetMaterialIndex();
+                        }
+                        if (cube.ShouldRender()) {
+                            for (const auto &vertex : cube.GetVertices()) {
+                                VerticesToRender.push_back(vertex);
+                            }
+                            CubesToRender.push_back(&cube);
+                        }
+                    }
                 }
-                CubesToRender.push_back(&cube);
             }
         }
     }
 
     void WorldChunk::SetupShader() {
         auto shader = GetShader();
+        shader->Compile();
         auto vba = GetVertexBufferArray();
         shader->use();
+        static std::array<bool, 128> initializedMaterials = {false};
         for (const auto &cube : CubesToRender) {
             vba->nrVertex += cube->GetNrVertex();
-            auto &material = cube->GetMaterial();
-            std::string index = std::to_string(cube->GetMaterialIndex());
-            shader->setVec3("materials[" + index + "].ambient", material.ambient);
-            shader->setVec3("materials[" + index + "].diffuse", material.diffuse);
-            shader->setVec3("materials[" + index + "].specular", material.specular);
-            shader->setFloat("materials[" + index + "].shininess", material.shininess);
+            if (!initializedMaterials[cube->GetMaterialIndex()]) {
+                initializedMaterials[cube->GetMaterialIndex()] = true;
+                std::string index = std::to_string(cube->GetMaterialIndex());
+                auto &material = cube->GetMaterial();
+                shader->setVec3("materials[" + index + "].ambient", material.ambient);
+                shader->setVec3("materials[" + index + "].diffuse", material.diffuse);
+                shader->setVec3("materials[" + index + "].specular", material.specular);
+                shader->setFloat("materials[" + index + "].shininess", material.shininess);
+            }
             const auto &cubesVertexAttributes = cube->GetVertexAttributes();
             vba->vertexAttributes.insert(vba->vertexAttributes.end(), cubesVertexAttributes.begin(), cubesVertexAttributes.end());
         }
@@ -109,34 +120,45 @@ namespace voxie {
 
     void WorldChunk::FaceCulling() {
         auto render = [&](Cube &cube, Cube::Face face, const ChunkCoordinate &pos) {
-            auto it = Cubes.find(pos);
-            if (it != Cubes.end()) {
+            if (pos.x >= ChunkPos::xSize || pos.y >= ChunkPos::ySize || pos.z >= ChunkPos::zSize) {
+                return;
+            }
+            if (pos.x < 0 || pos.y < 0 || pos.z < 0) {
+                return;
+            }
+            if (Cubes[pos.x][pos.y][pos.z].IsEnabled()) {
                 cube.SetRenderSide(face, false);
             }
         };
-        for (auto &pair : Cubes) {
-            auto &cube = pair.second;
-            auto pos = pair.first;
-            pos.x++;
-            render(cube, Cube::Face::RIGHT, pos);
-            pos.x--;
-            pos.x--;
-            render(cube, Cube::Face::LEFT, pos);
-            pos.x++;
+        for (int x = 0; x < ChunkPos::xSize; x++) {
+            for (int y = 0; y < ChunkPos::ySize; y++) {
+                for (int z = 0; z < ChunkPos::zSize; z++) {
+                    if (Cubes[x][y][z].IsEnabled()) {
+                        auto pos = ChunkCoordinate{x, y, z};
+                        auto &cube = Cubes[x][y][z];
+                        pos.x++;
+                        render(cube, Cube::Face::RIGHT, pos);
+                        pos.x--;
+                        pos.x--;
+                        render(cube, Cube::Face::LEFT, pos);
+                        pos.x++;
 
-            pos.y++;
-            render(cube, Cube::Face::TOP, pos);
-            pos.y--;
-            pos.y--;
-            render(cube, Cube::Face::BOTTOM, pos);
-            pos.y++;
+                        pos.y++;
+                        render(cube, Cube::Face::TOP, pos);
+                        pos.y--;
+                        pos.y--;
+                        render(cube, Cube::Face::BOTTOM, pos);
+                        pos.y++;
 
-            pos.z++;
-            render(cube, Cube::Face::FRONT, pos);
-            pos.z--;
-            pos.z--;
-            render(cube, Cube::Face::BACK, pos);
-            pos.z++;
+                        pos.z++;
+                        render(cube, Cube::Face::FRONT, pos);
+                        pos.z--;
+                        pos.z--;
+                        render(cube, Cube::Face::BACK, pos);
+                        pos.z++;
+                    }
+                }
+            }
         }
     }
 

@@ -57,10 +57,13 @@ namespace voxie {
 
         const std::vector<float> &GetVertices() const;
 
+        bool IsEnabled() const;
+
     private:
         void GenerateVertexAttributes(const Side &side);
         void GenerateSides(Position p, Dimensions d);
 
+        bool enabled = false;
         Material material;
         int materialIndex = 0;
         std::shared_ptr<VertexBufferArray> vertexBufferArray;

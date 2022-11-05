@@ -172,7 +172,8 @@ namespace voxie {
                 std::make_shared<voxie::Shader>(
                         std::map<std::string, ShaderType>{
                                 std::make_pair(BASE_PATH + SHADERS + "/cunk.vs", ShaderType::VERTEX),
-                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)}),
+                                std::make_pair(BASE_PATH + SHADERS + "/cunk.fs", ShaderType::FRAGMENT)},
+                        true),
                 config.ChunkPos);
         return worldChunk;
     }
