@@ -4,7 +4,9 @@
 
 #pragma once
 #include "ChunkPos.h"
+#include "ThreadPool.h"
 #include <EntityComponentSystem.h>
+#include <future>
 #include <iostream>
 #include <list>
 #include <map>
@@ -76,6 +78,7 @@ namespace voxie {
         void DisableWorldChunks();
         void LoadWorldChunks(const Position &);
 
+        ThreadPool threadPool;
         std::unique_ptr<Node> root;
         std::string folder;
         std::string sceneName;
@@ -84,6 +87,7 @@ namespace voxie {
         std::vector<Handle> playerControllers;
         std::map<ChunkPos, Handle> loadedChunks;
         std::vector<Handle> loadingChunks;
+        std::vector<std::future<void>> preLoadingChunks;
     };
 
 }// namespace voxie

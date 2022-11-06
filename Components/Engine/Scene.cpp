@@ -10,6 +10,7 @@
 #include <Skybox.h>
 #include <fstream>
 #include <future>
+#include <thread>
 
 namespace internal {
     auto read_file(std::string_view path) -> std::string {
@@ -35,6 +36,7 @@ namespace voxie {
     }
 
     Scene::~Scene() {
+        threadPool.Stop();
         ClearScene();
     }
 
@@ -74,13 +76,15 @@ namespace voxie {
                                                                         std::map<std::string, ShaderType>{
                                                                                 std::make_pair(BASE_PATH + SHADERS + "/skybox.vs", ShaderType::VERTEX),
                                                                                 std::make_pair(BASE_PATH + SHADERS + "/skybox.fs", ShaderType::FRAGMENT)}));
+        threadPool.Start();
 
         if (!playerControllers.empty()) {
             Engine::GetEngine().onTick.Bind([&](float delta) {
                 TimeMeasurment::Start("LoadWorldChunks");
-                auto lock = std::async(std::launch::async, [this]() { LoadWorldChunks(*Engine::GetEngine().GetCamera()->GetPosition().get()); });
+                LoadWorldChunks(*Engine::GetEngine().GetCamera()->GetPosition().get());
                 TimeMeasurment::Start("LoadWorldChunks");
                 DisableWorldChunks();
+
                 auto loadingChunkCopy = loadingChunks;
                 loadingChunks.clear();
                 TimeMeasurment::Start("SettingUpLights");
@@ -103,22 +107,23 @@ namespace voxie {
     void Scene::DisableWorldChunks() {
         /* Remove old chunks */
         TimeMeasurment::Start("RemovingChunks");
-        constexpr float loadDistance = 50;
+        constexpr float loadDistance = 100;
         for (const auto &chunk : loadedChunks) {
             if (chunk.first.chunkDistance(Engine::GetEngine().GetCamera()->GetPosition()->pos) > loadDistance) {
                 DisableEntity(chunk.second);
-                //RemoveEntity(chunk.second);
+                RemoveEntity(chunk.second);
             }
         }
         TimeMeasurment::End("RemovingChunks");
     }
 
     void Scene::LoadWorldChunks(const Position &position) {
-        constexpr float loadDistance = 50;
+        constexpr float loadDistance = 100;
         for (int x = -3; x < 3; x++) {
             for (int y = -3; y < 3; y++) {
                 WorldChunkConfig config;
                 auto origChunkPos = ChunkPos::toChunkPos(position.pos);
+                config.entity = Handle::MakeEntity();
                 config.ChunkPos = origChunkPos;
                 config.ChunkPos += ChunkPos{x, y};
                 config.seed = 0;
@@ -127,10 +132,13 @@ namespace voxie {
                     auto chunk = loadedChunks.find(config.ChunkPos);
 
                     if (chunk == loadedChunks.end()) {
-                        auto worldChunk = MakeWorldChunk(config);
-                        loadedChunks.emplace(config.ChunkPos, worldChunk->GetHandle());
-                        loadingChunks.push_back(worldChunk->GetHandle());
-                        AddEntity(std::move(worldChunk), root.get());
+                        loadedChunks.emplace(config.ChunkPos, config.entity);
+                        threadPool.QueueJob([this, config]() {
+                            auto worldChunk = MakeWorldChunk(config);
+                            loadingChunks.push_back(worldChunk->GetHandle());
+                            AddEntity(std::move(worldChunk), root.get());
+                        });
+
                     } else {
                         EnableEntity(chunk->second);
                     }
