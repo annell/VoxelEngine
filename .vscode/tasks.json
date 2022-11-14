@@ -4,6 +4,18 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Build folder",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "mkdir",
+            "args": [
+                "-p",
+                "build"
+            ]
+        },
+        {
             "label": "Editor Configure",
             "type": "shell",
             "options": {
@@ -12,6 +24,9 @@
             "command": "cmake",
             "args": [
                 "${workspaceRoot}"
+            ],
+            "dependsOn": [
+                "Build folder"
             ]
         },
         {
