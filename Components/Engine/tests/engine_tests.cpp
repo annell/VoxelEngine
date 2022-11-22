@@ -91,6 +91,13 @@ TEST(Engine, Loop) {
     ASSERT_FALSE(engine.IsRunning());
 }
 
+TEST(Engine, RegisterECS) {
+    voxie::ECSManager ecs;
+    ecs.RegisterComponent<std::string>();
+    ecs.RegisterComponent<int>();
+    ASSERT_FALSE(true);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

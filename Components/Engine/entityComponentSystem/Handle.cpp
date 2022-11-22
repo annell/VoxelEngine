@@ -20,7 +20,7 @@ namespace voxie {
     }
 
     bool Handle::operator==(const Handle &rhs) const {
-        return as_tie() == rhs.as_tie();
+        return id == rhs.id;
     }
 
     Handle Handle::MakeEntity() {

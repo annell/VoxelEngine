@@ -30,7 +30,14 @@
 			"any": "cpp",
 			"filesystem": "cpp",
 			"typeinfo": "cpp",
-			"variant": "cpp"
+			"variant": "cpp",
+			"future": "cpp",
+			"deque": "cpp",
+			"list": "cpp",
+			"optional": "cpp",
+			"vector": "cpp",
+			"array": "cpp",
+			"unordered_map": "cpp"
 		},
 	}
 }

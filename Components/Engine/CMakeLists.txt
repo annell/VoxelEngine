@@ -12,6 +12,7 @@ find_package(Freetype REQUIRED)
 file(GLOB CPP_FILES
         *.cpp
         entities/*.cpp
+        entityComponentSystem/*.cpp
         components/*.cpp
         external/imgui/*.cpp
         external/ImGuizmo/*.cpp
@@ -28,6 +29,7 @@ file(GLOB CPP_FILES
 file(GLOB H_FILES
         *.h
         entities/*.h
+        entityComponentSystem/*.h
         components/*.h
         external/imgui/*.h
         external/ImGuizmo/*.h
@@ -44,6 +46,7 @@ file(GLOB H_FILES
 set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/.
         ${PROJECT_SOURCE_DIR}/entities
+        ${PROJECT_SOURCE_DIR}/entityComponentSystem
         ${PROJECT_SOURCE_DIR}/components
         ${PROJECT_SOURCE_DIR}/utility
         ${PROJECT_SOURCE_DIR}/input
@@ -151,8 +154,20 @@ target_include_directories(engine_tests
 PRIVATE "."
 )
 
+add_executable(ecs_tests ${PROJECT_SOURCE_DIR}/entityComponentSystem/tests/ECSTests.cpp)
+target_link_libraries(ecs_tests
+        PRIVATE
+        gtest
+        gtest_main
+        ${PROJECT_NAME}
+        )
+target_include_directories(ecs_tests
+PRIVATE "."
+)
+
 include(GoogleTest)
 gtest_discover_tests(engine_tests)
+gtest_discover_tests(ecs_tests)
 
 if (DO_INSTALL)
     install(TARGETS ${PROJECT_NAME} DESTINATION lib)
