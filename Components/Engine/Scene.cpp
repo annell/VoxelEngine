@@ -133,11 +133,11 @@ namespace voxie {
 
                     if (chunk == loadedChunks.end()) {
                         loadedChunks.emplace(config.ChunkPos, config.entity);
-                        threadPool.QueueJob([this, config]() {
+                        //threadPool.QueueJob([this, config]() {
                             auto worldChunk = MakeWorldChunk(config);
                             loadingChunks.push_back(worldChunk->GetHandle());
                             AddEntity(std::move(worldChunk), root.get());
-                        });
+                        //});
 
                     } else {
                         EnableEntity(chunk->second);

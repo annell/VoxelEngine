@@ -37,3 +37,5 @@ build
 imgui.ini
 resources/scenes/config.yaml
 .VSCodeCounter
+
+Debug

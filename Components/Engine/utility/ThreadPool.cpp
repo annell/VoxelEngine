@@ -3,7 +3,7 @@
 namespace voxie {
 
     void ThreadPool::Start() {
-        const uint32_t num_threads = std::thread::hardware_concurrency();// Max # of threads the system supports
+        const uint32_t num_threads = 5;//std::thread::hardware_concurrency();// Max # of threads the system supports
         threads.resize(num_threads);
         for (uint32_t i = 0; i < num_threads; i++) {
             threads.at(i) = std::thread(&ThreadPool::ThreadLoop, this);

@@ -26,6 +26,29 @@
                 "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
             },
             "preLaunchTask": "Build Editor"
+        },
+        {
+            "name": "ECS tests",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/components/Engine/ecs_tests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "linux": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "/usr/bin/gdb"
+            },
+            "osx": {
+                "MIMode": "lldb"
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
+            },
+            "preLaunchTask": "Build Tests"
         }
     ]
 }

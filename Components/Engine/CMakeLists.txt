@@ -143,23 +143,23 @@ include_directories(${Engine_INCLUDE_DIRS})
 
 
 enable_testing()
-add_executable(engine_tests ${PROJECT_SOURCE_DIR}/tests/engine_tests.cpp)
+add_executable(engine_tests ${PROJECT_SOURCE_DIR}/test/engine_tests.cpp)
 target_link_libraries(engine_tests
         PRIVATE
         gtest
         gtest_main
-        ${PROJECT_NAME}
+	${PROJECT_NAME}
         )
 target_include_directories(engine_tests
 PRIVATE "."
 )
 
-add_executable(ecs_tests ${PROJECT_SOURCE_DIR}/entityComponentSystem/tests/ECSTests.cpp)
+add_executable(ecs_tests ${PROJECT_SOURCE_DIR}/entityComponentSystem/test/ECSTests.cpp)
 target_link_libraries(ecs_tests
         PRIVATE
         gtest
         gtest_main
-        ${PROJECT_NAME}
+	${PROJECT_NAME}
         )
 target_include_directories(ecs_tests
 PRIVATE "."

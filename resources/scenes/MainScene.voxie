@@ -114,20 +114,6 @@
         - 0
 - parent: 4290297168568620581
   node:
-    type: Sprite
-    id: 3408038652390227071
-    path: /Users/annell/dev/c++/VoxelEngine/build/components/Editor/../../../resources/sprites/blackdot.png
-    name: Crosshair
-    position:
-      position:
-        - 0
-        - 0
-      rotation: 0
-      scale:
-        - 0.00400000019
-        - 0.00400000019
-- parent: 4290297168568620581
-  node:
     type: Camera
     id: 3268650726063865125
     activeCamera: false

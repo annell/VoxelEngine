@@ -1,0 +1,52 @@
+{
+  "configurations": {
+    "Edior": {
+      "adapter": "vscode-cpptools",
+      "configuration": {
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/Debug/components/Editor/Editor",
+        "args": [],
+        "stopAtEntry": false,
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "logging": {
+          "engineLogging": false
+        }
+      }
+    },
+    "ECS Tests": {
+      "adapter": "vscode-cpptools",
+      "configuration": {
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/Debug/components/Engine/ecs_tests",
+        "args": [],
+        "stopAtEntry": false,
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "logging": {
+          "engineLogging": false
+        }
+      }
+    },
+    "Engine Tests": {
+      "adapter": "vscode-cpptools",
+      "configuration": {
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/Debug/components/Engine/engine_tests",
+        "args": [],
+        "stopAtEntry": false,
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "logging": {
+          "engineLogging": false
+        }
+      }
+    }
+  }
+}

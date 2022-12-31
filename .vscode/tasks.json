@@ -41,5 +41,17 @@
                 "Editor Configure"
             ]
         },
+        {
+            "label": "Build Tests",
+            "suppressTaskName": true,
+            "isBuildCommand": true,
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceRoot}/build/components/Engine"
+            },
+            "dependsOn": [
+                "Editor Configure"
+            ]
+        },
     ]
 }
